@@ -12,7 +12,7 @@ export default function HomePage() {
   const stickyNotes = [
     {
       id: "note-1",
-      text: "💻 Full Stack",
+      text: "Manish Gole Tamang",
       color: "yellow" as const,
       initialX: 378,
       initialY: 472,
@@ -27,10 +27,10 @@ export default function HomePage() {
     },
     {
       id: "note-2",
-      text: "🚀 Performance",
+      text: "The Man Who Can't Be Moved",
       color: "green" as const,
-      initialX: 1199,
-      initialY: 1440,
+      initialX: 874,
+      initialY: 2285,
       initialRotation: 8,
       width: 110,
       height: 110,
