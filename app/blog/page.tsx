@@ -7,9 +7,7 @@ export default async function BlogPage() {
 
   return (
     <div className="min-h-screen flex flex-col items-center">
-      <div className="w-[640px] px-6 py-8">
-        <BlogList posts={posts} />
-      </div>
+      <BlogList posts={posts} />
     </div>
   )
 }
