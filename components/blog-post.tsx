@@ -32,7 +32,7 @@ export function BlogPost({ title, date, content, category = ["TECH", "DESIGN"], 
       </div>
 
       {/* Main Title */}
-      <h1 className="text-4xl md:text-5xl font-bold leading-[1.1] tracking-tight text-zinc-900 mb-8 max-w-[800px]">
+      <h1 className="text-4xl md:text-5xl font-bold leading-[1.1] tracking-tight text-zinc-950 dark:text-zinc-50 mb-8 max-w-[800px]">
         {title}
       </h1>
 
@@ -55,7 +55,7 @@ export function BlogPost({ title, date, content, category = ["TECH", "DESIGN"], 
         </div>
         <div className="flex flex-col h-full h-auto">
           {summary && (
-            <p className="text-foreground leading-normal border-l-2 border-[#5C2BFF] pl-6 mb-8 mt-2">
+            <p className="text-zinc-800 dark:text-zinc-300 leading-normal border-l-2 border-[#5C2BFF] pl-6 mb-8 mt-2">
               {summary.split(/\s+/).slice(0, 60).join(" ")}
               {summary.split(/\s+/).length > 60 && "…"}
             </p>
@@ -63,7 +63,7 @@ export function BlogPost({ title, date, content, category = ["TECH", "DESIGN"], 
 
           <div className="mt-auto pt-6 border-t border-zinc-100">
             <div className="flex items-center gap-2 mb-1">
-              <span className="text-xs font-bold text-zinc-900">by</span>
+              <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">by</span>
               <span className="text-xs font-bold text-[#5C2BFF] cursor-pointer hover:underline">
                 {author?.name || "Manish Tamang"}
               </span>
@@ -95,14 +95,14 @@ export function BlogPost({ title, date, content, category = ["TECH", "DESIGN"], 
       </div>
 
       {author && (
-        <div className="w-full bg-[#f9f9f9] border-y border-zinc-100 py-6 px-1 lg:px-0 ">
+        <div className="w-full bg-[#f9f9f9] dark:bg-zinc-900/50 border-y border-zinc-100 dark:border-zinc-800 py-6 px-1 lg:px-0 ">
           <div className="flex items-center gap-4 max-w-[600px]">
-            <div className="relative w-10 h-10 rounded-full overflow-hidden shrink-0 border border-zinc-200">
+            <div className="relative w-10 h-10 rounded-full overflow-hidden shrink-0 border border-zinc-200 dark:border-zinc-800">
               <Image src="/images/profile.png" alt={author.name} fill className="object-cover" />
             </div>
             <div>
-              <p className="text-[11px] leading-relaxed text-zinc-600">
-                <span className="font-bold text-zinc-900">{author.name}</span> is {author.role}. {author.bio}
+              <p className="text-[11px] leading-relaxed text-zinc-600 dark:text-zinc-400">
+                <span className="font-bold text-zinc-900 dark:text-zinc-100">{author.name}</span> is {author.role}. {author.bio}
               </p>
             </div>
           </div>
