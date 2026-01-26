@@ -140,7 +140,7 @@ export const MDXComponents: React.FC<MDXComponentsProps> = ({ content }) => {
             h1: ({ children }) => {
               const id = children ? slugify(children.toString()) : '';
               return (
-                <h1 id={id} className="text-4xl mt-10 mb-4 text-gray-900 dark:text-gray-100 border-b pb-4 border-gray-200 dark:border-gray-700">
+                <h1 id={id} className="text-4xl mt-10 mb-4 text-zinc-950 dark:text-zinc-50 border-b pb-4 border-zinc-200 dark:border-zinc-800">
                   {children}
                 </h1>
               );
@@ -148,7 +148,7 @@ export const MDXComponents: React.FC<MDXComponentsProps> = ({ content }) => {
             h2: ({ children }) => {
               const id = children ? slugify(children.toString()) : '';
               return (
-                <h2 id={id} className="text-3xl mt-8 mb-4 text-gray-800 dark:text-gray-200">
+                <h2 id={id} className="text-3xl mt-8 mb-4 text-zinc-900 dark:text-zinc-100">
                   {children}
                 </h2>
               );
@@ -156,7 +156,7 @@ export const MDXComponents: React.FC<MDXComponentsProps> = ({ content }) => {
             h3: ({ children }) => {
               const id = children ? slugify(children.toString()) : '';
               return (
-                <h3 id={id} className="text-2xl mt-6 mb-3 text-gray-800 dark:text-gray-200">
+                <h3 id={id} className="text-2xl mt-6 mb-3 text-zinc-900 dark:text-zinc-100">
                   {children}
                 </h3>
               );
@@ -164,23 +164,23 @@ export const MDXComponents: React.FC<MDXComponentsProps> = ({ content }) => {
             h4: ({ children }) => {
               const id = children ? slugify(children.toString()) : '';
               return (
-                <h4 id={id} className="text-xl font-semibold mt-6 mb-3 text-gray-800 dark:text-gray-200">
+                <h4 id={id} className="text-xl font-semibold mt-6 mb-3 text-zinc-900 dark:text-zinc-100">
                   {children}
                 </h4>
               );
             },
             p: ({ children }) => (
-              <p className="text-foreground text-[#3E3E3E] leading-normal">
+              <p className="text-zinc-700 dark:text-zinc-300 leading-relaxed text-[17px]">
                 {children}
               </p>
             ),
             ul: ({ children }) => (
-              <ul className="list-disc pl-8 text-foreground leading-normal">
+              <ul className="list-disc pl-8 text-zinc-700 dark:text-zinc-300 leading-relaxed space-y-2">
                 {children}
               </ul>
             ),
             ol: ({ children }) => (
-              <ol className="list-decimal pl-8 text-foreground leading-normal">
+              <ol className="list-decimal pl-8 text-zinc-700 dark:text-zinc-300 leading-relaxed space-y-2">
                 {children}
               </ol>
             ),
@@ -246,12 +246,12 @@ export const MDXComponents: React.FC<MDXComponentsProps> = ({ content }) => {
               <tr>{children}</tr>
             ),
             th: ({ children }) => (
-              <th className="px-8 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+              <th className="px-8 py-4 text-left text-sm font-medium text-zinc-900 dark:text-zinc-100 uppercase tracking-wider">
                 {children}
               </th>
             ),
             td: ({ children }) => (
-              <td className="px-8 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+              <td className="px-8 py-4 whitespace-nowrap text-sm text-zinc-700 dark:text-zinc-300">
                 {children}
               </td>
             ),
