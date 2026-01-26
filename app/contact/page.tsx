@@ -97,6 +97,7 @@ export default function ContactPage() {
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
         const { name, value } = e.target;
+        sounds.tick();
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
