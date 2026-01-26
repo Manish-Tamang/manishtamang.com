@@ -35,7 +35,7 @@ export function Footer() {
                         </div>
                     </div>
                     <Image
-                        src="/footer.png"
+                        src="/images/flowers.png"
                         alt="Footer decoration"
                         width={1200}
                         height={400}
