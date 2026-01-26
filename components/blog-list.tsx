@@ -76,7 +76,10 @@ export function BlogList({ posts }: BlogListProps) {
               type="text"
               placeholder="Search posts..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => {
+                sounds.tick()
+                setSearchQuery(e.target.value)
+              }}
               className="w-full pl-9 pr-4 py-2 bg-foreground/5 border border-transparent focus:border-foreground/10 focus:bg-foreground/[0.08] rounded-xl outline-none text-sm transition-all"
             />
           </div>
