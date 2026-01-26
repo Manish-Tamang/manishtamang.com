@@ -45,7 +45,7 @@ export function Hero() {
             onMouseLeave={() => setIsHovered(false)}
           >
             <div
-              className="absolute inset-0 rounded-md transition-all duration-500 ease-out group-hover:grayscale"
+              className="absolute inset-0 rounded-md transition-all duration-500 ease-out group-hover:grayscale dark:hidden"
               style={{
                 backgroundImage: 'url("/bg.svg")',
                 backgroundRepeat: 'repeat',
