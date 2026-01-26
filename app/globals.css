@@ -40,7 +40,7 @@
 }
 
 .dark {
-  --background: oklch(0.12 0 0);
+  --background: #191919;
   --foreground: oklch(0.97 0 0);
   --card: oklch(0.12 0 0);
   --card-foreground: oklch(0.97 0 0);
@@ -208,32 +208,16 @@
     z-index: 0;
   }
 
-  /* Dark mode vignette background */
-  body.dark::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background-image: url("/bg.svg");
-    background-repeat: repeat;
-    background-position: left top;
-    background-size: 32px;
-    filter: invert(1) drop-shadow(0 0 3px rgba(255, 255, 255, 0.6)) drop-shadow(0 0 6px rgba(255, 255, 255, 0.3));
-    pointer-events: none;
-    z-index: 0;
+  /* Disable SVG background in dark mode */
+  .dark body::before {
+    background-image: none;
+    content: none;
   }
 
-  /* Inverse vignette overlay for dark mode */
-  body.dark::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background: radial-gradient(ellipse at center,
-        rgba(18, 18, 18, 0.85) 0%,
-        rgba(18, 18, 18, 0.5) 40%,
-        transparent 70%,
-        transparent 100%);
-    pointer-events: none;
-    z-index: 0;
+  /* Disable vignette overlay in dark mode */
+  .dark body::after {
+    background: none;
+    content: none;
   }
 
   body>* {
