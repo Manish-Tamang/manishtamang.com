@@ -55,6 +55,8 @@ export const metadata: Metadata = {
   },
 }
 
+import { Toaster } from "sonner"
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -63,7 +65,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={`${inter.variable} ${perfectlyNineties.variable} ${myFont.variable} ${jetbrainsMono.variable}`}>
       <body
-        className={`font-inter antialiased bg-[#F7F7F7] dark:bg-[#373737]`}
+        className={`font-inter antialiased bg-[#F7F7F7] dark:bg-[#191919]`}
       >
         <div className="min-h-screen flex flex-col">
           <div className="flex-1 flex justify-center">
@@ -72,6 +74,15 @@ export default function RootLayout({
           <Footer />
         </div>
         <Analytics />
+        <Toaster
+          position="bottom-right"
+          toastOptions={{
+            className: "font-inter",
+            style: {
+              fontFamily: "var(--font-inter)",
+            },
+          }}
+        />
       </body>
     </html>
   )
