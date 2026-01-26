@@ -37,7 +37,7 @@ export default async function BlogPostPage({
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center dark:bg-zinc-950">
+    <div className="min-h-screen flex flex-col items-center">
       <div className="w-full px-6 py-12 md:py-20 lg:py-24">
         <BlogPost {...formattedPost} />
       </div>
