@@ -7,8 +7,12 @@ import { AboutSection } from "@/components/about-section"
 import { FeaturedProjects } from "@/components/featured-projects"
 import { LineBreaker } from "@/components/line-breaker"
 import { ManWhoCantBeMoved } from "@/components/man-who-cant-be-moved"
+import { sanityFetch } from "@/sanity/lib/live"
+import { FEATURED_POSTS_QUERY } from "@/sanity/lib/queries"
 
-export default function HomePage() {
+export default async function HomePage() {
+  const { data: posts } = await sanityFetch({ query: FEATURED_POSTS_QUERY })
+
   const stickyNotes = [
     {
       id: "note-1",
@@ -19,10 +23,10 @@ export default function HomePage() {
       initialRotation: -9,
       width: 110,
       height: 110,
-      mobileWidth: 70,
-      mobileHeight: 70,
-      mobileX: 10,
-      mobileY: 1050,
+      mobileWidth: 110,
+      mobileHeight: 110,
+      mobileX: 32,
+      mobileY: 701,
       delay: 0.3,
     },
     {
@@ -36,40 +40,40 @@ export default function HomePage() {
       height: 110,
       mobileWidth: 70,
       mobileHeight: 70,
-      mobileX: 130,
-      mobileY: 1060,
+      mobileX: 293,
+      mobileY: 3844,
       delay: 0.4,
     },
-    {
-      id: "note-3",
-      text: "✨ Creative",
-      color: "pink" as const,
-      initialX: 497,
-      initialY: 1339,
-      initialRotation: -8,
-      width: 110,
-      height: 110,
-      mobileWidth: 70,
-      mobileHeight: 70,
-      mobileX: 250,
-      mobileY: 1045,
-      delay: 0.5,
-    },
-    {
-      id: "note-4",
-      text: "🎯 User First",
-      color: "blue" as const,
-      initialX: 626,
-      initialY: 1287,
-      initialRotation: -5,
-      width: 110,
-      height: 110,
-      mobileWidth: 70,
-      mobileHeight: 70,
-      mobileX: 370,
-      mobileY: 1055,
-      delay: 0.6,
-    },
+    // {
+    //   id: "note-3",
+    //   text: "✨ Creative",
+    //   color: "pink" as const,
+    //   initialX: 497,
+    //   initialY: 1339,
+    //   initialRotation: -8,
+    //   width: 110,
+    //   height: 110,
+    //   mobileWidth: 70,
+    //   mobileHeight: 70,
+    //   mobileX: 250,
+    //   mobileY: 1045,
+    //   delay: 0.5,
+    // },
+    // {
+    //   id: "note-4",
+    //   text: "🎯 User First",
+    //   color: "blue" as const,
+    //   initialX: 626,
+    //   initialY: 1287,
+    //   initialRotation: -5,
+    //   width: 110,
+    //   height: 110,
+    //   mobileWidth: 70,
+    //   mobileHeight: 70,
+    //   mobileX: 370,
+    //   mobileY: 1055,
+    //   delay: 0.6,
+    // },
   ]
 
   return (
@@ -83,13 +87,13 @@ export default function HomePage() {
       <LineBreaker />
       <FeaturedProjects />
       <LineBreaker />
-      <FeaturedBlogs />
+      <FeaturedBlogs posts={posts} />
       <LineBreaker />
       <ManWhoCantBeMoved />
       <LineBreaker />
-      <div className="p-6 mt-4 w-[720px]">
+      <div className="p-6 mt-4 max-w-[720px] w-full">
         <Image
-          src="/tour/pokhara.jpg"
+          src="/skeleton.png"
           alt="Pokhara tour"
           width={1920}
           height={1080}
