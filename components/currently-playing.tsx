@@ -57,7 +57,7 @@ export function CurrentlyPlaying() {
     const current = data?.isPlaying ? data : fallbackTrack;
 
     return (
-        <div className="col-span-1 bg-white rounded-[9px] p-4 flex flex-col justify-between border border-zinc-200 relative overflow-hidden group">
+        <div className="col-span-1 bg-white rounded-[12px] p-4 flex flex-col justify-between border border-zinc-200 relative overflow-hidden group">
             <div className="relative z-10 flex flex-col h-full justify-between">
                 <div>
                     <div className="flex justify-between items-start mb-2">
@@ -76,9 +76,16 @@ export function CurrentlyPlaying() {
                         </div>
                         <SpotifyLogo />
                     </div>
-                    <h3 className="text-sm font-bold text-zinc-900 line-clamp-1">
-                        {current.title}
-                    </h3>
+                    <div className="overflow-hidden mask-marquee whitespace-nowrap">
+                        <div className="animate-marquee inline-block">
+                            <h3 className="text-sm font-bold text-zinc-900 inline-block">
+                                {current.title}
+                            </h3>
+                            <h3 className="text-sm font-bold text-zinc-900 inline-block ml-8">
+                                {current.title}
+                            </h3>
+                        </div>
+                    </div>
                     <p className="text-[10px] text-zinc-500 line-clamp-1">
                         {current.artist}
                     </p>
@@ -94,7 +101,7 @@ export function CurrentlyPlaying() {
             </div>
 
             {/* Record Animation */}
-            <div className="absolute -bottom-10 -right-10 transition-all duration-500 group-hover:-bottom-4 group-hover:-right-4 opacity-100 group-hover:opacity-100 group-hover:z-50 group-hover:scale-110">
+            <div className="absolute -bottom-10 -right-10 transition-all duration-500 group-hover:-bottom-4 group-hover:-right-4 opacity-100 group-hover:opacity-100 group-hover:z-50 z-10 group-hover:scale-110">
                 <Record
                     albumImageUrl={current.albumImageUrl || ""}
                     isPlaying={data?.isPlaying || false}
