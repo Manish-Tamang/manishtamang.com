@@ -18,7 +18,7 @@ export function BlogCard({ blog, index }: BlogCardProps) {
 
     return (
         <Link
-            href={`/blog/${blog.slug}`}
+            href={`/blog/${blog.slug?.current || blog.slug}`}
             onMouseEnter={() => sounds.tick()}
             className={cn(
                 "group relative w-[260px] h-[340px] bg-white dark:bg-[#1C1C1C] rounded-xl flex flex-col shadow-2xl border border-border/50 transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]",
