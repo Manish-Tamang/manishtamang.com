@@ -72,7 +72,7 @@ export default function StickyNotesProvider({ stickyNotes = [] }: StickyNotesPro
                 content = (
                     <div className="flex flex-col items-center gap-1">
                         {parts.map((part, i) => (
-                            <span key={i} className={i === 0 ? "text-xs md:text-base" : "text-sm md:text-xl font-semibold text-foreground leading-tight"}>
+                            <span key={i} className={i === 0 ? "text-xs md:text-base" : "text-sm md:text-xl font-semibold text-zinc-900 dark:text-zinc-900 leading-tight"}>
                                 {part}
                             </span>
                         ))}
@@ -87,7 +87,7 @@ export default function StickyNotesProvider({ stickyNotes = [] }: StickyNotesPro
             } else {
                 content = (
                     <div className="flex items-center justify-center h-full text-center">
-                        <p className="text-xs md:text-sm font-medium text-foreground leading-tight" style={{ fontFamily: 'var(--font-paragraph), sans-serif' }}>
+                        <p className="text-xs md:text-sm font-medium text-zinc-900 dark:text-zinc-900 leading-tight" style={{ fontFamily: 'var(--font-paragraph), sans-serif' }}>
                             {text.split('\n').map((line, i) => (
                                 <span key={i}>
                                     {line}
