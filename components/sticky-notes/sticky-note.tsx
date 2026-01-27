@@ -198,7 +198,7 @@ export default function StickyNote({
     const hoverRotation = hovered && !dragging ? position.rotation + (color === 'green' ? 8 : -5) : position.rotation
 
     const displayContent = content || (
-        <p className="text-sm md:text-lg font-medium text-foreground leading-tight text-center">
+        <p className="text-sm md:text-lg font-medium text-zinc-900 dark:text-zinc-900 leading-tight text-center">
             {text}
         </p>
     )
@@ -248,7 +248,7 @@ export default function StickyNote({
                 onMouseEnter={() => setHovered(true)}
                 onMouseLeave={() => setHovered(false)}
             >
-                <div className="flex items-center justify-center h-full text-center">
+                <div className="flex items-center justify-center h-full text-foreground leading-normal text-center">
                     {displayContent}
                 </div>
             </motion.div>
