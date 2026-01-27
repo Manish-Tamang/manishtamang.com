@@ -59,51 +59,68 @@ export default function StickyNote({
     const [dragging, setDragging] = useState(false)
     const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
     const [hovered, setHovered] = useState(false)
+    const [hasInitialized, setHasInitialized] = useState(false)
 
-    // Detect mobile and adjust initial position
+    // Robust mode detection and position initialization
     useEffect(() => {
-        const checkMobile = () => {
-            const mobile = window.innerWidth < 768
-            setIsMobile(mobile)
-            if (mobile && (mobileX !== undefined || mobileY !== undefined)) {
-                setPosition(prev => ({
-                    ...prev,
-                    x: mobileX !== undefined ? mobileX : prev.x,
-                    y: mobileY !== undefined ? mobileY : prev.y,
-                }))
-            } else if (!mobile) {
-                setPosition(prev => ({
-                    ...prev,
-                    x: initialX,
-                    y: initialY,
-                }))
+        const mediaQuery = window.matchMedia('(max-width: 767px)')
+
+        const handleModeChange = (e: MediaQueryListEvent | MediaQueryList) => {
+            const isNowMobile = e.matches
+            setIsMobile(isNowMobile)
+
+            const mode = isNowMobile ? 'mobile' : 'desktop'
+            const storageKey = `sticky-note-${id}-${mode}`
+            const saved = localStorage.getItem(storageKey)
+
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved)
+                    setPosition(parsed)
+                } catch (err) {
+                    console.error("Error loading position:", err)
+                }
+            } else {
+                // Initial fallback to props
+                if (isNowMobile) {
+                    setPosition({
+                        x: mobileX ?? initialX,
+                        y: mobileY ?? initialY,
+                        rotation: initialRotation
+                    })
+                } else {
+                    setPosition({
+                        x: initialX,
+                        y: initialY,
+                        rotation: initialRotation
+                    })
+                }
             }
+            setHasInitialized(true)
         }
-        checkMobile()
-        window.addEventListener('resize', checkMobile)
-        return () => window.removeEventListener('resize', checkMobile)
-    }, [initialX, initialY, mobileX, mobileY])
 
-    // Load position from localStorage on mount
-    useEffect(() => {
-        const saved = localStorage.getItem(`sticky-note-${id}`)
-        if (saved) {
-            try {
-                const parsed = JSON.parse(saved)
-                setPosition(parsed)
-            } catch (e) {
-                // Invalid saved data, use initial position
-            }
-        }
-    }, [id])
+        // Initial check
+        handleModeChange(mediaQuery)
 
-    // Save position to localStorage when it changes
+        // Listen for changes
+        mediaQuery.addEventListener('change', handleModeChange)
+        return () => mediaQuery.removeEventListener('change', handleModeChange)
+    }, [id, initialX, initialY, initialRotation, mobileX, mobileY])
+
+    // Save position ONLY when dragging stops, and ONLY to the current mode's slot
     useEffect(() => {
-        if (!dragging) {
-            localStorage.setItem(`sticky-note-${id}`, JSON.stringify(position))
+        // We check hasInitialized to ensure we don't save the default state
+        // and we check !dragging to only save on 'drop'
+        if (hasInitialized && !dragging) {
+            const mode = isMobile ? 'mobile' : 'desktop'
+            const storageKey = `sticky-note-${id}-${mode}`
+
+            // Critical check: only save if the position we have actually matches
+            // what should be in this mode (prevents desktop -> mobile save bleed)
+            localStorage.setItem(storageKey, JSON.stringify(position))
             onPositionChange?.(id, position.x, position.y)
         }
-    }, [position, dragging, id, onPositionChange])
+    }, [position, dragging, id, isMobile, hasInitialized])
 
     const handleStart = useCallback((clientX: number, clientY: number) => {
         const scrollX = window.scrollX || window.pageXOffset
@@ -245,9 +262,10 @@ export default function StickyNote({
                         top: `${position.y + noteHeight + 5}px`,
                     }}
                 >
-                    <div className="font-bold mb-0.5">ID: {id}</div>
-                    <div>X: {Math.round(position.x)}</div>
-                    <div>Y: {Math.round(position.y)}</div>
+                    <div className="font-bold mb-0.5 text-blue-400">ID: {id}</div>
+                    <div className="text-yellow-400 mb-0.5">Mode: {isMobile ? 'MOBILE' : 'DESKTOP'}</div>
+                    <div>{isMobile ? 'mobileX' : 'initialX'}: {Math.round(position.x)}</div>
+                    <div>{isMobile ? 'mobileY' : 'initialY'}: {Math.round(position.y)}</div>
                     <div>Rot: {Math.round(position.rotation)}°</div>
                 </div>
             )}
