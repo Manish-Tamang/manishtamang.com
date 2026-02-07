@@ -333,4 +333,35 @@ export const sounds = {
             });
         } catch { }
     },
+
+    delete: () => {
+        try {
+            const ctx = getAudioContext();
+            const t = ctx.currentTime;
+
+            const noise = ctx.createBufferSource();
+            const buf = ctx.createBuffer(1, ctx.sampleRate * 0.1, ctx.sampleRate);
+            const data = buf.getChannelData(0);
+            for (let i = 0; i < data.length; i++) {
+                const env = Math.exp(-i / (ctx.sampleRate * 0.02));
+                data[i] = (Math.random() * 2 - 1) * env;
+            }
+            noise.buffer = buf;
+
+            const filter = ctx.createBiquadFilter();
+            filter.type = "lowpass";
+            filter.frequency.setValueAtTime(2000, t);
+            filter.frequency.exponentialRampToValueAtTime(100, t + 0.1);
+
+            const gain = ctx.createGain();
+            gain.gain.setValueAtTime(0.3, t);
+            gain.gain.exponentialRampToValueAtTime(0.001, t + 0.1);
+
+            noise.connect(filter);
+            filter.connect(gain);
+            gain.connect(ctx.destination);
+            noise.start(t);
+            noise.stop(t + 0.1);
+        } catch { }
+    },
 };
