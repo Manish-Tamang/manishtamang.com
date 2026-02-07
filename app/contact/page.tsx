@@ -272,11 +272,11 @@ export default function ContactPage() {
                         <div className="flex flex-col items-center gap-2 text-[15px] text-foreground/60">
                             <p>You can also reach me directly at</p>
                             <a
-                                href="mailto:maneshtamang833@gmail.com"
+                                href={`mailto:${process.env.NEXT_PUBLIC_ADMIN_EMAIL}`}
                                 className="text-foreground font-medium underline underline-offset-4 decoration-foreground/20 hover:decoration-foreground transition-all"
                                 onClick={() => sounds.click()}
                             >
-                                maneshtamang833@gmail.com
+                                {process.env.NEXT_PUBLIC_ADMIN_EMAIL}
                             </a>
                         </div>
                     </div>
