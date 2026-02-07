@@ -1,0 +1,83 @@
+    # UI & Design System Guide
+
+    This document outlines the core design tokens, layout principles, and component patterns used in the portfolio. The system is built for a **clean, minimal, and typography-first** aesthetic.
+
+    ---
+
+    ## 🏗️ Layout & Containment
+
+    The layout follows a centered "column" structure with tiered maximum widths to maintain focus and readability.
+
+    | Scope | Property | Value | Description |
+    | :--- | :--- | :--- | :--- |
+    | **Site Container** | `max-w` | `720px` | Maximum width for global elements like the Header and Footer. |
+    | **Main Content** | `max-w` | `610px` | Inner container for sections like About, Projects, and Blog. |
+    | **Page Padding** | `px` | `24px (1.5rem)` | Standard horizontal gutter on mobile. |
+    | **Section Gap** | `space-y` | `24 (6rem)` | Vertical spacing between primary page sections. |
+
+    ---
+
+    ## 🔤 Typography
+
+    The typography system relies on a mix of Serif (for display) and Sans-Serif (for UI/Body).
+
+    ### Font Families
+    - **Headings (Display)**: `Perfectly Nineties` (Serif). Used for H1 and H2.
+    - **UI & Body**: `Inter` (Sans-Serif). Standard for all descriptive text.
+    - **Monospace**: `JetBrains Mono`. Used for metadata, dates, or technical details.
+
+    ### Type Scale
+    | Element | Size | Font Family | Tracking | Leading |
+    | :--- | :--- | :--- | :--- | :--- |
+    | **H1** | `48px` | Perfectly Nineties | `0` | `1em` |
+    | **H2** | `36px` | Perfectly Nineties | `0` | `1em` |
+    | **H3** | `18px` | Inter | `-0.02em`| `1.3em` |
+    | **Body (p)** | `16px` | Inter | `-0.02em`| `22px` |
+    | **Small UI** | `14px` | Inter | `-0.01em`| `Normal` |
+    | **Metadata** | `10px` | JetBrains Mono | `0.1em` | `Normal` |
+
+    ---
+
+    ## 🎨 Color Palette
+
+    The project uses a light/dark system defined by **OKLCH** tokens for high-fidelity colors.
+
+    ### Core Tokens
+    - **Background**: `oklch(0.99 0 0)` (Light) / `#191919` (Dark).
+    - **Foreground**: `rgba(0, 0, 0, 0.75)` (Light) / `oklch(0.97 0 0)` (Dark).
+    - **Secondary**: `oklch(0.95 0 0)` (Light) / `oklch(0.2 0 0)` (Dark).
+    - **Border**: `oklch(0.88 0 0)` (Light) / `oklch(0.25 0 0)` (Dark).
+
+    ---
+
+    ## 📐 Rounding & Borders
+
+    Consistent rounding logic across all components.
+
+    - **Standard Radius**: `rounded-md` (8px). Used for project images and sections.
+    - **Pill/Nav Radius**: `rounded-full` (9999px). Used for navigation links and year badges.
+    - **UI Surfaces**: `rounded-2xl` (16px). Used for mobile menus and dropdowns.
+    - **Borders**: Standard `1px` width using `border-border`.
+    - **Line Breakers**: `1.5px` dashed border with `zinc-200` (light) or `zinc-800` (dark).
+
+    ---
+
+    ## 🧩 Component Patterns
+
+    ### 1. Navigation (Header)
+    - **Styling**: `backdrop-blur-sm` with `bg-foreground/5` for active states.
+    - **Interaction**: Transition color from `text-foreground/60` to `text-foreground`.
+    - **Spacing**: `px-3 py-1.5` for desktop links.
+
+    ### 2. Featured Projects
+    - **Image Aspect**: `16:9` (aspect-video) or `180px x 110px`.
+    - **Layout**: Grid-based `gap-4` (mobile) to `gap-6` (desktop).
+    - **Hierarchy**: H3 (Title) + Tagline text + Description + Link metadata.
+
+    ### 3. Year Badges
+    - **Style**: Pill-shaped, semi-transparent background (`bg-secondary/50`).
+    - **Typography**: Inline-flex, `10px` font size, bold tracking, uppercase.
+
+    ### 4. Site Background
+    - **Light Mode**: Includes a repeating SVG grain/grid (`bg.svg`) and a subtle radial vignette overlay.
+    - **Dark Mode**: Flat deep charcoal background for high-contrast readability.
