@@ -43,11 +43,17 @@ export function Header() {
       icon: <FaRss className="w-4 h-4" />
     },
     {
+      href: "/guestbook",
+      label: "Guestbook",
+      active: isActive("/guestbook"),
+      icon: <MdLocalPhone className="w-4 h-4" />
+    },
+    {
       href: "/contact",
       label: "Contact",
       active: isActive("/contact"),
       icon: <MdLocalPhone className="w-4 h-4" />
-    }
+    },
   ]
 
   const MenuIcon = () => (
