@@ -74,7 +74,7 @@ export function AboutSection() {
                     <div className="flex justify-between items-start">
                         <h1 className="font-myfont text-xl text-white">Welcome to my corner on the internet :)</h1>
                     </div>
-                    <Link href="#" className="text-[10px] flex items-center gap-1 hover:underline font-medium">
+                    <Link href="/about" className="text-[10px] mt-2 text-white  flex items-center gap-1 hover:underline font-medium">
                         My journey <ArrowUpRight className="w-2 h-2" />
                     </Link>
                 </div>
