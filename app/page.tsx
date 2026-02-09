@@ -1,17 +1,20 @@
 import { Hero } from "@/components/hero"
 import { FeaturedBlogs } from "@/components/featured-blogs"
 import StickyNotesProvider from "@/components/sticky-notes"
-import Image from "next/image"
-
 import { AboutSection } from "@/components/about-section"
-import { FeaturedProjects } from "@/components/featured-projects"
+import { FeaturedProjects, FeaturedProjectsSkeleton } from "@/components/featured-projects"
 import { LineBreaker } from "@/components/line-breaker"
 import { ManWhoCantBeMoved } from "@/components/man-who-cant-be-moved"
+import { FeaturedImageSection, FeaturedImageSkeleton } from "@/components/featured-image-section"
 import { sanityFetch } from "@/sanity/lib/live"
-import { FEATURED_POSTS_QUERY } from "@/sanity/lib/queries"
+import { FEATURED_POSTS_QUERY, RECENT_FAVORITE_QUERY } from "@/sanity/lib/queries"
+import { Suspense } from "react"
 
 export default async function HomePage() {
-  const { data: posts } = await sanityFetch({ query: FEATURED_POSTS_QUERY })
+  const [{ data: posts }, { data: recentFavorite }] = await Promise.all([
+    sanityFetch({ query: FEATURED_POSTS_QUERY }),
+    sanityFetch({ query: RECENT_FAVORITE_QUERY })
+  ])
 
   const stickyNotes = [
     {
@@ -83,24 +86,19 @@ export default async function HomePage() {
         <Hero />
       </div>
       <LineBreaker />
-      <AboutSection />
+      <AboutSection recentFavorite={recentFavorite} />
       <LineBreaker />
-      <FeaturedProjects />
+      <Suspense fallback={<FeaturedProjectsSkeleton />}>
+        <FeaturedProjects />
+      </Suspense>
       <LineBreaker />
       <FeaturedBlogs posts={posts} />
       <LineBreaker />
       <ManWhoCantBeMoved />
       <LineBreaker />
-      <div className="p-6 mt-4 max-w-[720px] w-full">
-        <Image
-          src="/skeleton.png"
-          alt="Pokhara tour"
-          width={1920}
-          height={1080}
-          className="w-full h-auto rounded-md"
-          priority
-        />
-      </div>
+      <Suspense fallback={<FeaturedImageSkeleton />}>
+        <FeaturedImageSection />
+      </Suspense>
       {/* <BentoGrid /> */}
     </div>
   )
