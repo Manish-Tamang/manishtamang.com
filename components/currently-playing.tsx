@@ -13,16 +13,24 @@ interface SpotifyData {
     title?: string;
 }
 
-const fallbackTrack: SpotifyData = {
+const fallbackTrack = {
     artist: "Arthur Gunn",
     album: "Nyano Ghar",
     title: "Nyano Ghar",
     albumImageUrl: "/nyano-ghar.jpg",
     songUrl: "https://open.spotify.com/track/7wCND5ZKuJbbBYZVKfUE4y?si=95bd642e0010497b",
-    isPlaying: true,
+    isPlaying: false,
 };
 
-export function CurrentlyPlaying() {
+export function CurrentlyPlaying({ recentFavorite }: { recentFavorite?: any }) {
+    const cmsFallbackTrack: SpotifyData = {
+        artist: recentFavorite?.artist || fallbackTrack.artist,
+        album: recentFavorite?.album || fallbackTrack.album,
+        title: recentFavorite?.title || fallbackTrack.title,
+        albumImageUrl: recentFavorite?.albumImageUrl || fallbackTrack.albumImageUrl,
+        songUrl: recentFavorite?.songUrl || fallbackTrack.songUrl,
+        isPlaying: false,
+    };
     const [data, setData] = useState<SpotifyData | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -54,7 +62,7 @@ export function CurrentlyPlaying() {
         );
     }
 
-    const current = data?.isPlaying ? data : fallbackTrack;
+    const current = data?.isPlaying ? data : cmsFallbackTrack;
 
     return (
         <div className="col-span-1 bg-white rounded-[12px] p-4 flex flex-col justify-between border border-zinc-200 relative overflow-hidden group">
