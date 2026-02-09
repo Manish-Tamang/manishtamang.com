@@ -6,7 +6,7 @@ import Link from "next/link"
 import { ArrowUpRight, PenTool } from "lucide-react"
 import { CurrentlyPlaying } from "./currently-playing"
 
-export function AboutSection() {
+export function AboutSection({ recentFavorite }: { recentFavorite?: any }) {
     const [frame, setFrame] = useState(0)
     const [isHovered, setIsHovered] = useState(false)
 
@@ -60,6 +60,7 @@ export function AboutSection() {
                         alt="mini-gole"
                         fill
                         className="object-cover user-select-none"
+                        priority
                     />
                     <div className="absolute inset-0" />
                     <div className="absolute bottom-3 left-3 right-3">
@@ -78,7 +79,7 @@ export function AboutSection() {
                         My journey <ArrowUpRight className="w-2 h-2" />
                     </Link>
                 </div>
-                <CurrentlyPlaying />
+                <CurrentlyPlaying recentFavorite={recentFavorite} />
                 <div className="col-span-2 md:col-span-1 bg-[#FFD86E] rounded-[12px] p-4 flex flex-col justify-between border border-yellow-500/20">
                     <div className="flex justify-between items-start">
                         <h3 className="text-sm text-zinc-900 leading-tight pr-8">
