@@ -25,15 +25,8 @@ export function Timeline({ avatarUrl, entries }: TimelineProps) {
         offset: ["start 70%", "end 30%"],
     });
 
-    // Smooth out the scroll progress
-    const smoothProgress = useSpring(scrollYProgress, {
-        stiffness: 100,
-        damping: 30,
-        restDelta: 0.001
-    });
-
     // Avatar movement logic - moves from top to bottom
-    const yTranslate = useTransform(smoothProgress, [0, 1], ["0%", "100%"]);
+    const yTranslate = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
     return (
         <div className="w-full">
@@ -49,7 +42,7 @@ export function Timeline({ avatarUrl, entries }: TimelineProps) {
                     <div className="absolute bottom-0 left-1/2 top-0 w-[1px] -translate-x-1/2">
                         <motion.div
                             className="absolute inset-x-0 top-0 origin-top bg-gradient-to-b from-indigo-500 via-purple-500 to-transparent"
-                            style={{ scaleY: smoothProgress, height: "100%" }}
+                            style={{ scaleY: scrollYProgress, height: "100%" }}
                         />
                     </div>
 
@@ -78,12 +71,8 @@ export function Timeline({ avatarUrl, entries }: TimelineProps) {
                 {/* Timeline Content */}
                 <div className="space-y-16 md:space-y-24 pb-20">
                     {entries.map((entry, index) => (
-                        <motion.div
+                        <div
                             key={index}
-                            initial={{ opacity: 0, x: 10 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true, margin: "-10%" }}
-                            transition={{ duration: 0.7, delay: index * 0.1, ease: [0.21, 0.45, 0.32, 0.9] }}
                             className="relative"
                         >
                             {/* Year Badge */}
@@ -91,7 +80,7 @@ export function Timeline({ avatarUrl, entries }: TimelineProps) {
                                 {entry.year}
                             </div>
 
-                            <div className="space-y-4">
+                            <div className="space-y-2">
                                 <h3 className="text-base md:text-lg font-medium tracking-tight text-foreground/90 leading-snug">
                                     {entry.title}
                                 </h3>
@@ -101,7 +90,7 @@ export function Timeline({ avatarUrl, entries }: TimelineProps) {
 
                                 {entry.images && entry.images.length > 0 && (
                                     <div className={cn(
-                                        "mt-6 grid gap-3",
+                                        "mt-2 grid gap-3",
                                         entry.images.length === 1 ? "grid-cols-1" : "grid-cols-2"
                                     )}>
                                         {entry.images.map((img, i) => (
@@ -124,7 +113,7 @@ export function Timeline({ avatarUrl, entries }: TimelineProps) {
                                     </div>
                                 )}
                             </div>
-                        </motion.div>
+                        </div>
                     ))}
                 </div>
             </div>
