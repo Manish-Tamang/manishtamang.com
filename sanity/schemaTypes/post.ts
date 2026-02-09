@@ -1,7 +1,10 @@
+import { RiBallPenFill } from "react-icons/ri";
+
 export const post = {
     name: "post",
     title: "Post",
     type: "document",
+    icon: RiBallPenFill,
     fields: [
         {
             name: "title",
