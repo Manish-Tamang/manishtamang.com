@@ -25,3 +25,52 @@ export const FEATURED_POSTS_QUERY = defineQuery(`*[_type == "post"] {
     coverImage,
     "tag": category[0]
 } | order(date desc)[0...3]`);
+export const FEATURE_PROJECTS_QUERY = defineQuery(`*[_type == "featuredProjects"][0] {
+    projects[]-> {
+        title,
+        tagline,
+        excerpt,
+        icon,
+        "link": projectUrl,
+        "image": thumbnail.asset->url
+    }
+}.projects`);
+
+export const RECENT_FAVORITE_QUERY = defineQuery(`*[_type == "recentFavorite"][0] {
+    title,
+    artist,
+    album,
+    "albumImageUrl": albumImageUrl.asset->url,
+    songUrl
+}`);
+
+export const FEATURED_IMAGE_QUERY = defineQuery(`*[_type == "featuredImage"][0] {
+    "url": image.asset->url,
+    alt,
+    caption
+}`);
+
+export const TIMELINE_QUERY = defineQuery(`*[_type == "timeline"] | order(date desc) {
+    title,
+    month,
+    year,
+    description,
+    "images": images[].asset->url,
+    date
+}`);
+
+export const SOCIALS_QUERY = defineQuery(`*[_type == "social"] {
+    platform,
+    url,
+    icon
+}`);
+
+export const ABOUT_PROFILE_QUERY = defineQuery(`*[_type == "aboutProfile"][0] {
+    heading,
+    intro,
+    bio,
+    socialLinks[] {
+        platform,
+        url
+    }
+}`);
