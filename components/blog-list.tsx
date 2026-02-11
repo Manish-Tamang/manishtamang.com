@@ -7,6 +7,7 @@ import { format } from "date-fns"
 import { urlFor } from "@/sanity/lib/image"
 import { sounds } from "@/lib/sounds"
 import { ArrowUpRight, Search, ListFilter } from "lucide-react"
+import { BlogViewDisplay } from "@/components/blog-view-display"
 
 interface Post {
   title?: string
@@ -145,6 +146,7 @@ export function BlogList({ posts }: BlogListProps) {
                         <time className="text-[10px] font-bold text-zinc-400 dark:text-zinc-600 uppercase tracking-tighter">
                           {post.date ? format(new Date(post.date), "MMM d") : ""}
                         </time>
+                        <BlogViewDisplay slug={post.slug?.current || ""} />
                       </div>
                     </div>
                   </Link>
