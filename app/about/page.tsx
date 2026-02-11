@@ -106,7 +106,7 @@ export default async function AboutPage() {
                     strong: ({ children }) => <span className="font-bold text-foreground">{children}</span>,
                   }}
                 >
-                  {bio}
+                  {bio.replace(/\*\*\s+/g, '**')}
                 </ReactMarkdown>
               </div>
               <div className="flex flex-col items-center md:items-end gap-6">
