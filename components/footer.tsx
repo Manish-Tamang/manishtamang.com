@@ -2,13 +2,32 @@
 import Image from "next/image"
 import Link from "next/link"
 import { HiOutlineInformationCircle, HiOutlineDesktopComputer, HiOutlineBookOpen, HiOutlineBriefcase, HiOutlinePhotograph } from "react-icons/hi"
-import { FaRegStar, FaRegEnvelope, FaInstagram, FaGithub, FaLinkedin } from "react-icons/fa"
+import { FaRegStar, FaRegEnvelope, FaInstagram, FaGithub, FaLinkedin, FaRegClock } from "react-icons/fa"
 import { SiSimpleanalytics, SiDailydotdev } from "react-icons/si"
 import { FeedbackFish } from "@feedback-fish/react"
 import { LineBreaker } from "./line-breaker"
+import { useState, useEffect } from "react"
 
 export function Footer() {
     const currentYear = new Date().getFullYear()
+    const [time, setTime] = useState<string>("")
+
+    useEffect(() => {
+        const updateTime = () => {
+            const now = new Date();
+            const options: Intl.DateTimeFormatOptions = {
+                timeZone: "Asia/Kathmandu",
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: true,
+            };
+            setTime(now.toLocaleTimeString("en-US", options));
+        };
+
+        updateTime();
+        const interval = setInterval(updateTime, 1000);
+        return () => clearInterval(interval);
+    }, []);
 
     return (
         <footer className="w-full mt-auto">
@@ -188,8 +207,12 @@ export function Footer() {
                         </nav>
                     </div>
                     <LineBreaker />
-                    <div className="flex items-start justify-start text-[10px] font-normal" style={{ letterSpacing: '-0.02em', lineHeight: '1.35em' }}>
+                    <div className="flex flex-row justify-between items-center text-[10px] font-normal" style={{ letterSpacing: '-0.02em', lineHeight: '1.35em' }}>
                         <p className="text-gray-600 text-sm dark:text-gray-400 text-start">Manish Tamang © {currentYear}</p>
+                        <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400 text-sm">
+                            <FaRegClock className="w-4 h-4" />
+                            <span>{time} NPT</span>
+                        </div>
                     </div>
                     <Image
                         src="/images/flowers.png"
