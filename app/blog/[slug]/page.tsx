@@ -4,6 +4,7 @@ import { POST_BY_SLUG_QUERY, POSTS_QUERY } from "@/sanity/lib/queries"
 import { sanityFetch } from "@/sanity/lib/live"
 import { urlFor } from "@/sanity/lib/image"
 import { client } from "@/sanity/lib/client"
+import { BlogViewTracker } from "@/components/blog-view-tracker"
 
 export default async function BlogPostPage({
   params,
@@ -11,6 +12,7 @@ export default async function BlogPostPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
+
   const { data: post } = await sanityFetch({
     query: POST_BY_SLUG_QUERY,
     params: { slug }
@@ -38,6 +40,7 @@ export default async function BlogPostPage({
 
   return (
     <div className="min-h-screen flex flex-col items-center">
+      <BlogViewTracker slug={slug} />
       <div className="w-full px-6 py-12 md:py-20 lg:py-24">
         <BlogPost {...formattedPost} />
       </div>
