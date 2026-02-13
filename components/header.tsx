@@ -11,6 +11,7 @@ import { BsFillInfoCircleFill } from "react-icons/bs";
 import { MdLocalPhone } from "react-icons/md";
 import { FaRss } from "react-icons/fa";
 import { HiMiniHome } from "react-icons/hi2";
+import { GoProjectSymlink } from "react-icons/go";
 
 export function Header() {
   const pathname = usePathname()
@@ -35,6 +36,12 @@ export function Header() {
       label: "About",
       active: isActive("/about"),
       icon: <BsFillInfoCircleFill className="w-4 h-4" />
+    },
+    {
+      href: "/projects",
+      label: "Projects",
+      active: isActive("/projects"),
+      icon: <GoProjectSymlink className="w-4 h-4" />
     },
     {
       href: "/blog",
@@ -73,7 +80,7 @@ export function Header() {
   )
 
   return (
-    <header className="w-full max-w-[720px] mx-auto mb-8 pt-8 px-4 md:px-2">
+    <header className="w-full max-w-[720px] mx-auto mb-6 pt-8 px-4 md:px-2">
       <nav className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <div className="md:hidden">

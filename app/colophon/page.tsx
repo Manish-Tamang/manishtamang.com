@@ -14,6 +14,8 @@ import {
 } from "react-icons/si"
 import { Motion } from "@/components/icons/Motion"
 import { useState, useEffect } from "react"
+import { LineBreaker } from "@/components/line-breaker"
+import { sounds } from "@/lib/sounds"
 
 const ColophonPage = () => {
     const [daysSinceLaunch, setDaysSinceLaunch] = useState(0)
@@ -399,8 +401,8 @@ const ColophonPage = () => {
                     </p>
                 </section>
 
-                {/* Footer */}
-                <footer className="pt-8 border-t border-zinc-200 dark:border-zinc-800 space-y-4">
+                <LineBreaker />
+                <footer className="pt-8 space-y-4">
                     <p className="text-sm text-foreground/50">
                         This page is inspired by{" "}
                         <Link
@@ -433,6 +435,8 @@ const IconItem: React.FC<IconItemProps> = ({ url, icon }) => (
         target="_blank"
         rel="noopener noreferrer"
         className="flex items-center justify-center h-20 sm:h-24 border-r border-b border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-900/50 transition-colors"
+        onMouseEnter={() => sounds.tick()}
+        onClick={() => sounds.click()}
     >
         {icon}
     </Link>
@@ -440,8 +444,10 @@ const IconItem: React.FC<IconItemProps> = ({ url, icon }) => (
 
 const TypographyItem: React.FC<{ label: string; font?: string }> = ({ label, font }) => (
     <div
-        className="border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 text-2xl sm:text-3xl text-center bg-zinc-50 dark:bg-zinc-900/50 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors"
+        className="border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 text-2xl sm:text-3xl text-center bg-zinc-50 dark:bg-zinc-900/50 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors cursor-default"
         style={{ fontFamily: font || "inherit" }}
+        onMouseEnter={() => sounds.tick()}
+        onClick={() => sounds.click()}
     >
         {label}
     </div>

@@ -1,5 +1,28 @@
 import { defineQuery } from "next-sanity";
 
+export const PROJECTS_QUERY = defineQuery(`*[_type == "project"] | order(date desc) {
+    title,
+    "slug": slug.current,
+    excerpt,
+    thumbnail,
+    date,
+    projectUrl,
+    githubUrl,
+    techStack
+}`);
+
+export const PROJECT_BY_SLUG_QUERY = defineQuery(`*[_type == "project" && slug.current == $slug][0] {
+    "currentSlug": slug.current,
+    title,
+    date,
+    thumbnail,
+    content,
+    projectUrl,
+    githubUrl,
+    techStack,
+    excerpt
+}`);
+
 export const POSTS_QUERY = defineQuery(`*[_type == "post"] {
     title,
     slug,
@@ -74,3 +97,14 @@ export const ABOUT_PROFILE_QUERY = defineQuery(`*[_type == "aboutProfile"][0] {
         url
     }
 }`);
+
+export const GALLERY_QUERY = defineQuery(`*[_type == "gallery"] | order(order asc) {
+    _id,
+    "imageURL": image.asset->url,
+    alt,
+    caption,
+    format,
+    order,
+    uploadedAt
+}`);
+

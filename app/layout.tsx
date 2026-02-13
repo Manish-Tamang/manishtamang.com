@@ -6,6 +6,7 @@ import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
+import Script from "next/script";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -34,8 +35,9 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "Manish Tamang (@golecodes) - Developer & Student",
-  description: "Minimal portfolio website showcasing my work and thoughts",
+  title: "Manish Tamang - A young developer",
+  description:
+    "Hi, I'm Manish Gole Tamang, a 17-year-old from Itahari, Nepal, with a fervent passion for web development.",
   icons: {
     icon: [
       {
@@ -49,7 +51,14 @@ export const metadata: Metadata = {
     ],
     apple: "/icon-light-32x32.png",
   },
-}
+  openGraph: {
+    title: "Manish Tamang - A young developer",
+    description:
+      "Hi, I'm Manish Gole Tamang, a 17-year-old from Itahari, Nepal, with a fervent passion for web development.",
+    images: "https://manishtamang.com/profile.png",
+    type: "website",
+  },
+};
 
 import { Toaster } from "sonner"
 
@@ -60,6 +69,28 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning className={`${inter.variable} ${perfectlyNineties.variable} ${myFont.variable} ${jetbrainsMono.variable}`}>
+      <head>
+        <meta name="description" content={metadata.description ?? ""} />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1"
+        />
+        <Script
+          src="https://manish-analytics.vercel.app/script.js"
+          data-website-id="d5fd3d82-d867-4e3d-badb-837ad2ff7f7d"
+          strategy="afterInteractive"
+        />
+        <Script
+          src="https://cloud.umami.is/script.js"
+          data-website-id="87f8f3a2-7fad-4aed-b92d-5beeee4c4491"
+          strategy="afterInteractive"
+        />
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3993510219762880"
+          crossOrigin="anonymous"
+        ></script>
+      </head>
       <body
         className={`font-inter antialiased bg-[#F7F7F7] dark:bg-[#191919]`}
       >

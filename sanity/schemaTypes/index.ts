@@ -7,7 +7,8 @@ import { featuredImage } from './featuredImage'
 import { timeline } from './timeline'
 import { social } from './social'
 import { aboutProfile } from './aboutProfile'
+import { gallery } from './gallery'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [post, project, featuredProjects, recentFavorite, featuredImage, timeline, social, aboutProfile],
+  types: [post, project, featuredProjects, recentFavorite, featuredImage, timeline, social, aboutProfile, gallery],
 }

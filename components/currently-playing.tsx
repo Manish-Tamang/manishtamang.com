@@ -32,8 +32,6 @@ export function CurrentlyPlaying({ recentFavorite }: { recentFavorite?: any }) {
         isPlaying: false,
     };
     const [data, setData] = useState<SpotifyData | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
-
     useEffect(() => {
         const fetchNowPlaying = async () => {
             try {
@@ -42,8 +40,6 @@ export function CurrentlyPlaying({ recentFavorite }: { recentFavorite?: any }) {
                 setData(result);
             } catch (error) {
                 console.error("Error fetching now playing:", error);
-            } finally {
-                setIsLoading(false);
             }
         };
 
@@ -51,16 +47,6 @@ export function CurrentlyPlaying({ recentFavorite }: { recentFavorite?: any }) {
         const interval = setInterval(fetchNowPlaying, 60000); // Update every minute
         return () => clearInterval(interval);
     }, []);
-
-    if (isLoading) {
-        return (
-            <div className="col-span-1 bg-white rounded-[9px] p-4 flex items-center justify-center border border-zinc-200 shadow-sm relative overflow-hidden">
-                <div className="animate-pulse text-[10px] text-zinc-400 font-bold uppercase tracking-wider">
-                    Loading...
-                </div>
-            </div>
-        );
-    }
 
     const current = data?.isPlaying ? data : cmsFallbackTrack;
 

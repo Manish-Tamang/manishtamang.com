@@ -1,0 +1,32 @@
+[
+  {
+    "title": "Structure",
+    "name": "structure",
+    "type": "sanity/structure",
+    "icon": "<svg data-sanity-icon=\"master-detail\" width=\"1em\" height=\"1em\" viewBox=\"0 0 25 25\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M9.5 6.5V10.5M9.5 10.5V14.5M9.5 10.5H5.5M9.5 14.5V18.5M9.5 14.5H5.5M5.5 6.5H19.5V18.5H5.5V6.5Z\" stroke=\"currentColor\" stroke-width=\"1.2\" stroke-linejoin=\"round\"></path></svg>"
+  },
+  {
+    "title": "Vision",
+    "name": "vision",
+    "type": "sanity/vision",
+    "icon": "<svg data-sanity-icon=\"eye-open\" width=\"1em\" height=\"1em\" viewBox=\"0 0 25 25\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M9.39999 12.5C9.39999 10.7879 10.7879 9.39999 12.5 9.39999C14.2121 9.39999 15.6 10.7879 15.6 12.5C15.6 14.2121 14.2121 15.6 12.5 15.6C10.7879 15.6 9.39999 14.2121 9.39999 12.5Z\" fill=\"currentColor\"></path><path d=\"M12.5 7.5C8.5 7.5 6 10 4.5 12.5C6 15 8.5 17.5 12.5 17.5C16.5 17.5 19 15 20.5 12.5C19 10 16.5 7.5 12.5 7.5Z\" stroke=\"currentColor\" stroke-width=\"1.2\" stroke-linejoin=\"round\"></path></svg>"
+  },
+  {
+    "title": "Media",
+    "name": "media",
+    "type": "sanity/media",
+    "icon": "<svg data-sanity-icon=\"image\" width=\"1em\" height=\"1em\" viewBox=\"0 0 25 25\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M5.5 15.5L8.79289 12.2071C9.18342 11.8166 9.81658 11.8166 10.2071 12.2071L12.8867 14.8867C13.2386 15.2386 13.7957 15.2782 14.1938 14.9796L15.1192 14.2856C15.3601 14.1049 15.6696 14.0424 15.9618 14.1154L19.5 15M5.5 6.5H19.5V18.5H5.5V6.5ZM15.5 10.5C15.5 11.0523 15.0523 11.5 14.5 11.5C13.9477 11.5 13.5 11.0523 13.5 10.5C13.5 9.94772 13.9477 9.5 14.5 9.5C15.0523 9.5 15.5 9.94772 15.5 10.5Z\" stroke=\"currentColor\" stroke-width=\"1.2\" stroke-linejoin=\"round\"></path></svg>"
+  },
+  {
+    "title": "Schedules",
+    "name": "schedules",
+    "type": "sanity/scheduled-publishing",
+    "icon": "<svg data-sanity-icon=\"calendar\" width=\"1em\" height=\"1em\" viewBox=\"0 0 25 25\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M5.5 18.5H19.5V6.5H5.5V18.5Z\" stroke=\"currentColor\" stroke-width=\"1.2\" stroke-linejoin=\"round\"></path><path d=\"M16.5 8V4M8.5 8V4M8 12.5H10M8 15.5H10M11.5 12.5H13.5M11.5 15.5H13.5M15 12.5H17M15 15.5H17M12.5 8V4M5.5 9.5H19.5\" stroke=\"currentColor\" stroke-width=\"1.2\" stroke-linejoin=\"round\"></path></svg>"
+  },
+  {
+    "title": "Releases",
+    "name": "releases",
+    "type": "sanity/schedules",
+    "icon": null
+  }
+]

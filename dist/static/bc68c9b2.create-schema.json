@@ -1,0 +1,799 @@
+[
+  {
+    "name": "markdown",
+    "type": "string"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "name",
+        "type": "slug"
+      }
+    ],
+    "name": "media.tag",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "name": "language",
+        "type": "string"
+      },
+      {
+        "name": "filename",
+        "type": "string"
+      },
+      {
+        "name": "code",
+        "type": "text"
+      },
+      {
+        "of": [
+          {
+            "type": "number",
+            "title": "Highlighted line"
+          }
+        ],
+        "name": "highlightedLines",
+        "type": "array",
+        "title": "Highlighted lines"
+      }
+    ],
+    "name": "code",
+    "type": "object"
+  },
+  {
+    "fields": [
+      {
+        "description": "The main headline or title of the blog post",
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "options": {
+          "source": "title",
+          "maxLength": 96
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "A URL-friendly version of the title, used in the post URL",
+        "name": "slug",
+        "type": "slug"
+      },
+      {
+        "description": "The main body content of the post, written in Markdown format",
+        "name": "content",
+        "type": "markdown"
+      },
+      {
+        "description": "A short summary of the post, typically used in previews or meta descriptions",
+        "name": "excerpt",
+        "type": "string"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "description": "The featured image for the post, displayed at the top or in previews",
+        "name": "coverImage",
+        "type": "image"
+      },
+      {
+        "description": "The publication date and time of the post",
+        "name": "date",
+        "type": "datetime"
+      }
+    ],
+    "name": "post",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "description": "A short catchphrase or description (e.g., 'SaaS for Photobooth Management')",
+        "name": "tagline",
+        "type": "string"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "max",
+                "constraint": 3
+              }
+            ],
+            "level": "warning",
+            "message": "Keep it short, preferably 1-2 characters"
+          }
+        ],
+        "description": "1-2 uppercase characters to display as a small icon (e.g., 'YB')",
+        "name": "icon",
+        "type": "string",
+        "title": "Icon Text"
+      },
+      {
+        "options": {
+          "source": "title",
+          "maxLength": 96
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "slug",
+        "type": "slug"
+      },
+      {
+        "name": "content",
+        "type": "markdown"
+      },
+      {
+        "name": "excerpt",
+        "type": "string"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "name": "thumbnail",
+        "type": "image",
+        "title": "Thumbnail Image"
+      },
+      {
+        "name": "date",
+        "type": "datetime"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Link to the live project (optional)",
+        "name": "projectUrl",
+        "type": "url",
+        "title": "Project URL"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Link to the project's GitHub repository (optional)",
+        "name": "githubUrl",
+        "type": "url",
+        "title": "GitHub URL"
+      },
+      {
+        "options": {
+          "layout": "tags"
+        },
+        "description": "Technologies used in this project (e.g., React, Node.js, Tailwind CSS)",
+        "of": [
+          {
+            "type": "string"
+          }
+        ],
+        "name": "techStack",
+        "type": "array"
+      }
+    ],
+    "name": "project",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "length",
+                "constraint": 4
+              }
+            ],
+            "level": "error",
+            "message": "Please select exactly 4 projects to feature"
+          }
+        ],
+        "of": [
+          {
+            "to": [
+              {
+                "type": "project"
+              }
+            ],
+            "type": "reference",
+            "title": "Reference to project"
+          }
+        ],
+        "name": "projects",
+        "type": "array",
+        "title": "Featured Projects"
+      }
+    ],
+    "name": "featuredProjects",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "title",
+        "type": "string",
+        "title": "Track Title"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "artist",
+        "type": "string"
+      },
+      {
+        "name": "album",
+        "type": "string",
+        "title": "Album Name"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "name": "albumImageUrl",
+        "type": "image",
+        "title": "Album Cover Image"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "songUrl",
+        "type": "url",
+        "title": "Spotify / Song URL"
+      }
+    ],
+    "name": "recentFavorite",
+    "type": "document",
+    "title": "Recent Favorite Track"
+  },
+  {
+    "fields": [
+      {
+        "options": {
+          "hotspot": true
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "image",
+        "type": "image",
+        "title": "Featured Image"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Description of the image for accessibility",
+        "name": "alt",
+        "type": "string",
+        "title": "Alt Text"
+      },
+      {
+        "description": "A short caption to display below or as a tooltip",
+        "name": "caption",
+        "type": "string",
+        "title": "Caption (Optional)"
+      }
+    ],
+    "name": "featuredImage",
+    "type": "document",
+    "title": "Featured Image Section"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "options": {
+          "list": [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December"
+          ]
+        },
+        "name": "month",
+        "type": "string"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "year",
+        "type": "string"
+      },
+      {
+        "description": "Detailed description of the milestone. Supports Markdown for links and highlights.",
+        "name": "description",
+        "type": "markdown"
+      },
+      {
+        "of": [
+          {
+            "options": {
+              "hotspot": true
+            },
+            "type": "image"
+          }
+        ],
+        "name": "images",
+        "type": "array"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Used only for ordering the timeline entries in the UI.",
+        "name": "date",
+        "type": "date",
+        "title": "Sort Date"
+      }
+    ],
+    "name": "timeline",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "platform",
+        "type": "string",
+        "title": "Platform Name"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "url",
+        "type": "url",
+        "title": "profile URL"
+      },
+      {
+        "description": "Name of the icon to use (e.g., 'GitHub', 'Twitter', 'LinkedIn')",
+        "name": "icon",
+        "type": "string",
+        "title": "Icon Name"
+      }
+    ],
+    "name": "social",
+    "type": "document",
+    "title": "Social Links"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "The main heading (e.g., 'About')",
+        "name": "heading",
+        "type": "string",
+        "title": "Page Heading"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "The large intro text (e.g., 'Hi, I'm Manish Tamang...')",
+        "name": "intro",
+        "type": "text",
+        "title": "Intro Paragraph"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "The main bio description with markdown support for links and formatting.",
+        "name": "bio",
+        "type": "markdown",
+        "title": "Bio Paragraph"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "options": {
+                  "list": [
+                    {
+                      "title": "GitHub",
+                      "value": "github"
+                    },
+                    {
+                      "title": "Twitter/X",
+                      "value": "twitter"
+                    },
+                    {
+                      "title": "LinkedIn",
+                      "value": "linkedin"
+                    },
+                    {
+                      "title": "Daily.dev",
+                      "value": "dailydev"
+                    },
+                    {
+                      "title": "Instagram",
+                      "value": "instagram"
+                    }
+                  ]
+                },
+                "name": "platform",
+                "type": "string"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "uri",
+                        "constraint": {
+                          "options": {
+                            "scheme": [
+                              "/^http$/",
+                              "/^https$/"
+                            ],
+                            "allowRelative": false,
+                            "relativeOnly": false,
+                            "allowCredentials": false
+                          }
+                        }
+                      },
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "url",
+                "type": "url",
+                "title": "URL"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "socialLinks",
+        "type": "array"
+      }
+    ],
+    "name": "aboutProfile",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "options": {
+          "hotspot": true
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "image",
+        "type": "image"
+      },
+      {
+        "description": "Alternative text for accessibility",
+        "name": "alt",
+        "type": "string",
+        "title": "Alt Text"
+      },
+      {
+        "description": "Optional caption for the image",
+        "name": "caption",
+        "type": "string"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Standard Square (1x1)",
+              "value": "1x1"
+            },
+            {
+              "title": "Horizontal Wide (2x1)",
+              "value": "2x1"
+            },
+            {
+              "title": "Vertical Tall (1x2)",
+              "value": "1x2"
+            },
+            {
+              "title": "Large Square (2x2)",
+              "value": "2x2"
+            },
+            {
+              "title": "Extra Wide (3x1)",
+              "value": "3x1"
+            },
+            {
+              "title": "Cinematic Wide (4x1)",
+              "value": "4x1"
+            }
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "1x1",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "valid",
+                "constraint": [
+                  "1x1",
+                  "2x1",
+                  "1x2",
+                  "2x2",
+                  "3x1",
+                  "4x1"
+                ]
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Choose the visual shape of the image in the grid",
+        "name": "format",
+        "type": "string",
+        "title": "Layout Format"
+      },
+      {
+        "initialValue": 0,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Order in which the image appears (lower numbers appear first)",
+        "name": "order",
+        "type": "number"
+      },
+      {
+        "name": "uploadedAt",
+        "type": "datetime"
+      }
+    ],
+    "name": "gallery",
+    "type": "document"
+  }
+]

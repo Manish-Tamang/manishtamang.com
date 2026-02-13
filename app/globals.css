@@ -257,3 +257,23 @@
     mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
   }
 }
+
+html {
+  min-width: 360px;
+  scroll-behavior: smooth;
+  cursor:
+    url("/cursor/tab-cursor.png") 10 10,
+    pointer;
+}
+
+
+a,
+button,
+[role="button"],
+input[type="submit"],
+input[type="button"],
+.clickable {
+  cursor:
+    url("/cursor/mac-cursor.png") 10 10,
+    pointer;
+}
