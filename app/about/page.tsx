@@ -15,13 +15,13 @@ const timelineEntries = [
     year: "2026",
     title: "Full Stack Aspirant & AI Enthusiast",
     description: "Currently building high-performance web applications with a focus on Agentic AI, modern design systems, and seamless user experiences.",
-    images: ["/images/image.png"],
+    images: ["/images/IMG-20260120-WA0010.jpg"],
   },
   {
     year: "2025",
     title: "Mastering the Modern Web",
     description: "Deep-dived into the Next.js ecosystem, Server Components, and advanced animation techniques with Framer Motion.",
-    images: ["/images/IMG_20251108_133229.jpg", "/images/IMG_20251121_140545.jpg"],
+    images: ["/images/IMG_20251016_132841.jpg", "/images/24e6ecea-71e5-40da-a5e9-f0a287e4ad9a.png"],
   },
   {
     year: "2024",
