@@ -214,13 +214,13 @@ export function GuestbookItem({ entry, onDelete, onRefresh }: GuestbookItemProps
 
     return (
         <>
-            <div className="flex mt-6 gap-4 group relative">
+            <div className="flex mt-4 sm:mt-6 gap-2 sm:gap-4 group relative">
                 <div className="flex flex-col items-center">
-                    <Avatar className="w-10 h-10 border-2 border-white dark:border-zinc-800 shadow-sm shrink-0">
+                    <Avatar className="w-8 h-8 sm:w-10 sm:h-10 border-2 border-white dark:border-zinc-800 shadow-sm shrink-0">
                         {entry.image_url ? (
                             <AvatarImage src={entry.image_url} />
                         ) : (
-                            <AvatarFallback className="bg-gradient-to-br from-zinc-100 to-zinc-200 dark:from-zinc-800 dark:to-zinc-900 text-[13px] font-semibold">
+                            <AvatarFallback className="bg-gradient-to-br from-zinc-100 to-zinc-200 dark:from-zinc-800 dark:to-zinc-900 text-[11px] sm:text-[13px] font-semibold">
                                 {entry.name.charAt(0)}
                             </AvatarFallback>
                         )}
@@ -228,9 +228,9 @@ export function GuestbookItem({ entry, onDelete, onRefresh }: GuestbookItemProps
                     {adminLiked && (
                         <div className="absolute bottom-2 -right-1 z-10">
                             <div className="relative">
-                                <Avatar className="w-5 h-5 border border-white dark:border-zinc-900 shadow-sm">
+                                <Avatar className="w-4 h-4 sm:w-5 sm:h-5 border border-white dark:border-zinc-900 shadow-sm">
                                     <AvatarImage src="https://github.com/Manish-Tamang.png" />
-                                    <AvatarFallback className="text-[6px]">A</AvatarFallback>
+                                    <AvatarFallback className="text-[5px] sm:text-[6px]">A</AvatarFallback>
                                 </Avatar>
                                 <div className="absolute -bottom-1 -right-1 bg-red-500 rounded-full p-0.5 border border-white dark:border-zinc-900">
                                     <Heart className="w-1.5 h-1.5 text-white fill-current" />
@@ -248,40 +248,40 @@ export function GuestbookItem({ entry, onDelete, onRefresh }: GuestbookItemProps
                                 className="absolute pointer-events-none z-50 left-1/2 -translate-x-1/2"
                                 transition={{ duration: 0.6, ease: "easeOut" }}
                             >
-                                <Heart className="w-8 h-8 text-red-500 fill-current drop-shadow-lg" />
+                                <Heart className="w-6 h-6 sm:w-8 sm:h-8 text-red-500 fill-current drop-shadow-lg" />
                             </motion.div>
                         )}
                     </AnimatePresence>
 
                     {hasReplies && <div className="w-[1px] flex-1 bg-zinc-200 dark:bg-zinc-800 mt-2 mb-2" />}
                 </div>
-                <div className="flex-1 space-y-2">
-                    <div className="flex justify-between items-start">
-                        <div className="flex items-center gap-2">
-                            <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                <div className="flex-1 space-y-1.5 sm:space-y-2 min-w-0">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-1 sm:gap-0">
+                        <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+                            <p className="text-xs sm:text-sm font-medium text-zinc-900 dark:text-zinc-100">
                                 {entry.name}
                             </p>
                             {entry.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL && (
-                                <Badge variant="secondary" className="bg-blue-500/10 text-blue-500 border-none text-[10px] h-4 px-1 rounded-sm">Admin</Badge>
+                                <Badge variant="secondary" className="bg-blue-500/10 text-blue-500 border-none text-[9px] sm:text-[10px] h-3.5 sm:h-4 px-1 rounded-sm">Admin</Badge>
                             )}
-                            <span className="text-zinc-500 font-normal text-sm">signed the guestbook</span>
+                            <span className="text-zinc-500 font-normal text-xs sm:text-sm hidden sm:inline">signed the guestbook</span>
                         </div>
-                        <div className="flex items-center gap-2">
-                            <span className="text-[11px] text-zinc-400 font-mono">{formatTimestamp(entry.timestamp)}</span>
+                        <div className="flex items-center gap-1.5 sm:gap-2">
+                            <span className="text-[10px] sm:text-[11px] text-zinc-400 font-mono">{formatTimestamp(entry.timestamp)}</span>
                             {canDelete && (
                                 <button
                                     onClick={() => initiateDelete(entry.id, false)}
-                                    className="p-1 text-zinc-400 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
+                                    className="p-0.5 sm:p-1 text-zinc-400 hover:text-red-500 transition-colors opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
                                     aria-label="Delete message"
                                 >
-                                    <Trash2 className="w-3.5 h-3.5" />
+                                    <Trash2 className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                                 </button>
                             )}
                         </div>
 
                     </div>
                     <div className="relative">
-                        <div className="text-[14px] leading-relaxed text-zinc-600 dark:text-zinc-400 whitespace-pre-wrap break-words">
+                        <div className="text-[13px] sm:text-[14px] leading-relaxed text-zinc-600 dark:text-zinc-400 whitespace-pre-wrap break-words">
                             {parseLinks(displayMessage)}
                             {isLong && (
                                 <button
@@ -289,7 +289,7 @@ export function GuestbookItem({ entry, onDelete, onRefresh }: GuestbookItemProps
                                         setIsExpanded(!isExpanded)
                                         sounds.tick()
                                     }}
-                                    className="ml-1 text-blue-500 hover:text-blue-600 font-medium text-[13px] transition-colors"
+                                    className="ml-1 text-blue-500 hover:text-blue-600 font-medium text-[12px] sm:text-[13px] transition-colors"
                                 >
                                     {isExpanded ? "See less" : "See more"}
                                 </button>
@@ -297,7 +297,7 @@ export function GuestbookItem({ entry, onDelete, onRefresh }: GuestbookItemProps
                         </div>
 
                         {entry.attachment_url && (
-                            <div className="mt-3 relative max-w-[400px] aspect-[16/10] overflow-hidden rounded-xl border border-zinc-200 dark:border-zinc-800 bg-black/5 dark:bg-white/5 group/img transition-all duration-500 hover:border-zinc-300 dark:hover:border-zinc-700 shadow-sm">
+                            <div className="mt-2 sm:mt-3 relative max-w-full sm:max-w-[400px] aspect-[16/10] overflow-hidden rounded-lg sm:rounded-xl border border-zinc-200 dark:border-zinc-800 bg-black/5 dark:bg-white/5 group/img transition-all duration-500 hover:border-zinc-300 dark:hover:border-zinc-700 shadow-sm">
                                 <img
                                     src={entry.attachment_url}
                                     alt="Attachment"
@@ -328,37 +328,37 @@ export function GuestbookItem({ entry, onDelete, onRefresh }: GuestbookItemProps
                     )}
 
                     {isAdmin && (
-                        <div className="flex items-center gap-4 pt-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="flex items-center gap-2 sm:gap-4 pt-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                             <button
                                 onClick={() => handleAction("like")}
                                 className={cn(
-                                    "flex items-center gap-1.5 text-xs transition-colors",
+                                    "flex items-center gap-1 sm:gap-1.5 text-[11px] sm:text-xs transition-colors",
                                     hasLiked ? "text-red-500" : "text-zinc-400 hover:text-red-500"
                                 )}
                             >
-                                <Heart className={cn("w-3.5 h-3.5 transition-transform active:scale-125", hasLiked && "fill-current")} />
-                                {hasLiked ? "Liked" : "Like"}
+                                <Heart className={cn("w-3 h-3 sm:w-3.5 sm:h-3.5 transition-transform active:scale-125", hasLiked && "fill-current")} />
+                                <span className="hidden sm:inline">{hasLiked ? "Liked" : "Like"}</span>
                             </button>
 
                             <Popover>
                                 <PopoverTrigger asChild>
                                     <button
                                         className={cn(
-                                            "flex items-center gap-1.5 text-xs transition-colors",
+                                            "flex items-center gap-1 sm:gap-1.5 text-[11px] sm:text-xs transition-colors",
                                             hasReacted ? "text-blue-500" : "text-zinc-400 hover:text-blue-500"
                                         )}
                                     >
-                                        <Smile className={cn("w-3.5 h-3.5", hasReacted && "fill-current")} />
-                                        React
+                                        <Smile className={cn("w-3 h-3 sm:w-3.5 sm:h-3.5", hasReacted && "fill-current")} />
+                                        <span className="hidden sm:inline">React</span>
                                     </button>
                                 </PopoverTrigger>
-                                <PopoverContent align="start" side="top" className="w-auto p-2 bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-2xl animate-in fade-in zoom-in-95 duration-200">
-                                    <div className="grid grid-cols-4 gap-1">
+                                <PopoverContent align="start" side="top" className="w-auto p-1.5 sm:p-2 bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md border-zinc-200 dark:border-zinc-800 rounded-xl sm:rounded-2xl shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+                                    <div className="grid grid-cols-4 gap-0.5 sm:gap-1">
                                         {COMMON_EMOJIS.map((emoji) => (
                                             <button
                                                 key={emoji}
                                                 onClick={() => handleAction("react", emoji)}
-                                                className="w-9 h-9 flex items-center justify-center hover:bg-zinc-200 dark:hover:bg-zinc-800 rounded-xl text-xl transition-all hover:scale-125 active:scale-90"
+                                                className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center hover:bg-zinc-200 dark:hover:bg-zinc-800 rounded-lg sm:rounded-xl text-lg sm:text-xl transition-all hover:scale-125 active:scale-90"
                                             >
                                                 {emoji}
                                             </button>
@@ -373,39 +373,39 @@ export function GuestbookItem({ entry, onDelete, onRefresh }: GuestbookItemProps
                                         setIsReplying(true)
                                         sounds.toggle()
                                     }}
-                                    className="flex items-center gap-1.5 text-xs text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors"
+                                    className="flex items-center gap-1 sm:gap-1.5 text-[11px] sm:text-xs text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors"
                                 >
-                                    <Reply className="w-3.5 h-3.5" />
-                                    Reply
+                                    <Reply className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                                    <span className="hidden sm:inline">Reply</span>
                                 </button>
                             )}
                         </div>
                     )}
 
                     {!isAdmin && canReply && !isReplying && (
-                        <div className="pt-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="pt-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                             <button
                                 onClick={() => {
                                     setIsReplying(true)
                                     sounds.toggle()
                                 }}
-                                className="flex items-center gap-1.5 text-xs text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors"
+                                className="flex items-center gap-1 sm:gap-1.5 text-[11px] sm:text-xs text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors"
                             >
-                                <Reply className="w-3.5 h-3.5" />
-                                Reply
+                                <Reply className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                                <span className="hidden sm:inline">Reply</span>
                             </button>
                         </div>
                     )}
 
                     {isReplying && (
-                        <form onSubmit={handleReply} className="mt-3 flex gap-2 animate-in fade-in slide-in-from-top-1 duration-200">
+                        <form onSubmit={handleReply} className="mt-2 sm:mt-3 flex gap-1.5 sm:gap-2 animate-in fade-in slide-in-from-top-1 duration-200">
                             <div className="flex-1 relative">
                                 <Input
                                     autoFocus
                                     value={replyMessage}
                                     onChange={(e) => setReplyMessage(e.target.value)}
                                     placeholder="Write a reply..."
-                                    className="bg-zinc-50 dark:bg-zinc-900/50 border-zinc-200 dark:border-zinc-800 rounded-xl pr-10 min-h-[38px] text-sm"
+                                    className="bg-zinc-50 dark:bg-zinc-900/50 border-zinc-200 dark:border-zinc-800 rounded-lg sm:rounded-xl pr-8 sm:pr-10 min-h-[34px] sm:min-h-[38px] text-xs sm:text-sm"
                                     disabled={isSubmittingReply}
                                 />
                                 <button
@@ -414,59 +414,59 @@ export function GuestbookItem({ entry, onDelete, onRefresh }: GuestbookItemProps
                                         setIsReplying(false)
                                         sounds.pop()
                                     }}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600"
+                                    className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600"
                                 >
-                                    <X className="w-3.5 h-3.5" />
+                                    <X className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                                 </button>
                             </div>
                             <Button
                                 type="submit"
                                 size="sm"
-                                className="rounded-xl h-[38px] px-4"
+                                className="rounded-lg sm:rounded-xl h-[34px] sm:h-[38px] px-3 sm:px-4 text-xs sm:text-sm"
                                 disabled={isSubmittingReply || !replyMessage.trim()}
                             >
-                                <Send className="w-3.5 h-3.5 mr-2" />
-                                Post
+                                <Send className="w-3 h-3 sm:w-3.5 sm:h-3.5 sm:mr-2" />
+                                <span className="hidden sm:inline">Post</span>
                             </Button>
                         </form>
                     )}
 
                     {hasReplies && (
-                        <div className="space-y-2 mt-2 pl-4 border-l-2 border-zinc-100 dark:border-zinc-800/50">
+                        <div className="space-y-1.5 sm:space-y-2 mt-2 pl-2 sm:pl-4 border-l-2 border-zinc-100 dark:border-zinc-800/50">
                             {entry.replies?.map((reply) => (
-                                <div key={reply.id} className="flex gap-3 group/reply relative">
-                                    <Avatar className="w-8 h-8 border border-white dark:border-zinc-800 shadow-sm shrink-0">
+                                <div key={reply.id} className="flex gap-2 sm:gap-3 group/reply relative">
+                                    <Avatar className="w-6 h-6 sm:w-8 sm:h-8 border border-white dark:border-zinc-800 shadow-sm shrink-0">
                                         {reply.image_url ? (
                                             <AvatarImage src={reply.image_url} />
                                         ) : (
-                                            <AvatarFallback className="text-[10px]">{reply.name.charAt(0)}</AvatarFallback>
+                                            <AvatarFallback className="text-[9px] sm:text-[10px]">{reply.name.charAt(0)}</AvatarFallback>
                                         )}
                                     </Avatar>
-                                    <div className="flex-1 space-y-1">
-                                        <div className="flex items-center justify-between">
-                                            <div className="flex items-center gap-2">
-                                                <p className="text-xs font-medium text-zinc-900 dark:text-zinc-100">
+                                    <div className="flex-1 space-y-0.5 sm:space-y-1 min-w-0">
+                                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-0.5 sm:gap-0">
+                                            <div className="flex items-center gap-1.5 sm:gap-2">
+                                                <p className="text-[11px] sm:text-xs font-medium text-zinc-900 dark:text-zinc-100">
                                                     {reply.name}
                                                 </p>
                                                 {reply.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL && (
-                                                    <Badge variant="secondary" className="bg-blue-500/10 text-blue-500 border-none text-[8px] h-3.5 px-1 rounded-sm">Admin</Badge>
+                                                    <Badge variant="secondary" className="bg-blue-500/10 text-blue-500 border-none text-[7px] sm:text-[8px] h-3 sm:h-3.5 px-1 rounded-sm">Admin</Badge>
                                                 )}
 
                                             </div>
-                                            <div className="flex items-center gap-2">
-                                                <span className="text-[10px] text-zinc-400 font-mono">{formatTimestamp(reply.timestamp)}</span>
+                                            <div className="flex items-center gap-1 sm:gap-2">
+                                                <span className="text-[9px] sm:text-[10px] text-zinc-400 font-mono">{formatTimestamp(reply.timestamp)}</span>
                                                 {(isAdmin || session?.user?.email === reply.email) && (
                                                     <button
                                                         onClick={() => initiateDelete(reply.id, true)}
-                                                        className="p-1 text-zinc-400 hover:text-red-500 transition-colors opacity-0 group-hover/reply:opacity-100"
+                                                        className="p-0.5 sm:p-1 text-zinc-400 hover:text-red-500 transition-colors opacity-100 sm:opacity-0 sm:group-hover/reply:opacity-100"
                                                         aria-label="Delete reply"
                                                     >
-                                                        <Trash2 className="w-3 h-3" />
+                                                        <Trash2 className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
                                                     </button>
                                                 )}
                                             </div>
                                         </div>
-                                        <div className="text-[13px] leading-relaxed text-zinc-600 dark:text-zinc-400">
+                                        <div className="text-[12px] sm:text-[13px] leading-relaxed text-zinc-600 dark:text-zinc-400 break-words">
                                             {parseLinks(reply.message)}
                                         </div>
                                     </div>
