@@ -9,7 +9,8 @@ export const auth = betterAuth({
             rejectUnauthorized: false,
         },
     }),
-    baseURL: process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_BETTER_AUTH_URL || (process.env.NODE_ENV === "production" ? "https://manishtamang.com" : "http://localhost:3000"),
+    secret: process.env.BETTER_AUTH_SECRET,
+    baseURL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL || "https://manishtamang.com",
     trustedOrigins: ["https://manishtamang.com", "http://localhost:3000"],
     socialProviders: {
         github: {
