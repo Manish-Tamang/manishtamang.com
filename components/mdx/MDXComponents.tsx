@@ -170,12 +170,12 @@ export const MDXComponents: React.FC<MDXComponentsProps> = ({ content }) => {
               );
             },
             p: ({ children }) => (
-              <p className="text-zinc-700 dark:text-zinc-300 leading-relaxed text-[17px]">
+              <p className="text-foreground leading-normal text-sm md:text-base">
                 {children}
               </p>
             ),
             ul: ({ children }) => (
-              <ul className="list-disc pl-8 text-zinc-700 dark:text-zinc-300 leading-relaxed space-y-2">
+              <ul className="list-disc pl-8 text-foreground leading-normal text-sm md:text-base space-y-2">
                 {children}
               </ul>
             ),
