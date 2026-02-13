@@ -5,7 +5,12 @@ import { Pool } from "pg";
 export const auth = betterAuth({
     database: new Pool({
         connectionString: process.env.DATABASE_URL,
+        ssl: {
+            rejectUnauthorized: false,
+        },
     }),
+    baseURL: process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_BETTER_AUTH_URL || (process.env.NODE_ENV === "production" ? "https://manishtamang.com" : "http://localhost:3000"),
+    trustedOrigins: ["https://manishtamang.com", "http://localhost:3000"],
     socialProviders: {
         github: {
             clientId: process.env.GITHUB_CLIENT_ID || "",
