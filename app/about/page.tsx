@@ -9,6 +9,10 @@ import { sanityFetch } from "@/sanity/lib/live";
 import { ABOUT_PROFILE_QUERY } from "@/sanity/lib/queries";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
+import { CertificatesSection } from "@/components/certificates-section";
+import { FeaturedSection } from "@/components/featured-section";
+
+
 
 const timelineEntries = [
   {
@@ -139,9 +143,19 @@ export default async function AboutPage() {
         </section>
 
 
+        <section id="featured">
+          <FeaturedSection />
+        </section>
+        {/* 
+        <section id="certificates">
+          <CertificatesSection />
+        </section> */}
+
+
         <section id="timeline">
           <Timeline avatarUrl="/images/profile.png" entries={timelineEntries} />
         </section>
+
       </div>
     </div>
   );
