@@ -106,7 +106,7 @@ export default async function AboutPage() {
                 <ReactMarkdown
                   rehypePlugins={[rehypeRaw]}
                   components={{
-                    p: ({ children }) => <p className="mb-6 last:mb-0">{children}</p>,
+                    p: ({ children }) => <p className="mb-6 text-foreground leading-normal text-sm md:text-base last:mb-0">{children}</p>,
                     strong: ({ children }) => <span className="font-bold text-foreground">{children}</span>,
                   }}
                 >
