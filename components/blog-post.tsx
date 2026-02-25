@@ -3,6 +3,7 @@ import Image from "next/image"
 import { MessageCircle, Share2, MoreHorizontal } from "lucide-react"
 import { MDXComponents } from "./mdx/MDXComponents"
 import { format } from "date-fns"
+import Comments from "./Comments"
 
 interface BlogPostProps {
   title: string
@@ -21,7 +22,7 @@ interface BlogPostProps {
 
 export function BlogPost({ title, date, content, category = ["TECH", "DESIGN"], summary, author, image }: BlogPostProps) {
   return (
-    <main className="w-full max-w-[910px] mx-auto pb-24">
+    <main className="w-full max-w-[910px] -mt-16 mx-auto pb-24">
       {/* Top Tags */}
       <div className="flex gap-4 mb-4">
         {category.map((tag) => (
@@ -55,13 +56,13 @@ export function BlogPost({ title, date, content, category = ["TECH", "DESIGN"], 
         </div>
         <div className="flex flex-col h-full h-auto">
           {summary && (
-            <p className="text-zinc-800 dark:text-zinc-300 leading-normal border-l-2 border-[#5C2BFF] pl-6 mb-8 mt-2">
-              {summary.split(/\s+/).slice(0, 60).join(" ")}
+            <p className="text-zinc-800 dark:text-zinc-300 leading-normal border-l-2 border-[#5C2BFF] pl-6 mb-2 mt-2">
+              {summary.split(/\s+/).slice(0, 30).join(" ")}
               {summary.split(/\s+/).length > 60 && "…"}
             </p>
           )}
 
-          <div className="mt-auto pt-6 border-t border-zinc-100">
+          <div className="mt-auto pt-2 border-t border-zinc-100">
             <div className="flex items-center gap-2 mb-1">
               <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">by</span>
               <span className="text-xs font-bold text-[#5C2BFF] cursor-pointer hover:underline">
@@ -111,6 +112,7 @@ export function BlogPost({ title, date, content, category = ["TECH", "DESIGN"], 
 
       <article className="max-w-[610px] p-0 md:p-6 mx-auto">
         <MDXComponents content={content} />
+        <Comments  />
       </article>
     </main>
   )
