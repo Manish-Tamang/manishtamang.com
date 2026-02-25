@@ -180,7 +180,7 @@ export const MDXComponents: React.FC<MDXComponentsProps> = ({ content }) => {
               </ul>
             ),
             ol: ({ children }) => (
-              <ol className="list-decimal pl-8 text-zinc-700 dark:text-zinc-300 leading-relaxed space-y-2">
+              <ol className="list-decimal pl-8 text-zinc-700 dark:text-zinc-300 leading-normal space-y-2">
                 {children}
               </ol>
             ),
