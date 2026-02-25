@@ -7,7 +7,7 @@ export default async function PhotosPage() {
 
     return (
         <div className="flex flex-col items-center min-h-screen">
-            <div className="w-full max-w-[670px] px-4 sm:px-6 py-6 sm:py-12 space-y-8 sm:space-y-12">
+            <div className="w-full max-w-[670px] -mt-10 px-4 sm:px-6 py-6 sm:py-12 space-y-8 sm:space-y-12">
                 {/* Header */}
                 <header className="space-y-4">
                     <h1 className="text-3xl sm:text-4xl font-medium tracking-tight">Photos</h1>
