@@ -281,7 +281,7 @@ export function GuestbookItem({ entry, onDelete, onRefresh }: GuestbookItemProps
 
                     </div>
                     <div className="relative">
-                        <div className="text-[13px] sm:text-[14px] leading-relaxed text-zinc-600 dark:text-zinc-400 whitespace-pre-wrap break-words">
+                        <div className="text-[13px] sm:text-[14px] leading-normal text-zinc-600 dark:text-zinc-400 whitespace-pre-wrap break-words">
                             {parseLinks(displayMessage)}
                             {isLong && (
                                 <button
