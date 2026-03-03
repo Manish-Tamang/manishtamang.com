@@ -2,12 +2,20 @@ import { betterAuth } from "better-auth";
 import { admin } from "better-auth/plugins";
 import { Pool } from "pg";
 
-if (!process.env.DATABASE_URL) {
-    throw new Error("Missing required environment variable: DATABASE_URL");
-}
+const requiredEnvVars = [
+    "DATABASE_URL",
+    "BETTER_AUTH_SECRET",
+    "BETTER_AUTH_URL",
+    "GITHUB_CLIENT_ID",
+    "GITHUB_CLIENT_SECRET",
+    "GOOGLE_CLIENT_ID",
+    "GOOGLE_CLIENT_SECRET",
+] as const;
 
-if (!process.env.BETTER_AUTH_SECRET) {
-    throw new Error("Missing required environment variable: BETTER_AUTH_SECRET");
+for (const envVar of requiredEnvVars) {
+    if (!process.env[envVar]) {
+        throw new Error(`Missing required environment variable: ${envVar}`);
+    }
 }
 
 export const auth = betterAuth({
