@@ -158,7 +158,7 @@ export default function ContactPage() {
                                 onChange={handleChange}
                                 onInvalid={() => sounds.warning()}
                                 required
-                                placeholder="you@example.com"
+                                placeholder="laro@example.com"
                                 className="w-full px-4 py-3 rounded-xl bg-foreground/5 border border-transparent focus:border-foreground/10 focus:bg-foreground/[0.08] transition-all outline-none text-[16px]"
                             />
                         </div>
@@ -261,6 +261,8 @@ export default function ContactPage() {
                                 The most efficient way to start the conversation is to book a complimentary 30-minute consultation.
                             </p>
                             <a
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 href={process.env.NEXT_PUBLIC_CALENDLY_URL || "#"}
                                 className="inline-flex items-center gap-2 px-6 py-3 bg-foreground text-background rounded-full text-sm font-medium hover:scale-[1.02] active:scale-[0.98] transition-all"
                             >
@@ -280,6 +282,17 @@ export default function ContactPage() {
                             </a>
                         </div>
                     </div>
+                    <p className="text-xs text-gray-500 dark:text-neutral-400 mt-8">
+                        This page is inspired by{" "}
+                        <a href="https://www.totaltypescript.com/contact" className="underline">
+                            Total TypeScript
+                        </a>{" "}
+                        and
+                        <a href="https://www.romanabashin.com/contact" className="underline">
+                            {" "}
+                            Roman Abashin
+                        </a>
+                    </p>
                 </section>
             </div>
         </div>
