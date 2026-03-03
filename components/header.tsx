@@ -12,6 +12,7 @@ import { MdLocalPhone } from "react-icons/md";
 import { FaRss } from "react-icons/fa";
 import { HiMiniHome } from "react-icons/hi2";
 import { GoProjectSymlink } from "react-icons/go";
+import { FaBook } from "react-icons/fa6";
 
 export function Header() {
   const pathname = usePathname()
@@ -53,7 +54,7 @@ export function Header() {
       href: "/guestbook",
       label: "Guestbook",
       active: isActive("/guestbook"),
-      icon: <MdLocalPhone className="w-4 h-4" />
+      icon: <FaBook className="w-4 h-4" />
     },
     {
       href: "/contact",
