@@ -7,6 +7,7 @@ import "./globals.css"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import Script from "next/script";
+import CarbonAds from "@/components/CarbonAds";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -96,7 +97,8 @@ export default function RootLayout({
       >
         <div className="min-h-screen flex flex-col">
           <div className="flex-1 flex justify-center">
-            <div className="w-full  relative"> <Header /> {children}</div>
+            <div className="w-full  relative"> <Header />
+              <CarbonAds className="fixed bottom-4 left-16 w-1/4 hidden md:block" /> {children}</div>
           </div>
           <Footer />
         </div>
