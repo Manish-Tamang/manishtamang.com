@@ -46,6 +46,7 @@ export function WorkSection() {
                 className="rounded-md"
               />
             </div> */}
+            
             <div className="flex-1">
               <div className="flex items-center justify-between">
                 <div>
