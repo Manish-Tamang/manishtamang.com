@@ -72,6 +72,7 @@
     "react-syntax-highlighter": "^16.1.0",
     "recharts": "2.15.4",
     "rehype-raw": "^7.0.0",
+    "resend": "^6.9.3",
     "sanity": "^4.22.0",
     "sanity-plugin-markdown": "^8.0.4",
     "sanity-plugin-media": "^4.1.1",
