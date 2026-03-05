@@ -34,7 +34,7 @@ export default function NotFound() {
                 The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.
             </p>
 
-            <Button asChild size="lg">
+            <Button className="bg-[#9AC372] hover:bg-[#9AC372]/80" asChild size="lg">
                 <Link href="/">
                     Go Back Home
                 </Link>
