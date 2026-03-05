@@ -37,8 +37,6 @@ const ColophonPage = () => {
                         A detailed look at how this website was built, the technologies used, and the people who inspired it.
                     </p>
                 </header>
-
-                {/* About This Website */}
                 <section className="space-y-6">
                     <h2 className="text-3xl font-inter font-bold tracking-tight">About This Website</h2>
                     <div className="space-y-4 text-[15px] sm:text-[17px] leading-relaxed text-foreground/80">
