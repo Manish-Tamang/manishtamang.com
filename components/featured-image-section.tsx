@@ -15,10 +15,11 @@ export async function FeaturedImageSection() {
                 <Image
                     src={featuredImage.url}
                     alt={featuredImage.alt || "Featured Image"}
-                    width={1920}
-                    height={1080}
+                    width={900}
+                    height={506}
                     className="w-full h-auto rounded-md shadow-sm border border-zinc-200 dark:border-zinc-800"
-                    priority
+                    loading="lazy"
+                    quality={75}
                 />
                 {featuredImage.caption && (
                     <p className="mt-2 text-xs text-zinc-500 text-center font-medium italic">
