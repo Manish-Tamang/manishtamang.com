@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Heart, Smile, Trash2, Reply, Send, X, Plus, Flower } from "lucide-react"
+import { Heart, Smile, Trash2, Reply, Send, X, Plus, Flower, Link2 } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -214,7 +214,10 @@ export function GuestbookItem({ entry, onDelete, onRefresh }: GuestbookItemProps
 
     return (
         <>
-            <div className="flex mt-4 sm:mt-6 gap-2 sm:gap-4 group relative">
+            <div
+                id={entry.id}
+                className="flex mt-3 sm:mt-3 gap-2 sm:gap-4 group relative scroll-mt-24 target:bg-blue-500/5 dark:target:bg-blue-500/10 target:ring-1 target:ring-blue-500/20 rounded-xl p-2 -m-2 transition-all duration-700"
+            >
                 <div className="flex flex-col items-center">
                     <Avatar className="w-8 h-8 sm:w-10 sm:h-10 border-2 border-white dark:border-zinc-800 shadow-sm shrink-0">
                         {entry.image_url ? (
@@ -268,6 +271,19 @@ export function GuestbookItem({ entry, onDelete, onRefresh }: GuestbookItemProps
                         </div>
                         <div className="flex items-center gap-1.5 sm:gap-2">
                             <span className="text-[10px] sm:text-[11px] text-zinc-400 font-mono">{formatTimestamp(entry.timestamp)}</span>
+                            <button
+                                onClick={() => {
+                                    const url = `${window.location.origin}${window.location.pathname}#${entry.id}`;
+                                    navigator.clipboard.writeText(url);
+                                    toast.success("Link copied to clipboard");
+                                    sounds.success();
+                                }}
+                                className="p-0.5 sm:p-1 text-zinc-400 hover:text-[#9AC372] transition-colors opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
+                                title="Copy link to this message"
+                                aria-label="Copy link"
+                            >
+                                <Link2 className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                            </button>
                             {canDelete && (
                                 <button
                                     onClick={() => initiateDelete(entry.id, false)}
@@ -301,7 +317,8 @@ export function GuestbookItem({ entry, onDelete, onRefresh }: GuestbookItemProps
                                 <img
                                     src={entry.attachment_url}
                                     alt="Attachment"
-                                    className="w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-[1.03]"
+                                    draggable={false}
+                                    className="w-full h-full user-select-none object-cover transition-transform duration-700 group-hover/img:scale-[1.03]"
                                 />
                             </div>
                         )}
