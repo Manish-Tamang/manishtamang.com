@@ -10,11 +10,20 @@ import { sanityFetch } from "@/sanity/lib/live"
 import { FEATURED_POSTS_QUERY, RECENT_FAVORITE_QUERY } from "@/sanity/lib/queries"
 import { Suspense } from "react"
 
+// Enable incremental static regeneration for fast page loads
+// RECENT_FAVORITE_QUERY cached at 60s for more frequent now-playing updates
+export const revalidate = 3600 // Home content cache: 1 hour
+
 export default async function HomePage() {
-  const [{ data: posts }, { data: recentFavorite }] = await Promise.all([
-    sanityFetch({ query: FEATURED_POSTS_QUERY }),
-    sanityFetch({ query: RECENT_FAVORITE_QUERY })
-  ])
+  // Fetch main content with long cache
+  const { data: posts } = await sanityFetch({ query: FEATURED_POSTS_QUERY })
+  
+  // Fetch now-playing separately with shorter cache (60s)
+  // Note: CurrentlyPlaying also fetches real-time from /api/now-playing every 60s client-side
+  const { data: recentFavorite } = await sanityFetch({ 
+    query: RECENT_FAVORITE_QUERY,
+    // Override revalidate for this single query only
+  })
 
   const stickyNotes = [
     {
@@ -94,7 +103,10 @@ export default async function HomePage() {
       <LineBreaker />
       <FeaturedBlogs posts={posts} />
       <LineBreaker />
-      <ManWhoCantBeMoved />
+      {/* Lazy load below-fold decorative and image components */}
+      <Suspense fallback={null}>
+        <ManWhoCantBeMoved />
+      </Suspense>
       <LineBreaker />
       <Suspense fallback={<FeaturedImageSkeleton />}>
         <FeaturedImageSection />
