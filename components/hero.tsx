@@ -65,6 +65,7 @@ export function Hero() {
                 priority
                 draggable={false}
                 className="object-contain pointer-events-none select-none drop-shadow-2xl transition-transform duration-500 ease-out group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:scale-[1.03] group-hover:rotate-1"
+                sizes="(max-width: 768px) 96px, 160px"
               />
             </div>
           </div>
