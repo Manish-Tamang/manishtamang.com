@@ -29,8 +29,7 @@ export function AboutSection({ recentFavorite }: { recentFavorite?: any }) {
         <section className="max-w-[610px] w-full mx-auto mt-6 px-4 md:px-0">
             <h2 className="text-2xl font-semibold mb-2">About</h2>
             <p className="text-foreground leading-normal mb-6 text-sm md:text-base">
-                I craft minimal and functional digital experiences. Focused on clean design, thoughtful typography, and
-                building with modern web technologies.
+                I craft thoughtful digital experiences that feel clear, fast, and genuinely useful in everyday use.
             </p>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                 <div className="col-span-1 bg-[#A0C4FF] rounded-[12px] p-6 relative min-h-[160px] flex flex-col justify-between">
@@ -88,7 +87,7 @@ export function AboutSection({ recentFavorite }: { recentFavorite?: any }) {
                         <PenTool className="w-4 h-4 text-zinc-800" />
                     </div>
                     <p className="text-[11px] text-zinc-800/80 mt-2 line-clamp-2">
-                        Focusing on the React ecosystem, TypeScript, and modern backend solutions to create seamless user journeys.
+                        I work across React, TypeScript, and modern backend stacks to ship reliable and delightful user experiences.
                     </p>
                     <Link href="#" className="text-[10px] flex items-center gap-1 hover:underline mt-4 font-bold text-zinc-900">
                         Read my logs <ArrowUpRight className="w-2 h-2" />
@@ -98,7 +97,7 @@ export function AboutSection({ recentFavorite }: { recentFavorite?: any }) {
                     <div>
                         <h3 className="text-sm text-white font-semibold mb-2">Constantly Learning</h3>
                         <p className="text-[11px] leading-relaxed opacity-80">
-                            When I'm not coding, I'm diving into documentation, exploring new UI patterns, or contributing to open-source projects.
+                            Outside of client work, I'm studying emerging web patterns, experimenting with agentic workflows, and sharpening my craft.
                         </p>
                     </div>
                     <Link href="#" className="text-[10px] flex items-center gap-1 hover:underline mt-4 opacity-100">
