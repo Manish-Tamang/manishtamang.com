@@ -49,7 +49,7 @@ export function AboutSection({ recentFavorite }: { recentFavorite?: any }) {
                     <div className="flex items-center justify-between mt-4">
                         <p className="text-[10px] text-zinc-800 uppercase tracking-wider">Current role</p>
                         <div className="w-6 h-6 bg-[#E0E7FF] rounded-full flex items-center justify-center">
-                            <Image src="/images/profile.png" alt="Logo" className="rounded-full" width={24} height={24} />
+                            <Image src="/images/profile.png" alt="Logo" className="rounded-full" width={24} height={24} loading="lazy" />
                         </div>
                     </div>
                 </div>
@@ -59,7 +59,8 @@ export function AboutSection({ recentFavorite }: { recentFavorite?: any }) {
                         alt="mini-gole"
                         fill
                         className="object-cover user-select-none"
-                        priority
+                        loading="lazy"
+                        sizes="(max-width: 768px) 100px, 150px"
                     />
                     <div className="absolute inset-0" />
                     <div className="absolute bottom-3 left-3 right-3">
