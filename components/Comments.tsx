@@ -1,6 +1,6 @@
 "use client";
 import React, { Component, createRef, useEffect, useState } from 'react';
-import { useTheme } from 'next-themes';
+import { useTheme } from 'next-themes'; 
 
 interface CommentsProps {
 }
@@ -16,7 +16,7 @@ export default class Comments extends Component<CommentsProps, CommentsState> {
     }
 
     componentDidUpdate(prevProps: CommentsProps, prevState: CommentsState) {
-        if (this.props !== prevProps || this.state !== prevState) {
+        if (this.props !== prevProps || this.state !== prevState) { 
             const existingScript = this.commentBox.current?.querySelector('script[src*="utteranc.es"]');
             if (existingScript) {
                 existingScript.remove();
@@ -54,11 +54,11 @@ export default class Comments extends Component<CommentsProps, CommentsState> {
 
 export const CommentsFunctional = () => {
     const commentBox = createRef<HTMLDivElement>();
-    const { theme } = useTheme();
+    const { theme } = useTheme(); 
 
     useEffect(() => {
         const loadUtterances = () => {
-            if (!theme) return;
+            if (!theme) return; 
 
             const utterancesTheme = theme === 'dark' ? 'github-dark' : 'github-light';
 
@@ -66,7 +66,7 @@ export const CommentsFunctional = () => {
             scriptEl.setAttribute("src", "https://utteranc.es/client.js");
             scriptEl.setAttribute("crossorigin", "anonymous");
             scriptEl.setAttribute("async", "true");
-            scriptEl.setAttribute("repo", "Manish-tamang/comments");
+            scriptEl.setAttribute("repo", "Manish-tamang/comments"); 
             scriptEl.setAttribute("issue-term", "title");
             scriptEl.setAttribute("theme", utterancesTheme);
             const existingScript = commentBox.current?.querySelector('script[src*="utteranc.es"]');
