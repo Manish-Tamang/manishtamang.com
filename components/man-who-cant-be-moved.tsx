@@ -17,7 +17,8 @@ export function ManWhoCantBeMoved() {
                     fill
                     className="object-contain user-select-none"
                     draggable={false}
-                    priority
+                    loading="lazy"
+                    sizes="(max-width: 640px) 150px, (max-width: 768px) 200px, 260px"
                 />
             </div>
         </section>
