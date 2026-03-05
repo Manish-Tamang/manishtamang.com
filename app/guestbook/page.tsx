@@ -14,7 +14,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useGuestbook } from "@/hooks/use-guestbook"
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { GuestbookItem } from "@/components/guestbook/guestbook-item"
 import { GuestbookForm } from "@/components/guestbook/guestbook-form"
 import { GuestbookSkeleton } from "@/components/guestbook/guestbook-skeleton"
@@ -32,10 +32,43 @@ export default function GuestbookPage() {
         })
     }, [entries, sortOrder])
 
+    useEffect(() => {
+        const handleHashChange = () => {
+            if (typeof window !== 'undefined' && window.location.hash) {
+                const hash = decodeURIComponent(window.location.hash.slice(1)).toLowerCase();
+
+                // Try by ID first
+                let element = document.getElementById(hash);
+
+                // If not found by ID, try finding an entry with this name (slugified)
+                if (!element) {
+                    const entry = entries.find(e =>
+                        e.name.toLowerCase().replace(/\s+/g, '-') === hash ||
+                        e.name.toLowerCase() === hash
+                    );
+                    if (entry) {
+                        element = document.getElementById(entry.id);
+                    }
+                }
+
+                if (element) {
+                    setTimeout(() => {
+                        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }, 500);
+                }
+            }
+        };
+
+        if (!isLoading && entries.length > 0) {
+            handleHashChange();
+            window.addEventListener('hashchange', handleHashChange);
+            return () => window.removeEventListener('hashchange', handleHashChange);
+        }
+    }, [isLoading, entries])
+
     return (
         <div className="flex flex-col items-center min-h-screen font-inter">
             <div className="w-full max-w-[610px] px-4 sm:px-6 py-6 sm:py-8 space-y-6 sm:space-y-8">
-                {/* Header */}
                 <header className="space-y-3 sm:space-y-4">
                     <div className="flex items-center justify-between w-full">
                         <div className="flex items-center gap-3 sm:gap-4">
@@ -74,10 +107,7 @@ export default function GuestbookPage() {
                         Leave a comment below. It could be anything – appreciation, information, wisdom, anything good or bad about me or even humor.
                     </p>
                 </header>
-
                 <GuestbookForm onSuccess={refresh} />
-
-                {/* Activity Feed */}
                 <div className="space-y-3 sm:space-y-4">
                     {isLoading ? (
                         <div className="py-8 sm:py-10">
@@ -98,7 +128,7 @@ export default function GuestbookPage() {
                             />
                         ))
                     )}
-                    <div className="pt-4 sm:pt-6 border-t border-dashed border-zinc-200 dark:border-zinc-800">
+                    <div className="pt-4 sm:pt-6 mt-3 border-t border-dashed border-zinc-200 dark:border-zinc-800">
                         <div className="bg-zinc-100/30 dark:bg-zinc-900/30 border border-zinc-200/50 dark:border-zinc-800/50 rounded-xl sm:rounded-2xl p-3 sm:p-4 flex gap-3 sm:gap-4 items-center group cursor-pointer hover:bg-zinc-100/50 dark:hover:bg-zinc-900/50 transition-colors">
                             <div className="flex-1 space-y-0.5 sm:space-y-1">
                                 <h3 className="text-[13px] sm:text-[14px] md:text-[15px] font-semibold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5 sm:gap-2">
