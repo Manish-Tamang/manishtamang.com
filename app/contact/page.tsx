@@ -129,7 +129,7 @@ export default function ContactPage() {
             <div className="w-full max-w-[610px] px-6 py-12 space-y-12">
                 <section className="space-y-6">
                     <h1 className="text-4xl font-medium tracking-tight">Contact</h1>
-                    <p className="text-[17px] leading-relaxed text-foreground/80 font-normal">
+                    <p className="text-foreground leading-normal text-sm md:text-base">
                         It&apos;s currently{" "}
                         {nepalTime ? (
                             <span className="font-medium text-foreground">
