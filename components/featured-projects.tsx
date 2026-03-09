@@ -21,7 +21,7 @@ export async function FeaturedProjects() {
                         target={project.link ? "_blank" : undefined}
                         className="group flex flex-col md:flex-row gap-4 md:gap-6 items-start hover:opacity-80 transition-opacity"
                     >
-                        <div className="relative w-full md:w-[180px] aspect-video md:h-[110px] rounded-md overflow-hidden bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shrink-0">
+                        <div className="relative w-full md:w-[180px] aspect-video md:h-[110px] rounded-md overflow-hidden bg-zinc-100 dark:bg-zinc-900 shrink-0">
                             {project.image ? (
                                 <Image
                                     src={project.image}
@@ -31,7 +31,17 @@ export async function FeaturedProjects() {
                                 />
                             ) : (
                                 <div className="w-full h-full flex items-center justify-center bg-zinc-200 dark:bg-zinc-800">
-                                    <span className="text-zinc-400 dark:text-zinc-600 font-bold text-2xl">{project.icon}</span>
+                                    {project.link ? (
+                                        <Image
+                                            src={`https://www.google.com/s2/favicons?domain=${project.link?.replace(/^https?:\/\//, '').split('/')[0]}&sz=128`}
+                                            alt={`${project.title} icon`}
+                                            width={48}
+                                            height={48}
+                                            className="object-contain"
+                                        />
+                                    ) : (
+                                        <span className="text-zinc-400 dark:text-zinc-600 font-bold text-2xl">{project.icon || project.title.substring(0, 2)}</span>
+                                    )}
                                 </div>
                             )}
                             <div className="absolute inset-0 bg-gradient-to-br from-transparent to-black/5 dark:to-black/20" />
@@ -64,8 +74,18 @@ export async function FeaturedProjects() {
                             </p>
 
                             <div className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-zinc-100 transition-colors">
-                                <div className="w-4 h-4 rounded-sm bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 flex items-center justify-center overflow-hidden">
-                                    <span className="text-[8px] font-bold uppercase text-zinc-900 dark:text-zinc-100">{project.icon || project.title.substring(0, 2)}</span>
+                                <div className="w-4 h-4 rounded-sm bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center overflow-hidden">
+                                    {project.link ? (
+                                        <Image
+                                            src={`https://www.google.com/s2/favicons?domain=${project.link?.replace(/^https?:\/\//, '').split('/')[0]}&sz=32`}
+                                            alt={`${project.title} icon`}
+                                            width={16}
+                                            height={16}
+                                            className="object-contain"
+                                        />
+                                    ) : (
+                                        <span className="text-[8px] font-bold uppercase text-zinc-900 dark:text-zinc-100">{project.icon || project.title.substring(0, 2)}</span>
+                                    )}
                                 </div>
                                 <span className="text-xs font-medium truncate max-w-[200px]">{project.link?.replace(/^https?:\/\//, '') || 'No link'}</span>
                                 {project.link && <ArrowUpRight className="w-3 h-3 opacity-0 md:opacity-0 group-hover:opacity-100 transition-opacity" />}
