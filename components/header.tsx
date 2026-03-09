@@ -13,6 +13,7 @@ import { FaRss } from "react-icons/fa";
 import { HiMiniHome } from "react-icons/hi2";
 import { GoProjectSymlink } from "react-icons/go";
 import { FaBook } from "react-icons/fa6";
+import { MdDashboardCustomize } from "react-icons/md";
 
 export function Header() {
   const pathname = usePathname()
@@ -57,6 +58,12 @@ export function Header() {
       icon: <FaBook className="w-4 h-4" />
     },
     {
+      href: "/dashboard",
+      label: "Dashboard",
+      active: isActive("/dashboard"),
+      icon: <MdDashboardCustomize className="w-4 h-4" />
+    },
+    {
       href: "/contact",
       label: "Contact",
       active: isActive("/contact"),
@@ -97,7 +104,7 @@ export function Header() {
             </button>
           </div>
 
-          <div className="hidden md:flex gap-2 items-center">
+          <div className="hidden md:flex gap-0 items-center">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
