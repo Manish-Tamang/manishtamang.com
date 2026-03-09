@@ -1,83 +1,144 @@
-"use client"
+import { headers } from "next/headers";
+import { WakaTimeOverview } from "@/components/dashboard/wakatime-overview";
+import type { WakaTimeApiResponse } from "@/lib/wakatime-types";
+import GithubContribution from "@/components/github-contribution";
+import { getBlogPostStats } from "@/lib/BlogStats";
+import { BlogStatsTable } from "@/components/dashboard/blog-stats-table";
+import { RecentUmamiSessions } from "@/components/dashboard/recent-umami-sessions";
 
-import React from "react"
-import Link from "next/link"
-import { motion } from "motion/react"
-import { Hammer, ArrowLeft, Construction } from "lucide-react"
-import { sounds } from "@/lib/sounds"
+export const revalidate = 60;
 
-export default function DashboardPage() {
+interface UmamiSession {
+    id?: string;
+    url?: string;
+    hostname?: string;
+    browser?: string;
+    os?: string;
+    device?: string;
+    country?: string;
+    city?: string;
+    createdAt?: number;
+    visitedAt?: number;
+}
+
+async function getInitialWakaTimeData(): Promise<WakaTimeApiResponse | null> {
+    const headerStore = await headers();
+    const forwardedHost = headerStore.get("x-forwarded-host");
+    const host = forwardedHost ?? headerStore.get("host");
+
+    if (!host) {
+        return null;
+    }
+
+    const protocol =
+        headerStore.get("x-forwarded-proto") ??
+        (host.includes("localhost") ? "http" : "https");
+
+    try {
+        const response = await fetch(`${protocol}://${host}/api/wakatime`, {
+            next: { revalidate: 60 },
+        });
+
+        if (!response.ok) {
+            return null;
+        }
+
+        return (await response.json()) as WakaTimeApiResponse;
+    } catch {
+        return null;
+    }
+}
+
+async function getRecentSessions(): Promise<UmamiSession[]> {
+    const headerStore = await headers();
+    const forwardedHost = headerStore.get("x-forwarded-host");
+    const host = forwardedHost ?? headerStore.get("host");
+
+    if (!host) {
+        return [];
+    }
+
+    const protocol =
+        headerStore.get("x-forwarded-proto") ??
+        (host.includes("localhost") ? "http" : "https");
+
+    try {
+        const response = await fetch(
+            `${protocol}://${host}/api/umami?type=sessions&limit=3`,
+            {
+                next: { revalidate: 60 },
+            }
+        );
+
+        if (!response.ok) {
+            return [];
+        }
+
+        const payload = (await response.json()) as { data?: UmamiSession[] };
+        if (!Array.isArray(payload.data)) {
+            return [];
+        }
+
+        return payload.data.slice(0, 3);
+    } catch {
+        return [];
+    }
+}
+
+export default async function DashboardPage() {
+    const [initialData, blogStats, recentSessions] = await Promise.all([
+        getInitialWakaTimeData(),
+        getBlogPostStats(),
+        getRecentSessions(),
+    ]);
+
     return (
-        <div className="flex flex-col items-center justify-center min-h-[80vh] px-6">
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
-                className="w-full max-w-md text-center space-y-8"
-            >
-                {/* Visual Icon Area */}
-                <div className="relative inline-flex items-center justify-center">
-                    <motion.div
-                        animate={{
-                            rotate: [0, 10, 0, -10, 0],
-                        }}
-                        transition={{
-                            duration: 4,
-                            repeat: Infinity,
-                            ease: "easeInOut"
-                        }}
-                        className="p-6 rounded-3xl bg-foreground/5 border border-foreground/10 relative z-10"
-                    >
-                        <Construction className="w-12 h-12 text-foreground/40" />
-                    </motion.div>
-
-                    {/* Decorative Elements */}
-                    <div className="absolute -top-4 -right-4 w-12 h-12 bg-yellow-500/10 rounded-full blur-xl animate-pulse" />
-                    <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-blue-500/10 rounded-full blur-xl animate-pulse delay-700" />
-                </div>
-
-                {/* Content */}
-                <div className="space-y-4">
-                    <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
-                        Under Construction
-                    </h1>
-                    <p className="text-[15px] sm:text-[17px] leading-relaxed text-foreground/60 max-w-[320px] mx-auto">
-                        This page is currently being built with passion. I'm working hard to bring you something amazing soon.
+        <main className="min-h-[80vh] px-6 py-8 sm:py-12">
+            <section className="mx-auto w-full max-w-152.5 space-y-8">
+                <header className="space-y-3 max-w-2xl">
+                    <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-500 dark:text-zinc-400 font-mono">
+                        Dashboard
                     </p>
-                </div>
+                    <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+                        Coding Activity
+                    </h1>
+                    <p className="text-zinc-600 dark:text-zinc-400 text-base leading-relaxed">
+                        Real-time coding statistics from <a href="https://wakatime.com/@manishtamang" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline decoration-wavy">WakaTime</a>. Tracking my development journey across all projects and languages.
+                    </p>
+                </header>
 
-                {/* Progress Indicator (Fake/Static for aesthetic) */}
-                <div className="space-y-2 max-w-[280px] mx-auto">
-                    <div className="h-1.5 w-full bg-foreground/5 rounded-full overflow-hidden">
-                        <motion.div
-                            initial={{ width: 0 }}
-                            animate={{ width: "65%" }}
-                            transition={{ duration: 1.5, delay: 0.5, ease: "circOut" }}
-                            className="h-full bg-foreground/20 rounded-full"
-                        />
-                    </div>
-                    <div className="flex justify-between text-[11px] uppercase tracking-widest text-foreground/30 font-bold">
-                        <span>Development</span>
-                        <span>65%</span>
-                    </div>
-                </div>
-
-                {/* Actions */}
-                <div className="pt-4">
-                    <Link
-                        href="/"
-                        onClick={() => sounds.click()}
-                        className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-foreground text-background text-sm font-medium hover:scale-[1.03] active:scale-[0.98] transition-all shadow-lg shadow-foreground/10 group"
-                    >
-                        <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
-                        Back to Home
-                    </Link>
-                </div>
-
-                <p className="text-[13px] text-foreground/30 font-medium pt-4">
-                    Thank you for your patience!
+                <WakaTimeOverview initialData={initialData} />
+                <section className="space-y-3 max-w-2xl ">
+                    <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+                        Contribution Graph
+                    </h2>
+                    <p className="text-zinc-600 dark:text-zinc-400 text-base leading-relaxed">
+                        A quick view of my activity and open-source contribution streak on <a href="https://github.com/Manish-Tamang" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline decoration-wavy">GitHub</a>.
+                    </p>
+                </section>
+                <GithubContribution />
+                <section className="space-y-3">
+                    <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+                        Recent Sessions
+                    </h2>
+                    <p className="text-zinc-600 dark:text-zinc-400 text-base leading-relaxed">
+                        Latest 3 visits captured from <a href="https://manish-analytics.vercel.app/share/jFK5VpX2c6h2JgRg/manishtamang.com" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline decoration-wavy">Umami analytics</a>.
+                    </p>
+                    <RecentUmamiSessions sessions={recentSessions} />
+                </section>
+                <section className="space-y-3">
+                    <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+                        Blog Statistics
+                    </h2>
+                    <p className="text-zinc-600 dark:text-zinc-400 text-base leading-relaxed">
+                        Views and reactions across all blog posts.
+                    </p>
+                    <BlogStatsTable posts={blogStats} />
+                </section>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-8">
+                    This page is inspired by <a href="https://theodorusclarence.com/statistics" className="underline">Theodorus Clarence (Blog stats)</a>and <a href="https://victoreke.com/" className="underline">Victor Eke (Contribution Graph)</a>.
                 </p>
-            </motion.div>
-        </div>
-    )
+            </section>
+        </main>
+    );
 }
