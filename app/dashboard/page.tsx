@@ -139,6 +139,7 @@ export default async function DashboardPage() {
                     This page is inspired by <a href="https://theodorusclarence.com/statistics" className="underline">Theodorus Clarence (Blog stats)</a>and <a href="https://victoreke.com/" className="underline">Victor Eke (Contribution Graph)</a>.
                 </p>
             </section>
+            
         </main>
     );
 }
