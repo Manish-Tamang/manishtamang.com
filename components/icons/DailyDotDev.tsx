@@ -2,7 +2,7 @@ import type { SVGProps } from "react";
 
 const DailyDotDev = (props: SVGProps<SVGSVGElement>) => (
     <svg {...props} viewBox="0 0 40 40">
-        <g fill="#272727ff" fillRule="evenodd">
+        <g fill="currentColor" fillRule="evenodd">
             <path
                 d="m31.48 19.944-3.533-3.533 1.765-3.531 5.74 5.74a1.873 1.873 0 0 1 0 2.648l-7.065 7.064a1.873 1.873 0 0 1-2.648-2.648l5.74-5.74Z"
                 opacity=".56"
