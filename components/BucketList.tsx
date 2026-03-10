@@ -2,6 +2,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { Checkbox } from "@/components/ui/checkbox";
+import { sounds } from "@/lib/sounds";
+import { toast } from "sonner";
 
 interface BucketListItem {
     id: number;
@@ -44,7 +46,12 @@ const BucketList: React.FC<BucketListProps> = ({ bucketList, setBucketList }) =>
                             <Checkbox
                                 className="mr-2 h-4 w-4 border-gray-300 dark:border-gray-600 text-[#38A662] dark:text-[#38A662] focus:ring-[#38A662] dark:focus:ring-[#38A662]"
                                 checked={item.completed}
-                                onCheckedChange={() => { }}
+                                onCheckedChange={() => {
+                                    if (!item.completed) {
+                                        sounds.error();
+                                        toast.error("that's not how it works buddy :)");
+                                    }
+                                }}
                             />
                             <div className="text-gray-700 dark:text-gray-300">
                                 <span className="font-medium font-mono"> {item.title} </span>
