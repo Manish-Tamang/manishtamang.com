@@ -11,6 +11,7 @@ import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import { CertificatesSection } from "@/components/certificates-section";
 import { FeaturedSection } from "@/components/featured-section";
+import { Education } from "@/components/Education";
 
 
 
@@ -86,13 +87,13 @@ export default async function AboutPage() {
     { platform: "github", url: "https://github.com" },
     { platform: "twitter", url: "https://twitter.com" },
     { platform: "linkedin", url: "https://linkedin.com" },
-    { platform: "dailydev", url: "https://daily.dev/golecodes" },
+    { platform: "dailydev", url: "https://app.daily.dev/manishtamang" },
     { platform: "instagram", url: "https://instagram.com/golecodes" },
   ];
 
   return (
     <div className="flex flex-col items-center">
-      <div className="w-full max-w-[610px] px-6 py-12 space-y-24">
+      <div className="w-full max-w-[610px] px-6 py-12 space-y-12">
         <StickyNotesProvider stickyNotes={stickyNotes} />
         <section className="space-y-6">
           <h1 className="text-4xl font-medium tracking-tight">{heading}</h1>
@@ -106,7 +107,7 @@ export default async function AboutPage() {
                 <ReactMarkdown
                   rehypePlugins={[rehypeRaw]}
                   components={{
-                    p: ({ children }) => <p className="mb-6 text-foreground leading-normal text-sm md:text-base last:mb-0">{children}</p>,
+                    p: ({ children }) => <p className="mb-6 text-zinc-600 dark:text-zinc-400 leading-normal text-sm md:text-base last:mb-0">{children}</p>,
                     strong: ({ children }) => <span className="font-bold text-foreground">{children}</span>,
                   }}
                 >
@@ -142,6 +143,9 @@ export default async function AboutPage() {
           </div>
         </section>
 
+        <section id="education">
+          <Education />
+        </section>
 
         <section id="featured">
           <FeaturedSection />
