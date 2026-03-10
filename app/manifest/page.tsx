@@ -32,7 +32,6 @@ const ManifestPage = () => {
     return (
         <div className="flex flex-col items-center min-h-screen">
             <div className="w-full max-w-[610px] px-4 sm:px-6 py-6 sm:py-12 space-y-12 sm:space-y-16">
-                {/* Header */}
                 <header className="space-y-4">
                     <h1 className="text-3xl sm:text-4xl font-medium tracking-tight">Manifest List</h1>
                     <p className="text-foreground leading-normal text-sm md:text-base">
@@ -43,14 +42,10 @@ const ManifestPage = () => {
                         . Your support is greatly appreciated and will be acknowledged with a special gratitude page dedicated to my sponsors.
                     </p>
                 </header>
-
-                {/* Bucket List */}
                 <section className="space-y-6">
                     <h2 className="text-3xl font-bold tracking-tight">Bucket List</h2>
                     <BucketList bucketList={bucketList} setBucketList={setBucketList} />
                 </section>
-
-                {/* Learning Goals */}
                 <section className="space-y-6">
                     <h2 className="text-3xl font-bold tracking-tight">My Learning Goals</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -69,8 +64,6 @@ const ManifestPage = () => {
                         ))}
                     </div>
                 </section>
-
-                {/* Footer */}
                 <footer className="pt-8 border-t border-zinc-200 dark:border-zinc-800 space-y-4">
                     <p className="text-sm text-foreground/50">
                         The Bucket List section is inspired by{" "}
@@ -85,7 +78,7 @@ const ManifestPage = () => {
                         .
                     </p>
                     <p className="text-sm text-foreground/50">
-                        Last Updated: <span className="font-medium text-foreground/70">February 14, 2026</span>
+                        Last Updated: <span className="font-medium text-foreground/70">November 8, 2025</span>
                     </p>
                 </footer>
             </div>
