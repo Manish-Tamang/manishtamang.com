@@ -16,6 +16,7 @@ import { Motion } from "@/components/icons/Motion"
 import { useState, useEffect } from "react"
 import { LineBreaker } from "@/components/line-breaker"
 import { sounds } from "@/lib/sounds"
+import { ColorPalette } from "@/components/ColorPalette"
 
 const ColophonPage = () => {
     const [daysSinceLaunch, setDaysSinceLaunch] = useState(0)
@@ -29,8 +30,7 @@ const ColophonPage = () => {
 
     return (
         <div className="flex flex-col items-center min-h-screen">
-            <div className="w-full max-w-[610px] px-4 sm:px-6 py-6 sm:py-12 space-y-12 sm:space-y-16">
-                {/* Header */}
+            <div className="w-full max-w-[610px] px-4 sm:px-6 py-6 sm:py-12 space-y-12 sm:space-y-8">
                 <header className="space-y-4">
                     <h1 className="text-3xl sm:text-4xl font-medium tracking-tight">Colophon</h1>
                     <p className="text-foreground leading-normal text-sm md:text-base">
@@ -46,7 +46,7 @@ const ColophonPage = () => {
                             I'm passionate about.
                         </p>
                         <p className="text-foreground leading-normal text-sm md:text-base" >
-                            This is the third version of my portfolio. My journey began in 2023
+                            This is the fourth version of my portfolio. My journey began in 2023
                             when I deployed my first portfolio, which I had copied from a{" "}
                             <Link
                                 href="https://www.youtube.com/watch?v=ldwlOzRvYOU"
@@ -66,9 +66,9 @@ const ColophonPage = () => {
                             >
                                 Leerob
                             </Link>
-                            's portfolio. Now, with everything I've learned along the way, I've
-                            crafted this version from the ground up, blending all my experiences
-                            into a site that truly represents me.
+                            's portfolio. In March 2025, I launched the third version, refining my skills further.
+                            Now, I've crafted this fourth version from the ground up with a strong focus on minimalism,
+                            blending all my experiences into a clean, thoughtful design that truly represents me.
                         </p>
                         <p className="text-foreground leading-normal text-sm md:text-base" >
                             Built with Sanity, TypeScript, Next.js, and PostgreSQL,
@@ -76,9 +76,7 @@ const ColophonPage = () => {
                             maintainability.
                         </p>
                     </div>
-
-                    {/* Live Since Counter */}
-                    <div className="flex flex-col items-center py-8 px-6 bg-zinc-50 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800">
+                    <div className="flex flex-col items-center py-8 px-6 bg-zinc-50 dark:bg-zinc-900/50 rounded-[8px] border border-zinc-200 dark:border-zinc-800">
                         <h3 className="text-lg font-medium mb-4 text-foreground/70">Live Since</h3>
                         <div className="flex items-baseline gap-3">
                             <span className="text-4xl sm:text-5xl font-bold text-foreground">
@@ -92,7 +90,6 @@ const ColophonPage = () => {
                     </div>
                 </section>
 
-                {/* Tech Stack */}
                 <section className="space-y-6">
                     <h2 className="text-3xl font-bold tracking-tight">Tech Stack</h2>
                     <p className="text-[15px] sm:text-[17px] leading-relaxed text-foreground/80">
@@ -173,8 +170,6 @@ const ColophonPage = () => {
                         .
                     </p>
                 </section>
-
-                {/* Typography */}
                 <section className="space-y-6">
                     <h2 className="text-3xl font-bold tracking-tight">Typography</h2>
                     <p className="text-foreground leading-normal text-sm md:text-base">
@@ -201,23 +196,17 @@ const ColophonPage = () => {
                         <TypographyItem label="Custom Font" font="var(--font-myfont)" />
                     </div>
                 </section>
-
-                {/* Design & Colors */}
                 <section className="space-y-6">
                     <h2 className="text-3xl font-bold tracking-tight">Design & Colors</h2>
                     <p className="text-[15px] sm:text-[17px] leading-relaxed text-foreground/80">
-                        The website's design follows a minimalist approach with a focus on readability and user experience.
-                        The color palette adapts seamlessly between light and dark modes, ensuring optimal contrast and accessibility.
+                        The website uses a minimalist design focused on readability and user experience.
+                        It supports light and dark modes for strong contrast and accessibility.
+                        An intentional mix of colors adds visual interest while keeping the design balanced.
                     </p>
-                    <div className="p-6 bg-zinc-50 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800">
-                        <p className="text-sm text-foreground/60">
-                            The design emphasizes clean typography, generous whitespace, and subtle animations to create
-                            a pleasant browsing experience that puts content first.
-                        </p>
-                    </div>
-                </section>
 
-                {/* External APIs & Libraries */}
+                    <p className="text-xs text-foreground/50 mb-3">Color Palette (Click to copy)</p>
+                    <ColorPalette />
+                </section>
                 <section className="space-y-6">
                     <h2 className="text-3xl font-bold tracking-tight">External APIs & Libraries</h2>
                     <p className="text-[15px] sm:text-[17px] leading-relaxed text-foreground/80">
@@ -226,14 +215,14 @@ const ColophonPage = () => {
                     <ul className="list-disc list-inside text-[15px] sm:text-[17px] leading-relaxed text-foreground/80 space-y-2">
                         <li>
                             <Link
-                                href="https://www.spotify.com/us/developer/"
+                                href="https://manish-analytics.vercel.app/share/jFK5VpX2c6h2JgRg/manishtamang.com"
                                 className="text-foreground font-medium underline underline-offset-4 decoration-foreground/30 hover:decoration-foreground/60 transition-all"
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
-                                Spotify API
+                                Umami Analytics API
                             </Link>
-                            : To showcase listening activity.
+                            : To fetch analytics data.
                         </li>
                         <li>
                             <Link
@@ -259,8 +248,6 @@ const ColophonPage = () => {
                         </li>
                     </ul>
                 </section>
-
-                {/* Additional Libraries */}
                 <section className="space-y-6">
                     <h2 className="text-3xl font-bold tracking-tight">Additional Libraries & Functionality</h2>
                     <p className="text-[15px] sm:text-[17px] leading-relaxed text-foreground/80">
@@ -288,6 +275,17 @@ const ColophonPage = () => {
                                 Better Auth
                             </Link>
                             : For secure and streamlined user authentication.
+                        </li>
+                        <li>
+                            <Link
+                                href="https://resend.com/"
+                                className="text-foreground font-medium underline underline-offset-4 decoration-foreground/30 hover:decoration-foreground/60 transition-all"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Resend
+                            </Link>
+                            : For email delivery.
                         </li>
                         <li>
                             Icons: Sourced from{" "}
