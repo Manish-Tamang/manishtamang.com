@@ -216,7 +216,7 @@ export default function StickyNote({
                     width: `${noteWidth}px`,
                     height: `${noteHeight}px`,
                     transform: `rotate(${hoverRotation}deg)`,
-                    boxShadow: '0 4px 10px rgba(150, 150, 180, 0.3), 0 2px 4px rgba(100, 100, 120, 0.2)',
+                    // boxShadow: '0 4px 10px rgba(150, 150, 180, 0.3), 0 2px 4px rgba(100, 100, 120, 0.2)',
                     borderRadius: '0px',
                     padding: isMobile ? '8px' : '12px',
                 }}
