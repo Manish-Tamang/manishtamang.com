@@ -39,7 +39,7 @@ export function Footer() {
                                 <li>
                                     <Link
                                         href="/about"
-                                        className="text-gray-600 dark:text-gray-400 hover:text-[#9AC372] dark:hover:text-[#9AC372] flex items-center transition-colors duration-200"
+                                        className="text-neutral-600 dark:text-neutral-400 hover:text-[#9AC372] dark:hover:text-[#9AC372] flex items-center transition-colors duration-200"
                                     >
                                         <HiOutlineInformationCircle className="mr-2 h-5 w-5" aria-hidden="true" />
                                         About
@@ -48,7 +48,7 @@ export function Footer() {
                                 <li>
                                     <Link
                                         href="/dashboard"
-                                        className="text-gray-600 dark:text-gray-400 hover:text-[#9AC372] dark:hover:text-[#9AC372] flex items-center transition-colors duration-200"
+                                        className="text-neutral-600 dark:text-neutral-400 hover:text-[#9AC372] dark:hover:text-[#9AC372] flex items-center transition-colors duration-200"
                                     >
                                         <HiOutlineDesktopComputer className="mr-2 h-5 w-5" aria-hidden="true" />
                                         Dashboard
@@ -57,7 +57,7 @@ export function Footer() {
                                 <li>
                                     <Link
                                         href="/colophon"
-                                        className="text-gray-600 dark:text-gray-400 hover:text-[#9AC372] dark:hover:text-[#9AC372] flex items-center transition-colors duration-200"
+                                        className="text-neutral-600 dark:text-neutral-400 hover:text-[#9AC372] dark:hover:text-[#9AC372] flex items-center transition-colors duration-200"
                                     >
                                         <HiOutlineBookOpen className="mr-2 h-5 w-5" aria-hidden="true" />
                                         Colophon
@@ -66,7 +66,7 @@ export function Footer() {
                                 <li>
                                     <Link
                                         href="/manifest"
-                                        className="text-gray-600 dark:text-gray-400 hover:text-[#9AC372] dark:hover:text-[#9AC372] flex items-center transition-colors duration-200"
+                                        className="text-neutral-600 dark:text-neutral-400 hover:text-[#9AC372] dark:hover:text-[#9AC372] flex items-center transition-colors duration-200"
                                     >
                                         <FaRegStar className="mr-2 h-5 w-5" aria-hidden="true" />
                                         Manifest
@@ -79,7 +79,7 @@ export function Footer() {
                                 <li>
                                     <Link
                                         href="/guestbook"
-                                        className="text-gray-600 dark:text-gray-400 hover:text-[#9AC372] dark:hover:text-[#9AC372] flex items-center transition-colors duration-200"
+                                        className="text-neutral-600 dark:text-neutral-400 hover:text-[#9AC372] dark:hover:text-[#9AC372] flex items-center transition-colors duration-200"
                                     >
                                         <HiOutlineBookOpen className="mr-2 h-5 w-5" aria-hidden="true" />
                                         Guestbook
@@ -88,7 +88,7 @@ export function Footer() {
                                 <li>
                                     <Link
                                         href="/contact"
-                                        className="text-gray-600 dark:text-gray-400 hover:text-[#9AC372] dark:hover:text-[#9AC372] flex items-center transition-colors duration-200"
+                                        className="text-neutral-600 dark:text-neutral-400 hover:text-[#9AC372] dark:hover:text-[#9AC372] flex items-center transition-colors duration-200"
                                     >
                                         <FaRegEnvelope className="mr-2 h-5 w-5" aria-hidden="true" />
                                         Contact
@@ -97,7 +97,7 @@ export function Footer() {
                                 <li>
                                     <Link
                                         href="/blog"
-                                        className="text-gray-600 dark:text-gray-400 hover:text-[#9AC372] dark:hover:text-[#9AC372] flex items-center transition-colors duration-200"
+                                        className="text-neutral-600 dark:text-neutral-400 hover:text-[#9AC372] dark:hover:text-[#9AC372] flex items-center transition-colors duration-200"
                                     >
                                         <HiOutlineBookOpen className="mr-2 h-5 w-5" aria-hidden="true" />
                                         Blogs
@@ -106,7 +106,7 @@ export function Footer() {
                                 <li>
                                     <Link
                                         href="/uses"
-                                        className="text-gray-600 dark:text-gray-400 hover:text-[#9AC372] dark:hover:text-[#9AC372] flex items-center transition-colors duration-200"
+                                        className="text-neutral-600 dark:text-neutral-400 hover:text-[#9AC372] dark:hover:text-[#9AC372] flex items-center transition-colors duration-200"
                                     >
                                         <HiOutlineDesktopComputer className="mr-2 h-5 w-5" aria-hidden="true" />
                                         Uses
@@ -119,7 +119,7 @@ export function Footer() {
                                 <li>
                                     <Link
                                         href="/projects"
-                                        className="text-gray-600 dark:text-gray-400 hover:text-[#9AC372] dark:hover:text-[#9AC372] flex items-center transition-colors duration-200"
+                                        className="text-neutral-600 dark:text-neutral-400 hover:text-[#9AC372] dark:hover:text-[#9AC372] flex items-center transition-colors duration-200"
                                     >
                                         <HiOutlineBriefcase className="mr-2 h-5 w-5" aria-hidden="true" />
                                         Projects
@@ -128,7 +128,7 @@ export function Footer() {
                                 <li>
                                     <Link
                                         href="/photos"
-                                        className="text-gray-600 dark:text-gray-400 hover:text-[#9AC372] dark:hover:text-[#9AC372] flex items-center transition-colors duration-200"
+                                        className="text-neutral-600 dark:text-neutral-400 hover:text-[#9AC372] dark:hover:text-[#9AC372] flex items-center transition-colors duration-200"
                                     >
                                         <HiOutlinePhotograph className="mr-2 h-5 w-5" aria-hidden="true" />
                                         Photos
@@ -137,7 +137,7 @@ export function Footer() {
                                 <li>
                                     <FeedbackFish projectId={process.env.NEXT_PUBLIC_FEEDBACK_FISH_ID || 'e60dbe6f6bf435'}>
                                         <button
-                                            className="text-gray-600 dark:text-gray-400 hover:text-[#9AC372] dark:hover:text-[#9AC372] flex items-center transition-colors duration-200 w-full text-left"
+                                            className="text-neutral-600 dark:text-neutral-400 hover:text-[#9AC372] dark:hover:text-[#9AC372] flex items-center transition-colors duration-200 w-full text-left"
                                         >
                                             <HiOutlineInformationCircle className="mr-2 h-5 w-5" aria-hidden="true" />
                                             Feedback
@@ -147,7 +147,7 @@ export function Footer() {
                                 <li>
                                     <Link
                                         href="https://manish-analytics.vercel.app/share/jFK5VpX2c6h2JgRg/manishtamang.com"
-                                        className="text-gray-600 dark:text-gray-400 hover:text-[#9AC372] dark:hover:text-[#9AC372] flex items-center transition-colors duration-200"
+                                        className="text-neutral-600 dark:text-neutral-400 hover:text-[#9AC372] dark:hover:text-[#9AC372] flex items-center transition-colors duration-200"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                     >
@@ -164,7 +164,7 @@ export function Footer() {
                                         href="https://www.instagram.com/golecodes/"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="text-gray-600 dark:text-gray-400 hover:text-[#9AC372] dark:hover:text-[#9AC372] flex items-center transition-colors duration-200"
+                                        className="text-neutral-600 dark:text-neutral-400 hover:text-[#9AC372] dark:hover:text-[#9AC372] flex items-center transition-colors duration-200"
                                     >
                                         <FaInstagram className="mr-2 h-5 w-5" aria-hidden="true" />
                                         Instagram
@@ -175,7 +175,7 @@ export function Footer() {
                                         href="https://app.daily.dev/manishtamang"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="text-gray-600 dark:text-gray-400 hover:text-[#9AC372] dark:hover:text-[#9AC372] flex items-center transition-colors duration-200"
+                                        className="text-neutral-600 dark:text-neutral-400 hover:text-[#9AC372] dark:hover:text-[#9AC372] flex items-center transition-colors duration-200"
                                     >
                                         <SiDailydotdev className="mr-2 h-5 w-5" aria-hidden="true" />
                                         Daily.dev
@@ -186,7 +186,7 @@ export function Footer() {
                                         href="https://github.com/Manish-Tamang"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="text-gray-600 dark:text-gray-400 hover:text-[#9AC372] dark:hover:text-[#9AC372] flex items-center transition-colors duration-200"
+                                        className="text-neutral-600 dark:text-neutral-400 hover:text-[#9AC372] dark:hover:text-[#9AC372] flex items-center transition-colors duration-200"
                                     >
                                         <FaGithub className="mr-2 h-5 w-5" aria-hidden="true" />
                                         GitHub
@@ -197,7 +197,7 @@ export function Footer() {
                                         href="https://www.linkedin.com/in/manish-tamang/"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="text-gray-600 dark:text-gray-400 hover:text-[#9AC372] dark:hover:text-[#9AC372] flex items-center transition-colors duration-200"
+                                        className="text-neutral-600 dark:text-neutral-400 hover:text-[#9AC372] dark:hover:text-[#9AC372] flex items-center transition-colors duration-200"
                                     >
                                         <FaLinkedin className="mr-2 h-5 w-5" aria-hidden="true" />
                                         LinkedIn
@@ -208,8 +208,8 @@ export function Footer() {
                     </div>
                     <LineBreaker />
                     <div className="flex flex-row justify-between items-center text-[10px] font-normal" style={{ letterSpacing: '-0.02em', lineHeight: '1.35em' }}>
-                        <p className="text-gray-600 text-sm dark:text-gray-400 text-start">Manish Tamang © {currentYear}</p>
-                        <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400 text-sm">
+                        <p className="text-neutral-600 text-sm dark:text-neutral-400 text-start">Manish Tamang © {currentYear}</p>
+                        <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 text-sm">
                             <FaRegClock className="w-4 h-4" />
                             <span>{time} NPT</span>
                         </div>
