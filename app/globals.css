@@ -270,7 +270,7 @@ button,
 [role="button"],
 input[type="submit"],
 input[type="button"],
-.clickable {
+.pointer {
   cursor:
     url("/cursor/mac-cursor.png") 10 10,
     pointer;
