@@ -68,7 +68,7 @@ export function WakaTimeStatCard({
       <article 
         className="rounded-lg cursor-pointer border-0 p-5 transition-all duration-300 hover:translate-y-[3px] hover:shadow-[0_-8px_0px_0px_rgba(0,0,0,0.15)] relative z-10"
         style={{ backgroundColor: bgColor }}
-        onMouseEnter={() => sounds.tick()}
+        onMouseEnter={() => sounds.whoosh()}
         onClick={() => {
           sounds.pop();
           toast.success("🎉 Easter egg unlocked!", {
