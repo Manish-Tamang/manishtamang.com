@@ -108,3 +108,10 @@ export const GALLERY_QUERY = defineQuery(`*[_type == "gallery"] | order(order as
     uploadedAt
 }`);
 
+export const WALL_QUERY = defineQuery(`*[_type == "wall"] | order(order asc) {
+    _id,
+    "imageURL": image.asset->url + "?w=200&fit=crop&auto=format&q=80",
+    order,
+    uploadedAt
+}`);
+
