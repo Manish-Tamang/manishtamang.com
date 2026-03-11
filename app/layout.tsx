@@ -63,6 +63,7 @@ export const metadata: Metadata = {
 };
 
 import { Toaster } from "sonner"
+import { SanityLive } from "@/sanity/lib/live"
 
 export default function RootLayout({
   children,
@@ -107,6 +108,7 @@ export default function RootLayout({
           <Footer />
         </div>
         <Analytics />
+        <SanityLive />
         <Toaster
           position="bottom-right"
           toastOptions={{
