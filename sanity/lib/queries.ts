@@ -48,7 +48,7 @@ export const FEATURED_POSTS_QUERY = defineQuery(`*[_type == "post"] {
     coverImage,
     "tag": category[0]
 } | order(date desc)[0...3]`);
-export const FEATURE_PROJECTS_QUERY = defineQuery(`*[_type == "featuredProjects"][0] {
+export const FEATURE_PROJECTS_QUERY = defineQuery(`*[_type == "featuredProjects" && _id == "featuredProjects"][0] {
     projects[]-> {
         title,
         tagline,
@@ -59,7 +59,7 @@ export const FEATURE_PROJECTS_QUERY = defineQuery(`*[_type == "featuredProjects"
     }
 }.projects`);
 
-export const RECENT_FAVORITE_QUERY = defineQuery(`*[_type == "recentFavorite"][0] {
+export const RECENT_FAVORITE_QUERY = defineQuery(`*[_type == "recentFavorite" && _id == "recentFavorite"][0] {
     title,
     artist,
     album,
@@ -67,7 +67,7 @@ export const RECENT_FAVORITE_QUERY = defineQuery(`*[_type == "recentFavorite"][0
     songUrl
 }`);
 
-export const FEATURED_IMAGE_QUERY = defineQuery(`*[_type == "featuredImage"][0] {
+export const FEATURED_IMAGE_QUERY = defineQuery(`*[_type == "featuredImage" && _id == "featuredImage"][0] {
     "url": image.asset->url,
     alt,
     caption
@@ -88,7 +88,7 @@ export const SOCIALS_QUERY = defineQuery(`*[_type == "social"] {
     icon
 }`);
 
-export const ABOUT_PROFILE_QUERY = defineQuery(`*[_type == "aboutProfile"][0] {
+export const ABOUT_PROFILE_QUERY = defineQuery(`*[_type == "aboutProfile" && _id == "aboutProfile"][0] {
     heading,
     intro,
     bio,
