@@ -147,7 +147,7 @@ export function GuestbookForm({ onSuccess }: GuestbookFormProps) {
             <div className=" rounded-2xl bg-foreground/5 border border-foreground/5 p-6 flex flex-col items-start gap-6 text-start">
                 <div className="space-y-2 text-start">
                     <h3 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">Sign the Guestbook</h3>
-                    <p className="text-sm text-zinc-500 max-w-[280px]">Log in to leave a message and join the building of this space.</p>
+                   <p className="text-foreground leading-normal text-sm md:text-base">Log in to leave a message and join the building of this space.</p>
                 </div>
                 <div className="grid grid-cols-2 gap-3 w-full">
                     <Button
