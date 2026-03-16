@@ -103,7 +103,7 @@ export default function GuestbookPage() {
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </div>
-                    <p className="text-[14px] sm:text-[15px] md:text-[16px] leading-relaxed text-zinc-500 dark:text-zinc-400 font-normal">
+                   <p className="text-foreground leading-normal text-sm md:text-base">
                         Leave a comment below. It could be anything – appreciation, information, wisdom, anything good or bad about me or even humor.
                     </p>
                 </header>
