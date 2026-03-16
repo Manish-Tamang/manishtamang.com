@@ -11,19 +11,13 @@ import { FEATURED_POSTS_QUERY, RECENT_FAVORITE_QUERY } from "@/sanity/lib/querie
 import { Suspense } from "react"
 
 // Enable incremental static regeneration for fast page loads
-// RECENT_FAVORITE_QUERY cached at 60s for more frequent now-playing updates
 export const revalidate = 3600 // Home content cache: 1 hour
 
 export default async function HomePage() {
   // Fetch main content with long cache
   const { data: posts } = await sanityFetch({ query: FEATURED_POSTS_QUERY })
   
-  // Fetch now-playing separately with shorter cache (60s)
-  // Note: CurrentlyPlaying also fetches real-time from /api/now-playing every 60s client-side
-  const { data: recentFavorite } = await sanityFetch({ 
-    query: RECENT_FAVORITE_QUERY,
-    // Override revalidate for this single query only
-  })
+  const { data: recentFavorite } = await sanityFetch({ query: RECENT_FAVORITE_QUERY })
 
   const stickyNotes = [
     {
