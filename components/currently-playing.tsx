@@ -1,54 +1,28 @@
 "use client"
 
-import { useState, useEffect } from "react"
 import Link from "next/link"
 import { ArrowUpRight } from "lucide-react"
 
-interface SpotifyData {
+interface RecentFavoriteData {
     album?: string;
     albumImageUrl?: string;
     artist?: string;
-    isPlaying: boolean;
     songUrl?: string;
     title?: string;
 }
 
-const fallbackTrack = {
-    artist: "Arthur Gunn",
-    album: "Nyano Ghar",
-    title: "Nyano Ghar",
-    albumImageUrl: "/nyano-ghar.jpg",
-    songUrl: "https://open.spotify.com/track/7wCND5ZKuJbbBYZVKfUE4y?si=95bd642e0010497b",
-    isPlaying: false,
-};
-
 export function CurrentlyPlaying({ recentFavorite }: { recentFavorite?: any }) {
-    const cmsFallbackTrack: SpotifyData = {
-        artist: recentFavorite?.artist || fallbackTrack.artist,
-        album: recentFavorite?.album || fallbackTrack.album,
-        title: recentFavorite?.title || fallbackTrack.title,
-        albumImageUrl: recentFavorite?.albumImageUrl || fallbackTrack.albumImageUrl,
-        songUrl: recentFavorite?.songUrl || fallbackTrack.songUrl,
-        isPlaying: false,
-    };
-    const [data, setData] = useState<SpotifyData | null>(null);
-    useEffect(() => {
-        const fetchNowPlaying = async () => {
-            try {
-                const response = await fetch("/api/now-playing");
-                const result = await response.json();
-                setData(result);
-            } catch (error) {
-                console.error("Error fetching now playing:", error);
-            }
-        };
+    const current: RecentFavoriteData | null = recentFavorite
+        ? {
+            artist: recentFavorite.artist,
+            album: recentFavorite.album,
+            title: recentFavorite.title,
+            albumImageUrl: recentFavorite.albumImageUrl,
+            songUrl: recentFavorite.songUrl,
+        }
+        : null;
 
-        fetchNowPlaying();
-        const interval = setInterval(fetchNowPlaying, 60000); // Update every minute
-        return () => clearInterval(interval);
-    }, []);
-
-    const current = data?.isPlaying ? data : cmsFallbackTrack;
+    if (!current?.title || !current.artist) return null;
 
     return (
         <div className="col-span-1 bg-white rounded-[12px] p-4 flex flex-col justify-between border border-zinc-200 relative overflow-hidden group">
@@ -56,17 +30,7 @@ export function CurrentlyPlaying({ recentFavorite }: { recentFavorite?: any }) {
                 <div>
                     <div className="flex justify-between items-start mb-2">
                         <div className="text-[10px] text-[#1DB954] font-bold uppercase tracking-wider flex items-center gap-1">
-                            {data?.isPlaying ? (
-                                <>
-                                    <span className="relative flex h-2 w-2">
-                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#1DB954] opacity-75"></span>
-                                        <span className="relative inline-flex rounded-full h-2 w-2 bg-[#1DB954]"></span>
-                                    </span>
-                                    Now Playing
-                                </>
-                            ) : (
-                                "Recent Favorite"
-                            )}
+                            Recent Favorite
                         </div>
                         <SpotifyLogo />
                     </div>
@@ -90,15 +54,14 @@ export function CurrentlyPlaying({ recentFavorite }: { recentFavorite?: any }) {
                     target="_blank"
                     className="text-[9px] text-[#1DB954] font-bold hover:underline flex items-center gap-1 group/link"
                 >
-                    {data?.isPlaying ? "Listen on Spotify" : "View Track"} <ArrowUpRight className="w-2 h-2 transition-transform group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5" />
+                    View Track <ArrowUpRight className="w-2 h-2 transition-transform group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5" />
                 </Link>
             </div>
 
-            {/* Record Animation */}
             <div className="absolute -bottom-10 -right-10 transition-all duration-500 group-hover:-bottom-4 group-hover:-right-4 opacity-100 group-hover:opacity-100 group-hover:z-50 z-10 group-hover:scale-110">
                 <Record
                     albumImageUrl={current.albumImageUrl || ""}
-                    isPlaying={data?.isPlaying || false}
+                    isPlaying={false}
                 />
             </div>
         </div>
