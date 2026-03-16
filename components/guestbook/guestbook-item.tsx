@@ -261,7 +261,7 @@ export function GuestbookItem({ entry, onDelete, onRefresh }: GuestbookItemProps
                 <div className="flex-1 space-y-1.5 sm:space-y-2 min-w-0">
                     <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-1 sm:gap-0">
                         <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
-                            <p className="text-xs sm:text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                           <p className="text-foreground leading-normal text-sm md:text-base">
                                 {entry.name}
                             </p>
                             {entry.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL && (
@@ -297,7 +297,7 @@ export function GuestbookItem({ entry, onDelete, onRefresh }: GuestbookItemProps
 
                     </div>
                     <div className="relative">
-                        <div className="text-[13px] sm:text-[14px] leading-normal text-zinc-600 dark:text-zinc-400 whitespace-pre-wrap break-words">
+                        <div className="text-[13px] sm:text-[14px] text-foreground leading-normal whitespace-pre-wrap break-words">
                             {parseLinks(displayMessage)}
                             {isLong && (
                                 <button
