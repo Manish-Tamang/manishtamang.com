@@ -4,8 +4,13 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 
-export const Firfirey = () => {
+interface FirefreyProps {
+    forceSpin?: boolean;
+}
+
+export const Firfirey = ({ forceSpin = false }: FirefreyProps) => {
     const [isHovered, setIsHovered] = useState(false);
+    const shouldSpin = isHovered || forceSpin;
 
     return (
         <div
@@ -16,7 +21,7 @@ export const Firfirey = () => {
             <motion.div
                 className="relative z-10"
                 animate={
-                    isHovered
+                    shouldSpin
                         ? {
                             rotate: [0, 360],
                             filter: ["blur(0px)", "blur(1.5px)", "blur(0px)"],
@@ -27,7 +32,7 @@ export const Firfirey = () => {
                         }
                 }
                 transition={
-                    isHovered
+                    shouldSpin
                         ? {
                             rotate: {
                                 duration: 0.8,
