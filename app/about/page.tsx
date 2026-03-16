@@ -1,5 +1,5 @@
 import { Timeline } from "@/components/timeline";
-import { Firfirey } from "@/components/firfirey";
+import { AboutContent } from "@/components/about-content";
 import { GitHub } from "@/components/icons/Github";
 import { XformerlyTwitter } from "@/components/icons/X";
 import { LinkedIn } from "@/components/icons/LinkedIn";
@@ -7,8 +7,6 @@ import { DailyDotDev } from "@/components/icons/DailyDotDev";
 import StickyNotesProvider from "@/components/sticky-notes"
 import { sanityFetch } from "@/sanity/lib/live";
 import { ABOUT_PROFILE_QUERY } from "@/sanity/lib/queries";
-import ReactMarkdown from "react-markdown";
-import rehypeRaw from "rehype-raw";
 import { CertificatesSection } from "@/components/certificates-section";
 import { FeaturedSection } from "@/components/featured-section";
 import { Education } from "@/components/Education";
@@ -40,23 +38,23 @@ const timelineEntries = [
   },
 ];
 
-const stickyNotes = [
-  {
-    id: "note-3",
-    text: "Firfirey",
-    color: "purple" as const,
-    initialX: 814,
-    initialY: 464,
-    initialRotation: 9,
-    width: 80,
-    height: 80,
-    mobileWidth: 80,
-    mobileHeight: 80,
-    mobileX: 291,
-    mobileY: 657,
-    delay: 0.3,
-  },
-];
+// const stickyNotes = [
+//   {
+//     id: "note-3",
+//     text: "Firfirey",
+//     color: "purple" as const,
+//     initialX: 814,
+//     initialY: 464,
+//     initialRotation: 9,
+//     width: 80,
+//     height: 80,
+//     mobileWidth: 80,
+//     mobileHeight: 80,
+//     mobileX: 291,
+//     mobileY: 657,
+//     delay: 0.3,
+//   },
+// ];
 
 const InstagramIcon = ({ className }: { className?: string }) => (
   <div className={`opacity-80 dark:invert transition-all duration-300 hover:opacity-100 ${className}`}>
@@ -94,7 +92,7 @@ export default async function AboutPage() {
   return (
     <div className="flex flex-col items-center">
       <div className="w-full max-w-[610px] px-6 py-12 space-y-12">
-        <StickyNotesProvider stickyNotes={stickyNotes} />
+        {/* <StickyNotesProvider stickyNotes={stickyNotes} /> */}
         <section className="space-y-6">
           <h1 className="text-4xl font-medium tracking-tight">{heading}</h1>
           <div className="space-y-6 text-[17px] leading-relaxed text-foreground/80 font-normal">
@@ -102,44 +100,7 @@ export default async function AboutPage() {
               {intro}
             </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-[8fr_2fr] gap-8 items-center">
-              <div>
-                <ReactMarkdown
-                  rehypePlugins={[rehypeRaw]}
-                  components={{
-                    p: ({ children }) => <p className="mb-6 text-zinc-600 dark:text-zinc-400 leading-normal text-sm md:text-base last:mb-0">{children}</p>,
-                    strong: ({ children }) => <span className="font-bold text-foreground">{children}</span>,
-                  }}
-                >
-                  {bio.replace(/\*\*\s+/g, '**')}
-                </ReactMarkdown>
-              </div>
-              <div className="flex flex-col items-center md:items-end gap-6">
-                <Firfirey />
-              </div>
-              <div className="flex flex-row items-center gap-4">
-                {socialLinks.map((link: { platform: string; url: string }) => {
-                  const PlatformIcon = socialIcons[link.platform as SocialPlatform];
-                  if (!PlatformIcon) return null;
-
-                  let iconClass = "w-5 h-5";
-                  if (link.platform === "dailydev") iconClass = "w-8 h-8";
-                  if (link.platform === "instagram") iconClass = "w-20 h-auto mt-1";
-
-                  return (
-                    <a
-                      key={link.platform}
-                      href={link.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-foreground/60 hover:text-foreground transition-all duration-300 hover:scale-110"
-                    >
-                      <PlatformIcon className={iconClass} />
-                    </a>
-                  );
-                })}
-              </div>
-            </div>
+            <AboutContent bio={bio} socialLinks={socialLinks} />
           </div>
         </section>
 
