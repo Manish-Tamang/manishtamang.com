@@ -10,8 +10,41 @@ import { ABOUT_PROFILE_QUERY } from "@/sanity/lib/queries";
 import { CertificatesSection } from "@/components/certificates-section";
 import { FeaturedSection } from "@/components/featured-section";
 import { Education } from "@/components/Education";
+import { LineBreaker } from "@/components/line-breaker";
+import type { BioPolaroidItem } from "@/data/bio-polaroids"
+import { PolaroidGallery } from "@/components/bio/polaroid-gallery"
+import { Line } from "recharts";
 
-
+const bioPolaroidData: BioPolaroidItem[] = [
+  {
+    id: "bio-polaroid-1",
+    src: "/images/mini-gole.jpg",
+    alt: "Polaroid moment one",
+    caption: "Mini Gole",
+    rotate: -4,
+  },
+  {
+    id: "bio-polaroid-2",
+    src: "/bio/IMG-20260201-WA0042.jpg",
+    alt: "GoGlamping, Dharan, 2026",
+    caption: "GoGlamping, Dharan",
+    rotate: 2,
+  },
+  {
+    id: "bio-polaroid-3",
+    src: "/bio/d815986e-5752-47ec-807b-2a138683c6a4.png",
+    alt: "Bhojpur, 2011",
+    caption: "Bhojpur",
+    rotate: -3,
+  },
+  {
+    id: "bio-polaroid-4",
+    src: "/bio/mini-gole.png",
+    alt: "Me in Grade 3, 2017",
+    caption: "Me in Grade III",
+    rotate: 3,
+  },
+]
 
 const timelineEntries = [
   {
@@ -103,14 +136,17 @@ export default async function AboutPage() {
             <AboutContent bio={bio} socialLinks={socialLinks} />
           </div>
         </section>
-
+        <LineBreaker />
+        <PolaroidGallery data={bioPolaroidData} />
+        <LineBreaker />
         <section id="education">
           <Education />
         </section>
-
+        <LineBreaker />
         <section id="featured">
           <FeaturedSection />
         </section>
+        <LineBreaker />
         {/* 
         <section id="certificates">
           <CertificatesSection />
@@ -120,7 +156,7 @@ export default async function AboutPage() {
         <section id="timeline">
           <Timeline avatarUrl="/images/profile.png" entries={timelineEntries} />
         </section>
-
+<LineBreaker />
       </div>
     </div>
   );
