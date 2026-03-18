@@ -1,6 +1,6 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Inter, JetBrains_Mono } from "next/font/google"
+import { Inter, JetBrains_Mono, Karla } from "next/font/google"
 import localFont from "next/font/local"
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
@@ -13,6 +13,13 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+  weight: "400",
+  display: "swap",
+})
+
+const karla = Karla({
+  subsets: ["latin"],
+  variable: "--font-karla",
   weight: "400",
   display: "swap",
 })
@@ -71,7 +78,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${perfectlyNineties.variable} ${myFont.variable} ${jetbrainsMono.variable}`}>
+    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${karla.variable} ${perfectlyNineties.variable} ${myFont.variable} ${jetbrainsMono.variable}`}>
       <head>
         <meta name="description" content={metadata.description ?? ""} />
         <meta
