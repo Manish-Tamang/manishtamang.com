@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import {
     SiNextdotjs,
     SiTailwindcss,
@@ -340,7 +341,81 @@ const ColophonPage = () => {
                         I would like to express my sincere gratitude to the following individuals and their work,
                         which have significantly inspired the design and development of this portfolio:
                     </p>
+
+                    <div className="p-4 bg-zinc-50 dark:bg-zinc-900/50 rounded-[8px] border border-zinc-200 dark:border-zinc-800 space-y-4">
+                        <Image
+                            src="/images/flowers.png"
+                            alt="Flowers decoration"
+                            width={730}
+                            height={100}
+                            style={{ userSelect: "none" }}
+                            draggable={false}
+                            className="w-full rounded-lg"
+                        />
+                        <p className="text-sm md:text-base text-foreground/80 text-center leading-relaxed">
+                            Beautiful flowers decoration used in the footer by{" "}
+                            <Link
+                                href="https://www.instagram.com/uiuxsesh/"
+                                className="text-foreground font-medium underline underline-offset-4 decoration-foreground/30 hover:decoration-foreground/60 transition-all"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Saira
+                            </Link>{" "}
+                            from{" "}
+                            <Link
+                                href="https://www.figma.com/design/uXZi2989oC14Z5EtNODWtJ/100-Day-Design-Challenge?t=PnkCBvQeWWRsgr5Q-0"
+                                className="text-foreground font-medium underline underline-offset-4 decoration-foreground/30 hover:decoration-foreground/60 transition-all"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                100 Day Design Challenge
+                            </Link>
+                            .
+                        </p>
+                    </div>
+
                     <ul className="list-disc list-inside text-[15px] sm:text-[17px] leading-relaxed text-foreground/80 space-y-2">
+                        <li>
+                            <Link
+                                href="https://ouassim.tech/"
+                                className="text-foreground font-medium underline underline-offset-4 decoration-foreground/30 hover:decoration-foreground/60 transition-all"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Ouassim
+                            </Link>
+                        </li>
+                        <li>
+                            <Link
+                                href="https://jahir.dev/colophon"
+                                className="text-foreground font-medium underline underline-offset-4 decoration-foreground/30 hover:decoration-foreground/60 transition-all"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Jahir Fiquitiva
+                            </Link>
+                        </li>
+                        <li>
+                            <Link
+                                href="https://theodorusclarence.com/"
+                                className="text-foreground font-medium underline underline-offset-4 decoration-foreground/30 hover:decoration-foreground/60 transition-all"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Theodorus Clarence
+                            </Link>
+                        </li>
+                        <li>
+                            <Link
+                                href="https://bonabrian.com/"
+                                className="text-foreground font-medium underline underline-offset-4 decoration-foreground/30 hover:decoration-foreground/60 transition-all"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Bona Brian Siagian
+                            </Link>
+                        </li>
                         <li>
                             <Link
                                 href="https://leerob.com/"
@@ -363,16 +438,6 @@ const ColophonPage = () => {
                         </li>
                         <li>
                             <Link
-                                href="https://jahir.dev/colophon"
-                                className="text-foreground font-medium underline underline-offset-4 decoration-foreground/30 hover:decoration-foreground/60 transition-all"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                Jahir Fiquitiva
-                            </Link>
-                        </li>
-                        <li>
-                            <Link
                                 href="https://marcbouchenoire.com/"
                                 className="text-foreground font-medium underline underline-offset-4 decoration-foreground/30 hover:decoration-foreground/60 transition-all"
                                 target="_blank"
@@ -389,6 +454,76 @@ const ColophonPage = () => {
                                 rel="noopener noreferrer"
                             >
                                 Victor Eke
+                            </Link>
+                        </li>
+                        <li>
+                            <Link
+                                href="https://aulianza.id/"
+                                className="text-foreground font-medium underline underline-offset-4 decoration-foreground/30 hover:decoration-foreground/60 transition-all"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Ryan Aulia
+                            </Link>
+                        </li>
+                        <li>
+                            <Link
+                                href="https://vjy.me/"
+                                className="text-foreground font-medium underline underline-offset-4 decoration-foreground/30 hover:decoration-foreground/60 transition-all"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Vijay Verma
+                            </Link>
+                        </li>
+                        <li>
+                            <Link
+                                href="https://www.raphaelchelly.com/"
+                                className="text-foreground font-medium underline underline-offset-4 decoration-foreground/30 hover:decoration-foreground/60 transition-all"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Raphaël Chelly
+                            </Link>
+                        </li>
+                        <li>
+                            <Link
+                                href="https://danielwirtz.com/"
+                                className="text-foreground font-medium underline underline-offset-4 decoration-foreground/30 hover:decoration-foreground/60 transition-all"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                danielwirtz
+                            </Link>
+                        </li>
+                        <li>
+                            <Link
+                                href="https://darn.es/"
+                                className="text-foreground font-medium underline underline-offset-4 decoration-foreground/30 hover:decoration-foreground/60 transition-all"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                David Darnes
+                            </Link>
+                        </li>
+                        <li>
+                            <Link
+                                href="https://sayandey.dev/"
+                                className="text-foreground font-medium underline underline-offset-4 decoration-foreground/30 hover:decoration-foreground/60 transition-all"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Sayan Dey
+                            </Link>
+                        </li>
+                        <li>
+                            <Link
+                                href="https://www.havardbrynjulfsen.design/"
+                                className="text-foreground font-medium underline underline-offset-4 decoration-foreground/30 hover:decoration-foreground/60 transition-all"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Håvard Brynjulfsen
                             </Link>
                         </li>
                     </ul>
