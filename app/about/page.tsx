@@ -4,16 +4,11 @@ import { GitHub } from "@/components/icons/Github";
 import { XformerlyTwitter } from "@/components/icons/X";
 import { LinkedIn } from "@/components/icons/LinkedIn";
 import { DailyDotDev } from "@/components/icons/DailyDotDev";
-import StickyNotesProvider from "@/components/sticky-notes"
-import { sanityFetch } from "@/sanity/lib/live";
-import { ABOUT_PROFILE_QUERY } from "@/sanity/lib/queries";
-import { CertificatesSection } from "@/components/certificates-section";
 import { FeaturedSection } from "@/components/featured-section";
 import { Education } from "@/components/Education";
 import { LineBreaker } from "@/components/line-breaker";
 import type { BioPolaroidItem } from "@/data/bio-polaroids"
 import { PolaroidGallery } from "@/components/bio/polaroid-gallery"
-import { Line } from "recharts";
 
 const bioPolaroidData: BioPolaroidItem[] = [
   {
@@ -71,6 +66,17 @@ const timelineEntries = [
   },
 ];
 
+const heading = "About";
+const intro = "Hi, I'm Manish Tamang from Itahari, where I craft, break, and rebuild the internet, one line at a time.";
+const bio = "Driven by a love for web development, I'm a 17-year-old full stack aspirant from <span className=\"font-myfont text-xl font-bold\">Itahari, Nepal</span>. My coding journey began early, and since then, I've dedicated myself to crafting engaging web experiences using technologies like React, Next.js, and Tailwind CSS.<br /><br />I'm constantly seeking new challenges and learning opportunities to refine my skills.";
+const socialLinks = [
+  { platform: "github", url: "https://github.com/Manish-Tamang" },
+  { platform: "twitter", url: "https://x.com/Manishtamangxyz" },
+  { platform: "linkedin", url: "https://www.linkedin.com/in/manish-tamang" },
+  { platform: "dailydev", url: "https://app.daily.dev/manishtamang" },
+  { platform: "instagram", url: "https://instagram.com/golecodes" },
+];
+
 // const stickyNotes = [
 //   {
 //     id: "note-3",
@@ -107,21 +113,7 @@ const socialIcons: Partial<Record<SocialPlatform, React.ElementType>> = {
   instagram: InstagramIcon,
 };
 
-export default async function AboutPage() {
-  const { data: aboutProfile } = await sanityFetch({ query: ABOUT_PROFILE_QUERY });
-
-  // Use values from Sanity or fallbacks if data is missing
-  const heading = aboutProfile?.heading ?? "About";
-  const intro = aboutProfile?.intro ?? "Hi, I'm Manish Tamang from Itahari, where I craft, break, and rebuild the internet, one line at a time.";
-  const bio = aboutProfile?.bio ?? "Driven by a love for web development, I'm a 17-year-old full stack aspirant from Itahari, Nepal.\n\nMy coding journey began early, and since then, I've dedicated myself to crafting engaging web experiences using technologies like React, Next.js, and Tailwind CSS.\n\nI'm constantly seeking new challenges and learning opportunities to refine my skills.";
-  const socialLinks = aboutProfile?.socialLinks ?? [
-    { platform: "github", url: "https://github.com" },
-    { platform: "twitter", url: "https://twitter.com" },
-    { platform: "linkedin", url: "https://linkedin.com" },
-    { platform: "dailydev", url: "https://app.daily.dev/manishtamang" },
-    { platform: "instagram", url: "https://instagram.com/golecodes" },
-  ];
-
+export default function AboutPage() {
   return (
     <div className="flex flex-col items-center">
       <div className="w-full max-w-[610px] px-6 py-12 space-y-12">
