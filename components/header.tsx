@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { ThemeToggle } from "@/components/theme-toggle"
@@ -88,29 +89,29 @@ export function Header() {
   )
 
   return (
-    <header className="w-full max-w-[720px] mx-auto mb-6 pt-8 px-4 md:px-2">
-      <nav className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <div className="md:hidden">
-            <button
-              onClick={() => {
-                setIsOpen(!isOpen)
-                sounds.click()
-              }}
-              className="p-2 -ml-2 text-foreground/60 hover:text-foreground transition-colors"
-              aria-label="Toggle menu"
-            >
-              {isOpen ? <X className="w-5 h-5" /> : <MenuIcon />}
-            </button>
-          </div>
+    <header className="w-full max-w-180 mx-auto mb-6 pt-8 px-4 md:px-2">
+      <nav className="flex items-center justify-between gap-3">
+        <div className="md:hidden">
+          <button
+            onClick={() => {
+              setIsOpen(!isOpen)
+              sounds.click()
+            }}
+            className="p-2 -ml-2 text-foreground/60 hover:text-foreground transition-colors"
+            aria-label="Toggle menu"
+          >
+            {isOpen ? <X className="w-5 h-5" /> : <MenuIcon />}
+          </button>
+        </div>
 
-          <div className="hidden md:flex gap-0 items-center">
+        <div className="hidden md:flex flex-1 items-center justify-center">
+          <div className="flex items-center rounded-full bg-background/70 backdrop-blur-sm border border-border/60 px-1 py-1">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  "text-[16px] font-normal transition-all px-3 py-1.5 rounded-full",
+                  "text-[15px] font-normal transition-all px-3 py-1.5 rounded-full whitespace-nowrap",
                   link.active
                     ? "text-foreground bg-foreground/5 backdrop-blur-sm"
                     : "text-foreground/60 hover:text-foreground",
@@ -124,8 +125,22 @@ export function Header() {
           </div>
         </div>
 
-        <ThemeToggle />
+        <div className="shrink-0">
+          <ThemeToggle />
+        </div>
       </nav>
+
+      <div className="mt-4 flex justify-center">
+        <Image
+          src="/chhana.png"
+          alt="Chhana of Header"
+          width={320}
+          height={80}
+          className="hidden h-6 w-full dark:opacity-45 z-60 max-w-60 grayscale-60 -mt-15 mr-10 user-select-none rounded-md md:block md:max-w-130"
+          draggable={false}
+          priority
+        />
+      </div>
 
       {/* Mobile Menu Dropdown */}
       {isOpen && (
