@@ -12,6 +12,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import Image from 'next/image';
+import { ImageModal, type GalleryImage } from "@/components/ImageModal";
 
 
 const slugify = (text: string): string => {
@@ -82,8 +83,8 @@ export const MDXComponents: React.FC<MDXComponentsProps> = ({ content }) => {
   const [toc, setToc] = useState<TocItem[]>([]);
   const contentRef = useRef<HTMLDivElement>(null);
 
-  // Image zoom modal state
-  const [zoomedImg, setZoomedImg] = useState<{ src: string; alt: string } | null>(null);
+  const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
 
   useEffect(() => {
     const headings: TocItem[] = [];
@@ -100,39 +101,19 @@ export const MDXComponents: React.FC<MDXComponentsProps> = ({ content }) => {
     setToc(headings);
   }, [content]);
 
-  const handleCloseModal = () => setZoomedImg(null);
+  const handleImagePreviewClick = (src: string, alt: string) => {
+    setSelectedImage({
+      _id: `mdx-${src}`,
+      imageURL: src,
+      alt,
+      order: 0,
+    });
+    setIsImageModalOpen(true);
+  };
 
   return (
     <div className="py-6">
-      {zoomedImg && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm animate-fade-in"
-          onClick={handleCloseModal}
-        >
-          <div
-            className="relative max-w-full max-h-full flex items-center justify-center p-4"
-            onClick={e => e.stopPropagation()}
-          >
-            <button
-              aria-label="Close image zoom"
-              className="absolute top-2 right-2 text-white bg-black/60 rounded-full p-2 hover:bg-black/80 focus:outline-none focus:ring-2 focus:ring-[#9AC372] z-10"
-              onClick={handleCloseModal}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                <path stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" d="M6 6l12 12M18 6l-12 12" />
-              </svg>
-            </button>
-            <Image
-              src={zoomedImg.src}
-              alt={zoomedImg.alt}
-              width={1200}
-              height={900}
-              className="rounded-lg shadow-2xl max-h-[80vh] max-w-[90vw] object-contain"
-              style={{ background: '#fff' }}
-            />
-          </div>
-        </div>
-      )}
+      <ImageModal image={selectedImage} open={isImageModalOpen} onOpenChange={setIsImageModalOpen} />
       <div ref={contentRef} className="space-y-6">
         <Markdown
           rehypePlugins={[rehypeRaw]}
@@ -188,7 +169,7 @@ export const MDXComponents: React.FC<MDXComponentsProps> = ({ content }) => {
               <li className="mb-2">{children}</li>
             ),
             blockquote: ({ children }) => (
-              <blockquote className="pl-3 my-4 text-xs text-gray-600 dark:text-gray-400 border-l-2 border-gray-300 dark:border-gray-600">
+              <blockquote className="my-5 pl-4 font-jetbrains-mono text-sm -mt-6 mb-4 text-zinc-400 dark:text-zinc-300">
                 {children}
               </blockquote>
             ),
@@ -202,26 +183,31 @@ export const MDXComponents: React.FC<MDXComponentsProps> = ({ content }) => {
                 {children}
               </a>
             ),
-            img: ({ src, alt }) => (
-              <>
-                <div className="relative group my-6 cursor-zoom-in rounded-md overflow-hidden">
-                  <Image
-                    src={src || ''}
-                    alt={alt || ''}
-                    className="object-cover w-full h-full"
-                    width={400}
-                    height={200}
-                    onClick={() => src && setZoomedImg({ src: src as string, alt: (alt as string) || '' })}
-                    style={{ background: '#fff' }}
-                  />
+            img: ({ src, alt }) => {
+              const imageSrc = typeof src === "string" ? src : "";
+              const imageAlt = typeof alt === "string" ? alt : "";
 
-                  {/* hover overlay */}
-                  <div className="absolute inset-0 bg-white/0 group-hover:bg-white/10 transition-colors duration-300 pointer-events-none" />
-                </div>
+              return (
+                <>
+                  <div className="relative group my-6 w-full aspect-video cursor-zoom-in rounded-md overflow-hidden bg-zinc-100 dark:bg-zinc-900">
+                    <Image
+                      src={imageSrc}
+                      alt={imageAlt}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 768px"
+                      className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-[1.01]"
+                      onClick={() => imageSrc && handleImagePreviewClick(imageSrc, imageAlt)}
+                      style={{ background: '#fff' }}
+                    />
 
-                <span className="block text-center text-xs text-gray-400 mt-1 select-none">Click to zoom</span>
-              </>
-            ),
+                    {/* hover overlay */}
+                    <div className="absolute inset-0 bg-white/0 group-hover:bg-white/10 transition-colors duration-300 pointer-events-none" />
+                  </div>
+
+                  <span className="block text-center text-xs text-gray-400 -mt-5 select-none">Click to zoom</span>
+                </>
+              );
+            },
             hr: () => (
               <hr className="my-8 border-gray-200 dark:border-gray-700" />
             ),
