@@ -181,10 +181,10 @@ const ColophonPage = () => {
                             <span className="font-medium text-foreground">Inter:</span> Used for the majority of the body content for readability.
                         </li>
                         <li>
-                            <span className="font-medium text-foreground">Geist:</span> Used for the content of Blogs and Projects.
+                            <span className="font-medium text-foreground">Perfectly Nineties:</span> Applied to headings and key sections for clean look.
                         </li>
                         <li>
-                            <span className="font-medium text-foreground">Geist Mono:</span> Chosen for code snippets, ensuring clarity and legibility.
+                            <span className="font-medium text-foreground">JetBrains:</span> Chosen for code snippets, ensuring clarity and legibility.
                         </li>
                         <li>
                             <span className="font-medium text-foreground">Custom Font:</span> Applied to special headings and personal touches.
@@ -192,8 +192,8 @@ const ColophonPage = () => {
                     </ul>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
                         <TypographyItem label="Inter Regular" font="var(--font-inter)" />
-                        <TypographyItem label="Geist Regular" font="var(--font-geist-sans)" />
-                        <TypographyItem label="JetBrains Mono" font="var(--font-jetbrain)" />
+                        <TypographyItem label="Perfectly Nineties" font="var(--font-perfectly-nineties)" />
+                        <TypographyItem label="JetBrains Mono" font="var(--font-mono)" />
                         <TypographyItem label="Custom Font" font="var(--font-myfont)" />
                     </div>
                 </section>
@@ -575,7 +575,7 @@ const IconItem: React.FC<IconItemProps> = ({ url, icon }) => (
 
 const TypographyItem: React.FC<{ label: string; font?: string }> = ({ label, font }) => (
     <div
-        className="border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 text-2xl sm:text-3xl text-center bg-zinc-50 dark:bg-zinc-900/50 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors cursor-default"
+        className="border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 text-2xl sm:text-2xl text-center bg-zinc-50 dark:bg-zinc-900/50 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors cursor-default"
         style={{ fontFamily: font || "inherit" }}
         onMouseEnter={() => sounds.tick()}
         onClick={() => sounds.click()}
