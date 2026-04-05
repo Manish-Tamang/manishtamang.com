@@ -26,7 +26,7 @@ export function Hero() {
     <main className="-mt-4 space-y-8 px-4 md:px-0">
       <div className="grid grid-cols-[1fr_auto] md:flex md:flex-row gap-x-4 gap-y-6 md:gap-2 max-w-[610px] mx-auto items-center">
         <div className="md:basis-[80%] text-left md:text-left">
-          <h1 className="text-3xl md:text-4xl">
+          <h1 className="text-3xl font-myfont md:text-4xl">
             <span className="relative inline-block group overflow-hidden">
               <span className="block transform transition-transform duration-500 group-hover:translate-y-full">
                 Manish Tamang
