@@ -89,8 +89,8 @@ export function Header() {
   )
 
   return (
-    <header className="w-full max-w-180 mx-auto mb-6 pt-8 px-4 md:px-2">
-      <nav className="flex items-center justify-between gap-3">
+    <header className="w-full dont max-w-180 mx-auto mb-6 pt-8 px-4 md:px-2">
+      <nav className="flex items-center justify-between gap-2">
         <div className="md:hidden">
           <button
             onClick={() => {
@@ -105,7 +105,7 @@ export function Header() {
         </div>
 
         <div className="hidden md:flex flex-1 items-center justify-center">
-          <div className="flex items-center rounded-full bg-background/70 backdrop-blur-sm border border-border/60 px-1 py-1">
+          <div className="flex items-center rounded-full bg-background/80 backdrop-blur-sm border border-border/60 px-1 py-1">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
