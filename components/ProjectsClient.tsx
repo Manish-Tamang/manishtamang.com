@@ -8,12 +8,9 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import { Search, Calendar } from "lucide-react"
-import Link from "next/link"
-import Image from "next/image"
-import { format } from "date-fns"
-import { urlFor } from "@/sanity/lib/image"
+import { Search } from "lucide-react"
 import { sounds } from "@/lib/sounds"
+import ProjectCard from "@/components/project-card"
 
 interface Project {
     title: string
@@ -114,58 +111,16 @@ export default function ProjectsClient({ initialProjects }: ProjectsClientProps)
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {filteredAndSortedProjects.map((project) => (
-                        <div key={project.slug} className="group relative bg-foreground/5 border border-transparent hover:border-foreground/5 hover:bg-foreground/[0.07] rounded-2xl overflow-hidden transition-all duration-300">
-                            <Link href={`/projects/${project.slug}`} className="block">
-                                {/* Image Container */}
-                                <div className="relative aspect-[16/10] w-full overflow-hidden">
-                                    {project.thumbnail ? (
-                                        <Image
-                                            src={urlFor(project.thumbnail).url()}
-                                            alt={project.title}
-                                            fill
-                                            className="object-cover transition-transform duration-700 group-hover:scale-105"
-                                        />
-                                    ) : (
-                                        <div className="w-full h-full bg-foreground/5 flex items-center justify-center">
-                                            <span className="text-foreground/20 font-bold text-xs uppercase tracking-widest">No Image</span>
-                                        </div>
-                                    )}
-                                    {/* Subtle Gradient Overlay */}
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                                </div>
-
-                                {/* Content */}
-                                <div className="p-6 space-y-3">
-                                    <div className="flex items-center justify-between text-[10px] uppercase tracking-[0.1em] text-foreground/40 font-bold">
-                                        <span className="flex items-center gap-1.5">
-                                            {format(new Date(project.date), "MMM yyyy")}
-                                        </span>
-                                    </div>
-
-                                    <div className="space-y-1.5">
-                                        <h3 className="text-[17px] font-semibold text-foreground leading-tight">
-                                            {project.title}
-                                        </h3>
-                                        <p className="text-sm text-foreground/60 line-clamp-2 leading-relaxed font-normal">
-                                            {project.excerpt}
-                                        </p>
-                                    </div>
-
-                                    {project.techStack && (
-                                        <div className="flex flex-wrap gap-1.5 pt-2">
-                                            {project.techStack.slice(0, 3).map((tech, i) => (
-                                                <span key={i} className="text-[10px] px-2 py-0.5 bg-foreground/5 text-foreground/50 rounded-full font-medium border border-foreground/5">
-                                                    {tech}
-                                                </span>
-                                            ))}
-                                            {project.techStack.length > 3 && (
-                                                <span className="text-[10px] text-foreground/30 font-medium ml-0.5">+{project.techStack.length - 3}</span>
-                                            )}
-                                        </div>
-                                    )}
-                                </div>
-                            </Link>
-                        </div>
+                        <ProjectCard
+                            key={project.slug}
+                            title={project.title}
+                            slug={project.slug}
+                            excerpt={project.excerpt}
+                            thumbnail={project.thumbnail}
+                            date={project.date}
+                            projectUrl={project.projectUrl}
+                            githubUrl={project.githubUrl}
+                        />
                     ))}
                 </div>
             )}
