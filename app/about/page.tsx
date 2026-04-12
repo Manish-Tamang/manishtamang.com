@@ -7,6 +7,7 @@ import { DailyDotDev } from "@/components/icons/DailyDotDev";
 import { FeaturedSection } from "@/components/featured-section";
 import { Education } from "@/components/Education";
 import { LineBreaker } from "@/components/line-breaker";
+import Image from "next/image";
 import type { BioPolaroidItem } from "@/data/bio-polaroids"
 import { PolaroidGallery } from "@/components/bio/polaroid-gallery"
 
@@ -128,6 +129,32 @@ export default function AboutPage() {
             <AboutContent bio={bio} socialLinks={socialLinks} />
           </div>
         </section>
+
+        <section id="things-i-love" className="space-y-4">
+          {/* <h2 className="text-2xl font-medium tracking-tight">Things I Love</h2> */}
+          <div className="space-y-1">
+            <p className="text-sm text-foreground/70">Favorite game</p>
+            <div className="grayscale-50">
+              <Image
+                src="/far-cry-3-logo-black.png"
+                alt="Far Cry 3 logo"
+                width={140}
+                height={50}
+                draggable={false}
+                className="h-auto w-36 -ml-1 user-select-none dark:hidden"
+              />
+              <Image
+                src="/far-cry-3-logo-white.png"
+                alt="Far Cry 3 logo"
+                width={140}
+                height={50}
+                draggable={false}
+                className="hidden h-auto w-36 -ml-1 user-select-none dark:block"
+              />
+            </div>
+          </div>
+        </section>
+
         <LineBreaker />
         <PolaroidGallery data={bioPolaroidData} />
         <LineBreaker />
@@ -148,7 +175,7 @@ export default function AboutPage() {
         <section id="timeline">
           <Timeline avatarUrl="/images/profile.png" entries={timelineEntries} />
         </section>
-<LineBreaker />
+        <LineBreaker />
       </div>
     </div>
   );
