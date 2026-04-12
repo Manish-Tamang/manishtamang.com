@@ -105,7 +105,7 @@ export function Header() {
         </div>
 
         <div className="hidden md:flex flex-1 items-center justify-center">
-          <div className="flex items-center rounded-full bg-background/80 backdrop-blur-sm border border-border/60 px-1 py-1">
+          <div className="flex items-center rounded-full bg-neutral-100/20 backdrop-blur-sm border border-border/60 px-1 py-1">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
