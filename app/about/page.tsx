@@ -68,8 +68,8 @@ const timelineEntries = [
 ];
 
 const heading = "About";
-const intro = "Hi, I'm Manish Tamang from Itahari, where I craft, break, and rebuild the internet, one line at a time.";
-const bio = "Driven by a love for web development, I'm a 17-year-old full stack aspirant from <span className=\"font-myfont text-xl font-bold\">Itahari, Nepal</span>. My coding journey began early, and since then, I've dedicated myself to crafting engaging web experiences using technologies like React, Next.js, and Tailwind CSS.<br /><br />I'm constantly seeking new challenges and learning opportunities to refine my skills.";
+const intro = "Hi, I'm Manish Tamang from Kathmandu, where I craft, break, and rebuild the internet, one line at a time.";
+const bio = "Driven by a love for web development, I'm a 18-year-old full stack aspirant from <span className=\"font-myfont text-xl font-bold\">Kathmandu, Nepal</span>. My coding journey began early, and since then, I've dedicated myself to crafting engaging web experiences using technologies like React, Next.js, and Tailwind CSS.<br /><br />I'm constantly seeking new challenges and learning opportunities to refine my skills.";
 const socialLinks = [
   { platform: "github", url: "https://github.com/Manish-Tamang" },
   { platform: "twitter", url: "https://x.com/Manishtamangxyz" },
