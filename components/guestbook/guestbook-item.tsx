@@ -219,7 +219,7 @@ export function GuestbookItem({ entry, onDelete, onRefresh }: GuestbookItemProps
                 className="flex mt-3 sm:mt-3 gap-2 sm:gap-4 group relative scroll-mt-24 target:bg-blue-500/5 dark:target:bg-blue-500/10 target:ring-1 target:ring-blue-500/20 rounded-xl p-2 -m-2 transition-all duration-700"
             >
                 <div className="flex flex-col items-center">
-                    <Avatar className="w-8 h-8 sm:w-10 sm:h-10 border-2 border-white dark:border-zinc-800 shadow-sm shrink-0">
+                    <Avatar className="w-8 h-8 rounded-[4px] sm:w-10 sm:h-10 border-2 border-white dark:border-zinc-800 shadow-sm shrink-0">
                         {entry.image_url ? (
                             <AvatarImage src={entry.image_url} />
                         ) : (
