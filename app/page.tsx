@@ -2,6 +2,7 @@ import { Hero } from "@/components/hero"
 import { FeaturedBlogs } from "@/components/featured-blogs"
 import StickyNotesProvider from "@/components/sticky-notes"
 import { AboutSection } from "@/components/about-section"
+import { TrustedBySection } from "@/components/trusted-by-section"
 import { FeaturedProjects, FeaturedProjectsSkeleton } from "@/components/featured-projects"
 import { LineBreaker } from "@/components/line-breaker"
 import { ManWhoCantBeMoved } from "@/components/man-who-cant-be-moved"
@@ -31,23 +32,23 @@ export default async function HomePage() {
       height: 110,
       mobileWidth: 110,
       mobileHeight: 110,
-      mobileX: 32,
-      mobileY: 701,
+      mobileX: 40,
+      mobileY: 515,
       delay: 0.3,
     },
     {
       id: "note-2",
       text: "The Man Who Can't Be Moved",
       color: "green" as const,
-      initialX: 874,
-      initialY: 2285,
+      initialX: 944,
+      initialY: 2667,
       initialRotation: 8,
       width: 110,
       height: 110,
       mobileWidth: 70,
       mobileHeight: 70,
-      mobileX: 293,
-      mobileY: 3844,
+      mobileX: 309,
+      mobileY: 3882,
       delay: 0.4,
     },
     // {
@@ -90,6 +91,8 @@ export default async function HomePage() {
       </div>
       <LineBreaker />
       <AboutSection recentFavorite={recentFavorite} />
+      <LineBreaker />
+      <TrustedBySection />
       <LineBreaker />
       <Suspense fallback={<FeaturedProjectsSkeleton />}>
         <FeaturedProjects />
