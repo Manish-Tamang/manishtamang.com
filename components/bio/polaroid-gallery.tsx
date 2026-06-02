@@ -17,27 +17,20 @@ type PolaroidCardProps = {
 
 export function PolaroidCard({ src, alt, caption, rotate }: PolaroidCardProps) {
   return (
-    <div style={{ transform: `rotate(${rotate}deg)` }}>
-      <article className="w-full max-w-32 bg-zinc-50 p-1.5 pb-3 text-zinc-900 transition-transform duration-300 ease-out hover:-translate-y-1 hover:scale-[1.02] hover:rotate-1">
-        <div className="relative aspect-square w-full overflow-hidden border border-zinc-300 bg-zinc-200">
+    <div style={{ transform: `rotate(${rotate}deg)` }} className="mx-auto w-full max-w-36 sm:max-w-40">
+      <article className="w-full bg-white px-2.5 pt-2.5 pb-3.5 text-zinc-900 shadow-[0_6px_20px_rgba(0,0,0,0.12),0_2px_6px_rgba(0,0,0,0.08)] transition-all duration-300 ease-out hover:-translate-y-1 hover:scale-[1.02] hover:rotate-1 hover:shadow-[0_14px_36px_rgba(0,0,0,0.16),0_4px_10px_rgba(0,0,0,0.1)] dark:bg-zinc-100 dark:shadow-[0_8px_24px_rgba(0,0,0,0.35),0_2px_8px_rgba(0,0,0,0.2)] dark:hover:shadow-[0_16px_40px_rgba(0,0,0,0.45),0_4px_12px_rgba(0,0,0,0.25)]">
+        <div className="relative aspect-square w-full overflow-hidden bg-zinc-100">
           <Image
             src={src}
             alt={alt}
             fill
-            sizes="128px"
-            className="object-cover"
+            sizes="(max-width: 640px) 38vw, 160px"
+            className="size-full object-cover object-center"
             draggable={false}
             style={{ userSelect: "none" }}
           />
-          <div
-            className="pointer-events-none absolute inset-0 opacity-20 mix-blend-soft-light"
-            style={{
-              backgroundImage: "radial-gradient(rgba(255,255,255,0.35) 0.6px, transparent 0.7px)",
-              backgroundSize: "3px 3px",
-            }}
-          />
         </div>
-        <p className="pt-2 text-center text-[11px] font-myfont leading-tight text-zinc-700">
+        <p className="pt-2 text-center text-[11px] sm:text-xs font-myfont leading-tight text-zinc-700">
           {caption}
         </p>
       </article>
@@ -80,13 +73,13 @@ export function PolaroidGallery({ data }: PolaroidGalleryProps) {
 
   return (
     <>
-      <section className="pt-8" aria-label="Polaroid memories">
-        <div className="grid grid-cols-4 items-start gap-3">
+      <section className="w-full max-w-xl sm:max-w-2xl mx-auto pt-8" aria-label="Polaroid memories">
+        <div className="grid w-full grid-cols-2 items-start justify-items-center gap-3 sm:grid-cols-4 sm:gap-4">
           {data.map((item, index) => (
             <button
               key={item.id}
               type="button"
-              className="cursor-zoom-in text-left"
+              className="flex w-full cursor-zoom-in justify-center text-left"
               onClick={() => openModalAt(index)}
               aria-label={`Open ${item.caption}`}
             >

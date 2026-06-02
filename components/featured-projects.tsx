@@ -12,7 +12,7 @@ export async function FeaturedProjects() {
 
     return (
         <section className="w-full max-w-[610px] mx-auto mt-12 px-6">
-            <h2 className="text-2xl font-semibold mb-6 text-zinc-950 dark:text-zinc-50 text-left">Featured Projects</h2>
+            <h2 className="text-2xl font-semibold mb-6  text-left">Featured Projects</h2>
             <div className="space-y-12 md:space-y-6">
                 {projects.map((project: any, index: number) => (
                     <Link

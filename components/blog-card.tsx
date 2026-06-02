@@ -50,7 +50,7 @@ export function BlogCard({ blog, index }: BlogCardProps) {
                         {blog.date ? format(new Date(blog.date), "MMM d") : ""}
                     </span>
                 </div>
-                <h4 className="text-[14px] font-bold leading-tight mb-2 text-zinc-900 dark:text-zinc-100 line-clamp-2">
+                <h4 className="text-[16px] font-normal leading-tight mb-2 text-zinc-900 dark:text-zinc-100 line-clamp-2">
                     {blog.title}
                 </h4>
                 <p className="text-[11px] text-zinc-500 leading-snug line-clamp-4 opacity-70">
