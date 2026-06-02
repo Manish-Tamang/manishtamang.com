@@ -32,6 +32,14 @@ const featuredItems: FeaturedCard[] = [
         source: "masri.blog",
         date: "March 2, 2025",
     },
+    {
+        id: "feat-3",
+        href: "https://pafolios.com/manish-gole-tamang",
+        image: "/images/pafolios.png",
+        title: "Portfolio of the Day",
+        source: "pafolios.com",
+        date: "April 25, 2026",
+    },
 ];
 
 export function FeaturedSection() {
