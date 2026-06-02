@@ -144,7 +144,7 @@ export function GuestbookForm({ onSuccess }: GuestbookFormProps) {
 
     if (!session) {
         return (
-            <div className=" rounded-2xl bg-foreground/5 border border-foreground/5 p-6 flex flex-col items-start gap-6 text-start">
+            <div className=" rounded-[8px] bg-foreground/5 border border-foreground/5 p-6 flex flex-col items-start gap-6 text-start">
                 <div className="space-y-2 text-start">
                     <h3 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">Sign the Guestbook</h3>
                    <p className="text-foreground leading-normal text-sm md:text-base">Log in to leave a message and join the building of this space.</p>
@@ -152,7 +152,7 @@ export function GuestbookForm({ onSuccess }: GuestbookFormProps) {
                 <div className="grid grid-cols-2 gap-3 w-full">
                     <Button
                         variant="outline"
-                        className="h-12 gap-2 cursor-pointer rounded-2xl border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-all font-medium"
+                        className="h-12 gap-2 cursor-pointer rounded-lg border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-all font-medium"
                         onClick={() => {
                             sounds.click()
                             handleSignIn("github")
@@ -163,7 +163,7 @@ export function GuestbookForm({ onSuccess }: GuestbookFormProps) {
                     </Button>
                     <Button
                         variant="outline"
-                        className="h-12 gap-2 cursor-pointer rounded-2xl border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-all font-medium"
+                        className="h-12 gap-2 cursor-pointer rounded-lg border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-all font-medium"
                         onClick={() => {
                             sounds.click()
                             handleSignIn("google")
@@ -195,9 +195,9 @@ export function GuestbookForm({ onSuccess }: GuestbookFormProps) {
     }
 
     return (
-        <form onSubmit={handleSubmit} className=" rounded-2xl bg-foreground/5 border border-foreground/5 dark:border-zinc-800 p-5 shadow-sm space-y-4 transition-all">
+        <form onSubmit={handleSubmit} className=" rounded-[8px] bg-foreground/5 border border-foreground/5 dark:border-zinc-800 p-5 shadow-sm space-y-4 transition-all">
             <div className="flex gap-3">
-                <Avatar className="w-10 h-10 border border-zinc-100 dark:border-zinc-800">
+                    <Avatar className="w-10 h-10 rounded-[4px] border border-zinc-100 dark:border-zinc-800">
                     <AvatarImage src={session.user.image || undefined} />
                     <AvatarFallback className="bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
                         {session.user.name?.charAt(0)}
