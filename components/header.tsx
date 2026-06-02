@@ -111,7 +111,7 @@ export function Header() {
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  "text-[15px] font-normal transition-all px-3 py-1.5 rounded-full whitespace-nowrap",
+                  "text-[15px] leading-normal font-normal transition-all px-3 py-1.5 rounded-full whitespace-nowrap",
                   link.active
                     ? "text-foreground bg-foreground/5 backdrop-blur-sm"
                     : "text-foreground/60 hover:text-foreground",
