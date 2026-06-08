@@ -7,6 +7,7 @@ import { GitHub } from "@/components/icons/Github";
 import { XformerlyTwitter } from "@/components/icons/X";
 import { LinkedIn } from "@/components/icons/LinkedIn";
 import { DailyDotDev } from "@/components/icons/DailyDotDev";
+import { Gmail } from "@/components/icons/Gmail";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 
