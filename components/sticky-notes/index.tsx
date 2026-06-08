@@ -17,6 +17,7 @@ interface StickyNoteData {
     mobileX?: number
     mobileY?: number
     delay?: number
+    backgroundImage?: string
 }
 
 interface StickyNotesProviderProps {
@@ -113,6 +114,7 @@ export default function StickyNotesProvider({ stickyNotes = [] }: StickyNotesPro
                 mobileX: note.mobileX,
                 mobileY: note.mobileY,
                 delay: note.delay,
+                backgroundImage: note.backgroundImage,
             } as StickyNoteConfig
         })
 
