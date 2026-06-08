@@ -23,6 +23,7 @@ export interface StickyNoteProps {
     mobileX?: number
     mobileY?: number
     delay?: number
+    backgroundImage?: string
     onPositionChange?: (id: string, x: number, y: number) => void
     showDebug?: boolean
 }
@@ -51,6 +52,7 @@ export default function StickyNote({
     mobileX,
     mobileY,
     delay = 0,
+    backgroundImage,
     onPositionChange,
     showDebug = false,
 }: StickyNoteProps) {
@@ -209,16 +211,23 @@ export default function StickyNote({
     return (
         <>
             <motion.div
-                className={`absolute pointer-events-auto cursor-move touch-none ${colorClasses[color]} ${gaegu.className}`}
+                className={`absolute pointer-events-auto cursor-move touch-none ${backgroundImage ? "bg-transparent" : colorClasses[color]} ${gaegu.className}`}
                 style={{
                     left: `${position.x}px`,
                     top: `${position.y}px`,
                     width: `${noteWidth}px`,
                     height: `${noteHeight}px`,
                     transform: `rotate(${hoverRotation}deg)`,
-                    // boxShadow: '0 4px 10px rgba(150, 150, 180, 0.3), 0 2px 4px rgba(100, 100, 120, 0.2)',
                     borderRadius: '0px',
                     padding: isMobile ? '8px' : '12px',
+                    ...(backgroundImage
+                        ? {
+                            backgroundImage: `url(${backgroundImage})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                            backgroundRepeat: "no-repeat",
+                        }
+                        : {}),
                 }}
                 initial={{
                     opacity: 0,
