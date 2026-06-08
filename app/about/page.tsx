@@ -1,4 +1,3 @@
-import { Timeline } from "@/components/timeline";
 import { AboutContent } from "@/components/about-content";
 import { GitHub } from "@/components/icons/Github";
 import { XformerlyTwitter } from "@/components/icons/X";
@@ -74,6 +73,7 @@ const socialLinks = [
   { platform: "github", url: "https://github.com/Manish-Tamang" },
   { platform: "twitter", url: "https://x.com/Manishtamangxyz" },
   { platform: "linkedin", url: "https://www.linkedin.com/in/manish-tamang" },
+  { platform: "gmail", url: "mailto:maneshtamang833@gmail.com" },
   { platform: "dailydev", url: "https://app.daily.dev/manishtamang" },
   { platform: "instagram", url: "https://instagram.com/golecodes" },
 ];
@@ -166,16 +166,11 @@ export default function AboutPage() {
           <FeaturedSection />
         </section>
         <LineBreaker />
-        {/* 
-        <section id="certificates">
-          <CertificatesSection />
-        </section> */}
+       
 
 
-        <section id="timeline">
-          <Timeline avatarUrl="/images/profile.png" entries={timelineEntries} />
-        </section>
-        <LineBreaker />
+
+        {/* <LineBreaker /> */}
       </div>
     </div>
   );
