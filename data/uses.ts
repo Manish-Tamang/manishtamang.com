@@ -7,13 +7,12 @@ import {
   SiGit,
   SiGithub,
   SiNpm,
+  SiPnpm,
   SiBun,
   SiNotion,
   SiPostman,
   SiYarn,
   SiSpotify,
-  SiAdobephotoshop,
-  SiAdobeaftereffects,
   SiGoogledrive,
   SiCanva,
   SiOpenvpn,
@@ -35,6 +34,8 @@ import v0 from "@/components/icons/v0";
 import Gemini from "@/components/icons/Gemini";
 import { FiFigma } from "react-icons/fi";
 import { GoogleAntigravity } from "@/components/icons/Antigravity";
+import AfterEffects from "@/components/icons/AfterEffects";
+import Photoshop from "@/components/icons/Photoshop";
 
 export const gearItems = [
   {
@@ -182,6 +183,12 @@ export const codingItems = [
     link: "https://www.npmjs.com/get-npm",
   },
   {
+    name: "pnpm",
+    description: "Fast, disk space efficient package manager",
+    icon: SiPnpm,
+    link: "https://pnpm.io/",
+  },
+  {
     name: "bun",
     description: "JavaScript runtime",
     icon: SiBun,
@@ -241,7 +248,7 @@ export const softwareItems = [
   {
     name: "Photoshop",
     description: "Raster Graphics Editor",
-    icon: SiAdobephotoshop,
+    icon: Photoshop,
     link: "https://www.adobe.com/in/products/photoshop.html",
   },
   {
@@ -253,7 +260,7 @@ export const softwareItems = [
   {
     name: "After Effects",
     description: "Motion Graphics and Visual Effects",
-    icon: SiAdobeaftereffects,
+    icon: AfterEffects,
     link: "https://www.adobe.com/products/aftereffects.html",
   },
   {
