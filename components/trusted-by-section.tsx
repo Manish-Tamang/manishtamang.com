@@ -14,7 +14,7 @@ export function TrustedBySection() {
   return (
     <section className="max-w-[610px] w-full mx-auto mt-6 px-4 md:px-0">
       <h2 className="text-2xl font-semibold mb-2">Trusted by</h2>
-      <div className="space-y-3 text-sm md:text-base text-foreground/80 leading-normal mb-8">
+      <div className="text-foreground leading-normal text-xs sm:text-sm md:text-base mb-8">
         <p>
           I&apos;ve worked with clients across travel, finance, and product teams for{" "}
           <span className="font-semibold text-foreground">3+ years</span>, shipping sites and
