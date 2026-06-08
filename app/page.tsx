@@ -25,6 +25,7 @@ export default async function HomePage() {
       id: "note-1",
       text: "Manish Gole Tamang",
       color: "yellow" as const,
+      backgroundImage: "/svg/sticky-green.svg",
       initialX: 378,
       initialY: 472,
       initialRotation: -9,
