@@ -18,6 +18,7 @@ export interface StickyNoteConfig {
     mobileX?: number
     mobileY?: number
     delay?: number
+    backgroundImage?: string
 }
 
 interface StickyNotesCanvasProps {
@@ -96,6 +97,7 @@ export default function StickyNotesCanvas({ notes, zIndex = 9998 }: StickyNotesC
                     mobileX={note.mobileX}
                     mobileY={note.mobileY}
                     delay={note.delay ?? index * 0.1}
+                    backgroundImage={note.backgroundImage}
                     showDebug={false}
                 />
             ))}
