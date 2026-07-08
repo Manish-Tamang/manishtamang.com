@@ -46,7 +46,7 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "Manish Tamang - A young developer",
   description:
-    "Hi, I'm Manish Gole Tamang, a 17-year-old from Itahari, Nepal, with a fervent passion for web development.",
+    "Hi, I'm Manish Gole Tamang, an 18-year-old from Itahari, Nepal, with a fervent passion for web development.",
   icons: {
     icon: [
       {
@@ -63,7 +63,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Manish Tamang - A young developer",
     description:
-      "Hi, I'm Manish Gole Tamang, a 17-year-old from Itahari, Nepal, with a fervent passion for web development.",
+      "Hi, I'm Manish Gole Tamang, an 18-year-old from Itahari, Nepal, with a fervent passion for web development.",
     images: "https://manishtamang.com/profile.png",
     type: "website",
   },
