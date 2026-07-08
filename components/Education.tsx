@@ -8,9 +8,9 @@ interface EducationItemProps {
 }
 
 const EducationItem = ({ logo, institution, degree, dateRange }: EducationItemProps) => (
-    <div className="flex gap-3 group gap-y-1">
+    <div className="group flex gap-3">
         <div className="shrink-0">
-            <div className="relative w-10 h-10 rounded-full overflow-hidden border border-border/40">
+            <div className="relative h-10 w-10 overflow-hidden rounded-full border border-border/40">
                 <Image
                     src={logo}
                     alt={`${institution} Logo`}
@@ -19,10 +19,12 @@ const EducationItem = ({ logo, institution, degree, dateRange }: EducationItemPr
                 />
             </div>
         </div>
-        <div className="flex-1 min-w-0">
-            <h3 className="font-medium text-[15px] text-foreground">{institution}</h3>
-            <p className="text-sm text-foreground/60">{degree}</p>
-            <span className="inline-block mt-1.5 text-[11px] text-foreground/50 bg-secondary/50 px-2 py-0.5 rounded-full">
+        <div className="flex min-w-0 flex-1 flex-col gap-1 md:flex-row md:items-center md:justify-between md:gap-4">
+            <div className="min-w-0">
+                <h3 className="text-[15px] font-medium text-foreground">{institution}</h3>
+                <p className="text-sm text-foreground/60">{degree}</p>
+            </div>
+            <span className="mt-1.5 inline-block shrink-0 rounded-full bg-secondary/50 px-2 py-0.5 text-[11px] text-foreground/50 md:mt-0">
                 {dateRange}
             </span>
         </div>
