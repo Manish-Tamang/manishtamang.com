@@ -14,25 +14,25 @@ import {
   SiYarn,
   SiSpotify,
   SiGoogledrive,
-  SiCanva,
   SiOpenvpn,
   SiGooglechrome,
   SiTelegram,
   SiTrello,
   SiDiscord,
   SiNetlify,
+  SiVlcmediaplayer,
+  SiClickup,
 } from "react-icons/si";
 import { BiLogoVisualStudio } from "react-icons/bi";
 import { VscCopilot } from "react-icons/vsc";
-import { FaWindows } from "react-icons/fa";
-import { FaEdge } from "react-icons/fa";
-import { SiVlcmediaplayer, SiClickup } from "react-icons/si";
+import { FaWindows, FaEdge } from "react-icons/fa";
+import { FiFigma } from "react-icons/fi";
 import Cursor from "@/components/icons/Cursor";
 import ClaudeAI from "@/components/icons/Claude";
 import OpenAI from "@/components/icons/Chatgpt";
 import v0 from "@/components/icons/v0";
 import Gemini from "@/components/icons/Gemini";
-import { FiFigma } from "react-icons/fi";
+import Canva from "@/components/icons/Canva";
 import { GoogleAntigravity } from "@/components/icons/Antigravity";
 import AfterEffects from "@/components/icons/AfterEffects";
 import Photoshop from "@/components/icons/Photoshop";
@@ -266,7 +266,7 @@ export const softwareItems = [
   {
     name: "Canva",
     description: "Graphic Design Tool",
-    icon: SiCanva,
+    icon: Canva,
     link: "https://www.canva.com/download",
   },
   {
