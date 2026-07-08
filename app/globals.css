@@ -411,7 +411,10 @@ button,
 [role="button"],
 input[type="submit"],
 input[type="button"],
-.pointer {
+.pointer,
+img,
+.cursor-pointer,
+.cursor-pointer img {
   cursor:
     url("/cursor/mac-cursor.png") 10 10,
     pointer;
