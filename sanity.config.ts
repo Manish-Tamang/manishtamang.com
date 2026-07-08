@@ -5,9 +5,11 @@
  */
 
 import { visionTool } from "@sanity/vision";
+import { table } from "@sanity/table";
 import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";
 import { markdownSchema } from "sanity-plugin-markdown";
+import { SafeMarkdownInput } from "./sanity/components/safe-markdown-input";
 import { media } from "sanity-plugin-media";
 import { codeInput } from "@sanity/code-input";
 
@@ -27,7 +29,8 @@ export default defineConfig({
     // Vision is for querying with GROQ from inside the Studio
     // https://www.sanity.io/docs/the-vision-plugin
     visionTool({ defaultApiVersion: apiVersion }),
-    markdownSchema(),
+    table(),
+    markdownSchema({ input: SafeMarkdownInput }),
     media(),
     codeInput(),
   ],

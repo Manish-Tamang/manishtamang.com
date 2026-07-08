@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "createdAt": "2026-03-11T16:42:48.011Z",
+  "createdAt": "2026-07-08T17:11:19.062Z",
   "workspaces": [
     {
       "name": "default",
@@ -8,12 +8,12 @@
       "basePath": "/studio",
       "projectId": "dtlyikoh",
       "dataset": "production",
-      "icon": null,
+      "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 32 32\"><rect width=\"32\" height=\"32\" rx=\"2\" fill=\"#f7d455\"></rect><text x=\"50%\" y=\"50%\" text-anchor=\"middle\" alignment-baseline=\"middle\" fill=\"hsla(47, 91%, 25%, 1)\" style=\"font-family:Inter, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, &quot;Liberation Sans&quot;, Helvetica, Arial, system-ui, sans-serif;font-weight:500;font-size:13px;transform:translateY(1px)\">D</text></svg>",
       "mediaLibrary": {
         "enabled": false
       },
-      "schema": "2618a005.create-schema.json",
-      "tools": "bdbcf0f8.create-tools.json"
+      "schema": "c25a6c3f.create-schema.json",
+      "tools": "0c8c6a17.create-tools.json"
     }
   ],
   "studioVersion": "4.22.0"

@@ -4,6 +4,7 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { atomDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { Copy, Check } from 'lucide-react';
 import Markdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import {
   Accordion,
@@ -13,6 +14,14 @@ import {
 } from "@/components/ui/accordion"
 import Image from 'next/image';
 import { ImageModal, type GalleryImage } from "@/components/ImageModal";
+import {
+  BlogTable,
+  BlogTableBody,
+  BlogTableCell,
+  BlogTableHead,
+  BlogTableHeaderCell,
+  BlogTableRow,
+} from "./blog-table";
 
 
 const slugify = (text: string): string => {
@@ -41,16 +50,26 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ language, children }) => {
   };
 
   return (
-    <div className="relative group my-6">
+    <div className="relative group my-6 max-w-full">
       <SyntaxHighlighter
         PreTag="div"
         language={language}
-        wrapLines={true}
+        wrapLines
+        wrapLongLines
         style={atomDark}
-        className="rounded-[4px] overflow-hidden shadow-md font-mono"
+        className="rounded-[4px] overflow-hidden shadow-md font-mono !whitespace-pre-wrap !break-words"
+        customStyle={{
+          margin: 0,
+          whiteSpace: "pre-wrap",
+          wordBreak: "break-word",
+          overflowWrap: "anywhere",
+        }}
         codeTagProps={{
           style: {
-            fontFamily: 'var(--font-jetbrains-mono)',
+            fontFamily: "var(--font-jetbrains-mono)",
+            whiteSpace: "pre-wrap",
+            wordBreak: "break-word",
+            overflowWrap: "anywhere",
           },
         }}
       >
@@ -116,6 +135,7 @@ export const MDXComponents: React.FC<MDXComponentsProps> = ({ content }) => {
       <ImageModal image={selectedImage} open={isImageModalOpen} onOpenChange={setIsImageModalOpen} />
       <div ref={contentRef} className="space-y-6">
         <Markdown
+          remarkPlugins={[remarkGfm]}
           rehypePlugins={[rehypeRaw]}
           components={{
             h1: ({ children }) => {
@@ -194,7 +214,7 @@ export const MDXComponents: React.FC<MDXComponentsProps> = ({ content }) => {
                       src={imageSrc}
                       alt={imageAlt}
                       fill
-                      sizes="(max-width: 768px) 100vw, 768px"
+                      sizes="(max-width: 768px) 100vw, 720px"
                       className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-[1.01]"
                       onClick={() => imageSrc && handleImagePreviewClick(imageSrc, imageAlt)}
                       style={{ background: '#fff' }}
@@ -212,34 +232,22 @@ export const MDXComponents: React.FC<MDXComponentsProps> = ({ content }) => {
               <hr className="my-8 border-gray-200 dark:border-gray-700" />
             ),
             table: ({ children }) => (
-              <div className="overflow-x-auto my-6 rounded-lg shadow-md">
-                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 rounded-lg overflow-hidden">
-                  {children}
-                </table>
-              </div>
+              <BlogTable>{children}</BlogTable>
             ),
             thead: ({ children }) => (
-              <thead className="bg-gray-50 dark:bg-gray-800">
-                {children}
-              </thead>
+              <BlogTableHead>{children}</BlogTableHead>
             ),
             tbody: ({ children }) => (
-              <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                {children}
-              </tbody>
+              <BlogTableBody>{children}</BlogTableBody>
             ),
             tr: ({ children }) => (
-              <tr>{children}</tr>
+              <BlogTableRow>{children}</BlogTableRow>
             ),
             th: ({ children }) => (
-              <th className="px-8 py-4 text-left text-sm font-medium text-zinc-900 dark:text-zinc-100 uppercase tracking-wider">
-                {children}
-              </th>
+              <BlogTableHeaderCell>{children}</BlogTableHeaderCell>
             ),
             td: ({ children }) => (
-              <td className="px-8 py-4 whitespace-nowrap text-sm text-zinc-700 dark:text-zinc-300">
-                {children}
-              </td>
+              <BlogTableCell>{children}</BlogTableCell>
             ),
             code({ node, className, children, ...props }) {
               const match = /language-(\w+)/.exec(className || '');
@@ -251,8 +259,8 @@ export const MDXComponents: React.FC<MDXComponentsProps> = ({ content }) => {
               ) : (
                 <code
                   {...props}
-                  className="bg-gray-200 dark:bg-gray-700 text-pink-500 px-2 py-1 rounded font-mono text-sm"
-                  style={{ fontFamily: 'var(--font-jetbrains-mono)' }}
+                  className="bg-gray-200 dark:bg-gray-700 text-pink-500 px-2 py-1 rounded font-mono text-sm break-words whitespace-pre-wrap"
+                  style={{ fontFamily: "var(--font-jetbrains-mono)" }}
                 >
                   {children}
                 </code>

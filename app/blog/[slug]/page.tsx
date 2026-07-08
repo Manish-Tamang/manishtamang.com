@@ -6,6 +6,7 @@ import { sanityFetch } from "@/sanity/lib/live"
 import { urlFor } from "@/sanity/lib/image"
 import { client } from "@/sanity/lib/client"
 import { BlogViewTracker } from "@/components/blog-view-tracker"
+import { normalizePostContent } from "@/sanity/lib/portable-text-to-markdown"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://manishtamang.com"
 
@@ -86,7 +87,7 @@ export default async function BlogPostPage({
   const formattedPost = {
     title: post.title || "",
     date: post.date || "",
-    content: post.content || "",
+    content: normalizePostContent(post.content),
     summary: post.excerpt || "", // mapping excerpt to summary
     image: post.coverImage ? urlFor(post.coverImage).url() : undefined,
     // Assuming some default author info for now or you can add more fields to post schema

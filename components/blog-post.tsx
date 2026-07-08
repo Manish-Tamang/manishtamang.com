@@ -2,7 +2,6 @@ import Link from "next/link"
 import Image from "next/image"
 import { MessageCircle, Share2, MoreHorizontal } from "lucide-react"
 import { MDXComponents } from "./mdx/MDXComponents"
-import { format } from "date-fns"
 import Comments from "./Comments"
 
 interface BlogPostProps {
@@ -110,7 +109,7 @@ export function BlogPost({ title, date, content, category = ["TECH", "DESIGN"], 
         </div>
       )}
 
-      <article className="max-w-[610px] p-0 md:p-6 mx-auto">
+      <article className="max-w-[720px] p-0 md:p-6 mx-auto">
         <MDXComponents content={content} />
         <Comments  />
       </article>
