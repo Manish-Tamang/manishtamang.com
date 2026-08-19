@@ -1,25 +1,10 @@
 import { headers } from "next/headers";
-import { WakaTimeOverview } from "@/components/dashboard/wakatime-overview";
+import { WakaTimeOverview, GithubContribution, BlogStatsTable, RecentUmamiSessions, UmamiTotals } from "@/components/dashboard";
 import type { WakaTimeApiResponse } from "@/lib/wakatime-types";
-import GithubContribution from "@/components/github-contribution";
 import { getBlogPostStats } from "@/lib/BlogStats";
-import { BlogStatsTable } from "@/components/dashboard/blog-stats-table";
-import { RecentUmamiSessions } from "@/components/dashboard/recent-umami-sessions";
+import { getUmamiRecentSessions, getUmamiTotals } from "@/lib/umami";
 
 export const revalidate = 60;
-
-interface UmamiSession {
-    id?: string;
-    url?: string;
-    hostname?: string;
-    browser?: string;
-    os?: string;
-    device?: string;
-    country?: string;
-    city?: string;
-    createdAt?: number;
-    visitedAt?: number;
-}
 
 async function getInitialWakaTimeData(): Promise<WakaTimeApiResponse | null> {
     const headerStore = await headers();
@@ -49,47 +34,16 @@ async function getInitialWakaTimeData(): Promise<WakaTimeApiResponse | null> {
     }
 }
 
-async function getRecentSessions(): Promise<UmamiSession[]> {
-    const headerStore = await headers();
-    const forwardedHost = headerStore.get("x-forwarded-host");
-    const host = forwardedHost ?? headerStore.get("host");
-
-    if (!host) {
-        return [];
-    }
-
-    const protocol =
-        headerStore.get("x-forwarded-proto") ??
-        (host.includes("localhost") ? "http" : "https");
-
-    try {
-        const response = await fetch(
-            `${protocol}://${host}/api/umami?type=sessions&limit=3`,
-            {
-                next: { revalidate: 60 },
-            }
-        );
-
-        if (!response.ok) {
-            return [];
-        }
-
-        const payload = (await response.json()) as { data?: UmamiSession[] };
-        if (!Array.isArray(payload.data)) {
-            return [];
-        }
-
-        return payload.data.slice(0, 3);
-    } catch {
-        return [];
-    }
+async function getRecentSessions() {
+    return getUmamiRecentSessions(3);
 }
 
 export default async function DashboardPage() {
-    const [initialData, blogStats, recentSessions] = await Promise.all([
+    const [initialData, blogStats, recentSessions, umamiTotals] = await Promise.all([
         getInitialWakaTimeData(),
         getBlogPostStats(),
         getRecentSessions(),
+        getUmamiTotals(),
     ]);
 
     return (
@@ -117,13 +71,16 @@ export default async function DashboardPage() {
                     </p>
                 </section>
                 <GithubContribution />
-                <section className="space-y-3">
-                    <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
-                        Recent Sessions
-                    </h2>
-                    <p className="text-zinc-600 dark:text-zinc-400 text-base leading-relaxed">
-                        Latest 3 visits captured from <a href="https://manish-analytics.vercel.app/share/jFK5VpX2c6h2JgRg/manishtamang.com" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline decoration-wavy">Umami analytics</a>.
-                    </p>
+                <section className="space-y-5">
+                    <div className="space-y-3">
+                        <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+                            Site Traffic
+                        </h2>
+                        <p className="text-zinc-600 dark:text-zinc-400 text-base leading-relaxed">
+                            Visitors, visits, and page views from <a href="https://manish-analytics.vercel.app/share/jFK5VpX2c6h2JgRg/manishtamang.com" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline decoration-wavy">Umami</a> since Oct 18, 2024. Recent sessions show the latest 3 visits.
+                        </p>
+                    </div>
+                    <UmamiTotals totals={umamiTotals} />
                     <RecentUmamiSessions sessions={recentSessions} />
                 </section>
                 <section className="space-y-3">
