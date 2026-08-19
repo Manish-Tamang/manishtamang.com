@@ -15,9 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useGuestbook } from "@/hooks/use-guestbook"
 import { useState, useMemo, useEffect } from "react"
-import { GuestbookItem } from "@/components/guestbook/guestbook-item"
-import { GuestbookForm } from "@/components/guestbook/guestbook-form"
-import { GuestbookSkeleton } from "@/components/guestbook/guestbook-skeleton"
+import { GuestbookItem, GuestbookForm, GuestbookSkeleton } from "@/components/guestbook"
 import { cn } from "@/lib/utils"
 
 export default function GuestbookPage() {
