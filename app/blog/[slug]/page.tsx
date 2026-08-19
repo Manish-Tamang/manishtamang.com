@@ -1,11 +1,10 @@
-import { BlogPost } from "@/components/blog-post"
+import { BlogPost, BlogViewTracker } from "@/components/blog"
 import { notFound } from "next/navigation"
 import type { Metadata } from "next"
 import { POST_BY_SLUG_QUERY, POSTS_QUERY } from "@/sanity/lib/queries"
 import { sanityFetch } from "@/sanity/lib/live"
 import { urlFor } from "@/sanity/lib/image"
 import { client } from "@/sanity/lib/client"
-import { BlogViewTracker } from "@/components/blog-view-tracker"
 import { normalizePostContent } from "@/sanity/lib/portable-text-to-markdown"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://manishtamang.com"
