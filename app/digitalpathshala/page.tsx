@@ -1,4 +1,4 @@
-import { DigitalPathshalaCardStack } from "@/components/digitalpathshala-card-stack"
+import { DigitalPathshalaCardStack } from "@/components/digitalpathshala"
 
 export default function DigitalPathshalaPage() {
 	return (
