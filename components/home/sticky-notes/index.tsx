@@ -1,7 +1,7 @@
 "use client"
 
-import React from 'react'
-import StickyNotesCanvas, { StickyNoteConfig } from './sticky-notes-canvas'
+import React from "react"
+import StickyNotesCanvas, { StickyNoteConfig } from "./sticky-notes-canvas"
 
 interface StickyNoteData {
     id: string
@@ -25,85 +25,27 @@ interface StickyNotesProviderProps {
 }
 
 export default function StickyNotesProvider({ stickyNotes = [] }: StickyNotesProviderProps) {
-    const hasNotes = stickyNotes && stickyNotes.length > 0
-    const defaultNotes: StickyNoteData[] = !hasNotes ? [
-        {
-            id: 'hero-1',
-            text: '👋',
-            color: 'yellow',
-            initialX: 100,
-            initialY: 150,
-            initialRotation: -2,
-            width: 120,
-            height: 120,
-            mobileWidth: 80,
-            mobileHeight: 80,
-            mobileX: 20,
-            mobileY: 100,
-            delay: 0.2,
-        },
-        {
-            id: 'hero-2',
-            text: 'Scroll down\nfor more!',
-            color: 'green',
-            initialX: 250,
-            initialY: 120,
-            initialRotation: 12,
-            width: 120,
-            height: 120,
-            mobileWidth: 80,
-            mobileHeight: 80,
-            mobileX: 110,
-            mobileY: 100,
-            delay: 0.4,
-        },
-    ] : stickyNotes
-
-    // Convert data to StickyNoteConfig with JSX content
-    const notes: StickyNoteConfig[] = defaultNotes
-        .filter(note => note && note.id) // Filter out any invalid notes
+    const notes: StickyNoteConfig[] = stickyNotes
+        .filter((note) => note?.id)
         .map((note) => {
-            const text = note.text || ''
-            const isEmoji = /^[\p{Emoji}\s]+$/u.test(text.trim())
-            const hasLocation = text.includes('📍') || text.includes('Nepal')
+            const text = note.text || ""
+            const lines = text.split("\n")
 
-            let content: React.ReactNode
-            if (hasLocation) {
-                const parts = text.split('\n')
-                content = (
-                    <div className="flex flex-col items-center gap-1">
-                        {parts.map((part, i) => (
-                            <span key={i} className={i === 0 ? "text-xs md:text-base" : "text-sm md:text-xl font-semibold text-zinc-900 dark:text-zinc-900 leading-tight"}>
-                                {part}
-                            </span>
-                        ))}
-                    </div>
-                )
-            } else if (isEmoji) {
-                content = (
-                    <div className="flex items-center justify-center h-full">
-                        <span className="text-2xl md:text-4xl">{text}</span>
-                    </div>
-                )
-            } else {
-                content = (
+            return {
+                id: note.id,
+                content: (
                     <div className="flex items-center justify-center h-full text-center">
-                        <p className="text-xs md:text-sm font-medium text-zinc-900 dark:text-zinc-900 leading-tight" style={{ fontFamily: 'var(--font-paragraph), sans-serif' }}>
-                            {text.split('\n').map((line, i) => (
+                        <p className="text-xs md:text-sm font-medium text-zinc-900 dark:text-zinc-900 leading-tight">
+                            {lines.map((line, i) => (
                                 <span key={i}>
                                     {line}
-                                    {i < text.split('\n').length - 1 && <br />}
+                                    {i < lines.length - 1 && <br />}
                                 </span>
                             ))}
                         </p>
                     </div>
-                )
-            }
-
-            return {
-                id: note.id,
-                content,
-                color: note.color as any,
+                ),
+                color: note.color as StickyNoteConfig["color"],
                 initialX: note.initialX,
                 initialY: note.initialY,
                 initialRotation: note.initialRotation,
@@ -115,9 +57,8 @@ export default function StickyNotesProvider({ stickyNotes = [] }: StickyNotesPro
                 mobileY: note.mobileY,
                 delay: note.delay,
                 backgroundImage: note.backgroundImage,
-            } as StickyNoteConfig
+            }
         })
 
     return <StickyNotesCanvas notes={notes} zIndex={9998} />
 }
-
