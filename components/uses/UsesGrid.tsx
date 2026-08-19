@@ -1,5 +1,5 @@
 import React from 'react';
-import UsesCard from '@/components/uses/UsesCard';
+import UsesCard from './UsesCard';
 import {
     gearItems,
     systemItems,
