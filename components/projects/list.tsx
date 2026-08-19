@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/select"
 import { Search } from "lucide-react"
 import { sounds } from "@/lib/sounds"
-import ProjectCard from "@/components/project-card"
+import ProjectCard from "./card"
 
 interface Project {
     title: string
