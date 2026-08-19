@@ -1,30 +1,9 @@
-"use client"
-
-import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { ArrowUpRight, PenTool } from "lucide-react"
 import { CurrentlyPlaying } from "./currently-playing"
 
 export function AboutSection({ recentFavorite }: { recentFavorite?: any }) {
-    const [frame, setFrame] = useState(0)
-    const [isHovered, setIsHovered] = useState(false)
-
-    const idleFrames = ["/character/12.png", "/character/13.png"]
-    const hoverFrames = ["/character/16.png", "/character/17.png", "/character/18.png"]
-    const currentFrames = isHovered ? hoverFrames : idleFrames
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setFrame((prev) => (prev + 1) % currentFrames.length)
-        }, 400)
-        return () => clearInterval(interval)
-    }, [currentFrames.length])
-
-    useEffect(() => {
-        setFrame(0)
-    }, [isHovered])
-
     return (
         <section className="max-w-[610px] w-full mx-auto mt-6 px-4 md:px-0">
             <h2 className="text-2xl font-semibold mb-2">About</h2>
@@ -60,7 +39,7 @@ export function AboutSection({ recentFavorite }: { recentFavorite?: any }) {
                         fill
                         className="object-cover user-select-none"
                         loading="lazy"
-                        sizes="(max-width: 768px) 100px, 150px"
+                        sizes="(max-width: 768px) 50vw, 200px"
                     />
                     <div className="absolute inset-0" />
                     <div className="absolute bottom-3 left-3 right-3">
