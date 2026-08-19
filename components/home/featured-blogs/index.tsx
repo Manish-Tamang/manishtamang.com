@@ -1,12 +1,4 @@
-"use client"
-
-import { BlogCard } from "./blog-card"
-import Link from "next/link"
-import Image from "next/image"
-import { format } from "date-fns"
-import { urlFor } from "@/sanity/lib/image"
-import { sounds } from "@/lib/sounds"
-import { ArrowUpRight } from "lucide-react"
+import { BlogCard, MobileBlogItem } from "./blog-card"
 
 interface FeaturedBlogsProps {
     posts: any[]
@@ -25,42 +17,7 @@ export function FeaturedBlogs({ posts }: FeaturedBlogsProps) {
                     </div>
                     <div className="flex md:hidden flex-col gap-4 w-full">
                         {posts?.map((blog: any) => (
-                            <Link
-                                key={blog.slug?.current || blog.slug}
-                                href={`/blog/${blog.slug?.current || blog.slug}`}
-                                onClick={() => sounds.click()}
-                                onMouseEnter={() => sounds.tick()}
-                                className="group flex gap-4 items-start p-2 rounded-xl bg-foreground/5 hover:bg-foreground/[0.08] transition-all"
-                            >
-                                <div className="relative w-[100px] h-[64px] rounded-lg overflow-hidden bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shrink-0">
-                                    {blog.coverImage ? (
-                                        <Image
-                                            src={urlFor(blog.coverImage).url()}
-                                            alt={blog.title || ""}
-                                            fill
-                                            className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
-                                        />
-                                    ) : (
-                                        <div className="w-full h-full flex items-center justify-center">
-                                            <span className="text-[10px] text-zinc-400">No Image</span>
-                                        </div>
-                                    )}
-                                </div>
-                                <div className="flex flex-col py-0.5 space-y-1 flex-1 min-w-0">
-                                    <div className="flex items-center justify-between gap-2">
-                                        <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100 leading-tight truncate">
-                                            {blog.title}
-                                        </h4>
-                                        <ArrowUpRight className="w-3 h-3 shrink-0 text-zinc-400" />
-                                    </div>
-                                    <p className="text-[11px] text-zinc-500 dark:text-zinc-400 leading-tight line-clamp-1">
-                                        {blog.excerpt}
-                                    </p>
-                                    <time className="text-[9px] font-bold text-zinc-400 uppercase">
-                                        {blog.date ? format(new Date(blog.date), "MMM d") : ""}
-                                    </time>
-                                </div>
-                            </Link>
+                            <MobileBlogItem key={blog.slug?.current || blog.slug} blog={blog} />
                         ))}
                     </div>
                 </div>
