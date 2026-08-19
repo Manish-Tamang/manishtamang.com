@@ -3,7 +3,7 @@ import { PROJECT_BY_SLUG_QUERY, PROJECTS_QUERY } from "@/sanity/lib/queries"
 import { sanityFetch } from "@/sanity/lib/live"
 import { urlFor } from "@/sanity/lib/image"
 import { client } from "@/sanity/lib/client"
-import ProjectDetails from "@/components/ProjectDetails"
+import { ProjectDetails } from "@/components/projects"
 
 import { Metadata } from 'next'
 
