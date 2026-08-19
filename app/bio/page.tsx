@@ -1,6 +1,5 @@
-import { MiniGoleCard } from "@/components/bio/mini-gole-card"
-import { PolaroidGallery } from "@/components/bio/polaroid-gallery"
-import { LineBreaker } from "@/components/line-breaker"
+import { MiniGoleCard, PolaroidGallery } from "@/components/bio"
+import { LineBreaker } from "@/components/shared/line-breaker"
 import type { BioPolaroidItem } from "@/data/bio-polaroids"
 
 const bioPolaroidData: BioPolaroidItem[] = [
