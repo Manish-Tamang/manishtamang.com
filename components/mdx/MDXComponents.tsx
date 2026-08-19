@@ -13,7 +13,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import Image from 'next/image';
-import { ImageModal, type GalleryImage } from "@/components/ImageModal";
+import { ImageModal, type GalleryImage } from "@/components/shared/image-modal";
 import {
   BlogTable,
   BlogTableBody,
