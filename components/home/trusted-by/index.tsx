@@ -49,6 +49,7 @@ export function TrustedBySection() {
                   height={48}
                   className="h-full w-auto max-w-full object-contain object-center"
                   draggable={false}
+                  loading="lazy"
                 />
               </div>
             </TooltipTrigger>
