@@ -1,47 +1,51 @@
-import Image from "next/image"
-import { FEATURED_IMAGE_QUERY } from "@/sanity/lib/queries"
-import { sanityFetch } from "@/sanity/lib/live"
-import { Skeleton } from "@/components/ui/skeleton"
-import { FlowerButton } from "@/components/flower-button"
+import { BlurImage } from "@/components/shared"
+import { FEATURED_IMAGE_QUERY } from "@/sanity/lib/queries";
+import { sanityFetch } from "@/sanity/lib/live";
+import { Skeleton } from "@/components/ui/skeleton";
+import { FlowerButton } from "./flower-button";
+import { AiTwotoneCamera } from "react-icons/ai";
 
 export async function FeaturedImageSection() {
-    const { data: featuredImage } = await sanityFetch({ query: FEATURED_IMAGE_QUERY })
+  const { data: featuredImage } = await sanityFetch({
+    query: FEATURED_IMAGE_QUERY,
+  });
 
-    if (!featuredImage?.url) return null
+  if (!featuredImage?.url) return null;
 
-    return (
-        <div className="p-6 mt-4 max-w-[720px] w-full flex flex-col items-center gap-8">
-            <div className="w-full">
-                <Image
-                    src={featuredImage.url}
-                    alt={featuredImage.alt || "Featured Image"}
-                    width={900}
-                    height={506}
-                    className="w-full h-auto rounded-md shadow-sm border border-zinc-200 dark:border-zinc-800"
-                    loading="lazy"
-                    quality={75}
-                />
-                {featuredImage.caption && (
-                    <p className="mt-2 text-xs text-zinc-500 text-center font-medium italic">
-                        {featuredImage.caption}
-                    </p>
-                )}
-            </div>
+  return (
+    <div className="p-6 mt-4 max-w-[720px] w-full flex flex-col items-center gap-8">
+      <div className="w-full">
+        <BlurImage
+          src={featuredImage.url}
+          alt={featuredImage.alt || "Featured Image"}
+          width={900}
+          height={506}
+          className="w-full h-auto rounded-md shadow-sm border border-zinc-200 dark:border-zinc-800"
+          lazy
+          quality={75}
+        />
+        {featuredImage.caption && (
+          <p className="mt-2 text-xs text-zinc-500 text-center font-medium italic">
+            <AiTwotoneCamera className="inline-block ml-1" />{": "}
+            {featuredImage.caption}
+          </p>
+        )}
+      </div>
 
-            <div className="w-full flex justify-end">
-                <FlowerButton text="View photos" href="/photos" />
-            </div>
-        </div>
-    )
+      <div className="w-full flex justify-end">
+        <FlowerButton text="View photos" href="/photos" />
+      </div>
+    </div>
+  );
 }
 
 export function FeaturedImageSkeleton() {
-    return (
-        <div className="p-6 mt-4 max-w-[720px] w-full">
-            <Skeleton className="w-full aspect-video rounded-md" />
-            <div className="mt-2 flex justify-center">
-                <Skeleton className="h-3 w-32" />
-            </div>
-        </div>
-    )
+  return (
+    <div className="p-6 mt-4 max-w-[720px] w-full">
+      <Skeleton className="w-full aspect-video rounded-md" />
+      <div className="mt-2 flex justify-center">
+        <Skeleton className="h-3 w-32" />
+      </div>
+    </div>
+  );
 }
