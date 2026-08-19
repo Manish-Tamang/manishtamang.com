@@ -1,6 +1,6 @@
 import { PROJECTS_QUERY } from "@/sanity/lib/queries"
 import { sanityFetch } from "@/sanity/lib/live"
-import ProjectsClient from "@/components/ProjectsClient"
+import { ProjectsClient } from "@/components/projects"
 
 export const metadata = {
     title: "Projects | Manish Tamang",
