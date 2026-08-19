@@ -1,7 +1,7 @@
 "use client"
 
-import { useEffect, useState } from 'react'
-import StickyNote, { StickyNoteColor } from './sticky-note'
+import { useEffect, useState } from "react"
+import StickyNote, { StickyNoteColor } from "./sticky-note"
 
 export interface StickyNoteConfig {
     id: string
@@ -31,39 +31,12 @@ export default function StickyNotesCanvas({ notes, zIndex = 9998 }: StickyNotesC
 
     useEffect(() => {
         const updateHeight = () => {
-            const main = document.querySelector('main')
-            if (main) {
-                const mainHeight = main.scrollHeight
-                setContainerHeight(mainHeight)
-            } else {
-                const docHeight = Math.max(
-                    document.body.scrollHeight,
-                    document.body.offsetHeight,
-                    document.documentElement.clientHeight,
-                    document.documentElement.scrollHeight,
-                    document.documentElement.offsetHeight
-                )
-                setContainerHeight(docHeight)
-            }
+            setContainerHeight(document.documentElement.scrollHeight)
         }
-        const timeoutId = setTimeout(updateHeight, 100)
+
         updateHeight()
-
-        const observer = new MutationObserver(updateHeight)
-        observer.observe(document.body, {
-            childList: true,
-            subtree: true,
-            attributes: true,
-            attributeFilter: ['style', 'class']
-        })
-
-        window.addEventListener('resize', updateHeight)
-
-        return () => {
-            clearTimeout(timeoutId)
-            observer.disconnect()
-            window.removeEventListener('resize', updateHeight)
-        }
+        window.addEventListener("resize", updateHeight)
+        return () => window.removeEventListener("resize", updateHeight)
     }, [])
 
     if (!notes || notes.length === 0) {
@@ -74,10 +47,10 @@ export default function StickyNotesCanvas({ notes, zIndex = 9998 }: StickyNotesC
         <div
             className="absolute left-0 top-0 pointer-events-none"
             style={{
-                width: '100%',
-                height: containerHeight > 0 ? `${containerHeight}px` : '100vh',
+                width: "100%",
+                height: containerHeight > 0 ? `${containerHeight}px` : "100vh",
                 zIndex,
-                minHeight: '100vh',
+                minHeight: "100vh",
             }}
         >
             {notes.map((note, index) => (
@@ -104,4 +77,3 @@ export default function StickyNotesCanvas({ notes, zIndex = 9998 }: StickyNotesC
         </div>
     )
 }
-
