@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { Firfirey } from "@/components/firfirey";
-import { ToggleButton } from "@/components/toggle-button";
+import { Firfirey } from "./firfirey";
+import { ToggleButton } from "./toggle-button";
 import { GitHub } from "@/components/icons/Github";
 import { XformerlyTwitter } from "@/components/icons/X";
 import { LinkedIn } from "@/components/icons/LinkedIn";
