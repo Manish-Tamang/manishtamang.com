@@ -1,6 +1,6 @@
 import { GALLERY_QUERY } from "@/sanity/lib/queries"
 import { sanityFetch } from "@/sanity/lib/live"
-import { PhotosGrid } from "@/components/PhotosGrid"
+import { PhotosGrid } from "@/components/photos"
 
 export default async function PhotosPage() {
     const { data: images } = await sanityFetch({ query: GALLERY_QUERY })
