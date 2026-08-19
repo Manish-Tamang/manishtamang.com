@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import type { WakaTimeApiResponse } from "@/lib/wakatime-types";
-import { WakaTimeStatCard } from "@/components/dashboard/wakatime-stat-card";
+import { WakaTimeStatCard } from "./wakatime-stat-card";
 
 interface WakaTimeOverviewProps {
   initialData?: WakaTimeApiResponse | null;
