@@ -1,4 +1,4 @@
-import { BlogList } from "@/components/blog-list"
+import { BlogList } from "@/components/blog"
 import { POSTS_QUERY } from "@/sanity/lib/queries"
 import { sanityFetch } from "@/sanity/lib/live"
 
