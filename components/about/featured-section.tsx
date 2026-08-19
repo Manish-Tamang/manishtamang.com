@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import { YouTube } from "./icons/YouTube";
+import { YouTube } from "@/components/icons/YouTube";
 import { sounds } from "@/lib/sounds";
 
 type FeaturedCard = {
