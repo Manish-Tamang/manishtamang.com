@@ -7,7 +7,7 @@ import { format } from "date-fns"
 import { urlFor } from "@/sanity/lib/image"
 import { sounds } from "@/lib/sounds"
 import { ArrowUpRight, Search, ListFilter } from "lucide-react"
-import { BlogViewDisplay } from "@/components/blog-view-display"
+import { BlogViewDisplay } from "./view-display"
 
 interface Post {
   title?: string
