@@ -44,6 +44,8 @@ export async function FeaturedProjects() {
                                     alt={project.title}
                                     fill
                                     className="object-cover"
+                                    loading="lazy"
+                                    sizes="(max-width: 768px) 100vw, 180px"
                                 />
                             ) : (
                                 <div className="flex h-full w-full items-center justify-center bg-zinc-200 dark:bg-zinc-800">
