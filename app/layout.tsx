@@ -1,14 +1,15 @@
 import type React from "react"
-import type { Metadata } from "next"
 import { Inter, JetBrains_Mono, Karla } from "next/font/google"
 import localFont from "next/font/local"
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
-import { Header } from "@/components/header"
-import { Footer } from "@/components/footer"
-import Script from "next/script";
-import CarbonAds from "@/components/CarbonAds";
+import { Header, Footer, CarbonAds } from "@/components/layout"
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Toaster } from "sonner"
+import { SanityLive } from "@/sanity/lib/live"
+import { metadata as siteMetadata } from "@/lib/seo"
+
+export const metadata = siteMetadata
 
 const inter = Inter({
   subsets: ["latin"],
@@ -43,57 +44,32 @@ const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
 })
 
-export const metadata: Metadata = {
-  title: "Manish Tamang - A young developer",
-  description:
-    "Hi, I'm Manish Gole Tamang, an 18-year-old from Itahari, Nepal, with a fervent passion for web development.",
-  icons: {
-    icon: [
-      {
-        url: "/icon-light-32x32.png",
-        media: "(prefers-color-scheme: light)",
-      },
-      {
-        url: "/icon-dark-32x32.png",
-        media: "(prefers-color-scheme: dark)",
-      },
-    ],
-    apple: "/icon-light-32x32.png",
-  },
-  openGraph: {
-    title: "Manish Tamang - A young developer",
-    description:
-      "Hi, I'm Manish Gole Tamang, an 18-year-old from Itahari, Nepal, with a fervent passion for web development.",
-    images: "https://manishtamang.com/profile.png",
-    type: "website",
-  },
-};
-
-import { Toaster } from "sonner"
-import { SanityLive } from "@/sanity/lib/live"
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${karla.variable} ${perfectlyNineties.variable} ${myFont.variable} ${jetbrainsMono.variable}`}>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${inter.variable} ${karla.variable} ${perfectlyNineties.variable} ${myFont.variable} ${jetbrainsMono.variable}`}
+    >
       <head>
         <meta name="description" content={metadata.description ?? ""} />
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1"
         />
-        <Script
+        <script
+          defer
           src="https://manish-analytics.vercel.app/script.js"
           data-website-id="d5fd3d82-d867-4e3d-badb-837ad2ff7f7d"
-          strategy="afterInteractive"
         />
-        <Script
+        <script
+          defer
           src="https://cloud.umami.is/script.js"
           data-website-id="87f8f3a2-7fad-4aed-b92d-5beeee4c4491"
-          strategy="afterInteractive"
         />
         <script
           async
@@ -102,13 +78,14 @@ export default function RootLayout({
           defer
         ></script>
       </head>
-      <body
-        className={`font-inter antialiased bg-[#F7F7F7] dark:bg-[#191919]`}
-      >
+      <body className={`font-inter antialiased bg-[#F7F7F7] dark:bg-[#191919]`}>
         <div className="min-h-screen flex flex-col">
           <div className="flex-1 flex justify-center">
-            <div className="w-full  relative"> <Header />
-              <CarbonAds className="fixed bottom-4 left-16 w-1/4 hidden md:block" /> {children}
+            <div className="w-full  relative">
+              {" "}
+              <Header />
+              <CarbonAds className="fixed bottom-4 left-16 w-1/4 hidden md:block" />{" "}
+              {children}
               <SpeedInsights />
             </div>
           </div>
