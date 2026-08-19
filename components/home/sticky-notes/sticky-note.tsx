@@ -1,12 +1,11 @@
 "use client"
 
-import { useState, useEffect, useCallback } from 'react'
-import { motion } from 'motion/react'
-import { Gaegu } from 'next/font/google'
+import { useState, useEffect, useCallback } from "react"
+import { Gaegu } from "next/font/google"
 
 const gaegu = Gaegu({ weight: ["400"], subsets: ["latin"] })
 
-export type StickyNoteColor = 'yellow' | 'green' | 'pink' | 'blue' | 'purple' | 'orange'
+export type StickyNoteColor = "yellow" | "green" | "pink" | "blue" | "purple" | "orange"
 
 export interface StickyNoteProps {
     id: string
@@ -210,57 +209,42 @@ export default function StickyNote({
 
     return (
         <>
-            <motion.div
-                className={`absolute pointer-events-auto cursor-move touch-none ${backgroundImage ? "bg-transparent" : colorClasses[color]} ${gaegu.className}`}
+            <div
+                className="absolute pointer-events-auto cursor-move touch-none sticky-note-enter"
                 style={{
                     left: `${position.x}px`,
                     top: `${position.y}px`,
                     width: `${noteWidth}px`,
                     height: `${noteHeight}px`,
-                    transform: `rotate(${hoverRotation}deg)`,
-                    borderRadius: '0px',
-                    padding: isMobile ? '8px' : '12px',
-                    ...(backgroundImage
-                        ? {
-                            backgroundImage: `url(${backgroundImage})`,
-                            backgroundSize: "cover",
-                            backgroundPosition: "center",
-                            backgroundRepeat: "no-repeat",
-                        }
-                        : {}),
-                }}
-                initial={{
-                    opacity: 0,
-                    scale: 0.5,
-                    rotate: position.rotation - 20,
-                    y: 50
-                }}
-                animate={{
-                    opacity: 1,
-                    scale: 1,
-                    rotate: position.rotation,
-                    y: 0
-                }}
-                transition={{
-                    type: "spring",
-                    stiffness: 200,
-                    damping: 15,
-                    delay,
-                }}
-                whileHover={{
-                    scale: 1.05,
-                    rotate: hoverRotation,
-                    transition: { duration: 0.2 }
+                    animationDelay: `${delay}s`,
                 }}
                 onMouseDown={handleMouseDown}
                 onTouchStart={handleTouchStart}
                 onMouseEnter={() => setHovered(true)}
                 onMouseLeave={() => setHovered(false)}
             >
-                <div className="flex items-center justify-center h-full text-foreground leading-normal text-center">
-                    {displayContent}
+                <div
+                    className={`h-full w-full ${gaegu.className} ${backgroundImage ? "bg-transparent" : colorClasses[color]}`}
+                    style={{
+                        transform: `rotate(${hoverRotation}deg) scale(${hovered && !dragging ? 1.05 : 1})`,
+                        transition: "transform 0.2s ease",
+                        borderRadius: "0px",
+                        padding: isMobile ? "8px" : "12px",
+                        ...(backgroundImage
+                            ? {
+                                backgroundImage: `url(${backgroundImage})`,
+                                backgroundSize: "cover",
+                                backgroundPosition: "center",
+                                backgroundRepeat: "no-repeat",
+                            }
+                            : {}),
+                    }}
+                >
+                    <div className="flex items-center justify-center h-full text-foreground leading-normal text-center">
+                        {displayContent}
+                    </div>
                 </div>
-            </motion.div>
+            </div>
 
             {/* Debug overlay */}
             {showDebug && (
