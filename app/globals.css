@@ -419,3 +419,18 @@ img,
     url("/cursor/mac-cursor.png") 10 10,
     pointer;
 }
+
+@keyframes sticky-note-in {
+  from {
+    opacity: 0;
+    transform: scale(0.5) translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.sticky-note-enter {
+  animation: sticky-note-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
