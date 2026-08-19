@@ -1,0 +1,5 @@
+export { AboutContent } from "./content"
+export { FeaturedSection } from "./featured-section"
+export { Education } from "./education"
+export { Firfirey } from "./firfirey"
+export { ToggleButton } from "./toggle-button"
