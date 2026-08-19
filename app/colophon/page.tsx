@@ -15,9 +15,9 @@ import {
 } from "react-icons/si"
 import { Motion } from "@/components/icons/Motion"
 import { useState, useEffect } from "react"
-import { LineBreaker } from "@/components/line-breaker"
+import { LineBreaker } from "@/components/shared/line-breaker"
 import { sounds } from "@/lib/sounds"
-import { ColorPalette } from "@/components/ColorPalette"
+import { ColorPalette } from "@/components/colophon"
 
 const ColophonPage = () => {
     const [daysSinceLaunch, setDaysSinceLaunch] = useState(0)
