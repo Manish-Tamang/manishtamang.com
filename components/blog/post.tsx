@@ -1,8 +1,8 @@
 import Link from "next/link"
 import Image from "next/image"
 import { MessageCircle, Share2, MoreHorizontal } from "lucide-react"
-import { MDXComponents } from "./mdx/MDXComponents"
-import Comments from "./Comments"
+import { MDXComponents } from "@/components/mdx/MDXComponents"
+import Comments from "./comments"
 
 interface BlogPostProps {
   title: string
