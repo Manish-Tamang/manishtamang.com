@@ -1,7 +1,7 @@
 "use client"
 
 import Image from "next/image"
-import styles from "./digitalpathshala-card-stack.module.css"
+import styles from "./card-stack.module.css"
 
 const dpImages = [
   "/images/dp/IMG_20251016_132841.jpg",
