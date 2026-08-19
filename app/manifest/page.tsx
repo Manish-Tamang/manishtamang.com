@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import Link from 'next/link'
-import BucketList from '@/components/BucketList'
+import { BucketList } from "@/components/manifest"
 
 interface BucketListItem {
     id: number
