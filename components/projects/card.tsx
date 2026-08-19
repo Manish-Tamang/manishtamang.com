@@ -6,7 +6,7 @@ import Link from "next/link"
 import { format } from "date-fns"
 import { FiExternalLink, FiGithub, FiMaximize2 } from "react-icons/fi"
 import { urlFor } from "@/sanity/lib/image"
-import styles from "./project-card.module.css"
+import styles from "./card.module.css"
 
 interface ProjectCardProps {
   title: string
