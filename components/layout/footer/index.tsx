@@ -5,7 +5,7 @@ import { HiOutlineInformationCircle, HiOutlineDesktopComputer, HiOutlineBookOpen
 import { FaRegStar, FaRegEnvelope, FaInstagram, FaGithub, FaLinkedin, FaRegClock } from "react-icons/fa"
 import { SiSimpleanalytics, SiDailydotdev } from "react-icons/si"
 import { FeedbackFish } from "@feedback-fish/react"
-import { LineBreaker } from "./line-breaker"
+import { LineBreaker } from "@/components/shared/line-breaker"
 import { useState, useEffect } from "react"
 
 export function Footer() {
