@@ -1,6 +1,6 @@
 "use client"
 
-import GithubContributionGraph from '@/components/GithubContributionGraph'
+import GithubContributionGraph from "./github-contribution-graph"
 
 export default function GithubContribution() {
     return (
