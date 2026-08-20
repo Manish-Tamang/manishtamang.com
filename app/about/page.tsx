@@ -1,4 +1,4 @@
-import { AboutContent, FeaturedSection, Education } from "@/components/about"
+import { AboutContent, FeaturedSection, Education, PrayerFlags } from "@/components/about"
 import { PolaroidGallery } from "@/components/bio"
 import { LineBreaker } from "@/components/shared/line-breaker"
 import {
@@ -47,8 +47,15 @@ export default function AboutPage() {
           </div>
         </section>
 
-        <LineBreaker />
-        <PolaroidGallery data={aboutPolaroids} />
+        <div className="relative">
+          <LineBreaker />
+          <div className="relative">
+            <div className="relative z-0 -mt-2">
+              <PolaroidGallery data={aboutPolaroids} />
+            </div>
+            <PrayerFlags />
+          </div>
+        </div>
         <LineBreaker />
         <section id="education">
           <Education />
