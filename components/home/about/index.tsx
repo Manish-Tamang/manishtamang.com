@@ -2,6 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { ArrowUpRight, PenTool } from "lucide-react"
 import { CurrentlyPlaying } from "./currently-playing"
+import { ToolsDock } from "./tools-dock"
 
 export function AboutSection({ recentFavorite }: { recentFavorite?: any }) {
     return (
@@ -80,9 +81,7 @@ export function AboutSection({ recentFavorite }: { recentFavorite?: any }) {
                             Outside of client work, I'm studying emerging web patterns, experimenting with agentic workflows, and sharpening my craft.
                         </p>
                     </div>
-                    <Link href="#" className="text-[10px] flex items-center gap-1 hover:underline mt-4 opacity-100">
-                        View technical stack <ArrowUpRight className="w-2 h-2" />
-                    </Link>
+                    <ToolsDock />
                 </div>
             </div>
         </section>
