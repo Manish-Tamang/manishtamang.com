@@ -215,6 +215,7 @@ const GithubContributionGraph: FC<Props> = ({
                     <a
                         style={{ color: "#A1A1AA" }}
                         target="_blank"
+                        rel="noopener noreferrer"
                         href={`https://github.com/${username}`}
                     >
                         @{username}
