@@ -3,7 +3,7 @@ import { Inter, JetBrains_Mono, Karla } from "next/font/google"
 import localFont from "next/font/local"
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
-import { Header, Footer, CarbonAds } from "@/components/layout"
+import { Header, Footer, CarbonAds, OpenForProjects } from "@/components/layout"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Toaster } from "sonner"
 import { SanityLive } from "@/sanity/lib/live"
@@ -84,7 +84,8 @@ export default function RootLayout({
             <div className="w-full  relative">
               {" "}
               <Header />
-              <CarbonAds className="fixed bottom-4 left-16 w-1/4 hidden md:block" />{" "}
+              <CarbonAds className="fixed bottom-4 left-16 w-1/4 hidden md:block" />
+              <OpenForProjects />
               {children}
               <SpeedInsights />
             </div>
