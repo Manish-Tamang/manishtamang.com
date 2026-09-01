@@ -50,6 +50,7 @@ export function CurrentlyPlaying({ recentFavorite }: { recentFavorite?: any }) {
                 <Link
                     href={current.songUrl || "#"}
                     target="_blank"
+                    rel="noopener noreferrer"
                     className="text-[9px] text-[#1DB954] font-bold hover:underline flex items-center gap-1 group/link"
                 >
                     View Track <ArrowUpRight className="w-2 h-2 transition-transform group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5" />
