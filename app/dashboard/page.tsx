@@ -93,7 +93,7 @@ export default async function DashboardPage() {
                     <BlogStatsTable posts={blogStats} />
                 </section>
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-8">
-                    This page is inspired by <a href="https://theodorusclarence.com/statistics" className="underline">Theodorus Clarence (Blog stats)</a>and <a href="https://victoreke.com/" className="underline">Victor Eke (Contribution Graph)</a>.
+                    This page is inspired by <a href="https://theodorusclarence.com/statistics" target="_blank" rel="noopener noreferrer" className="underline">Theodorus Clarence (Blog stats)</a>and <a href="https://victoreke.com/" target="_blank" rel="noopener noreferrer" className="underline">Victor Eke (Contribution Graph)</a>.
                 </p>
             </section>
             
