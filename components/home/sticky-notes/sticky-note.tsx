@@ -198,14 +198,15 @@ export default function StickyNote({
 
     const hoverRotation = hovered && !dragging ? position.rotation + (color === 'green' ? 8 : -5) : position.rotation
 
-    const displayContent = content || (
+    const displayContent = content ?? (text ? (
         <p className="text-sm md:text-lg font-medium text-zinc-900 dark:text-zinc-900 leading-tight text-center">
             {text}
         </p>
-    )
+    ) : null)
 
     const noteWidth = isMobile && mobileWidth !== undefined ? mobileWidth : width
     const noteHeight = isMobile && mobileHeight !== undefined ? mobileHeight : height
+    const isImageOnly = Boolean(backgroundImage) && !text && !content
 
     return (
         <>
@@ -229,7 +230,7 @@ export default function StickyNote({
                         transform: `rotate(${hoverRotation}deg) scale(${hovered && !dragging ? 1.05 : 1})`,
                         transition: "transform 0.2s ease",
                         borderRadius: "0px",
-                        padding: isMobile ? "8px" : "12px",
+                        padding: isImageOnly ? "0px" : isMobile ? "8px" : "12px",
                         ...(backgroundImage
                             ? {
                                 backgroundImage: `url(${backgroundImage})`,
