@@ -6,7 +6,7 @@ import {
   FeaturedProjects,
   FeaturedProjectsSkeleton,
   LineBreaker,
-  ManWhoCantBeMoved,
+  Quote,
   FeaturedImageSection,
   FeaturedImageSkeleton,
   StickyNotesLazy,
@@ -36,17 +36,17 @@ const stickyNotes = [
   },
   {
     id: "note-2",
-    text: "The Man Who Can't Be Moved",
     color: "green" as const,
-    initialX: 944,
-    initialY: 2667,
+    backgroundImage: "/images/hunger-strike-cd.png",
+    initialX: 1007,
+    initialY: 2591,
     initialRotation: 8,
     width: 110,
     height: 110,
     mobileWidth: 70,
     mobileHeight: 70,
-    mobileX: 309,
-    mobileY: 3882,
+    mobileX: 331,
+    mobileY: 3996,
     delay: 0.4,
   },
 ]
@@ -74,7 +74,7 @@ export default async function HomePage() {
       <LineBreaker />
       <FeaturedBlogs posts={posts} />
       <LineBreaker />
-      <ManWhoCantBeMoved />
+      <Quote />
       <LineBreaker />
       <Suspense fallback={<FeaturedImageSkeleton />}>
         <FeaturedImageSection />
