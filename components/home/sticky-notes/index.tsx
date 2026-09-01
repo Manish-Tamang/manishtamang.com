@@ -33,18 +33,20 @@ export default function StickyNotesProvider({ stickyNotes = [] }: StickyNotesPro
 
             return {
                 id: note.id,
-                content: (
-                    <div className="flex items-center justify-center h-full text-center">
-                        <p className="text-xs md:text-sm font-medium text-zinc-900 dark:text-zinc-900 leading-tight">
-                            {lines.map((line, i) => (
-                                <span key={i}>
-                                    {line}
-                                    {i < lines.length - 1 && <br />}
-                                </span>
-                            ))}
-                        </p>
-                    </div>
-                ),
+                content: text
+                    ? (
+                        <div className="flex items-center justify-center h-full text-center">
+                            <p className="text-xs md:text-sm font-medium text-zinc-900 dark:text-zinc-900 leading-tight">
+                                {lines.map((line, i) => (
+                                    <span key={i}>
+                                        {line}
+                                        {i < lines.length - 1 && <br />}
+                                    </span>
+                                ))}
+                            </p>
+                        </div>
+                    )
+                    : undefined,
                 color: note.color as StickyNoteConfig["color"],
                 initialX: note.initialX,
                 initialY: note.initialY,
