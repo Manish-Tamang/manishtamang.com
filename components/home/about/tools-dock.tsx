@@ -29,7 +29,7 @@ export function ToolsDock() {
                         onMouseEnter={() => sounds.tick()}
                     >
                         <span className="tools-dock-label">{name}</span>
-                        <Icon className="size-4 text-white" />
+                        <Icon className="size-4 text-zinc-900" />
                     </div>
                 ))}
             </div>
