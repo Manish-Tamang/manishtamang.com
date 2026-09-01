@@ -294,6 +294,8 @@ export default function ContactPage() {
                 href={`mailto:${process.env.NEXT_PUBLIC_ADMIN_EMAIL}`}
                 className="text-foreground font-medium underline underline-offset-4 decoration-foreground/20 hover:decoration-foreground transition-all"
                 onClick={() => sounds.click()}
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 {process.env.NEXT_PUBLIC_ADMIN_EMAIL}
               </a>
@@ -304,6 +306,8 @@ export default function ContactPage() {
             <a
               href="https://www.totaltypescript.com/contact"
               className="underline"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               Total TypeScript
             </a>{" "}
@@ -311,6 +315,8 @@ export default function ContactPage() {
             <a
               href="https://www.romanabashin.com/contact"
               className="underline"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               {" "}
               Roman Abashin
