@@ -53,7 +53,7 @@ export default function AboutPage() {
             <div className="relative z-0 -mt-2">
               <PolaroidGallery data={aboutPolaroids} />
             </div>
-            <PrayerFlags />
+            {/* <PrayerFlags /> */}
           </div>
         </div>
         <LineBreaker />
