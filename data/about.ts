@@ -15,6 +15,7 @@ export const socialLinks = [
   { platform: "gmail", url: "mailto:maneshtamang833@gmail.com" },
   { platform: "dailydev", url: "https://app.daily.dev/manishtamang" },
   { platform: "instagram", url: "https://instagram.com/golecodes" },
+  { platform: "tiktok", url: "https://www.tiktok.com/@golecodes" },
 ]
 
 export const favoriteGame = {
@@ -54,5 +55,14 @@ export const aboutPolaroids: BioPolaroidItem[] = [
     alt: "Me in Grade 3, 2017",
     caption: "Me in Grade III",
     rotate: 3,
+  },
+]
+
+export const randomFacts = [
+  {
+    id: "raspberry-pi-4",
+    text: "Back in late 2023, I uploaded a video about Raspberry Pi 4 builds.",
+    youtubeId: "6ljvu9RBBXo",
+    youtubeTitle: "Raspberry Pi 4 builds",
   },
 ]
