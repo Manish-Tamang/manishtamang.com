@@ -7,6 +7,7 @@ import { GitHub } from "@/components/icons/Github";
 import { XformerlyTwitter } from "@/components/icons/X";
 import { LinkedIn } from "@/components/icons/LinkedIn";
 import { DailyDotDev } from "@/components/icons/DailyDotDev";
+import { TikTok } from "@/components/icons/Tiktok";
 import { Gmail } from "@/components/icons/Gmail";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
@@ -19,7 +20,7 @@ const InstagramIcon = ({ className }: { className?: string }) => (
     </div>
 );
 
-type SocialPlatform = "github" | "twitter" | "linkedin" | "dailydev" | "instagram";
+type SocialPlatform = "github" | "twitter" | "linkedin" | "dailydev" | "instagram" | "tiktok";
 
 const socialIcons: Partial<Record<SocialPlatform, React.ElementType>> = {
     github: GitHub,
@@ -27,6 +28,7 @@ const socialIcons: Partial<Record<SocialPlatform, React.ElementType>> = {
     linkedin: LinkedIn,
     dailydev: DailyDotDev,
     instagram: InstagramIcon,
+    tiktok: TikTok,
 };
 
 interface AboutContentProps {
@@ -64,6 +66,7 @@ export function AboutContent({ bio, socialLinks }: AboutContentProps) {
                         let iconClass = "w-5 h-5";
                         if (link.platform === "dailydev") iconClass = "w-8 h-8";
                         if (link.platform === "instagram") iconClass = "w-20 h-auto mt-1";
+                        if (link.platform === "tiktok") iconClass = "w-20 h-auto";
 
                         return (
                             <a
