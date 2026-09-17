@@ -1,4 +1,4 @@
-import { AboutContent, FeaturedSection, Education, PrayerFlags } from "@/components/about"
+import { AboutContent, FeaturedSection, Education, PrayerFlags, RandomFacts } from "@/components/about"
 import { PolaroidGallery } from "@/components/bio"
 import { LineBreaker } from "@/components/shared/line-breaker"
 import {
@@ -63,6 +63,10 @@ export default function AboutPage() {
         <LineBreaker />
         <section id="featured">
           <FeaturedSection />
+        </section>
+        <LineBreaker />
+        <section id="random-facts">
+          <RandomFacts />
         </section>
         <LineBreaker />
       </div>
