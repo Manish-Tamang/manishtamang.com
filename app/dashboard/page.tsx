@@ -1,8 +1,10 @@
 import { headers } from "next/headers";
-import { WakaTimeOverview, GithubContribution, BlogStatsTable, RecentUmamiSessions, UmamiTotals } from "@/components/dashboard";
+import { WakaTimeOverview, GithubContribution, BlogStatsTable, RecentUmamiSessions, UmamiTotals, DailyBookmarks } from "@/components/dashboard";
 import type { WakaTimeApiResponse } from "@/lib/wakatime-types";
+import type { DailyBookmark } from "@/lib/daily-types";
 import { getBlogPostStats } from "@/lib/BlogStats";
 import { getUmamiRecentSessions, getUmamiTotals } from "@/lib/umami";
+import { getDailyBookmarks } from "@/lib/daily";
 
 export const revalidate = 60;
 
@@ -38,12 +40,22 @@ async function getRecentSessions() {
     return getUmamiRecentSessions(3);
 }
 
+async function getDailyDevBookmarks(): Promise<DailyBookmark[]> {
+    try {
+        const payload = await getDailyBookmarks({ limit: 8 });
+        return payload.data;
+    } catch {
+        return [];
+    }
+}
+
 export default async function DashboardPage() {
-    const [initialData, blogStats, recentSessions, umamiTotals] = await Promise.all([
+    const [initialData, blogStats, recentSessions, umamiTotals, dailyBookmarks] = await Promise.all([
         getInitialWakaTimeData(),
         getBlogPostStats(),
         getRecentSessions(),
         getUmamiTotals(),
+        getDailyDevBookmarks(),
     ]);
 
     return (
@@ -91,6 +103,15 @@ export default async function DashboardPage() {
                         Views and reactions across all blog posts.
                     </p>
                     <BlogStatsTable posts={blogStats} />
+                </section>
+                <section className="space-y-3">
+                    <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+                        Reading List
+                    </h2>
+                    <p className="text-zinc-600 dark:text-zinc-400 text-base leading-relaxed">
+                        Latest articles I saved on <a href="https://app.daily.dev/bookmarks" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline decoration-wavy">daily.dev</a>.
+                    </p>
+                    <DailyBookmarks bookmarks={dailyBookmarks} />
                 </section>
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-8">
                     This page is inspired by <a href="https://theodorusclarence.com/statistics" target="_blank" rel="noopener noreferrer" className="underline">Theodorus Clarence (Blog stats)</a>and <a href="https://victoreke.com/" target="_blank" rel="noopener noreferrer" className="underline">Victor Eke (Contribution Graph)</a>.

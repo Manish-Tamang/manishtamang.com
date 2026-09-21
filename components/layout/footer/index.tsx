@@ -135,7 +135,7 @@ export function Footer() {
                                     </Link>
                                 </li>
                                 <li>
-                                    <FeedbackFish projectId={process.env.NEXT_PUBLIC_FEEDBACK_FISH_ID || 'e60dbe6f6bf435'}>
+                                    <FeedbackFish projectId={process.env.NEXT_PUBLIC_FEEDBACK_FISH_ID || 'XXXXXXXXXXXX'}>
                                         <button
                                             className="text-neutral-600 dark:text-neutral-400 hover:text-[#9AC372] dark:hover:text-[#9AC372] flex items-center transition-colors duration-200 w-full text-left"
                                         >

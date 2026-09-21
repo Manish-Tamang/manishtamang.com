@@ -4,18 +4,18 @@ import { Resend } from "resend";
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(req: NextRequest) {
-    try {
-        const { userName, email, message, viewMessageUrl, date } = await req.json();
+  try {
+    const { userName, email, message, viewMessageUrl, date } = await req.json();
 
-        const currentYear = new Date().getFullYear();
+    const currentYear = new Date().getFullYear();
 
-        const getTemplate = (isRecipientUser: boolean) => `
+    const getTemplate = (isRecipientUser: boolean) => `
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>${isRecipientUser ? 'Thank You for Your Message' : 'New Guestbook Entry'}</title>
+<title>${isRecipientUser ? "Thank You for Your Message" : "New Guestbook Entry"}</title>
 </head>
 <body style="margin:0;padding:0;background:#f5f5f7;font-family:Arial, Helvetica, sans-serif;">
 <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f5f5f7;">
@@ -30,17 +30,19 @@ export async function POST(req: NextRequest) {
 <tr>
 <td style="padding:32px 28px;color:#3F3D56;font-size:16px;line-height:1.6;">
 <p style="margin:0 0 16px 0;">
-Hello <strong>${isRecipientUser ? userName : 'Manish'}</strong>,
+Hello <strong>${isRecipientUser ? userName : "Manish"}</strong>,
 </p>
 <p style="margin:0 0 20px 0;">
-${isRecipientUser
-                ? "Thank you for leaving a message in my guestbook. I truly appreciate your feedback and support."
-                : `A new message was just posted to your guestbook by <strong>${userName}</strong> (${email || 'No email provided'}).`}
+${
+  isRecipientUser
+    ? "Thank you for leaving a message in my guestbook. I truly appreciate your feedback and support."
+    : `A new message was just posted to your guestbook by <strong>${userName}</strong> (${email || "No email provided"}).`
+}
 </p>
 <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8f8fb;border-radius:6px;margin:20px 0;">
 <tr>
 <td style="padding:16px;font-size:15px;">
-<strong>${isRecipientUser ? 'Your message' : 'Message content'}</strong><br><br>
+<strong>${isRecipientUser ? "Your message" : "Message content"}</strong><br><br>
 ${message}
 </td>
 </tr>
@@ -52,7 +54,7 @@ Sent on ${date}
 <tr>
 <td style="background:#D65D3C;border-radius:6px;">
 <a href="${viewMessageUrl}" style="display:inline-block;padding:12px 22px;color:#ffffff;font-weight:bold;text-decoration:none;font-size:15px;">
-View ${isRecipientUser ? 'Your' : 'the'} Message
+View ${isRecipientUser ? "Your" : "the"} Message
 </a>
 </td>
 </tr>
@@ -97,30 +99,30 @@ Resend
 </html>
 `;
 
-        let userEmailResult = null;
-        if (email) {
-            userEmailResult = await resend.emails.send({
-                from: "Manish Tamang <guestbook@manishtamang.com>",
-                to: email,
-                subject: "Thank You for Your Guestbook Message!",
-                html: getTemplate(true)
-            });
-        }
-
-        const adminEmailResult = await resend.emails.send({
-            from: "Guestbook Notification <system@manishtamang.com>",
-            to: "maneshtamang833@gmail.com",
-            subject: `🚀 New Guestbook Entry from ${userName}`,
-            html: getTemplate(false)
-        });
-
-        return NextResponse.json({
-            success: true,
-            userEmail: userEmailResult,
-            adminEmail: adminEmailResult
-        });
-    } catch (error: any) {
-        console.error("Resend error:", error);
-        return NextResponse.json({ error: error.message }, { status: 500 });
+    let userEmailResult = null;
+    if (email) {
+      userEmailResult = await resend.emails.send({
+        from: "Manish Tamang <guestbook@manishtamang.com>",
+        to: email,
+        subject: "Thank You for Your Guestbook Message!",
+        html: getTemplate(true),
+      });
     }
+
+    const adminEmailResult = await resend.emails.send({
+      from: "Guestbook Notification <system@manishtamang.com>",
+      to: "maneshtamang833@gmail.com",
+      subject: `🚀 New Guestbook Entry from ${userName}`,
+      html: getTemplate(false),
+    });
+
+    return NextResponse.json({
+      success: true,
+      userEmail: userEmailResult,
+      adminEmail: adminEmailResult,
+    });
+  } catch (error: any) {
+    console.error("Resend error:", error);
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
 }

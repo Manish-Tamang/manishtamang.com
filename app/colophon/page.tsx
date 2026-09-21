@@ -238,6 +238,17 @@ const ColophonPage = () => {
                         </li>
                         <li>
                             <Link
+                                href="https://api.daily.dev/public/v1/docs/json"
+                                className="text-foreground font-medium underline underline-offset-4 decoration-foreground/30 hover:decoration-foreground/60 transition-all"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                daily.dev API
+                            </Link>
+                            : To fetch saved bookmarks and reading list posts.
+                        </li>
+                        <li>
+                            <Link
                                 href="https://supabase.com/"
                                 className="text-foreground font-medium underline underline-offset-4 decoration-foreground/30 hover:decoration-foreground/60 transition-all"
                                 target="_blank"

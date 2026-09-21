@@ -12,7 +12,7 @@ export const socialLinks = [
   { platform: "github", url: "https://github.com/Manish-Tamang" },
   { platform: "twitter", url: "https://x.com/Manishtamangxyz" },
   { platform: "linkedin", url: "https://www.linkedin.com/in/manish-tamang" },
-  { platform: "gmail", url: "mailto:maneshtamang833@gmail.com" },
+  { platform: "gmail", url: "mailto:hello@manishtamang.com" },
   { platform: "dailydev", url: "https://app.daily.dev/manishtamang" },
   { platform: "instagram", url: "https://instagram.com/golecodes" },
   { platform: "tiktok", url: "https://www.tiktok.com/@golecodes" },

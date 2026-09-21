@@ -1,18 +1,18 @@
 "use client"
 
 import { useState } from "react"
-import { Heart, Smile, Trash2, Reply, Send, X, Plus, Flower, Link2 } from "lucide-react"
+import { Heart, Smile, Trash2, Reply, Send, X, Link2 } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { motion, AnimatePresence } from "framer-motion"
 import { formatDistanceToNow } from "date-fns"
 import { authClient } from "@/lib/auth-client"
 import { toast } from "sonner"
 import { cn } from "@/lib/utils"
 import { sounds } from "@/lib/sounds"
+import type { GuestbookEntry } from "@/lib/guestbook"
 import {
     AlertDialog,
     AlertDialogAction,
@@ -24,19 +24,7 @@ import {
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 
-export interface GuestbookEntry {
-    id: string
-    name: string
-    image_url: string | null
-    message: string
-    timestamp: string
-    email?: string
-    parent_id?: string | null
-    likes?: string[]
-    reactions?: string[]
-    replies?: GuestbookEntry[]
-    attachment_url?: string | null
-}
+export type { GuestbookEntry }
 
 interface GuestbookItemProps {
     entry: GuestbookEntry
@@ -126,7 +114,7 @@ export function GuestbookItem({ entry, onDelete, onRefresh }: GuestbookItemProps
             return
         }
 
-        if (type === "like" && !entry.likes?.includes(session.user.email)) {
+        if (type === "like" && !entry.likedByMe) {
             setShowHeartPop(true)
             setTimeout(() => setShowHeartPop(false), 1000)
             sounds.pop()
@@ -141,8 +129,7 @@ export function GuestbookItem({ entry, onDelete, onRefresh }: GuestbookItemProps
                 body: JSON.stringify({
                     id: entry.id,
                     type,
-                    email: session.user.email,
-                    emoji // We'll pass emoji to the API if needed later
+                    emoji
                 })
             })
             if (!res.ok) throw new Error("Failed to update")
@@ -162,11 +149,7 @@ export function GuestbookItem({ entry, onDelete, onRefresh }: GuestbookItemProps
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    id: crypto.randomUUID(),
-                    name: session.user.name,
-                    imageUrl: session.user.image,
                     message: replyMessage.trim(),
-                    email: session.user.email,
                     parent_id: entry.id
                 }),
             })
@@ -187,30 +170,15 @@ export function GuestbookItem({ entry, onDelete, onRefresh }: GuestbookItemProps
     }
 
     const isAdmin = session?.user?.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL
-    const isAuthor = session?.user?.email === entry.email
-    const canDelete = isAdmin || isAuthor
+    const canDelete = isAdmin || entry.isMine
     const canReply = isAdmin
 
     const hasReplies = entry.replies && entry.replies.length > 0
-    const likesCount = entry.likes?.length || 0
-    const hasLiked = entry.likes?.includes(session?.user?.email || "")
-    const reactionsCount = entry.reactions?.length || 0
-
-    // Parse reactions into map of emoji -> count and list of users for each
-    const reactionGroups = (entry.reactions || []).reduce((acc, r) => {
-        const [emoji, email] = r.includes(":") ? r.split(":") : ["🙏", r]
-        if (!acc[emoji]) acc[emoji] = []
-        acc[emoji].push(email)
-        return acc
-    }, {} as Record<string, string[]>)
-
-    const userReaction = (entry.reactions || []).find(r => r.endsWith(`:${session?.user?.email}`) || r === session?.user?.email)
-    const hasReacted = !!userReaction
-
-    const ADMIN_EMAIL = process.env.NEXT_PUBLIC_ADMIN_EMAIL || ""
-    const adminLiked = entry.likes?.includes(ADMIN_EMAIL)
-    const adminReaction = (entry.reactions || []).find(r => r.includes(ADMIN_EMAIL) && r.includes(":"))
-    const adminReactionEmoji = adminReaction ? adminReaction.split(":")[0] : null
+    const hasLiked = entry.likedByMe
+    const reactionsCount = entry.reactions.reduce((sum, reaction) => sum + reaction.count, 0)
+    const hasReacted = Boolean(entry.myReaction)
+    const adminLiked = entry.likedByAdmin
+    const adminReactionEmoji = entry.adminReaction
 
     return (
         <>
@@ -242,19 +210,11 @@ export function GuestbookItem({ entry, onDelete, onRefresh }: GuestbookItemProps
                         </div>
                     )}
 
-                    <AnimatePresence>
-                        {showHeartPop && (
-                            <motion.div
-                                initial={{ scale: 0, opacity: 0, y: 0 }}
-                                animate={{ scale: 1.5, opacity: 1, y: -40 }}
-                                exit={{ scale: 2, opacity: 0, y: -80 }}
-                                className="absolute pointer-events-none z-50 left-1/2 -translate-x-1/2"
-                                transition={{ duration: 0.6, ease: "easeOut" }}
-                            >
-                                <Heart className="w-6 h-6 sm:w-8 sm:h-8 text-red-500 fill-current drop-shadow-lg" />
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
+                    {showHeartPop && (
+                        <div className="absolute pointer-events-none z-50 left-1/2 -translate-x-1/2 -translate-y-10 animate-in fade-in zoom-in-50 duration-300">
+                            <Heart className="w-6 h-6 sm:w-8 sm:h-8 text-red-500 fill-current drop-shadow-lg" />
+                        </div>
+                    )}
 
                     {hasReplies && <div className="w-[1px] flex-1 bg-zinc-200 dark:bg-zinc-800 mt-2 mb-2" />}
                 </div>
@@ -264,7 +224,7 @@ export function GuestbookItem({ entry, onDelete, onRefresh }: GuestbookItemProps
                            <p className="text-foreground leading-normal text-sm md:text-base">
                                 {entry.name}
                             </p>
-                            {entry.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL && (
+                            {entry.isAdminAuthor && (
                                 <Badge variant="secondary" className="bg-blue-500/10 text-blue-500 border-none text-[9px] sm:text-[10px] h-3.5 sm:h-4 px-1 rounded-sm">Admin</Badge>
                             )}
                             <span className="text-zinc-500 font-normal text-xs sm:text-sm hidden sm:inline">signed the guestbook</span>
@@ -332,12 +292,12 @@ export function GuestbookItem({ entry, onDelete, onRefresh }: GuestbookItemProps
                                 </div>
                             )}
 
-                            {Object.entries(reactionGroups).map(([emoji, users]) => {
-                                if (emoji === adminReactionEmoji) return null;
+                            {entry.reactions.map((reaction) => {
+                                if (reaction.emoji === adminReactionEmoji) return null;
                                 return (
-                                    <div key={emoji} className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-[10px] text-zinc-500 ml-1">
-                                        <span>{emoji}</span>
-                                        <span>{users.length}</span>
+                                    <div key={reaction.emoji} className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-[10px] text-zinc-500 ml-1">
+                                        <span>{reaction.emoji}</span>
+                                        <span>{reaction.count}</span>
                                     </div>
                                 )
                             })}
@@ -465,14 +425,14 @@ export function GuestbookItem({ entry, onDelete, onRefresh }: GuestbookItemProps
                                                 <p className="text-[11px] sm:text-xs font-medium text-zinc-900 dark:text-zinc-100">
                                                     {reply.name}
                                                 </p>
-                                                {reply.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL && (
+                                                {reply.isAdminAuthor && (
                                                     <Badge variant="secondary" className="bg-blue-500/10 text-blue-500 border-none text-[7px] sm:text-[8px] h-3 sm:h-3.5 px-1 rounded-sm">Admin</Badge>
                                                 )}
 
                                             </div>
                                             <div className="flex items-center gap-1 sm:gap-2">
                                                 <span className="text-[9px] sm:text-[10px] text-zinc-400 font-mono">{formatTimestamp(reply.timestamp)}</span>
-                                                {(isAdmin || session?.user?.email === reply.email) && (
+                                                {(isAdmin || reply.isMine) && (
                                                     <button
                                                         onClick={() => initiateDelete(reply.id, true)}
                                                         className="p-0.5 sm:p-1 text-zinc-400 hover:text-red-500 transition-colors opacity-100 sm:opacity-0 sm:group-hover/reply:opacity-100"

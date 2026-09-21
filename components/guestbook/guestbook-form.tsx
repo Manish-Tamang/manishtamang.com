@@ -93,13 +93,8 @@ export function GuestbookForm({ onSuccess }: GuestbookFormProps) {
                 setIsUploading(false)
             }
 
-            const id = crypto.randomUUID()
             const payload = {
-                id,
-                name: session.user.name,
-                imageUrl: session.user.image,
                 message: message.trim(),
-                email: session.user.email,
                 attachment_url: attachmentUrl
             }
 

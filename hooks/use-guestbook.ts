@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useEffect } from "react"
 import { toast } from "sonner"
-import { GuestbookEntry } from "@/components/guestbook"
+import { GuestbookEntry } from "@/lib/guestbook"
 
 export function useGuestbook() {
     const [entries, setEntries] = useState<GuestbookEntry[]>([])

@@ -28,7 +28,7 @@ This site is the primary source for Manish's work, writing, stack, and contact d
 - [GitHub](https://github.com/Manish-Tamang): Open source and project repositories.
 - [LinkedIn](https://www.linkedin.com/in/manish-tamang): Professional profile and experience.
 - [X](https://x.com/Manishtamangxyz): Updates and posts.
-- [Email](mailto:maneshtamang833@gmail.com): maneshtamang833@gmail.com
+- [Email](mailto:hello@manishtamang.com): hello@manishtamang.com
 - [Instagram](https://instagram.com/golecodes): Personal and build-in-public content.
 - [daily.dev](https://app.daily.dev/manishtamang): Reading and dev community profile.
 

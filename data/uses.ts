@@ -40,8 +40,8 @@ import Photoshop from "@/components/icons/Photoshop";
 export const gearItems = [
   {
     name: "Laptop",
-    description: "Acer Aspire 3 2024",
-    image: "/images/uses/laptop.png",
+    description: "Acer Aspire 14 AI 2025",
+    image: "/images/uses/acer-aspire-14.png",
     tags: ["Acer", "Laptop", "Windows"],
   },
   {

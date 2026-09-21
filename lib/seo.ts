@@ -1,6 +1,6 @@
-import type { Metadata } from "next"
+import type { Metadata } from "next";
 
-const SITE_URL = "https://manishtamang.com"
+const SITE_URL = "https://manishtamang.com";
 
 export const siteConfig = {
   name: "Manish Tamang",
@@ -9,7 +9,7 @@ export const siteConfig = {
     "Hi, I'm Manish Gole Tamang, an 18-year-old from Kathmandu, Nepal, with a fervent passion for web development.",
   url: SITE_URL,
   ogImage: `${SITE_URL}/profile.png`,
-}
+};
 
 export const metadata: Metadata = {
   title: siteConfig.title,
@@ -33,4 +33,4 @@ export const metadata: Metadata = {
     images: siteConfig.ogImage,
     type: "website",
   },
-}
+};

@@ -65,7 +65,7 @@ const UsesPage = () => {
           <p className="text-sm text-foreground/50">
             Last Updated:{" "}
             <span className="font-medium text-foreground/70">
-              October 15, 2025
+              September 20, 2026
             </span>
           </p>
         </footer>
