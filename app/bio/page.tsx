@@ -9,6 +9,8 @@ const bioPolaroidData: BioPolaroidItem[] = [
     alt: "Polaroid moment one",
     caption: "Mini Gole, 2012",
     rotate: -4,
+    width: 1600,
+    height: 1200,
   },
   {
     id: "bio-polaroid-2",
@@ -16,6 +18,8 @@ const bioPolaroidData: BioPolaroidItem[] = [
     alt: "GoGlamping, Dharan, 2026",
     caption: "GoGlamping, Dharan, 2026",
     rotate: 2,
+    width: 3120,
+    height: 4160,
   },
   {
     id: "bio-polaroid-3",
@@ -23,6 +27,8 @@ const bioPolaroidData: BioPolaroidItem[] = [
     alt: "Kathmandu, 2025",
     caption: "Kathmandu, 2025",
     rotate: -3,
+    width: 2316,
+    height: 2591,
   },
   {
     id: "bio-polaroid-4",
@@ -30,6 +36,8 @@ const bioPolaroidData: BioPolaroidItem[] = [
     alt: "Last Day of College, 2026",
     caption: "Last Day of College, 2026",
     rotate: 3,
+    width: 2316,
+    height: 3088,
   },
 ]
 
