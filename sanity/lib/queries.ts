@@ -101,6 +101,9 @@ export const ABOUT_PROFILE_QUERY = defineQuery(`*[_type == "aboutProfile" && _id
 export const GALLERY_QUERY = defineQuery(`*[_type == "gallery"] | order(order asc) {
     _id,
     "imageURL": image.asset->url,
+    "lqip": image.asset->metadata.lqip,
+    "width": image.asset->metadata.dimensions.width,
+    "height": image.asset->metadata.dimensions.height,
     alt,
     caption,
     format,
@@ -113,5 +116,31 @@ export const WALL_QUERY = defineQuery(`*[_type == "wall"] | order(order asc) {
     "imageURL": image.asset->url + "?w=200&fit=crop&auto=format&q=80",
     order,
     uploadedAt
+}`);
+
+export const SITEMAP_POSTS_QUERY = defineQuery(`*[_type == "post" && defined(slug.current)] | order(date desc) {
+    "slug": slug.current,
+    date,
+    _updatedAt
+}`);
+
+export const SITEMAP_PROJECTS_QUERY = defineQuery(`*[_type == "project" && defined(slug.current)] | order(date desc) {
+    "slug": slug.current,
+    date,
+    _updatedAt
+}`);
+
+export const FEED_POSTS_QUERY = defineQuery(`*[_type == "post" && defined(slug.current)] | order(date desc) {
+    title,
+    "slug": slug.current,
+    excerpt,
+    date
+}`);
+
+export const FEED_PROJECTS_QUERY = defineQuery(`*[_type == "project" && defined(slug.current)] | order(date desc) {
+    title,
+    "slug": slug.current,
+    excerpt,
+    date
 }`);
 
