@@ -178,7 +178,6 @@ export function GuestbookItem({ entry, onDelete, onRefresh }: GuestbookItemProps
     const reactionsCount = entry.reactions.reduce((sum, reaction) => sum + reaction.count, 0)
     const hasReacted = Boolean(entry.myReaction)
     const adminLiked = entry.likedByAdmin
-    const adminReactionEmoji = entry.adminReaction
 
     return (
         <>
@@ -199,12 +198,12 @@ export function GuestbookItem({ entry, onDelete, onRefresh }: GuestbookItemProps
                     {adminLiked && (
                         <div className="absolute bottom-2 -right-1 z-10">
                             <div className="relative">
-                                <Avatar className="w-4 h-4 sm:w-5 sm:h-5 border border-white dark:border-zinc-900 shadow-sm">
+                                <Avatar className="h-4 w-4 border border-white shadow-sm sm:h-5 sm:w-5 dark:border-zinc-900">
                                     <AvatarImage src="https://github.com/Manish-Tamang.png" />
                                     <AvatarFallback className="text-[5px] sm:text-[6px]">A</AvatarFallback>
                                 </Avatar>
-                                <div className="absolute -bottom-1 -right-1 bg-red-500 rounded-full p-0.5 border border-white dark:border-zinc-900">
-                                    <Heart className="w-1.5 h-1.5 text-white fill-current" />
+                                <div className="absolute -bottom-1 -right-1 rounded-full border border-white bg-red-500 p-0.5 dark:border-zinc-900">
+                                    <Heart className="h-1.5 w-1.5 fill-current text-white" />
                                 </div>
                             </div>
                         </div>
@@ -283,24 +282,14 @@ export function GuestbookItem({ entry, onDelete, onRefresh }: GuestbookItemProps
                             </div>
                         )}
                     </div>
-                    {(reactionsCount > 0 || adminReactionEmoji) && (
-                        <div className="flex justify-end mt-1">
-                            {adminReactionEmoji && (
-                                <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-blue-500/5 dark:bg-blue-500/10 border border-blue-500/20 text-[10px] text-blue-600 dark:text-blue-400 font-medium shadow-sm animate-in fade-in zoom-in-95 duration-200">
-                                    <span className="text-xs">{adminReactionEmoji}</span>
-                                    <span className="text-[9px] uppercase tracking-wider opacity-70">Admin</span>
-                                </div>
-                            )}
-
-                            {entry.reactions.map((reaction) => {
-                                if (reaction.emoji === adminReactionEmoji) return null;
-                                return (
-                                    <div key={reaction.emoji} className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-[10px] text-zinc-500 ml-1">
+                    {reactionsCount > 0 && (
+                        <div className="mt-1 flex justify-end">
+                            {entry.reactions.map((reaction) => (
+                                    <div key={reaction.emoji} className="ml-1 flex items-center gap-1 rounded-full border border-zinc-200 bg-zinc-100 px-1.5 py-0.5 text-[10px] text-zinc-500 dark:border-zinc-700 dark:bg-zinc-800">
                                         <span>{reaction.emoji}</span>
                                         <span>{reaction.count}</span>
                                     </div>
-                                )
-                            })}
+                            ))}
                         </div>
                     )}
 
