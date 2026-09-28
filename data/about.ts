@@ -34,6 +34,8 @@ export const aboutPolaroids: BioPolaroidItem[] = [
     alt: "Polaroid moment one",
     caption: "Mini Gole",
     rotate: -4,
+    width: 1600,
+    height: 1200,
   },
   {
     id: "bio-polaroid-2",
@@ -41,6 +43,8 @@ export const aboutPolaroids: BioPolaroidItem[] = [
     alt: "GoGlamping, Dharan, 2026",
     caption: "GoGlamping, Dharan",
     rotate: 2,
+    width: 3120,
+    height: 4160,
   },
   {
     id: "bio-polaroid-3",
@@ -48,6 +52,8 @@ export const aboutPolaroids: BioPolaroidItem[] = [
     alt: "Bhojpur, 2011",
     caption: "Bhojpur",
     rotate: -3,
+    width: 1080,
+    height: 1350,
   },
   {
     id: "bio-polaroid-4",
@@ -55,6 +61,8 @@ export const aboutPolaroids: BioPolaroidItem[] = [
     alt: "Me in Grade 3, 2017",
     caption: "Me in Grade III",
     rotate: 3,
+    width: 480,
+    height: 640,
   },
 ]
 
