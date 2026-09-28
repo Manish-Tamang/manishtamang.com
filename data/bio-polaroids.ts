@@ -4,6 +4,8 @@ export type BioPolaroidItem = {
   alt: string
   caption: string
   rotate: number
+  width?: number
+  height?: number
 }
 
 export type BioPolaroidParams = {
@@ -12,6 +14,8 @@ export type BioPolaroidParams = {
   alt: string
   caption: string
   rotate: number
+  width?: number
+  height?: number
 }
 
 export function createBioPolaroid(params: BioPolaroidParams): BioPolaroidItem {
@@ -21,6 +25,8 @@ export function createBioPolaroid(params: BioPolaroidParams): BioPolaroidItem {
     alt: params.alt,
     caption: params.caption,
     rotate: params.rotate,
+    width: params.width,
+    height: params.height,
   }
 }
 

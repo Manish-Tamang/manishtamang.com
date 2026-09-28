@@ -124,14 +124,14 @@ export function GuestbookForm({ onSuccess }: GuestbookFormProps) {
     // If it's pending, we show the same card structure to prevent blinking
     if (isPending && !session) {
         return (
-            <div className="bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-6 shadow-sm flex flex-col items-start gap-6 text-start animate-pulse">
+            <div className="flex animate-pulse flex-col items-start gap-6 rounded-[8px] border border-foreground/5 bg-foreground/5 p-6 text-start">
                 <div className="space-y-2 w-full text-start">
                     <div className="h-4 bg-zinc-200 dark:bg-zinc-800 rounded-full w-3/4" />
                     <div className="h-3 bg-zinc-100 dark:bg-zinc-700 rounded-full w-1/2" />
                 </div>
-                <div className="grid grid-cols-2 gap-3 w-full">
-                    <div className="h-12 bg-zinc-200 dark:bg-zinc-800 rounded-2xl w-full" />
-                    <div className="h-12 bg-zinc-200 dark:bg-zinc-800 rounded-2xl w-full" />
+                <div className="grid w-full grid-cols-2 gap-3">
+                    <div className="h-12 w-full rounded-lg bg-zinc-200 dark:bg-zinc-800" />
+                    <div className="h-12 w-full rounded-lg bg-zinc-200 dark:bg-zinc-800" />
                 </div>
             </div>
         )

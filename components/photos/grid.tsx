@@ -1,99 +1,81 @@
-"use client";
+"use client"
 
-import { BlurImage } from "@/components/shared";
-import { ImageModal, GalleryImage } from "@/components/shared/image-modal";
-import { useEffect, useState } from "react";
+import { useState } from "react"
+import { BlurImage } from "@/components/shared"
+import { ImageModal, type GalleryImage } from "@/components/shared/image-modal"
+import { cn } from "@/lib/utils"
 
 interface PhotosGridProps {
-  images: GalleryImage[];
+  images: GalleryImage[]
+}
+
+const formatClass: Record<string, string> = {
+  "1x1": "col-span-1 row-span-1 min-h-[8.5rem]",
+  "2x1": "col-span-2 row-span-1 min-h-[8.5rem]",
+  "1x2": "col-span-1 row-span-2 min-h-[17.5rem]",
+  "2x2": "col-span-2 row-span-2 min-h-[17.5rem]",
+  "3x1": "col-span-2 sm:col-span-3 row-span-1 min-h-[8.5rem]",
+  "4x1": "col-span-2 sm:col-span-3 md:col-span-4 row-span-1 min-h-[8.5rem]",
 }
 
 export function PhotosGrid({ images }: PhotosGridProps) {
-  const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [gridCols, setGridCols] = useState(4);
+  const [selectedIndex, setSelectedIndex] = useState(0)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
-  useEffect(() => {
-    const updateGridCols = () => {
-      if (window.innerWidth >= 768) {
-        setGridCols(4);
-      } else if (window.innerWidth >= 640) {
-        setGridCols(3);
-      } else {
-        setGridCols(2);
-      }
-    };
-
-    updateGridCols();
-    window.addEventListener("resize", updateGridCols);
-    return () => window.removeEventListener("resize", updateGridCols);
-  }, []);
-
-  const handleImageClick = (image: GalleryImage) => {
-    setSelectedImage(image);
-    setIsModalOpen(true);
-  };
-
-  const getResponsiveColSpan = (originalCols: number) => {
-    if (gridCols === 2) {
-      return Math.min(originalCols, 2);
-    } else if (gridCols === 3) {
-      return Math.min(originalCols, 3);
-    } else {
-      return originalCols;
-    }
-  };
+  const handleImageClick = (index: number) => {
+    setSelectedIndex(index)
+    setIsModalOpen(true)
+  }
 
   if (images.length === 0) {
     return (
-      <div className="text-center text-foreground/60 py-12">
+      <div className="py-12 text-center text-foreground/60">
         No images found in gallery.
       </div>
-    );
+    )
   }
 
   return (
     <>
-      <div
-        className="grid gap-1"
-        style={{
-          gridTemplateColumns: `repeat(${gridCols}, 1fr)`,
-          gridAutoRows: "minmax(100px, auto)",
-          gridAutoFlow: "dense",
-        }}
-      >
-        {images.map((image) => {
-          const [c, r] = (image.format || "1x1").split("x").map(Number);
-          const responsiveCols = getResponsiveColSpan(c);
+      <div className="grid auto-rows-[minmax(8.5rem,auto)] grid-cols-2 grid-flow-dense gap-1 sm:grid-cols-3 md:grid-cols-4">
+        {images.map((image, index) => {
+          const layout = formatClass[image.format || "1x1"] ?? formatClass["1x1"]
+          const eager = index < 4
 
           return (
-            <div
+            <button
               key={image._id}
-              className="relative overflow-hidden cursor-pointer hover:opacity-90 transition-opacity"
-              style={{
-                gridColumn: `span ${responsiveCols}`,
-                gridRow: `span ${r}`,
-              }}
-              onClick={() => handleImageClick(image)}
+              type="button"
+              className={cn(
+                "relative h-full w-full overflow-hidden bg-zinc-200 transition-opacity hover:opacity-90 dark:bg-zinc-800",
+                layout
+              )}
+              onClick={() => handleImageClick(index)}
+              aria-label={image.alt || image.caption || "Open photo"}
             >
               <BlurImage
                 src={image.imageURL}
                 alt={image.alt || image.caption || "Gallery image"}
-                width={670}
-                height={670}
-                className="w-full h-full object-cover"
-                lazy={true}
+                fill
+                sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 168px"
+                className="object-cover"
+                lazy={!eager}
+                priority={eager}
+                quality={70}
+                blurDataURL={image.lqip ?? undefined}
               />
-            </div>
-          );
+            </button>
+          )
         })}
       </div>
 
       <ImageModal
-        image={selectedImage}
+        images={images}
+        index={selectedIndex}
         open={isModalOpen}
         onOpenChange={setIsModalOpen}
+        onIndexChange={setSelectedIndex}
       />
     </>
-  );
+  )
 }

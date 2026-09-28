@@ -3,6 +3,7 @@ import Link from "next/link"
 import { ArrowUpRight, PenTool } from "lucide-react"
 import { CurrentlyPlaying } from "./currently-playing"
 import { ToolsDock } from "./tools-dock"
+import { BlurImage } from "@/components/shared"
 
 export function AboutSection({ recentFavorite }: { recentFavorite?: any }) {
     return (
@@ -34,13 +35,14 @@ export function AboutSection({ recentFavorite }: { recentFavorite?: any }) {
                     </div>
                 </div>
                 <div className="col-span-2 md:col-span-1 user-select-none row-span-1 md:row-span-2 relative rounded-[9px] overflow-hidden group min-h-[200px] md:min-h-0">
-                    <Image
+                    <BlurImage
                         src="/images/mini-gole.jpg"
-                        alt="mini-gole"
+                        alt="Mini Gole"
                         fill
-                        className="object-cover user-select-none"
-                        loading="lazy"
                         sizes="(max-width: 768px) 50vw, 200px"
+                        className="object-cover"
+                        quality={70}
+                        lazy
                     />
                     <div className="absolute inset-0" />
                     <div className="absolute bottom-3 left-3 right-3">

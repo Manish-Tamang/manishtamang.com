@@ -115,7 +115,7 @@ async function getSelfHostedToken() {
       username: UMAMI_USERNAME,
       password: UMAMI_PASSWORD,
     }),
-    cache: "no-store",
+    next: { revalidate: 60 },
   })
 
   if (!response.ok) {

@@ -4,12 +4,12 @@ import { useState, useCallback, useEffect } from "react"
 import { toast } from "sonner"
 import { GuestbookEntry } from "@/lib/guestbook"
 
-export function useGuestbook() {
-    const [entries, setEntries] = useState<GuestbookEntry[]>([])
-    const [isLoading, setIsLoading] = useState(true)
+export function useGuestbook(initialEntries?: GuestbookEntry[]) {
+    const [entries, setEntries] = useState<GuestbookEntry[]>(initialEntries ?? [])
+    const [isLoading, setIsLoading] = useState(initialEntries === undefined)
 
-    const fetchEntries = useCallback(async () => {
-        setIsLoading(true)
+    const fetchEntries = useCallback(async (silent = false) => {
+        if (!silent) setIsLoading(true)
         try {
             const res = await fetch("/api/guestbook")
             if (!res.ok) throw new Error("Failed to fetch entries")
@@ -27,12 +27,12 @@ export function useGuestbook() {
     }, [])
 
     useEffect(() => {
-        fetchEntries()
-    }, [fetchEntries])
+        fetchEntries(initialEntries !== undefined)
+    }, [fetchEntries, initialEntries])
 
     return {
         entries,
         isLoading,
-        refresh: fetchEntries
+        refresh: () => fetchEntries(),
     }
 }

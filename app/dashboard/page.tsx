@@ -9,19 +9,19 @@ import { getDailyBookmarks } from "@/lib/daily";
 export const revalidate = 60;
 
 async function getInitialWakaTimeData(): Promise<WakaTimeApiResponse | null> {
-    const headerStore = await headers();
-    const forwardedHost = headerStore.get("x-forwarded-host");
-    const host = forwardedHost ?? headerStore.get("host");
-
-    if (!host) {
-        return null;
-    }
-
-    const protocol =
-        headerStore.get("x-forwarded-proto") ??
-        (host.includes("localhost") ? "http" : "https");
-
     try {
+        const headerStore = await headers();
+        const forwardedHost = headerStore.get("x-forwarded-host");
+        const host = forwardedHost ?? headerStore.get("host");
+
+        if (!host) {
+            return null;
+        }
+
+        const protocol =
+            headerStore.get("x-forwarded-proto") ??
+            (host.includes("localhost") ? "http" : "https");
+
         const response = await fetch(`${protocol}://${host}/api/wakatime`, {
             next: { revalidate: 60 },
         });

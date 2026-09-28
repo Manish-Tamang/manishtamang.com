@@ -1,11 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import { auth } from "@/lib/auth";
-import {
-  getAdminEmail,
-  toPublicGuestbookEntry,
-  type RawGuestbookEntry,
-} from "@/lib/guestbook";
+import { getAdminEmail } from "@/lib/guestbook";
+import { getPublicGuestbookEntries } from "@/lib/guestbook-data";
 import { Resend } from "resend";
 
 const TABLE = "guestbook_entries";
@@ -18,43 +15,9 @@ async function getSessionUser(req: NextRequest) {
 export async function GET(req: NextRequest) {
   try {
     const user = await getSessionUser(req);
-    const { data, error } = await supabaseAdmin
-      .from(TABLE)
-      .select(
-        `
-                id, 
-                name, 
-                email, 
-                image_url, 
-                message, 
-                timestamp,
-                parent_id,
-                likes,
-                reactions,
-                attachment_url
-            `,
-      )
-      .order("timestamp", { ascending: false });
+    const entries = await getPublicGuestbookEntries(user?.email || null);
 
-    if (error) throw error;
-
-    const entries = (data || []) as RawGuestbookEntry[];
-    const mainEntries = entries.filter((e) => !e.parent_id);
-    const replies = entries.filter((e) => e.parent_id);
-    const viewerEmail = user?.email || null;
-
-    const nestedEntries = mainEntries.map((entry) => ({
-      ...toPublicGuestbookEntry(entry, viewerEmail),
-      replies: replies
-        .filter((r) => r.parent_id === entry.id)
-        .sort(
-          (a, b) =>
-            new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime(),
-        )
-        .map((reply) => toPublicGuestbookEntry(reply, viewerEmail)),
-    }));
-
-    return NextResponse.json({ entries: nestedEntries });
+    return NextResponse.json({ entries });
   } catch (error: any) {
     console.error("Fetch error:", error);
     return NextResponse.json(

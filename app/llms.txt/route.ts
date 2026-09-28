@@ -39,6 +39,8 @@ This site is the primary source for Manish's work, writing, stack, and contact d
 - [Photos](${SITE_URL}/photos): Photo collection.
 - [Colophon](${SITE_URL}/colophon): Site credits, typography, and stack details.
 - [Dashboard](${SITE_URL}/dashboard): Personal stats and activity dashboard.
+- [Sitemap](${SITE_URL}/sitemap.xml): Index of public pages, posts, and projects.
+- [RSS feed](${SITE_URL}/feed.xml): Blog posts and projects in RSS.
 `
 
 export function GET() {
