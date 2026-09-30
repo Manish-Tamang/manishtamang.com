@@ -77,6 +77,8 @@
 @theme inline {
   /* Font variables */
   --font-inter: "Inter", sans-serif;
+  --font-rubik: "Rubik", sans-serif;
+  --font-roboto: "Roboto", sans-serif;
   --font-perfectly-nineties: "Perfectly Nineties", sans-serif;
   --font-myfont: "MyFont", sans-serif;
   --font-jetbrains-mono: var(--font-jetbrains-mono), monospace;
@@ -241,6 +243,81 @@
 ::selection {
   background-color: #9ac372;
   color: white;
+}
+
+.blog-slug-page h1,
+.blog-slug-page h2,
+.blog-slug-page h3,
+.blog-slug-page h4,
+.blog-slug-page h5,
+.blog-slug-page .blog-post-prose h1,
+.blog-slug-page .blog-post-prose h2,
+.blog-slug-page .blog-post-prose h3,
+.blog-slug-page .blog-post-prose h4 {
+  font-family: var(--font-rubik), sans-serif;
+  font-feature-settings: normal;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.blog-slug-page .blog-post-prose th {
+  font-family: var(--font-rubik), sans-serif;
+  letter-spacing: -0.01em;
+}
+
+.blog-slug-page .blog-post-prose p,
+.blog-slug-page .blog-post-prose ul,
+.blog-slug-page .blog-post-prose ol,
+.blog-slug-page .blog-post-prose li,
+.blog-slug-page .blog-post-prose blockquote,
+.blog-slug-page .blog-post-prose td,
+.blog-slug-page .blog-post-prose a:not([class*="font-"]) {
+  font-family: var(--font-roboto), sans-serif;
+  letter-spacing: 0.01em;
+}
+
+.blog-slug-page .blog-post-prose p {
+  line-height: 1.75;
+  margin-bottom: 0.25rem;
+}
+
+.blog-slug-page .blog-post-prose p + p {
+  margin-top: 1.25rem;
+}
+
+.blog-slug-page .blog-post-prose ul,
+.blog-slug-page .blog-post-prose ol {
+  line-height: 1.75;
+  margin-top: 0.375rem;
+  margin-bottom: 0.375rem;
+}
+
+.blog-slug-page .blog-post-prose li {
+  line-height: 1.75;
+}
+
+.blog-slug-page .blog-post-prose h1 {
+  margin-top: 2.5rem;
+}
+
+.blog-slug-page .blog-post-prose h2 {
+  margin-top: 2rem;
+}
+
+.blog-slug-page .blog-post-prose h3 {
+  margin-top: 1.5rem;
+}
+
+.blog-slug-page .blog-post-prose h4 {
+  margin-top: 1.25rem;
+}
+
+.blog-slug-page .blog-post-prose :is(p, ul, ol, blockquote) + :is(h2, h3, h4) {
+  margin-top: 1.25rem;
+}
+
+.blog-slug-page .blog-post-prose :is(ul, ol) + :is(h2, h3, h4) {
+  margin-top: 1rem;
 }
 
 @layer utilities {
