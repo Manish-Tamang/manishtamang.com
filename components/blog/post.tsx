@@ -32,7 +32,7 @@ export function BlogPost({ title, date, content, category = ["TECH", "DESIGN"], 
       </div>
 
       {/* Main Title */}
-      <h1 className="text-4xl md:text-5xl font-bold leading-[1.1] tracking-tight text-zinc-950 dark:text-zinc-50 mb-8 max-w-[800px]">
+      <h1 className="font-rubik text-4xl md:text-5xl font-bold leading-[1.15] tracking-tight text-zinc-950 dark:text-zinc-50 mb-8 max-w-[800px]">
         {title}
       </h1>
 
@@ -55,7 +55,7 @@ export function BlogPost({ title, date, content, category = ["TECH", "DESIGN"], 
         </div>
         <div className="flex flex-col h-full h-auto">
           {summary && (
-            <p className="text-zinc-800 dark:text-zinc-300 leading-normal border-l-2 border-[#5C2BFF] pl-6 mb-2 mt-2">
+            <p className="font-roboto text-zinc-800 dark:text-zinc-300 text-base leading-[1.75] border-l-2 border-[#5C2BFF] pl-6 mb-2 mt-2">
               {summary.split(/\s+/).slice(0, 30).join(" ")}
               {summary.split(/\s+/).length > 60 && "…"}
             </p>
@@ -109,9 +109,9 @@ export function BlogPost({ title, date, content, category = ["TECH", "DESIGN"], 
         </div>
       )}
 
-      <article className="max-w-[720px] p-0 md:p-6 mx-auto">
-        <MDXComponents content={content} />
-        <Comments  />
+      <article className="max-w-[800px] p-0 md:p-6 mx-auto">
+        <MDXComponents content={content} typography="blog" />
+        <Comments />
       </article>
     </main>
   )
