@@ -96,9 +96,16 @@ interface TocItem {
 
 interface MDXComponentsProps {
   content: string;
+  typography?: "default" | "blog";
 }
 
-export const MDXComponents: React.FC<MDXComponentsProps> = ({ content }) => {
+export const MDXComponents: React.FC<MDXComponentsProps> = ({
+  content,
+  typography = "default",
+}) => {
+  const isBlogTypography = typography === "blog";
+  const headingClass = isBlogTypography ? "font-rubik" : "";
+  const bodyClass = isBlogTypography ? "font-roboto" : "";
   const [toc, setToc] = useState<TocItem[]>([]);
   const contentRef = useRef<HTMLDivElement>(null);
 
@@ -133,7 +140,12 @@ export const MDXComponents: React.FC<MDXComponentsProps> = ({ content }) => {
   return (
     <div className="py-6">
       <ImageModal image={selectedImage} open={isImageModalOpen} onOpenChange={setIsImageModalOpen} />
-      <div ref={contentRef} className="space-y-6">
+      <div
+        ref={contentRef}
+        className={
+          isBlogTypography ? "blog-post-prose" : "space-y-6"
+        }
+      >
         <Markdown
           remarkPlugins={[remarkGfm]}
           rehypePlugins={[rehypeRaw]}
@@ -141,7 +153,7 @@ export const MDXComponents: React.FC<MDXComponentsProps> = ({ content }) => {
             h1: ({ children }) => {
               const id = children ? slugify(children.toString()) : '';
               return (
-                <h1 id={id} className="text-4xl mt-10 mb-4 text-zinc-950 dark:text-zinc-50 border-b pb-4 border-zinc-200 dark:border-zinc-800">
+                <h1 id={id} className={`text-4xl font-bold mb-5 text-zinc-950 dark:text-zinc-50 border-b pb-4 border-zinc-200 dark:border-zinc-800 ${headingClass}`}>
                   {children}
                 </h1>
               );
@@ -149,7 +161,7 @@ export const MDXComponents: React.FC<MDXComponentsProps> = ({ content }) => {
             h2: ({ children }) => {
               const id = children ? slugify(children.toString()) : '';
               return (
-                <h2 id={id} className="text-3xl mt-8 mb-4 text-zinc-900 dark:text-zinc-100">
+                <h2 id={id} className={`text-3xl font-bold mb-4 text-zinc-900 dark:text-zinc-100 ${headingClass}`}>
                   {children}
                 </h2>
               );
@@ -157,7 +169,7 @@ export const MDXComponents: React.FC<MDXComponentsProps> = ({ content }) => {
             h3: ({ children }) => {
               const id = children ? slugify(children.toString()) : '';
               return (
-                <h3 id={id} className="text-2xl mt-6 mb-3 text-zinc-900 dark:text-zinc-100">
+                <h3 id={id} className={`text-2xl font-bold mb-3 text-zinc-900 dark:text-zinc-100 ${headingClass}`}>
                   {children}
                 </h3>
               );
@@ -165,31 +177,51 @@ export const MDXComponents: React.FC<MDXComponentsProps> = ({ content }) => {
             h4: ({ children }) => {
               const id = children ? slugify(children.toString()) : '';
               return (
-                <h4 id={id} className="text-xl font-semibold mt-6 mb-3 text-zinc-900 dark:text-zinc-100">
+                <h4 id={id} className={`text-xl font-bold mb-3 text-zinc-900 dark:text-zinc-100 ${headingClass}`}>
                   {children}
                 </h4>
               );
             },
             p: ({ children }) => (
-              <p className="text-foreground leading-normal text-sm md:text-base">
+              <p
+                className={`text-foreground text-base md:text-[17px] ${isBlogTypography
+                    ? `${bodyClass} leading-[1.75] mb-1`
+                    : "leading-normal text-sm md:text-base"
+                  }`}
+              >
                 {children}
               </p>
             ),
             ul: ({ children }) => (
-              <ul className="list-disc pl-8 text-foreground leading-normal text-sm md:text-base space-y-2">
+              <ul
+                className={`list-disc pl-8 text-foreground ${isBlogTypography
+                    ? `${bodyClass} leading-[1.75] text-base md:text-[17px] space-y-2`
+                    : "leading-normal text-sm md:text-base space-y-2"
+                  }`}
+              >
                 {children}
               </ul>
             ),
             ol: ({ children }) => (
-              <ol className="list-decimal pl-8 text-zinc-700 dark:text-zinc-300 leading-normal space-y-2">
+              <ol
+                className={`list-decimal pl-8 text-zinc-700 dark:text-zinc-300 ${isBlogTypography
+                    ? `${bodyClass} leading-[1.75] text-base md:text-[17px] space-y-2`
+                    : "leading-normal space-y-2"
+                  }`}
+              >
                 {children}
               </ol>
             ),
             li: ({ children }) => (
-              <li className="mb-2">{children}</li>
+              <li className={isBlogTypography ? "mb-1.5 pl-0.5" : "mb-2"}>{children}</li>
             ),
             blockquote: ({ children }) => (
-              <blockquote className="my-5 pl-4 font-jetbrains-mono text-sm -mt-6 mb-4 text-zinc-400 dark:text-zinc-300">
+              <blockquote
+                className={`my-6 pl-4 border-l-2 border-zinc-200 dark:border-zinc-700 text-sm md:text-base -mt-2 mb-6 text-zinc-500 dark:text-zinc-400 ${isBlogTypography
+                    ? `${bodyClass} leading-[1.75] italic`
+                    : "font-jetbrains-mono -mt-6 mb-4 text-zinc-400 dark:text-zinc-300"
+                  }`}
+              >
                 {children}
               </blockquote>
             ),
@@ -259,7 +291,7 @@ export const MDXComponents: React.FC<MDXComponentsProps> = ({ content }) => {
               ) : (
                 <code
                   {...props}
-                  className="bg-gray-200 dark:bg-gray-700 text-pink-500 px-2 py-1 rounded font-mono text-sm break-words whitespace-pre-wrap"
+                  className="bg-gray-200 dark:bg-gray-700 text-green-500 px-2 py-1 rounded font-mono text-sm break-words whitespace-pre-wrap"
                   style={{ fontFamily: "var(--font-jetbrains-mono)" }}
                 >
                   {children}
