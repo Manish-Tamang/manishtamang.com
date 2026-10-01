@@ -25,6 +25,7 @@ import { Vercel } from "@/components/icons/Vercel";
 import { VisualStudioCode } from "@/components/icons/Vsc";
 import { Windows } from "@/components/icons/Windows";
 import { Zsh } from "@/components/icons/Zsh";
+import { LineBreaker } from "@/components/shared/line-breaker";
 import {
   Tooltip,
   TooltipContent,
@@ -432,6 +433,13 @@ const UsesPage = () => {
               is what I use for music while working and coding.
             </p>
           </section>
+
+          <LineBreaker />
+          <footer className="pt-4 space-y-4">
+            <p className="text-sm text-foreground/50">
+              Last Updated: <span className="font-medium text-foreground/70">October 1, 2026</span>
+            </p>
+          </footer>
         </div>
       </main>
     </div>
