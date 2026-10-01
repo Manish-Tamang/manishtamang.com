@@ -18,6 +18,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "www.google.com",
       },
+      {
+        protocol: "https",
+        hostname: "github.gallerycdn.vsassets.io",
+      },
     ],
   },
 }

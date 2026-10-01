@@ -21,6 +21,7 @@ export const sitePages = [
   { path: "/guestbook", changeFrequency: "daily" as const, priority: 0.7 },
   { path: "/photos", changeFrequency: "weekly" as const, priority: 0.6 },
   { path: "/uses", changeFrequency: "monthly" as const, priority: 0.6 },
+  { path: "/bookmarks", changeFrequency: "monthly" as const, priority: 0.6 },
   { path: "/bio", changeFrequency: "monthly" as const, priority: 0.6 },
   { path: "/contact", changeFrequency: "yearly" as const, priority: 0.5 },
   { path: "/dashboard", changeFrequency: "daily" as const, priority: 0.5 },
