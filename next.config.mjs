@@ -22,6 +22,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "github.gallerycdn.vsassets.io",
       },
+      {
+        protocol: "https",
+        hostname: "windhawk.net",
+      },
     ],
   },
 }
