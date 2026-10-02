@@ -146,7 +146,7 @@ export function Footer() {
                                 </li>
                                 <li>
                                     <Link
-                                        href="https://manish-analytics.vercel.app/share/jFK5VpX2c6h2JgRg/manishtamang.com"
+                                        href="https://analytics.manishtamang.com/share/jFK5VpX2c6h2JgRg/manishtamang.com"
                                         className="text-neutral-600 dark:text-neutral-400 hover:text-[#9AC372] dark:hover:text-[#9AC372] flex items-center transition-colors duration-200"
                                         target="_blank"
                                         rel="noopener noreferrer"
