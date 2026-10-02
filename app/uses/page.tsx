@@ -69,6 +69,35 @@ const UsesPage = () => {
             <p>
               The rest of my setup is simple and practical.
             </p>
+            <p>
+              I use{" "}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <strong className="inline-flex cursor-help items-center gap-1.5 align-middle">
+                    <Image
+                      src="https://windhawk.net/logo-white.51673358e9c759f0.svg"
+                      alt=""
+                      width={16}
+                      height={16}
+                      aria-hidden="true"
+                      className="h-4 w-4 shrink-0 rounded bg-[#252525] p-0.5"
+                    />
+                    <Link
+                      href="https://windhawk.net/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-foreground underline decoration-dotted underline-offset-4"
+                    >
+                      Windhawk
+                    </Link>
+                  </strong>
+                </TooltipTrigger>
+                <TooltipContent>
+                  Windhawk is a Windows customization tool I use to configure the taskbar.
+                </TooltipContent>
+              </Tooltip>{" "}
+              for Windows taskbar configuration.
+            </p>
             <div className="grid grid-cols-2 gap-5 sm:grid-cols-3">
               <div className="space-y-2">
                 <Image
