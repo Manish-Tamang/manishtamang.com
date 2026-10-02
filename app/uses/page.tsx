@@ -13,6 +13,7 @@ import { NPM } from "@/components/icons/Npm";
 import { PayloadCMS } from "@/components/icons/Payload";
 import { Pnpm } from "@/components/icons/Pnpm";
 import { Postman } from "@/components/icons/Postman";
+import { PowerToys } from "@/components/icons/PowerToy";
 import { Prettier } from "@/components/icons/Prettier";
 import { React as ReactIcon } from "@/components/icons/Reactjs";
 import { Resend } from "@/components/icons/Resend";
@@ -97,6 +98,28 @@ const UsesPage = () => {
                 </TooltipContent>
               </Tooltip>{" "}
               for Windows taskbar configuration.
+            </p>
+            <p>
+              I also use{" "}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <strong className="inline-flex cursor-help items-center gap-1.5 align-middle">
+                    <PowerToys aria-hidden="true" className="h-4 w-4 shrink-0" />
+                    <Link
+                      href="https://learn.microsoft.com/en-us/windows/powertoys/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-foreground underline decoration-dotted underline-offset-4"
+                    >
+                      Microsoft PowerToys
+                    </Link>
+                  </strong>
+                </TooltipTrigger>
+                <TooltipContent>
+                  PowerToys is a collection of Windows utilities for customizing and improving the desktop workflow.
+                </TooltipContent>
+              </Tooltip>{" "}
+              for additional Windows utilities and customization.
             </p>
             <div className="grid grid-cols-2 gap-5 sm:grid-cols-3">
               <div className="space-y-2">
