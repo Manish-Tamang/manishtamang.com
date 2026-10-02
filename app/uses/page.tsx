@@ -1,13 +1,13 @@
 import Cursor from "@/components/icons/Cursor";
 import { Bun } from "@/components/icons/Bun";
 import { CSS } from "@/components/icons/Css";
-import { Chrome } from "@/components/icons/Chrome";
 import { Edge } from "@/components/icons/Edge";
 import { Figma } from "@/components/icons/Figma";
 import { Git } from "@/components/icons/Git";
 import { GitHub } from "@/components/icons/Github";
 import { GitLab } from "@/components/icons/Gitlab";
 import { GoogleAntigravity } from "@/components/icons/Antigravity";
+import { Helium } from "@/components/icons/Helium";
 import { Nextjs } from "@/components/icons/Nextjs";
 import { NPM } from "@/components/icons/Npm";
 import { PayloadCMS } from "@/components/icons/Payload";
@@ -69,7 +69,7 @@ const UsesPage = () => {
             <p>
               The rest of my setup is simple and practical.
             </p>
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
+            <div className="grid grid-cols-2 gap-5 sm:grid-cols-3">
               <div className="space-y-2">
                 <Image
                   src="/images/uses/keyboard.png"
@@ -397,19 +397,28 @@ const UsesPage = () => {
           <section className="space-y-4">
             <h2 className="text-2xl font-bold tracking-tight text-foreground">Browsing</h2>
             <p>
-              <strong className="inline-flex items-center gap-1.5 align-middle">
-                <Edge aria-hidden="true" className="h-4 w-4 shrink-0" />
-                Microsoft Edge
-              </strong>{" "}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <strong className="inline-flex cursor-help items-center gap-1.5 align-middle">
+                    <Helium aria-hidden="true" className="h-4 w-4 shrink-0" />
+                    <Link href="https://helium.computer/" target="_blank" rel="noopener noreferrer" className="underline decoration-dotted text-[#3450D1]  underline-offset-4">
+                      Helium
+                    </Link>
+                  </strong>
+                </TooltipTrigger>
+                <TooltipContent>
+                  Helium is a Chromium-based browser built for a focused, privacy-conscious browsing experience.
+                </TooltipContent>
+              </Tooltip>{" "}
               is my primary browser.
             </p>
             <p>
               I keep{" "}
               <strong className="inline-flex items-center gap-1.5 align-middle">
-                <Chrome aria-hidden="true" className="h-4 w-4 shrink-0" />
-                Google Chrome
+                <Edge aria-hidden="true" className="h-4 w-4 shrink-0" />
+                Microsoft Edge
               </strong>{" "}
-              as a secondary browser, mainly for testing, development, and situations where I need a separate browser environment.
+              as a secondary browser.
             </p>
           </section>
 
@@ -437,7 +446,7 @@ const UsesPage = () => {
           <LineBreaker />
           <footer className="pt-4 space-y-4">
             <p className="text-sm text-foreground/50">
-              Last Updated: <span className="font-medium text-foreground/70">October 1, 2026</span>
+              Last Updated: <span className="font-medium text-foreground/70">October 2, 2026</span>
             </p>
           </footer>
         </div>
