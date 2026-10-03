@@ -63,7 +63,7 @@ export default function RootLayout({
         />
         <script
           defer
-          src="https://manish-analytics.vercel.app/script.js"
+          src="https://analytics.manishtamang.com/script.js"
           data-website-id="d5fd3d82-d867-4e3d-badb-837ad2ff7f7d"
         />
         <script
