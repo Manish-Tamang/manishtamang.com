@@ -497,6 +497,18 @@ const UsesPage = () => {
 
           <LineBreaker />
           <footer className="pt-4 space-y-4">
+            <aside className="border-l-2 border-foreground/15 pl-4 text-sm leading-relaxed text-foreground/70 md:text-base">
+              Curious what other people use? Explore{" "}
+              <Link
+                href="https://uses.tech/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-foreground underline decoration-dotted underline-offset-4"
+              >
+                uses.tech
+              </Link>{" "}
+              to see the tools and setups shared by people around the web.
+            </aside>
             <p className="text-sm text-foreground/50">
               Last Updated: <span className="font-medium text-foreground/70">October 2, 2026</span>
             </p>
