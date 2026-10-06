@@ -22,10 +22,13 @@ import { Spotify } from "@/components/icons/Spotify";
 import { TailwindCSS } from "@/components/icons/Tailwind";
 import { Ubuntu } from "@/components/icons/Ubuntu";
 import { Netlify } from "@/components/icons/Netlify";
+import { Paper } from "@/components/icons/Paper";
 import { Vercel } from "@/components/icons/Vercel";
 import { VisualStudioCode } from "@/components/icons/Vsc";
 import { Windows } from "@/components/icons/Windows";
 import { Zsh } from "@/components/icons/Zsh";
+import { Icon1Password } from "@/components/icons/1password";
+import { BlurImage } from "@/components/shared";
 import { LineBreaker } from "@/components/shared/line-breaker";
 import {
   Tooltip,
@@ -35,6 +38,9 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 
+const terminalBlurDataURL =
+  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 10'%3E%3Crect width='100%25' height='100%25' fill='%23272b33'/%3E%3C/svg%3E";
+
 const UsesPage = () => {
   return (
     <div className="flex flex-col items-center min-h-screen">
@@ -43,13 +49,13 @@ const UsesPage = () => {
           <h1 className="text-3xl sm:text-4xl font-medium tracking-tight">
             Uses
           </h1>
-          <p className="text-sm leading-relaxed text-foreground md:text-base">
-            A small collection of the hardware, software, and tools I use to
-            build things, write code, and spend too much time on the internet.
+          <p className="text-sm text-foreground/70 sm:text-base">
+            A list of tools, software, and hardware I use for development, design,
+            and productivity.
           </p>
         </header>
 
-        <div className="mt-10 space-y-10 text-sm leading-relaxed text-foreground/80 md:text-base">
+        <div className="mt-10 space-y-10 text-sm leading-relaxed text-foreground/80 md:text-base [&_section>p]:ml-5 [&_section>p]:list-item [&_section]:!space-y-2">
           <section className="space-y-4">
             <h2 className="text-2xl font-bold tracking-tight text-foreground">Hardware</h2>
             <p>
@@ -65,10 +71,7 @@ const UsesPage = () => {
                   Acer Aspire 14 AI (2025)
                 </Link>
               </strong>{" "}
-              with an Intel Core Ultra 5 226V, 16 GB of RAM, and a 1 TB SSD.
-            </p>
-            <p>
-              The rest of my setup is simple and practical.
+              with Intel Core Ultra 5 226V, 16 GB RAM, and 1 TB SSD.
             </p>
             <p>
               I use{" "}
@@ -165,7 +168,6 @@ const UsesPage = () => {
               </div>
             </div>
           </section>
-
           <section className="space-y-4">
             <h2 className="text-2xl font-bold tracking-tight text-foreground">Development</h2>
             <p>
@@ -180,7 +182,7 @@ const UsesPage = () => {
                   Cursor
                 </Link>
               </strong>{" "}
-              is my main code editor. I use it primarily for agentic coding and larger development tasks where I want an AI agent working alongside me.
+              is my main editor for agentic coding.
             </p>
             <p>
               I still keep{" "}
@@ -195,7 +197,7 @@ const UsesPage = () => {
                   Visual Studio Code
                 </Link>
               </strong>{" "}
-              around for non-AI coding, smaller edits, or when I simply want to code without an agent involved.
+              for smaller edits and non-AI coding.
             </p>
             <p>
               <strong className="inline-flex items-center gap-1.5 align-middle">
@@ -209,7 +211,7 @@ const UsesPage = () => {
                   Antigravity
                 </Link>
               </strong>{" "}
-              is mostly my playground. I use it when I want to experiment, try something different, or just have fun with a new coding environment.
+              for experimenting with new coding environments.
             </p>
             <p>
               Across my editors, I generally use{" "}
@@ -231,14 +233,14 @@ const UsesPage = () => {
                   GitHub Dark
                 </Link>
               </strong>{" "}
-              theme and <strong><Link href="https://www.jetbrains.com/lp/mono/" target="_blank" rel="noopener noreferrer" className="text-foreground underline decoration-dotted underline-offset-4">JetBrains Mono</Link></strong> as my programming font.
+              theme and <strong><Link href="https://www.jetbrains.com/lp/mono/" target="_blank" rel="noopener noreferrer" className="text-foreground underline decoration-dotted underline-offset-4">JetBrains Mono</Link></strong> font.
             </p>
           </section>
 
           <section className="space-y-4">
             <h2 className="text-2xl font-bold tracking-tight text-foreground">Terminal</h2>
             <p>
-              My development environment lives primarily inside{" "}
+              Environment: {" "}
               <strong className="inline-flex items-center gap-1.5 align-middle">
                 <Ubuntu aria-hidden="true" className="h-4 w-4 shrink-0" />
                 <Link
@@ -250,7 +252,7 @@ const UsesPage = () => {
                   WSL2 (Windows Subsystem for Linux) Ubuntu
                 </Link>
               </strong>{" "}
-              rather than directly in Windows.
+              .
             </p>
             <p>
               I use{" "}
@@ -266,7 +268,7 @@ const UsesPage = () => {
                   completion, advanced globbing, and customizable prompts.
                 </TooltipContent>
               </Tooltip>{" "}
-              as my shell, with <strong><Link href="https://ohmyz.sh/" target="_blank" rel="noopener noreferrer" className="text-foreground underline decoration-dotted underline-offset-4">Oh My Zsh</Link></strong> handling the shell configuration and theming.
+              with <strong><Link href="https://ohmyz.sh/" target="_blank" rel="noopener noreferrer" className="text-foreground underline decoration-dotted underline-offset-4">Oh My Zsh</Link></strong>.
             </p>
             <p>
               For installing command-line packages, I use{" "}
@@ -288,51 +290,79 @@ const UsesPage = () => {
                   tools and applications on macOS and Linux.
                 </TooltipContent>
               </Tooltip>{" "}
-              where it makes sense.
+              .
             </p>
+            <p>
+              Prompt: {" "}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <strong className="inline-flex cursor-help items-center align-middle">
+                    <Link
+                      href="https://github.com/sindresorhus/pure"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-foreground underline decoration-dotted underline-offset-4"
+                    >
+                      Pure
+                    </Link>
+                  </strong>
+                </TooltipTrigger>
+                <TooltipContent>
+                  Pure is a minimal and fast ZSH prompt.
+                </TooltipContent>
+              </Tooltip>
+            </p>
+            <BlurImage
+              src="/images/terminal.png"
+              alt="Ubuntu terminal running in Windows Terminal"
+              width={1917}
+              height={1198}
+              sizes="(max-width: 680px) 100vw, 680px"
+              quality={70}
+              lazy
+              blurDataURL={terminalBlurDataURL}
+              className="h-auto w-full rounded-md object-cover"
+            />
           </section>
 
           <section className="space-y-4">
             <h2 className="text-2xl font-bold tracking-tight text-foreground">Web Development</h2>
             <p>
-              Most of what I build is for the web.
-            </p>
-            <p>
               <strong className="inline-flex items-center gap-1.5 align-middle">
                 <Nextjs aria-hidden="true" className="h-4 w-4 shrink-0 dark:invert" />
                 Next.js
               </strong>{" "}
-              is my primary framework, with{" "}
+              Framework: {" "}
               <strong className="inline-flex items-center gap-1.5 align-middle">
                 <ReactIcon aria-hidden="true" className="h-4 w-4 shrink-0" />
                 React
               </strong>{" "}
-              underneath it. For styling, I reach for{" "}
+              and {" "}
               <strong className="inline-flex items-center gap-1.5 align-middle">
                 <TailwindCSS aria-hidden="true" className="h-4 w-4 shrink-0" />
                 Tailwind CSS
               </strong>{" "}
-              most of the time, although I still use regular{" "}
+              and {" "}
               <strong className="inline-flex items-center gap-1.5 align-middle">
                 <CSS aria-hidden="true" className="h-4 w-4 shrink-0" />
                 CSS
               </strong>{" "}
-              when it makes more sense for a particular project.
+              .
             </p>
             <p>
               For content management, <strong className="inline-flex items-center gap-1.5 align-middle">
                 <Sanity aria-hidden="true" className="h-4 w-4 shrink-0 invert dark:invert-0" />
                 Sanity
               </strong>{" "}
-              is my go-to CMS for projects where I want a dedicated, flexible content platform. I also use{" "}
+              and {" "}
               <strong className="inline-flex items-center gap-1.5 align-middle">
                 <PayloadCMS aria-hidden="true" className="h-4 w-4 shrink-0 invert dark:invert-0" />
                 Payload
               </strong>{" "}
-              when I want the CMS to live closer to the application and have more control over the backend.
+              .
             </p>
             <p>
-              My package manager has traditionally been{" "}
+              Package managers: {" "}
               <strong className="inline-flex items-center gap-1.5 align-middle">
                 <Pnpm aria-hidden="true" className="h-4 w-4 shrink-0" />
                 pnpm
@@ -342,15 +372,15 @@ const UsesPage = () => {
                 <NPM aria-hidden="true" className="h-4 w-4 shrink-0" />
                 npm
               </strong>{", "}
-              but I'm increasingly using{" "}
+              and {" "}
               <strong className="inline-flex items-center gap-1.5 align-middle">
                 <Bun aria-hidden="true" className="h-4 w-4 shrink-0" />
                 Bun
               </strong>{" "}
-              for both the JavaScript runtime and package management.
+              .
             </p>
             <p>
-              For version control and collaboration, it's mostly{" "}
+              Version control: {" "}
               <strong className="inline-flex items-center gap-1.5 align-middle">
                 <Git aria-hidden="true" className="h-4 w-4 shrink-0" />
                 Git
@@ -364,7 +394,7 @@ const UsesPage = () => {
                 <GitLab aria-hidden="true" className="h-4 w-4 shrink-0" />
                 GitLab
               </strong>{" "}
-              occasionally appearing in the workflow.
+              .
             </p>
           </section>
 
@@ -375,7 +405,7 @@ const UsesPage = () => {
                 <Vercel aria-hidden="true" className="h-4 w-4 shrink-0 invert dark:invert-0" />
                 Vercel
               </strong>{" "}
-              is where I host most of my personal projects. It's usually the path of least resistance for the kind of Next.js projects I build.
+              for personal projects.
             </p>
             <p>
               I also use{" "}
@@ -383,13 +413,13 @@ const UsesPage = () => {
                 <Netlify aria-hidden="true" className="h-4 w-4 shrink-0" />
                 Netlify
               </strong>{" "}
-              from time to time. It was actually the first hosting platform I used, so I still occasionally come back to it for fun projects.
+              occasionally for fun projects.
             </p>
             <p>
-              For client projects, I often use a <strong>VPS</strong> when I need more control over the server and deployment environment.
+              Client hosting: <strong>VPS</strong>.
             </p>
             <p>
-              <strong>Hostinger</strong> comes up when a client's existing setup requires it, while <strong>SiteGround</strong> is what I use for WordPress hosting when that's the requirement.
+              WordPress hosting: <strong>Hostinger</strong> and <strong>SiteGround</strong>.
             </p>
           </section>
 
@@ -401,10 +431,13 @@ const UsesPage = () => {
                 <Figma aria-hidden="true" className="h-4 w-4 shrink-0" />
                 Figma
               </strong>{" "}
-              for UI/UX brainstorming, wireframes, and designing interfaces before turning them into code.
+              for UI/UX and wireframes.
             </p>
             <p>
-              I generally prefer interfaces that are simple, functional, and restrained rather than adding visual elements just because they can be added.
+              <strong className="inline-flex items-center gap-1.5 align-middle">
+                <Paper aria-hidden="true" className="h-4 w-4 shrink-0" />
+                Paper
+              </strong>
             </p>
           </section>
 
@@ -415,34 +448,28 @@ const UsesPage = () => {
                 <Postman aria-hidden="true" className="h-4 w-4 shrink-0" />
                 Postman
               </strong>{" "}
-              is my usual tool for testing APIs and inspecting requests while developing backends.
+              for API testing.
             </p>
             <p>
               <strong className="inline-flex items-center gap-1.5 align-middle">
                 <Prettier aria-hidden="true" className="h-4 w-4 shrink-0" />
                 Prettier
               </strong>{" "}
-              handles code formatting so I don't have to think about formatting every time I write or modify code.
+              for code formatting.
             </p>
             <p>
               <strong className="inline-flex items-center gap-1.5 align-middle">
                 <Resend aria-hidden="true" className="h-4 w-4 shrink-0 text-foreground" />
                 Resend
               </strong>{" "}
-              handles transactional email when a project needs it.
-            </p>
-            <p>
-              For databases and backend services, I use whatever fits the project rather than forcing the same service everywhere.
+              for transactional email.
             </p>
           </section>
 
           <section className="space-y-4">
             <h2 className="text-2xl font-bold tracking-tight text-foreground">Writing & Productivity</h2>
             <p>
-              <strong>Notion</strong> is where I do most of my writing, planning, notes, and documentation.
-            </p>
-            <p>
-              It's less of a strict productivity system and more of a place where I dump ideas, organize projects, and keep things I don't want to forget.
+              <strong>Notion</strong> for writing, planning, notes, and documentation.
             </p>
           </section>
 
@@ -462,7 +489,7 @@ const UsesPage = () => {
                   Helium is a Chromium-based browser built for a focused, privacy-conscious browsing experience.
                 </TooltipContent>
               </Tooltip>{" "}
-              is my primary browser.
+              as my primary browser.
             </p>
             <p>
               I keep{" "}
@@ -470,17 +497,17 @@ const UsesPage = () => {
                 <Edge aria-hidden="true" className="h-4 w-4 shrink-0" />
                 Microsoft Edge
               </strong>{" "}
-              as a secondary browser.
+              as my secondary browser.
             </p>
           </section>
 
           <section className="space-y-4">
             <h2 className="text-2xl font-bold tracking-tight text-foreground">Passwords & Accounts</h2>
             <p>
-              I use <strong>1Password</strong> for storing and managing passwords, with <strong>Google Password Manager</strong> also handling some of my credentials.
-            </p>
-            <p>
-              I try to keep credentials out of code and configuration files whenever possible.
+              <strong className="inline-flex items-center gap-1.5 align-middle">
+                <Icon1Password aria-hidden="true" className="h-4 w-4 shrink-0" />
+                1Password
+              </strong>
             </p>
           </section>
 
@@ -510,7 +537,7 @@ const UsesPage = () => {
               to see the tools and setups shared by people around the web.
             </aside>
             <p className="text-sm text-foreground/50">
-              Last Updated: <span className="font-medium text-foreground/70">October 2, 2026</span>
+              Last Updated: <span className="font-medium text-foreground/70">October 6, 2026</span>
             </p>
           </footer>
         </div>
