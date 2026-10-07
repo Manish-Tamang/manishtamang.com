@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { WakaTimeApiResponse } from "@/lib/wakatime-types";
 
-export const runtime = "edge";
-
 function formatDuration(seconds: number): string {
   if (!Number.isFinite(seconds) || seconds <= 0) {
     return "0 mins";
