@@ -161,7 +161,7 @@ const ColophonPage = () => {
                         </Link>
                         . The code for this site is open-source and available on{" "}
                         <Link
-                            href="https://github.com/Manish-Tamang/portfolio-2026"
+                            href="https://github.com/Manish-Tamang/manishtamang.com"
                             className="text-foreground font-medium underline underline-offset-4 decoration-foreground/30 hover:decoration-foreground/60 transition-all"
                             target="_blank"
                             rel="noopener noreferrer"
@@ -216,7 +216,7 @@ const ColophonPage = () => {
                     <ul className="list-disc list-inside text-[15px] sm:text-[17px] leading-relaxed text-foreground/80 space-y-2">
                         <li>
                             <Link
-                                href="https://manish-analytics.vercel.app/share/jFK5VpX2c6h2JgRg/manishtamang.com"
+                                href="https://analytics.manishtamang.com/share/jFK5VpX2c6h2JgRg"
                                 className="text-foreground font-medium underline underline-offset-4 decoration-foreground/30 hover:decoration-foreground/60 transition-all"
                                 target="_blank"
                                 rel="noopener noreferrer"
@@ -386,7 +386,7 @@ const ColophonPage = () => {
                         </p>
                     </div>
 
-                    <ul className="list-disc list-inside text-[15px] sm:text-[17px] leading-relaxed text-foreground/80 space-y-2">
+                    <ul className="columns-1 md:columns-2 gap-x-10 list-disc list-inside text-[15px] sm:text-[17px] leading-relaxed text-foreground/80 space-y-2 [&_li]:break-inside-avoid">
                         <li>
                             <Link
                                 href="https://ouassim.tech/"
@@ -435,16 +435,6 @@ const ColophonPage = () => {
                                 rel="noopener noreferrer"
                             >
                                 Lee Robinson
-                            </Link>
-                        </li>
-                        <li>
-                            <Link
-                                href="https://theodorusclarence.com/"
-                                className="text-foreground font-medium underline underline-offset-4 decoration-foreground/30 hover:decoration-foreground/60 transition-all"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                Theodorus Clarence
                             </Link>
                         </li>
                         <li>
