@@ -1,15 +1,18 @@
-import Cursor from "@/components/icons/Cursor";
+import { Icon1Password } from "@/components/icons/1password";
+import { GoogleAntigravity } from "@/components/icons/Antigravity";
 import { Bun } from "@/components/icons/Bun";
 import { CSS } from "@/components/icons/Css";
+import Cursor from "@/components/icons/Cursor";
 import { Edge } from "@/components/icons/Edge";
 import { Figma } from "@/components/icons/Figma";
 import { Git } from "@/components/icons/Git";
 import { GitHub } from "@/components/icons/Github";
 import { GitLab } from "@/components/icons/Gitlab";
-import { GoogleAntigravity } from "@/components/icons/Antigravity";
 import { Helium } from "@/components/icons/Helium";
+import { Netlify } from "@/components/icons/Netlify";
 import { Nextjs } from "@/components/icons/Nextjs";
 import { NPM } from "@/components/icons/Npm";
+import { Paper } from "@/components/icons/Paper";
 import { PayloadCMS } from "@/components/icons/Payload";
 import { Pnpm } from "@/components/icons/Pnpm";
 import { Postman } from "@/components/icons/Postman";
@@ -21,13 +24,10 @@ import { Sanity } from "@/components/icons/Sanity";
 import { Spotify } from "@/components/icons/Spotify";
 import { TailwindCSS } from "@/components/icons/Tailwind";
 import { Ubuntu } from "@/components/icons/Ubuntu";
-import { Netlify } from "@/components/icons/Netlify";
-import { Paper } from "@/components/icons/Paper";
 import { Vercel } from "@/components/icons/Vercel";
 import { VisualStudioCode } from "@/components/icons/Vsc";
 import { Windows } from "@/components/icons/Windows";
 import { Zsh } from "@/components/icons/Zsh";
-import { Icon1Password } from "@/components/icons/1password";
 import { BlurImage } from "@/components/shared";
 import { LineBreaker } from "@/components/shared/line-breaker";
 import {
@@ -49,13 +49,13 @@ const UsesPage = () => {
           <h1 className="text-3xl sm:text-4xl font-medium tracking-tight">
             Uses
           </h1>
-          <p className="text-sm text-foreground/70 sm:text-base">
+          <p className="font-inter text-sm leading-relaxed text-foreground/70 sm:text-base">
             A list of tools, software, and hardware I use for development, design,
             and productivity.
           </p>
         </header>
 
-        <div className="mt-10 space-y-10 text-sm leading-relaxed text-foreground/80 md:text-base [&_section>p]:ml-5 [&_section>p]:list-item [&_section]:!space-y-2">
+        <div className="mt-10 space-y-10 text-sm leading-relaxed text-foreground/80 md:text-base [&_section>p]:ml-5 [&_section>p]:list-item [&_section>p]:font-inter [&_section>p]:text-[0.9375rem] [&_section>p]:leading-[1.7] md:[&_section>p]:text-base [&_section]:!space-y-2">
           <section className="space-y-4">
             <h2 className="text-2xl font-bold tracking-tight text-foreground">Hardware</h2>
             <p>
@@ -312,6 +312,45 @@ const UsesPage = () => {
                 </TooltipContent>
               </Tooltip>
             </p>
+            <p>
+              I jump between directories with{" "}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <strong className="inline-flex cursor-help items-center align-middle">
+                    <Link
+                      href="https://github.com/ajeetdsouza/zoxide"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-foreground underline decoration-dotted underline-offset-4"
+                    >
+                      zoxide
+                    </Link>
+                  </strong>
+                </TooltipTrigger>
+                <TooltipContent>
+                  zoxide is a smarter cd command. It remembers the directories you use most so you can jump to them in a few keystrokes.
+                </TooltipContent>
+              </Tooltip>
+              , and pick files, history, and paths with{" "}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <strong className="inline-flex cursor-help items-center align-middle">
+                    <Link
+                      href="https://github.com/junegunn/fzf"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-foreground underline decoration-dotted underline-offset-4"
+                    >
+                      fzf
+                    </Link>
+                  </strong>
+                </TooltipTrigger>
+                <TooltipContent>
+                  fzf is a command-line fuzzy finder. It filters files, command history, and other lists as you type.
+                </TooltipContent>
+              </Tooltip>
+              .
+            </p>
             <BlurImage
               src="/images/terminal.png"
               alt="Ubuntu terminal running in Windows Terminal"
@@ -537,7 +576,7 @@ const UsesPage = () => {
               to see the tools and setups shared by people around the web.
             </aside>
             <p className="text-sm text-foreground/50">
-              Last Updated: <span className="font-medium text-foreground/70">October 6, 2026</span>
+              Last Updated: <span className="font-medium text-foreground/70">October 7, 2026</span>
             </p>
           </footer>
         </div>
