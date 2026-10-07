@@ -44,7 +44,8 @@ async function getDailyDevBookmarks(): Promise<DailyBookmark[]> {
     try {
         const payload = await getDailyBookmarks({ limit: 8 });
         return payload.data;
-    } catch {
+    } catch (error) {
+        console.error("Error fetching daily.dev bookmarks:", error);
         return [];
     }
 }
@@ -89,7 +90,7 @@ export default async function DashboardPage() {
                             Site Traffic
                         </h2>
                         <p className="text-zinc-600 dark:text-zinc-400 text-base leading-relaxed">
-                            Visitors, visits, and page views from <a href="https://manish-analytics.vercel.app/share/jFK5VpX2c6h2JgRg/manishtamang.com" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline decoration-wavy">Umami</a> since Oct 18, 2024. Recent sessions show the latest 3 visits.
+                            Visitors, visits, and page views from <a href="https://analytics.manishtamang.com/share/jFK5VpX2c6h2JgRg/manishtamang.com" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline decoration-wavy">Umami</a> since Oct 18, 2024. Recent sessions show the latest 3 visits.
                         </p>
                     </div>
                     <UmamiTotals totals={umamiTotals} />
