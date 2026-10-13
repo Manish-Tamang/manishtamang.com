@@ -3,8 +3,9 @@ import { sanityFetch } from "@/sanity/lib/live"
 import { ProjectsClient } from "@/components/projects"
 
 export const metadata = {
-    title: "Projects | Manish Tamang",
-    description: "A collection of my work, ranging from web applications to creative experiments.",
+    title: "Projects",
+    description: "Projects by Manish Tamang (golecodes) — web applications, experiments, and creative builds.",
+    alternates: { canonical: "https://manishtamang.com/projects" },
 }
 
 export default async function ProjectsPage() {
