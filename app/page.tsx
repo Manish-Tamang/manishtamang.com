@@ -14,8 +14,24 @@ import {
 import { sanityFetch } from "@/sanity/lib/live"
 import { FEATURED_POSTS_QUERY, RECENT_FAVORITE_QUERY } from "@/sanity/lib/queries"
 import { Suspense } from "react"
+import { siteConfig } from "@/lib/seo"
 
 export const revalidate = 3600
+
+const homeJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Manish Tamang",
+  alternateName: ["golecodes", "Manish Gole Tamang"],
+  url: siteConfig.url,
+  description: siteConfig.description,
+  author: {
+    "@type": "Person",
+    name: "Manish Tamang",
+    alternateName: ["golecodes", "gole", "Manish Gole Tamang"],
+    url: siteConfig.url,
+  },
+}
 
 const stickyNotes = [
   {
@@ -59,6 +75,10 @@ export default async function HomePage() {
 
   return (
     <div className="min-h-screen flex flex-col items-center">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(homeJsonLd) }}
+      />
       <StickyNotesLazy stickyNotes={stickyNotes} />
       <div className="px-6 py-8">
         <Hero />

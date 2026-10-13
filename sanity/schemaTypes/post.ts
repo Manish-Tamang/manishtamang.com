@@ -25,9 +25,9 @@ export const post = {
         {
             name: "content",
             title: "Content",
-            type: "markdown",
+            type: "blockContent",
             description:
-                "The main body content of the post, written in Markdown format",
+                "The main body content of the post, using the rich text editor",
         },
         {
             name: "excerpt",

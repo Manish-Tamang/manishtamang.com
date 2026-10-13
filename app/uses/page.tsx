@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Icon1Password } from "@/components/icons/1password";
 import { GoogleAntigravity } from "@/components/icons/Antigravity";
 import { Bun } from "@/components/icons/Bun";
@@ -37,6 +38,13 @@ import {
 } from "@/components/ui/tooltip";
 import Image from "next/image";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Uses",
+  description:
+    "Tools, software, and hardware Manish Tamang (golecodes) uses for development and design.",
+  alternates: { canonical: "https://manishtamang.com/uses" },
+};
 
 const terminalBlurDataURL =
   "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 10'%3E%3Crect width='100%25' height='100%25' fill='%23272b33'/%3E%3C/svg%3E";

@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import { AboutContent, FeaturedSection, Education, PrayerFlags, RandomFacts } from "@/components/about"
 import { PolaroidGallery } from "@/components/bio"
 import { LineBreaker } from "@/components/shared/line-breaker"
@@ -10,6 +11,13 @@ import {
   aboutPolaroids,
 } from "@/data/about"
 import Image from "next/image"
+
+export const metadata: Metadata = {
+  title: "About",
+  description:
+    "Learn about Manish Gole Tamang (golecodes) — developer and designer from Kathmandu, Nepal.",
+  alternates: { canonical: "https://manishtamang.com/about" },
+}
 
 export default function AboutPage() {
   return (

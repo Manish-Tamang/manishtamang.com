@@ -1,13 +1,13 @@
-import Link from "next/link"
 import Image from "next/image"
 import { MessageCircle, Share2, MoreHorizontal } from "lucide-react"
 import { MDXComponents } from "@/components/mdx/MDXComponents"
+import { PortableTextRenderer } from "./portable-text-renderer"
 import Comments from "./comments"
 
 interface BlogPostProps {
   title: string
   date: string
-  content: string
+  content: string | any[]
   category?: string[]
   summary?: string
   author?: {
@@ -110,7 +110,11 @@ export function BlogPost({ title, date, content, category = ["TECH", "DESIGN"], 
       )}
 
       <article className="max-w-[800px] p-0 md:p-6 mx-auto">
-        <MDXComponents content={content} typography="blog" />
+        {Array.isArray(content) ? (
+          <PortableTextRenderer content={content} />
+        ) : (
+          <MDXComponents content={content} typography="blog" />
+        )}
         <Comments />
       </article>
     </main>

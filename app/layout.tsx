@@ -7,9 +7,31 @@ import { Header, Footer, CarbonAds, OpenForProjects } from "@/components/layout"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Toaster } from "sonner"
 import { SanityLive } from "@/sanity/lib/live"
-import { metadata as siteMetadata } from "@/lib/seo"
+import { metadata as siteMetadata, siteConfig } from "@/lib/seo"
 
 export const metadata = siteMetadata
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Manish Tamang",
+  alternateName: ["golecodes", "gole", "Manish Gole Tamang"],
+  url: siteConfig.url,
+  image: siteConfig.ogImage,
+  jobTitle: "Developer & Designer",
+  description: siteConfig.description,
+  sameAs: [
+    "https://github.com/Manish-Tamang",
+    "https://x.com/Manishtamangxyz",
+    "https://www.linkedin.com/in/manish-tamang",
+    "https://instagram.com/golecodes",
+  ],
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Kathmandu",
+    addressCountry: "NP",
+  },
+}
 
 const inter = Inter({
   subsets: ["latin"],
@@ -56,10 +78,13 @@ export default function RootLayout({
       className={`${inter.variable} ${karla.variable} ${perfectlyNineties.variable} ${myFont.variable} ${jetbrainsMono.variable}`}
     >
       <head>
-        <meta name="description" content={metadata.description ?? ""} />
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1"
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         <script
           defer
