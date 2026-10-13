@@ -220,7 +220,7 @@ export function Footer() {
                         width={1200}
                         height={400}
                         draggable={false}
-                        priority
+                        loading="lazy"
                         className="w-full h-auto object-cover -mb-12 select-none pointer-events-none rounded-t-xl"
                     />
                 </div>
