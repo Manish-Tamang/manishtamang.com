@@ -152,9 +152,6 @@ importers:
       firebase:
         specifier: ^12.9.0
         version: 12.13.0
-      framer-motion:
-        specifier: ^12.40.0
-        version: 12.40.0(@emotion/is-prop-valid@1.4.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       input-otp:
         specifier: 1.4.1
         version: 1.4.1(react-dom@19.3.0(react@19.3.0))(react@19.3.0)

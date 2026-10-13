@@ -133,12 +133,12 @@ export function Header() {
       <div className="mt-4 flex justify-center">
         <Image
           src="/chhana.png"
-          alt="Chhana of Header"
+          alt=""
           width={320}
           height={80}
           className="hidden h-6 w-full dark:opacity-45 z-60 max-w-60 grayscale-60 -mt-15 mr-10 user-select-none rounded-md md:block md:max-w-130"
           draggable={false}
-          priority
+          loading="lazy"
         />
       </div>
 

@@ -3,7 +3,7 @@ import { Inter, JetBrains_Mono, Karla } from "next/font/google"
 import localFont from "next/font/local"
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
-import { Header, Footer, CarbonAds, OpenForProjects } from "@/components/layout"
+import { Header, Footer, OpenForProjects, CarbonAdsLazy } from "@/components/layout"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Toaster } from "sonner"
 import { SanityLive } from "@/sanity/lib/live"
@@ -64,6 +64,7 @@ const myFont = localFont({
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-jetbrains-mono",
+  display: "swap",
 })
 
 export default function RootLayout({
@@ -80,11 +81,19 @@ export default function RootLayout({
       <head>
         <meta
           name="viewport"
-          content="width=device-width, initial-scale=1, maximum-scale=1"
+          content="width=device-width, initial-scale=1"
         />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        <link
+          rel="preconnect"
+          href="https://analytics.manishtamang.com"
+        />
+        <link
+          rel="dns-prefetch"
+          href="https://cloud.umami.is"
         />
         <script
           defer
@@ -96,20 +105,13 @@ export default function RootLayout({
           src="https://cloud.umami.is/script.js"
           data-website-id="87f8f3a2-7fad-4aed-b92d-5beeee4c4491"
         />
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3993510219762880"
-          crossOrigin="anonymous"
-          defer
-        ></script>
       </head>
       <body className={`font-inter antialiased bg-[#F7F7F7] dark:bg-[#191919]`}>
         <div className="min-h-screen flex flex-col">
           <div className="flex-1 flex justify-center">
-            <div className="w-full  relative">
-              {" "}
+            <div className="w-full relative">
               <Header />
-              <CarbonAds className="fixed bottom-4 left-16 w-1/4 hidden md:block" />
+              <CarbonAdsLazy className="fixed bottom-4 left-16 w-1/4 hidden md:block" />
               <OpenForProjects />
               {children}
               <SpeedInsights />
