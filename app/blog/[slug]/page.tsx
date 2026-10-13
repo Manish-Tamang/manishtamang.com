@@ -5,7 +5,6 @@ import { POST_BY_SLUG_QUERY, POSTS_QUERY } from "@/sanity/lib/queries"
 import { sanityFetch } from "@/sanity/lib/live"
 import { urlFor } from "@/sanity/lib/image"
 import { client } from "@/sanity/lib/client"
-import { normalizePostContent } from "@/sanity/lib/portable-text-to-markdown"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://manishtamang.com"
 
@@ -29,7 +28,7 @@ export async function generateMetadata({
     }
   }
 
-  const title = `${post.title || "Blog Post"} | Manish Tamang`
+  const title = post.title || "Blog Post"
   const description =
     post.excerpt?.trim() || "Read this blog post by Manish Tamang."
   const url = `${SITE_URL}/blog/${slug}`
@@ -82,14 +81,38 @@ export default async function BlogPostPage({
     notFound()
   }
 
-  // Map Sanity post data to BlogPost props
+  const postUrl = `${SITE_URL}/blog/${slug}`
+  const postImage = post.coverImage
+    ? urlFor(post.coverImage).width(1200).height(630).url()
+    : `${SITE_URL}/profile.png`
+
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title || "",
+    description: post.excerpt || "",
+    url: postUrl,
+    datePublished: post.date || undefined,
+    image: postImage,
+    author: {
+      "@type": "Person",
+      name: "Manish Tamang",
+      alternateName: ["golecodes", "Manish Gole Tamang"],
+      url: SITE_URL,
+    },
+    publisher: {
+      "@type": "Person",
+      name: "Manish Tamang",
+      url: SITE_URL,
+    },
+  }
+
   const formattedPost = {
     title: post.title || "",
     date: post.date || "",
-    content: normalizePostContent(post.content),
-    summary: post.excerpt || "", // mapping excerpt to summary
+    content: post.content || "",
+    summary: post.excerpt || "",
     image: post.coverImage ? urlFor(post.coverImage).url() : undefined,
-    // Assuming some default author info for now or you can add more fields to post schema
     author: {
       name: "Manish Tamang",
       role: "Digital Designer & Frontend Developer",
@@ -100,6 +123,10 @@ export default async function BlogPostPage({
 
   return (
     <div className="min-h-screen flex flex-col items-center">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
       <BlogViewTracker slug={slug} />
       <div className="w-full px-6 py-12 md:py-20 lg:py-24">
         <BlogPost {...formattedPost} />
