@@ -9,7 +9,8 @@ import { social } from './social'
 import { aboutProfile } from './aboutProfile'
 import { gallery } from './gallery'
 import { wall } from './wall'
+import { blockContent } from './blockContent'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [post, project, featuredProjects, recentFavorite, featuredImage, timeline, social, aboutProfile, gallery, wall],
+  types: [blockContent, post, project, featuredProjects, recentFavorite, featuredImage, timeline, social, aboutProfile, gallery, wall],
 }
