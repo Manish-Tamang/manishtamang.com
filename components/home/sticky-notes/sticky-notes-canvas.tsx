@@ -35,8 +35,10 @@ export default function StickyNotesCanvas({ notes, zIndex = 9998 }: StickyNotesC
         }
 
         updateHeight()
-        window.addEventListener("resize", updateHeight)
-        return () => window.removeEventListener("resize", updateHeight)
+
+        const ro = new ResizeObserver(updateHeight)
+        ro.observe(document.body)
+        return () => ro.disconnect()
     }, [])
 
     if (!notes || notes.length === 0) {
