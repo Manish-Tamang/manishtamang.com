@@ -4,13 +4,24 @@ const SITE_URL = "https://manishtamang.com";
 
 export const siteConfig = {
   name: "Manish Tamang",
-  title: "Manish Tamang - A young developer",
+  title: "Manish Tamang (@golecodes) - Developer & Designer from Nepal",
   description:
-    "Hi, I'm Manish Gole Tamang, an 18-year-old from Kathmandu, Nepal, with a fervent passion for web development.",
+    "Hi, I'm Manish Gole Tamang (golecodes), a developer and designer from Kathmandu, Nepal. I build minimal, functional web experiences with modern technologies.",
   url: SITE_URL,
   ogImage: `${SITE_URL}/profile.png`,
   sitemap: `${SITE_URL}/sitemap.xml`,
   feed: `${SITE_URL}/feed.xml`,
+  keywords: [
+    "manish tamang",
+    "golecodes",
+    "gole",
+    "manish gole tamang",
+    "manish tamang developer",
+    "manish tamang nepal",
+    "golecodes developer",
+    "web developer nepal",
+    "frontend developer kathmandu",
+  ],
 };
 
 export const sitePages = [
@@ -32,9 +43,16 @@ export const sitePages = [
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: siteConfig.title,
+  title: {
+    default: siteConfig.title,
+    template: "%s | Manish Tamang",
+  },
   description: siteConfig.description,
+  keywords: siteConfig.keywords,
+  authors: [{ name: "Manish Tamang", url: SITE_URL }],
+  creator: "Manish Tamang",
   alternates: {
+    canonical: SITE_URL,
     types: {
       "application/rss+xml": siteConfig.feed,
     },
@@ -55,7 +73,27 @@ export const metadata: Metadata = {
   openGraph: {
     title: siteConfig.title,
     description: siteConfig.description,
+    url: SITE_URL,
+    siteName: "Manish Tamang",
     images: siteConfig.ogImage,
     type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteConfig.title,
+    description: siteConfig.description,
+    images: [siteConfig.ogImage],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
 };
