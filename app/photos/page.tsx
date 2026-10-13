@@ -1,6 +1,14 @@
+import type { Metadata } from "next"
 import { GALLERY_QUERY } from "@/sanity/lib/queries"
 import { sanityFetch } from "@/sanity/lib/live"
 import { PhotosGrid } from "@/components/photos"
+
+export const metadata: Metadata = {
+  title: "Photos",
+  description:
+    "A photo gallery by Manish Tamang (golecodes).",
+  alternates: { canonical: "https://manishtamang.com/photos" },
+}
 
 export default async function PhotosPage() {
     const { data: images } = await sanityFetch({ query: GALLERY_QUERY })
