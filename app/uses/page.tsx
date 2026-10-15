@@ -3,6 +3,7 @@ import { Icon1Password } from "@/components/icons/1password";
 import { GoogleAntigravity } from "@/components/icons/Antigravity";
 import { Bun } from "@/components/icons/Bun";
 import { CSS } from "@/components/icons/Css";
+import ClaudeAI from "@/components/icons/Claude";
 import Cursor from "@/components/icons/Cursor";
 import { Edge } from "@/components/icons/Edge";
 import { Figma } from "@/components/icons/Figma";
@@ -22,6 +23,7 @@ import { Prettier } from "@/components/icons/Prettier";
 import { React as ReactIcon } from "@/components/icons/Reactjs";
 import { Resend } from "@/components/icons/Resend";
 import { Sanity } from "@/components/icons/Sanity";
+import { Seelen } from "@/components/icons/Seelen";
 import { Spotify } from "@/components/icons/Spotify";
 import { TailwindCSS } from "@/components/icons/Tailwind";
 import { Ubuntu } from "@/components/icons/Ubuntu";
@@ -98,7 +100,7 @@ const UsesPage = () => {
                       href="https://windhawk.net/"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-foreground underline decoration-dotted underline-offset-4"
+                      className="text-foreground line-through decoration-foreground/70"
                     >
                       Windhawk
                     </Link>
@@ -106,6 +108,24 @@ const UsesPage = () => {
                 </TooltipTrigger>
                 <TooltipContent>
                   Windhawk is a Windows customization tool I use to configure the taskbar.
+                </TooltipContent>
+              </Tooltip>{" "}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <strong className="inline-flex cursor-help items-center gap-1.5 align-middle">
+                    <Seelen aria-hidden="true" className="h-4 w-4 shrink-0" />
+                    <Link
+                      href="https://seelen.io/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-foreground underline decoration-dotted underline-offset-4"
+                    >
+                      Seelen UI
+                    </Link>
+                  </strong>
+                </TooltipTrigger>
+                <TooltipContent>
+                  Seelen UI is a Windows desktop customization tool with a tiling window manager, taskbar, and widgets.
                 </TooltipContent>
               </Tooltip>{" "}
               for Windows taskbar configuration.
@@ -191,6 +211,21 @@ const UsesPage = () => {
                 </Link>
               </strong>{" "}
               is my main editor for agentic coding.
+            </p>
+            <p>
+              I also use{" "}
+              <strong className="inline-flex items-center gap-1.5 align-middle">
+                <ClaudeAI aria-hidden="true" className="h-4 w-4 shrink-0" />
+                <Link
+                  href="https://claude.com/product/claude-code"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline decoration-dotted text-[#D97757] underline-offset-4"
+                >
+                  Claude Code
+                </Link>
+              </strong>{" "}
+              as a CLI for agentic coding.
             </p>
             <p>
               I still keep{" "}
@@ -584,7 +619,7 @@ const UsesPage = () => {
               to see the tools and setups shared by people around the web.
             </aside>
             <p className="text-sm text-foreground/50">
-              Last Updated: <span className="font-medium text-foreground/70">October 7, 2026</span>
+              Last Updated: <span className="font-medium text-foreground/70">October 15, 2026</span>
             </p>
           </footer>
         </div>
