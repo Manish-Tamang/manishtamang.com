@@ -9,4 +9,7 @@ const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || "production"
 
 export default defineCliConfig({
   api: { projectId, dataset },
+  deployment: {
+    appId: 'xyfn3bkvt2e5dh2hduqywlr4',
+  },
 })
