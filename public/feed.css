@@ -1,0 +1,134 @@
+/* Styles /feed.xml when opened in a browser. Plain CSS instead of XSLT, which browsers are removing. */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+:root {
+  --background: #fcfcfc;
+  --foreground: rgba(0, 0, 0, 0.75);
+  --heading: #18181b;
+  --muted: #71717a;
+  --card: #f4f4f5;
+  --border: #e4e4e7;
+  --accent: #3b82f6;
+  --accent-soft: rgba(59, 130, 246, 0.1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #191919;
+    --foreground: rgba(255, 255, 255, 0.8);
+    --heading: #fafafa;
+    --muted: #a1a1aa;
+    --card: #222222;
+    --border: #2e2e2e;
+    --accent: #60a5fa;
+    --accent-soft: rgba(96, 165, 250, 0.12);
+  }
+}
+
+rss {
+  display: block;
+  min-height: 100vh;
+  margin: 0;
+  padding: 48px 16px;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  line-height: 1.6;
+}
+
+channel {
+  display: block;
+  max-width: 610px;
+  margin: 0 auto;
+}
+
+/* Hide feed metadata that readers need but people don't */
+channel > link,
+language,
+lastBuildDate,
+guid {
+  display: none;
+}
+
+channel::before {
+  content: "RSS feed · Copy this page's URL into a feed reader like Feedly, Reeder or NetNewsWire to follow new posts and projects.";
+  display: block;
+  margin-bottom: 32px;
+  padding: 14px 16px;
+  border: 1px solid var(--accent);
+  border-radius: 12px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+channel > title {
+  display: block;
+  color: var(--heading);
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+channel > description {
+  display: block;
+  margin: 8px 0 32px;
+  font-size: 16px;
+}
+
+item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 12px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--card);
+}
+
+item > category {
+  order: 1;
+  margin-bottom: 8px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+item > pubDate {
+  order: 2;
+  margin: 0 0 8px 8px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+item > title {
+  order: 3;
+  flex-basis: 100%;
+  color: var(--heading);
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+item > description {
+  order: 4;
+  flex-basis: 100%;
+  margin-top: 6px;
+  font-size: 14px;
+}
+
+item > link {
+  order: 5;
+  flex-basis: 100%;
+  margin-top: 10px;
+  color: var(--accent);
+  font-size: 12px;
+  word-break: break-all;
+}

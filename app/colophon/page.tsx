@@ -249,6 +249,28 @@ const ColophonPage = () => {
                         </li>
                         <li>
                             <Link
+                                href="https://www.last.fm/api"
+                                className="text-foreground font-medium underline underline-offset-4 decoration-foreground/30 hover:decoration-foreground/60 transition-all"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Last.fm API
+                            </Link>
+                            : To show what I'm listening to on Spotify and my recently played songs.
+                        </li>
+                        <li>
+                            <Link
+                                href="https://performance-partners.apple.com/search-api"
+                                className="text-foreground font-medium underline underline-offset-4 decoration-foreground/30 hover:decoration-foreground/60 transition-all"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                iTunes Search API
+                            </Link>
+                            : To fill in album covers that Last.fm is missing.
+                        </li>
+                        <li>
+                            <Link
                                 href="https://supabase.com/"
                                 className="text-foreground font-medium underline underline-offset-4 decoration-foreground/30 hover:decoration-foreground/60 transition-all"
                                 target="_blank"
@@ -548,7 +570,7 @@ const ColophonPage = () => {
                         .
                     </p>
                     <p className="text-sm text-foreground/50">
-                        Last Updated: <span className="font-medium text-foreground/70">February 13, 2026</span>
+                        Last Updated: <span className="font-medium text-foreground/70">October 20, 2026</span>
                     </p>
                 </footer>
             </div>
