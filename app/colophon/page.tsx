@@ -17,7 +17,7 @@ import { Motion } from "@/components/icons/Motion"
 import { useState, useEffect } from "react"
 import { LineBreaker } from "@/components/shared/line-breaker"
 import { sounds } from "@/lib/sounds"
-import { ColorPalette } from "@/components/colophon"
+import { ColorPalette, GithubStars } from "@/components/colophon"
 
 const ColophonPage = () => {
     const [daysSinceLaunch, setDaysSinceLaunch] = useState(0)
@@ -170,6 +170,7 @@ const ColophonPage = () => {
                         </Link>
                         .
                     </p>
+                    <GithubStars />
                 </section>
                 <section className="space-y-6">
                     <h2 className="text-3xl font-bold tracking-tight">Typography</h2>
