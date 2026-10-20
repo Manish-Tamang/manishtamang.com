@@ -1,5 +1,9 @@
+"use client"
+
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import { ArrowUpRight } from "lucide-react"
+import type { NowPlaying } from "@/lib/lastfm"
 
 interface RecentFavoriteData {
     album?: string;
@@ -9,8 +13,12 @@ interface RecentFavoriteData {
     title?: string;
 }
 
+const POLL_INTERVAL = 30_000;
+
 export function CurrentlyPlaying({ recentFavorite }: { recentFavorite?: any }) {
-    const current: RecentFavoriteData | null = recentFavorite
+    const live = useNowPlaying();
+
+    const favorite: RecentFavoriteData | null = recentFavorite
         ? {
             artist: recentFavorite.artist,
             album: recentFavorite.album,
@@ -20,6 +28,11 @@ export function CurrentlyPlaying({ recentFavorite }: { recentFavorite?: any }) {
         }
         : null;
 
+    const hasLive = Boolean(live?.title && live.artist);
+    const current = hasLive ? live : favorite;
+    const isPlaying = hasLive && Boolean(live?.isPlaying);
+    const label = isPlaying ? "Now Playing" : hasLive ? "Last Played" : "Recent Favorite";
+
     if (!current?.title || !current.artist) return null;
 
     return (
@@ -28,7 +41,13 @@ export function CurrentlyPlaying({ recentFavorite }: { recentFavorite?: any }) {
                 <div>
                     <div className="flex justify-between items-start mb-2">
                         <div className="text-[10px] text-[#1DB954] font-bold uppercase tracking-wider flex items-center gap-1">
-                            Recent Favorite
+                            {isPlaying && (
+                                <span className="relative flex w-1.5 h-1.5">
+                                    <span className="absolute inline-flex w-full h-full rounded-full bg-[#1DB954] opacity-75 animate-ping" />
+                                    <span className="relative inline-flex w-1.5 h-1.5 rounded-full bg-[#1DB954]" />
+                                </span>
+                            )}
+                            {label}
                         </div>
                         <SpotifyLogo />
                     </div>
@@ -60,11 +79,46 @@ export function CurrentlyPlaying({ recentFavorite }: { recentFavorite?: any }) {
             <div className="absolute -bottom-10 -right-10 transition-all duration-500 group-hover:-bottom-4 group-hover:-right-4 opacity-100 group-hover:opacity-100 group-hover:z-50 z-10 group-hover:scale-110">
                 <Record
                     albumImageUrl={current.albumImageUrl || ""}
-                    isPlaying={false}
+                    isPlaying={isPlaying}
                 />
             </div>
         </div>
     )
+}
+
+function useNowPlaying() {
+    const [song, setSong] = useState<NowPlaying | null>(null);
+
+    useEffect(() => {
+        let timer: ReturnType<typeof setInterval> | undefined;
+
+        const load = async () => {
+            try {
+                const response = await fetch("/api/now-playing");
+                if (response.ok) setSong(await response.json());
+            } catch (error) {
+                console.error("Failed to fetch now playing:", error);
+            }
+        };
+
+        // Only poll while the tab is visible
+        const start = () => {
+            load();
+            timer = setInterval(load, POLL_INTERVAL);
+        };
+        const stop = () => clearInterval(timer);
+        const onVisibilityChange = () => (document.hidden ? stop() : start());
+
+        if (!document.hidden) start();
+        document.addEventListener("visibilitychange", onVisibilityChange);
+
+        return () => {
+            stop();
+            document.removeEventListener("visibilitychange", onVisibilityChange);
+        };
+    }, []);
+
+    return song;
 }
 
 function Record({
