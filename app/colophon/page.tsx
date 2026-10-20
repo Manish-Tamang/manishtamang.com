@@ -17,7 +17,7 @@ import { Motion } from "@/components/icons/Motion"
 import { useState, useEffect } from "react"
 import { LineBreaker } from "@/components/shared/line-breaker"
 import { sounds } from "@/lib/sounds"
-import { ColorPalette } from "@/components/colophon"
+import { ColorPalette, GithubStars } from "@/components/colophon"
 
 const ColophonPage = () => {
     const [daysSinceLaunch, setDaysSinceLaunch] = useState(0)
@@ -170,6 +170,7 @@ const ColophonPage = () => {
                         </Link>
                         .
                     </p>
+                    <GithubStars />
                 </section>
                 <section className="space-y-6">
                     <h2 className="text-3xl font-bold tracking-tight">Typography</h2>
@@ -246,6 +247,28 @@ const ColophonPage = () => {
                                 daily.dev API
                             </Link>
                             : To fetch saved bookmarks and reading list posts.
+                        </li>
+                        <li>
+                            <Link
+                                href="https://www.last.fm/api"
+                                className="text-foreground font-medium underline underline-offset-4 decoration-foreground/30 hover:decoration-foreground/60 transition-all"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Last.fm API
+                            </Link>
+                            : To show what I'm listening to on Spotify and my recently played songs.
+                        </li>
+                        <li>
+                            <Link
+                                href="https://performance-partners.apple.com/search-api"
+                                className="text-foreground font-medium underline underline-offset-4 decoration-foreground/30 hover:decoration-foreground/60 transition-all"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                iTunes Search API
+                            </Link>
+                            : To fill in album covers that Last.fm is missing.
                         </li>
                         <li>
                             <Link
@@ -548,7 +571,7 @@ const ColophonPage = () => {
                         .
                     </p>
                     <p className="text-sm text-foreground/50">
-                        Last Updated: <span className="font-medium text-foreground/70">February 13, 2026</span>
+                        Last Updated: <span className="font-medium text-foreground/70">October 20, 2026</span>
                     </p>
                 </footer>
             </div>
