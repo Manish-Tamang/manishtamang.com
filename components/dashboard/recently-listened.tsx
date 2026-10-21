@@ -11,7 +11,8 @@ function formatDateTime(timestamp?: number): string | null {
     return null
   }
 
-  return new Date(timestamp).toLocaleString(undefined, {
+  return new Date(timestamp).toLocaleString("en-US", {
+    timeZone: "Asia/Kathmandu",
     month: "short",
     day: "numeric",
     hour: "2-digit",
