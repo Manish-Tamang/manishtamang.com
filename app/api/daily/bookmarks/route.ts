@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json(payload, {
       status: 200,
       headers: {
-        "cache-control": "public, s-maxage=300, stale-while-revalidate=60",
+        "cache-control": "public, s-maxage=1296000, stale-while-revalidate=86400",
       },
     })
   } catch (error: unknown) {
