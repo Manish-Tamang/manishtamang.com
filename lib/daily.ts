@@ -6,6 +6,8 @@ import type {
 
 const DAILY_API_BASE = "https://api.daily.dev/public/v1"
 const DEFAULT_LIMIT = 20
+// Hit daily.dev at most twice every 30 days.
+const DAILY_REVALIDATE_SECONDS = 60 * 60 * 24 * 15
 
 type DailyApiBookmark = {
   id?: unknown
@@ -53,7 +55,7 @@ async function dailyRequest<T>(path: string): Promise<T> {
     headers: {
       Authorization: `Bearer ${getDailyApiKey()}`,
     },
-    next: { revalidate: 300 },
+    next: { revalidate: DAILY_REVALIDATE_SECONDS },
   })
 
   if (!response.ok) {
