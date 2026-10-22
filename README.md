@@ -1,3 +1,5 @@
+<div align="center">
+
 # Manish Tamang - Personal Portfolio V4
 
 Welcome to my personal portfolio website, a showcase of my professional journey, technical skills, and creative endeavors. Built with cutting-edge web technologies, this site offers an immersive experience into my world of development and design.
@@ -6,7 +8,11 @@ Welcome to my personal portfolio website, a showcase of my professional journey,
 
 Live site: [manishtamang.com](https://manishtamang.com)
 
-![Homepage of manishtamang.com](./public/images/screenshot.png)
+</div>
+
+<p align="center">
+  <img src="./public/images/screenshot.webp" alt="Homepage of manishtamang.com" width="860">
+</p>
 
 ## Overview
 
