@@ -152,6 +152,35 @@ const UsesPage = () => {
               </Tooltip>{" "}
               for additional Windows utilities and customization.
             </p>
+            <p>
+              I use{" "}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <strong className="inline-flex cursor-help items-center gap-1.5 align-middle">
+                    <Image
+                      src="/images/uses/nusa.png"
+                      alt=""
+                      width={16}
+                      height={16}
+                      aria-hidden="true"
+                      className="h-4 w-4 shrink-0 rounded"
+                    />
+                    <Link
+                      href="https://rama2555.github.io/nusa/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-foreground underline decoration-dotted underline-offset-4"
+                    >
+                      Nusa
+                    </Link>
+                  </strong>
+                </TooltipTrigger>
+                <TooltipContent>
+                  Nusa is a lightweight native Windows app that turns the top edge of the screen into a notch with music, synced lyrics, timers, a file shelf, and to-dos.
+                </TooltipContent>
+              </Tooltip>{" "}
+              as a notch on top of my screen for music, timers, and to-dos.
+            </p>
             <div className="grid grid-cols-2 gap-5 sm:grid-cols-3">
               <div className="space-y-2">
                 <Image
