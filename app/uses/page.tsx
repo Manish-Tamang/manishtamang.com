@@ -129,7 +129,33 @@ const UsesPage = () => {
                   Seelen UI is a Windows desktop customization tool with a tiling window manager, taskbar, and widgets.
                 </TooltipContent>
               </Tooltip>{" "}
-              for Windows taskbar configuration.
+              for Windows taskbar configuration, with{" "}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <strong className="inline-flex cursor-help items-center gap-1.5 align-middle">
+                    <Image
+                      src="/images/uses/translucenttb.png"
+                      alt=""
+                      width={16}
+                      height={16}
+                      aria-hidden="true"
+                      className="h-4 w-4 shrink-0"
+                    />
+                    <Link
+                      href="https://translucenttb.net/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-foreground underline decoration-dotted underline-offset-4"
+                    >
+                      TranslucentTB
+                    </Link>
+                  </strong>
+                </TooltipTrigger>
+                <TooltipContent>
+                  TranslucentTB is a lightweight Windows utility that makes the taskbar translucent or fully transparent.
+                </TooltipContent>
+              </Tooltip>{" "}
+              to make the taskbar transparent.
             </p>
             <p>
               I also use{" "}
