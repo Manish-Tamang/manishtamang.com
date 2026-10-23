@@ -30,6 +30,7 @@ import { Ubuntu } from "@/components/icons/Ubuntu";
 import { Vercel } from "@/components/icons/Vercel";
 import { VisualStudioCode } from "@/components/icons/Vsc";
 import { Windows } from "@/components/icons/Windows";
+import { YouTube } from "@/components/icons/YouTube";
 import { Zsh } from "@/components/icons/Zsh";
 import { BlurImage } from "@/components/shared";
 import { LineBreaker } from "@/components/shared/line-breaker";
@@ -601,6 +602,23 @@ const UsesPage = () => {
                 </TooltipContent>
               </Tooltip>{" "}
               as my primary browser.
+            </p>
+            <p>
+              I run{" "}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <strong className="inline-flex cursor-help items-center gap-1.5 align-middle">
+                    <YouTube aria-hidden="true" className="h-4 w-4 shrink-0" />
+                    <Link href="https://github.com/Manish-Tamang/minimal-youtube" target="_blank" rel="noopener noreferrer" className="underline decoration-dotted text-[#FF0000] underline-offset-4">
+                      Minimal YouTube
+                    </Link>
+                  </strong>
+                </TooltipTrigger>
+                <TooltipContent>
+                  Minimal YouTube is my browser extension that hides Shorts, mixes, the sidebar, and other clutter, leaving just a clean grid of videos.
+                </TooltipContent>
+              </Tooltip>{" "}
+              on Helium to strip YouTube down to just the videos.
             </p>
             <p>
               I keep{" "}
