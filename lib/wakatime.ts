@@ -28,28 +28,12 @@ export async function getWakaTimeStats(): Promise<WakaTimeApiResponse> {
     throw new Error("No WakaTime access token found. Please authenticate.");
   }
 
-  let response = await fetch(STATS_ENDPOINT, {
+  const response = await fetch(STATS_ENDPOINT, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
     next: { revalidate: 60 },
   });
-
-  if (response.status === 401) {
-    const basicToken = btoa(`${accessToken}:`);
-    response = await fetch(STATS_ENDPOINT, {
-      headers: {
-        Authorization: `Basic ${basicToken}`,
-      },
-      next: { revalidate: 60 },
-    });
-  }
-
-  if (response.status === 401) {
-    response = await fetch(`${STATS_ENDPOINT}?api_key=${accessToken}`, {
-      next: { revalidate: 60 },
-    });
-  }
 
   if (!response.ok) {
     const errorText = await response.text();
