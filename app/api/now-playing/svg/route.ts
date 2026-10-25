@@ -1,16 +1,37 @@
 import { getNowPlaying, type NowPlaying } from "@/lib/lastfm";
 
-// Renders the now-playing card as an SVG so it can be embedded where JS can't run,
-// like the GitHub profile README
+// Renders the current (or last played) song as an SVG card so it can be embedded
+// where JS can't run, like the GitHub profile README
 
 const FONT = "'Segoe UI', Ubuntu, Helvetica, Arial, sans-serif";
+const TEXT_X = 86;
+
+// Matches GitHub's light and dark themes; the README picks one with <picture>
+const THEMES = {
+    light: { card: "#ffffff", border: "#d0d7de", title: "#1f2328", artist: "#59636e", rim: "#282828" },
+    dark: { card: "#0d1117", border: "#30363d", title: "#f0f6fc", artist: "#9198a1", rim: "#3d444d" },
+};
+
+// Last good song, so a Last.fm hiccup still shows the last thing listened to
+let lastSong: NowPlaying | undefined;
 
 const escapeXml = (text: string) =>
     text.replace(/[&<>"']/g, (char) => `&#${char.charCodeAt(0)};`);
 
-// SVG text doesn't wrap, so cut long names before they run under the record
+// SVG text doesn't wrap, so cut long names before they run off the card
 const truncate = (text: string, max: number) =>
     text.length > max ? `${text.slice(0, max - 1).trimEnd()}…` : text;
+
+// SVG can't size to its text, so estimate the width from rough per-character widths
+const textWidth = (text: string, fontSize: number) =>
+    [...text].reduce((width, char) => {
+        if (/[ il.,:;'|!I]/.test(char)) return width + 0.3;
+        if (/[frtj]/.test(char)) return width + 0.4;
+        if (/[mwMW]/.test(char)) return width + 0.88;
+        if (/[A-Z]/.test(char)) return width + 0.68;
+        if (/[\x21-\x7e]/.test(char)) return width + 0.57;
+        return width + 0.75;
+    }, 0) * fontSize;
 
 // GitHub's image proxy blocks external images inside an SVG, so inline the artwork
 const toDataUri = async (url?: string) => {
@@ -27,75 +48,64 @@ const toDataUri = async (url?: string) => {
     }
 };
 
-const renderCard = (song: NowPlaying, artwork?: string) => {
-    const hasSong = Boolean(song.title && song.artist);
-    const label = song.isPlaying ? "NOW PLAYING" : hasSong ? "LAST PLAYED" : "SPOTIFY";
-    const title = escapeXml(truncate(hasSong ? song.title! : "Not playing right now", 28));
-    const artist = escapeXml(truncate(hasSong ? song.artist! : "Check back later", 38));
+const renderCard = (song: NowPlaying, theme: keyof typeof THEMES, artwork?: string) => {
+    const colors = THEMES[theme];
+    const title = truncate(song.title!, 27);
+    const artist = truncate(song.artist!, 34);
+    // Semibold runs a little wider than the estimate
+    const contentWidth = Math.max(textWidth(title, 14) * 1.06, textWidth(artist, 12));
+    // The estimate runs a little wide, so a small pad still leaves ~16px after the text
+    const width = Math.min(400, Math.ceil(TEXT_X + contentWidth + 10));
 
-    return `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="120" viewBox="0 0 400 120" role="img" aria-label="${label}: ${title} by ${artist}">
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="84" viewBox="0 0 ${width} 84" role="img" aria-label="${escapeXml(`${title} by ${artist}`)}">
     <style>
-        .card { fill: #fff; stroke: #e4e4e7; }
-        .title { font: 700 15px ${FONT}; fill: #18181b; }
-        .artist { font: 400 12px ${FONT}; fill: #71717a; }
-        .accent { font: 700 10px ${FONT}; fill: #1DB954; letter-spacing: 0.08em; }
-        .spin { animation: spin 4s linear infinite; transform-origin: 345px 92px; }
-        .ping { animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite; transform-box: fill-box; transform-origin: center; }
+        .title { font: 600 14px ${FONT}; fill: ${colors.title}; }
+        .artist { font: 400 12px ${FONT}; fill: ${colors.artist}; }
+        .spin { animation: spin 4s linear infinite; transform-origin: 42px 42px; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        @keyframes ping { 75%, 100% { transform: scale(2); opacity: 0; } }
-        @media (prefers-color-scheme: dark) {
-            .card { fill: #0d1117; stroke: #30363d; }
-            .title { fill: #e6edf3; }
-            .artist { fill: #8b949e; }
-        }
     </style>
     <defs>
-        <clipPath id="card"><rect width="400" height="120" rx="12" /></clipPath>
-        <clipPath id="album"><circle cx="345" cy="92" r="25" /></clipPath>
+        <clipPath id="cover"><circle cx="42" cy="42" r="15" /></clipPath>
     </defs>
-    <g clip-path="url(#card)">
-        <rect class="card" x="0.5" y="0.5" width="399" height="119" rx="11.5" />
+    <rect x="0.5" y="0.5" width="${width - 1}" height="83" rx="4" fill="${colors.card}" stroke="${colors.border}" />
 
-        ${song.isPlaying
-            ? `<circle class="ping" cx="23" cy="29" r="3" fill="#1DB954" opacity="0.75" />
-        <circle cx="23" cy="29" r="3" fill="#1DB954" />`
+    <circle cx="42" cy="42" r="30" fill="#121212" />
+    <circle cx="42" cy="42" r="29.2" fill="none" stroke="${colors.rim}" stroke-width="1" />
+    <circle cx="42" cy="42" r="26.5" fill="none" stroke="#1f1f1f" stroke-width="0.5" />
+    <circle cx="42" cy="42" r="23.5" fill="none" stroke="#1f1f1f" stroke-width="0.5" />
+    <circle cx="42" cy="42" r="20.5" fill="none" stroke="#1f1f1f" stroke-width="0.5" />
+    <g${song.isPlaying ? ` class="spin"` : ""}>
+        <circle cx="42" cy="42" r="16.5" fill="#282828" stroke="#181818" stroke-width="0.5" />
+        ${artwork
+            ? `<image href="${artwork}" x="27" y="27" width="30" height="30" preserveAspectRatio="xMidYMid slice" clip-path="url(#cover)" />`
             : ""}
-        <text class="accent" x="${song.isPlaying ? 32 : 20}" y="32.5">${label}</text>
-        <text class="title" x="20" y="58">${title}</text>
-        <text class="artist" x="20" y="77">${artist}</text>
-        <text class="accent" x="20" y="102">VIEW TRACK ↗</text>
-
-        <g transform="translate(366 12)">
-            <path fill="#1DB954" transform="scale(0.6667)" d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.494 17.308c-.216.354-.675.467-1.03.251-2.859-1.747-6.458-2.143-10.697-1.176-.406.093-.815-.162-.908-.568-.093-.406.162-.815.568-.908 4.636-1.06 8.599-.606 11.815 1.357.355.216.468.677.252 1.031v.013zm1.467-3.264c-.273.443-.849.584-1.292.311-3.272-2.012-8.259-2.593-12.127-1.417-.5.152-1.026-.131-1.178-.631-.152-.5.131-1.026.631-1.178 4.414-1.339 9.897-.687 13.655 1.619.443.273.584.85.311 1.296zm.127-3.411c-3.924-2.33-10.387-2.544-14.153-1.401-.602.182-1.242-.164-1.425-.766-.182-.602.164-1.242.766-1.425 4.316-1.31 11.439-1.062 15.961 1.621.542.321.72 1.022.399 1.564-.321.542-1.022.72-1.564.399l.016.008z" />
-        </g>
-
-        <circle cx="345" cy="92" r="64" fill="#121212" />
-        <circle cx="345" cy="92" r="62.3" fill="none" stroke="#282828" stroke-width="1.5" />
-        <circle cx="345" cy="92" r="57.4" fill="none" stroke="#181818" stroke-width="0.5" />
-        <circle cx="345" cy="92" r="49.7" fill="none" stroke="#181818" stroke-width="0.5" />
-        <circle cx="345" cy="92" r="47.2" fill="none" stroke="#181818" stroke-width="0.5" />
-        <circle cx="345" cy="92" r="35.7" fill="none" stroke="#181818" stroke-width="0.5" />
-        <g${song.isPlaying ? ` class="spin"` : ""}>
-            <circle cx="345" cy="92" r="28" fill="#282828" stroke="#181818" stroke-width="0.5" />
-            ${artwork
-                ? `<image href="${artwork}" x="320" y="67" width="50" height="50" preserveAspectRatio="xMidYMid slice" clip-path="url(#album)" />`
-                : ""}
-        </g>
-        <circle cx="345" cy="92" r="2.6" fill="#121212" />
-        <circle cx="345" cy="92" r="2.4" fill="none" stroke="#fff" stroke-opacity="0.2" stroke-width="0.5" />
     </g>
+    <circle cx="42" cy="42" r="1.6" fill="#121212" />
+    <circle cx="42" cy="42" r="1.5" fill="none" stroke="#fff" stroke-opacity="0.2" stroke-width="0.5" />
+
+    <text class="title" x="${TEXT_X}" y="38">${escapeXml(title)}</text>
+    <text class="artist" x="${TEXT_X}" y="58">${escapeXml(artist)}</text>
 </svg>`;
 };
 
-export async function GET() {
-    let song: NowPlaying = { isPlaying: false };
+export async function GET(request: Request) {
+    const theme = new URL(request.url).searchParams.get("theme") === "dark" ? "dark" : "light";
+
     try {
-        song = await getNowPlaying();
+        const song = await getNowPlaying();
+        if (song.title && song.artist) lastSong = song;
     } catch (e) {
         console.error(e);
+        // Can't tell if the remembered song is still playing, so stop the spin
+        if (lastSong) lastSong = { ...lastSong, isPlaying: false };
     }
 
-    const svg = renderCard(song, await toDataUri(song.albumImageUrl));
+    if (!lastSong?.title || !lastSong.artist) {
+        // Nothing to show yet; don't let GitHub cache an empty card
+        return new Response(null, { status: 503, headers: { "cache-control": "no-store" } });
+    }
+
+    const svg = renderCard(lastSong, theme, await toDataUri(lastSong.albumImageUrl));
 
     return new Response(svg, {
         status: 200,
