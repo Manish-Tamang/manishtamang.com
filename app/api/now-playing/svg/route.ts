@@ -1,15 +1,15 @@
 import { getNowPlaying, type NowPlaying } from "@/lib/lastfm";
 
-// Renders the current (or last played) song as an SVG card so it can be embedded
+// Renders the current (or last played) song as an SVG so it can be embedded
 // where JS can't run, like the GitHub profile README
 
 const FONT = "'Segoe UI', Ubuntu, Helvetica, Arial, sans-serif";
-const TEXT_X = 86;
+const TEXT_X = 74;
 
-// Matches GitHub's light and dark themes; the README picks one with <picture>
+// Text colors match GitHub's light and dark themes; the README picks one with <picture>
 const THEMES = {
-    light: { card: "#ffffff", border: "#d0d7de", title: "#1f2328", artist: "#59636e", rim: "#282828" },
-    dark: { card: "#0d1117", border: "#30363d", title: "#f0f6fc", artist: "#9198a1", rim: "#3d444d" },
+    light: { title: "#1f2328", artist: "#59636e", rim: "#282828" },
+    dark: { title: "#f0f6fc", artist: "#9198a1", rim: "#3d444d" },
 };
 
 // Last good song, so a Last.fm hiccup still shows the last thing listened to
@@ -18,7 +18,7 @@ let lastSong: NowPlaying | undefined;
 const escapeXml = (text: string) =>
     text.replace(/[&<>"']/g, (char) => `&#${char.charCodeAt(0)};`);
 
-// SVG text doesn't wrap, so cut long names before they run off the card
+// Only cut absurdly long names, so the image never outgrows the README column
 const truncate = (text: string, max: number) =>
     text.length > max ? `${text.slice(0, max - 1).trimEnd()}…` : text;
 
@@ -50,41 +50,40 @@ const toDataUri = async (url?: string) => {
 
 const renderCard = (song: NowPlaying, theme: keyof typeof THEMES, artwork?: string) => {
     const colors = THEMES[theme];
-    const title = truncate(song.title!, 27);
-    const artist = truncate(song.artist!, 34);
+    const title = truncate(song.title!, 60);
+    const artist = truncate(song.artist!, 60);
     // Semibold runs a little wider than the estimate
     const contentWidth = Math.max(textWidth(title, 14) * 1.06, textWidth(artist, 12));
-    // The estimate runs a little wide, so a small pad still leaves ~16px after the text
-    const width = Math.min(400, Math.ceil(TEXT_X + contentWidth + 10));
+    // The estimate runs a little wide, so this small pad keeps wider fonts from clipping
+    const width = Math.ceil(TEXT_X + contentWidth + 4);
 
-    return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="84" viewBox="0 0 ${width} 84" role="img" aria-label="${escapeXml(`${title} by ${artist}`)}">
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="60" viewBox="0 0 ${width} 60" role="img" aria-label="${escapeXml(`${title} by ${artist}`)}">
     <style>
         .title { font: 600 14px ${FONT}; fill: ${colors.title}; }
         .artist { font: 400 12px ${FONT}; fill: ${colors.artist}; }
-        .spin { animation: spin 4s linear infinite; transform-origin: 42px 42px; }
+        .spin { animation: spin 4s linear infinite; transform-origin: 30px 30px; }
         @keyframes spin { to { transform: rotate(360deg); } }
     </style>
     <defs>
-        <clipPath id="cover"><circle cx="42" cy="42" r="15" /></clipPath>
+        <clipPath id="cover"><circle cx="30" cy="30" r="15" /></clipPath>
     </defs>
-    <rect x="0.5" y="0.5" width="${width - 1}" height="83" rx="4" fill="${colors.card}" stroke="${colors.border}" />
 
-    <circle cx="42" cy="42" r="30" fill="#121212" />
-    <circle cx="42" cy="42" r="29.2" fill="none" stroke="${colors.rim}" stroke-width="1" />
-    <circle cx="42" cy="42" r="26.5" fill="none" stroke="#1f1f1f" stroke-width="0.5" />
-    <circle cx="42" cy="42" r="23.5" fill="none" stroke="#1f1f1f" stroke-width="0.5" />
-    <circle cx="42" cy="42" r="20.5" fill="none" stroke="#1f1f1f" stroke-width="0.5" />
+    <circle cx="30" cy="30" r="30" fill="#121212" />
+    <circle cx="30" cy="30" r="29.2" fill="none" stroke="${colors.rim}" stroke-width="1" />
+    <circle cx="30" cy="30" r="26.5" fill="none" stroke="#1f1f1f" stroke-width="0.5" />
+    <circle cx="30" cy="30" r="23.5" fill="none" stroke="#1f1f1f" stroke-width="0.5" />
+    <circle cx="30" cy="30" r="20.5" fill="none" stroke="#1f1f1f" stroke-width="0.5" />
     <g${song.isPlaying ? ` class="spin"` : ""}>
-        <circle cx="42" cy="42" r="16.5" fill="#282828" stroke="#181818" stroke-width="0.5" />
+        <circle cx="30" cy="30" r="16.5" fill="#282828" stroke="#181818" stroke-width="0.5" />
         ${artwork
-            ? `<image href="${artwork}" x="27" y="27" width="30" height="30" preserveAspectRatio="xMidYMid slice" clip-path="url(#cover)" />`
+            ? `<image href="${artwork}" x="15" y="15" width="30" height="30" preserveAspectRatio="xMidYMid slice" clip-path="url(#cover)" />`
             : ""}
     </g>
-    <circle cx="42" cy="42" r="1.6" fill="#121212" />
-    <circle cx="42" cy="42" r="1.5" fill="none" stroke="#fff" stroke-opacity="0.2" stroke-width="0.5" />
+    <circle cx="30" cy="30" r="1.6" fill="#121212" />
+    <circle cx="30" cy="30" r="1.5" fill="none" stroke="#fff" stroke-opacity="0.2" stroke-width="0.5" />
 
-    <text class="title" x="${TEXT_X}" y="38">${escapeXml(title)}</text>
-    <text class="artist" x="${TEXT_X}" y="58">${escapeXml(artist)}</text>
+    <text class="title" x="${TEXT_X}" y="26">${escapeXml(title)}</text>
+    <text class="artist" x="${TEXT_X}" y="46">${escapeXml(artist)}</text>
 </svg>`;
 };
 
