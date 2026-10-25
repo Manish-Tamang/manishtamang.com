@@ -33,11 +33,16 @@ const textWidth = (text: string, fontSize: number) =>
         return width + 0.75;
     }, 0) * fontSize;
 
+// The cover only shows at 30px, so ask Last.fm and iTunes for a small size (2x for retina)
+// instead of inlining a 300–600px image into every response
+const toThumbnailUrl = (url: string) =>
+    url.replace(/\/i\/u\/[^/]+\//, "/i/u/64s/").replace(/\d+x\d+bb/, "60x60bb");
+
 // GitHub's image proxy blocks external images inside an SVG, so inline the artwork
 const toDataUri = async (url?: string) => {
     if (!url) return undefined;
     try {
-        const response = await fetch(url, { next: { revalidate: 86400 } });
+        const response = await fetch(toThumbnailUrl(url), { next: { revalidate: 86400 } });
         if (!response.ok) return undefined;
 
         const type = response.headers.get("content-type") ?? "image/jpeg";
