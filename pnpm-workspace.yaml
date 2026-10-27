@@ -3,3 +3,28 @@ allowBuilds:
   esbuild: false
   protobufjs: false
   sharp: false
+
+overrides:
+  uuid@<11.1.1: ^11.1.1
+  '@babel/core@<7.29.6': ^7.29.6
+  vite@>=7.0.0 <7.3.5: ^7.3.5
+  tar@<7.5.16: ^7.5.16
+  form-data@>=4.0.0 <4.0.6: ^4.0.6
+  protobufjs@<7.6.3: ^7.6.3
+  dompurify@<3.4.6: ^3.4.6
+  undici@<6.27.0: ^6.27.0
+  js-yaml@<3.15.0: ^3.15.0
+  json-2-csv@>=3.15.0 <5.5.11: ^5.5.11
+  websocket-driver@<0.7.5: ^0.7.5
+  adm-zip@<0.6.0: ^0.6.0
+  '@grpc/grpc-js@<1.13.6': ^1.13.6
+  brace-expansion@>=2.0.0 <2.1.7: ^2.1.7
+  brace-expansion@>=5.0.0 <5.0.12: ^5.0.12
+  browserslist@<4.28.7: ^4.28.7
+  colord@<2.9.4: ^2.9.4
+  linkify-it@<5.0.2: ^5.0.2
+  markdown-it@>=14.0.0 <14.3.3: ^14.3.3
+  nanoid@>=3.0.0 <3.3.18: ^3.3.18
+  postcss@<8.5.23: ^8.5.23
+  source-map-js@>=1.0.0 <1.2.2: ^1.2.2
+  valibot@>=1.0.0 <1.4.2: ^1.4.2
