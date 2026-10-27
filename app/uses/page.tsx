@@ -451,7 +451,7 @@ const UsesPage = () => {
               .
             </p>
             <BlurImage
-              src="/images/terminal.png"
+              src="/images/terminal.webp"
               alt="Ubuntu terminal running in Windows Terminal"
               width={1917}
               height={1198}
