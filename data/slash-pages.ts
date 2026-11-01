@@ -213,6 +213,8 @@ export const changelog: { date: string; changes: string[] }[] = [
       "Added an IndieWeb Webring bar and an h-card.",
       "Brought back Carbon ads and Umami analytics.",
       "Restored the old mobile navbar and About grid on phones.",
+      "Added an office photo and a coffee video to /digitalpathshala, and made the video player buffer before it starts.",
+      "Added FFmpeg to /uses.",
     ],
   },
   {

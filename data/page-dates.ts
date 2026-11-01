@@ -13,11 +13,11 @@ export const pageUpdated: Record<string, string> = {
   "/projects": "2026-10-13",
   "/guestbook": "2026-09-28",
   "/photos": "2026-10-13",
-  "/uses": "2026-10-31",
+  "/uses": "2026-11-01",
   "/bookmarks": "2026-10-30",
   "/contact": "2026-10-02",
   "/dashboard": "2026-11-01",
-  "/digitalpathshala": "2026-10-30",
+  "/digitalpathshala": "2026-11-01",
   "/colophon": "2026-10-20",
   "/manifest": "2025-11-08",
 
