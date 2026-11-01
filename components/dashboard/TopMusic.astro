@@ -1,0 +1,44 @@
+---
+/* Last.fm-style mosaic: the #1 item takes a double-size tile. Five items fill it exactly. */
+import DashIcon from "./DashIcon.astro"
+import type { TopItem } from "@/lib/services/lastfm"
+
+export interface Props {
+  items: TopItem[]
+  empty: string
+}
+
+const { items, empty } = Astro.props
+
+const label = ({ artist, plays }: TopItem) => {
+  const count = `${plays.toLocaleString("en-US")} ${plays === 1 ? "play" : "plays"}`
+  return artist ? `${artist} · ${count}` : count
+}
+---
+
+{items.length > 0 ? (
+  <div class="grid grid-cols-2 overflow-hidden rounded-xl bg-black sm:grid-cols-4">
+    {items.map((item, index) => (
+      <a
+        href={item.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        class:list={["group relative block aspect-square overflow-hidden", index === 0 && "col-span-2 row-span-2"]}
+      >
+        {item.imageUrl ? (
+          <img src={item.imageUrl} alt="" loading="lazy" class="size-full object-cover transition-transform duration-500 group-hover:scale-105" />
+        ) : (
+          <div class="flex size-full items-center justify-center text-white/40">
+            <DashIcon name="Music" class="size-8" />
+          </div>
+        )}
+        <div class="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/80 to-transparent px-3 pt-10 pb-2.5 text-white sm:px-4">
+          <p class:list={["truncate font-bold", index === 0 ? "text-lg" : "text-sm"]}>{item.name}</p>
+          <p class="truncate text-xs">{label(item)}</p>
+        </div>
+      </a>
+    ))}
+  </div>
+) : (
+  <div class="rounded-xl bg-zinc-50/70 p-4 text-sm text-zinc-600 dark:bg-zinc-900/60 dark:text-zinc-400">{empty}</div>
+)}

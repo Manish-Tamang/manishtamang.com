@@ -8,6 +8,7 @@ import DailyBookmarks from "@/components/dashboard/DailyBookmarks.astro"
 import DashboardSection from "@/components/dashboard/DashboardSection.astro"
 import RecentlyListened from "@/components/dashboard/RecentlyListened.astro"
 import SiteTraffic from "@/components/dashboard/SiteTraffic.astro"
+import TopMusic from "@/components/dashboard/TopMusic.astro"
 import { getDashboardData } from "@/lib/dashboard"
 
 // Rendered on request. The CDN refreshes it in the background, so visitors get a stored copy
@@ -15,7 +16,7 @@ import { getDashboardData } from "@/lib/dashboard"
 export const prerender = false
 Astro.response.headers.set("cache-control", "public, s-maxage=60, stale-while-revalidate=86400")
 
-const { wakatime, totals, sessions, bookmarks, tracks, contributions, views } = await getDashboardData(Astro.url)
+const { wakatime, totals, sessions, bookmarks, tracks, topArtists, topAlbums, contributions, views } = await getDashboardData(Astro.url)
 ---
 
 <PageLayout heading="Dashboard" description="Live coding activity, site traffic, blog statistics and what Manish Tamang is reading and listening to.">
@@ -57,6 +58,16 @@ const { wakatime, totals, sessions, bookmarks, tracks, contributions, views } = 
     <DashboardSection title="Recently Listened">
       <Fragment slot="description">The last few songs I played on Spotify, via <Link href="https://www.last.fm/user/golecodes">Last.fm</Link>.</Fragment>
       <RecentlyListened tracks={tracks} />
+    </DashboardSection>
+
+    <DashboardSection title="Top Artists">
+      <Fragment slot="description">Who I've played the most of all time, via <Link href="https://www.last.fm/user/golecodes">Last.fm</Link>.</Fragment>
+      <TopMusic items={topArtists} empty="No top artists available right now." />
+    </DashboardSection>
+
+    <DashboardSection title="Top Albums">
+      <Fragment slot="description">The albums I've played the most of all time.</Fragment>
+      <TopMusic items={topAlbums} empty="No top albums available right now." />
     </DashboardSection>
 
     <p class="text-xs text-muted-foreground">

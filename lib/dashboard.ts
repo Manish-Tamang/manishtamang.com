@@ -5,7 +5,7 @@
 import { getAllViews } from "@/lib/blog/views"
 import type { DailyBookmark } from "@/lib/services/daily"
 import { getContributions, type Contribution } from "@/lib/services/github"
-import { getRecentTracks, type RecentTrack } from "@/lib/services/lastfm"
+import { getRecentTracks, getTopAlbums, getTopArtists, type RecentTrack, type TopItem } from "@/lib/services/lastfm"
 import { getUmamiRecentSessions, getUmamiTotals } from "@/lib/services/umami"
 import { getWakaTimeStats, type WakaTimeApiResponse } from "@/lib/services/wakatime"
 
@@ -23,6 +23,24 @@ const getTracks = async (): Promise<RecentTrack[]> => {
     return await getRecentTracks(8)
   } catch (error) {
     console.error("Error fetching Last.fm recent tracks:", error)
+    return []
+  }
+}
+
+const getArtists = async (): Promise<TopItem[]> => {
+  try {
+    return await getTopArtists()
+  } catch (error) {
+    console.error("Error fetching Last.fm top artists:", error)
+    return []
+  }
+}
+
+const getAlbums = async (): Promise<TopItem[]> => {
+  try {
+    return await getTopAlbums()
+  } catch (error) {
+    console.error("Error fetching Last.fm top albums:", error)
     return []
   }
 }
@@ -58,14 +76,16 @@ const getViews = async (): Promise<Record<string, number>> => {
 
 // All at once, so the page waits for the slowest source rather than the sum of them
 export async function getDashboardData(origin: URL) {
-  const [wakatime, totals, sessions, bookmarks, tracks, contributions, views] = await Promise.all([
+  const [wakatime, totals, sessions, bookmarks, tracks, topArtists, topAlbums, contributions, views] = await Promise.all([
     getWakaTime(),
     getUmamiTotals(),
     getUmamiRecentSessions(3),
     getBookmarks(origin),
     getTracks(),
+    getArtists(),
+    getAlbums(),
     getGraph(),
     getViews(),
   ])
-  return { wakatime, totals, sessions, bookmarks, tracks, contributions, views }
+  return { wakatime, totals, sessions, bookmarks, tracks, topArtists, topAlbums, contributions, views }
 }
