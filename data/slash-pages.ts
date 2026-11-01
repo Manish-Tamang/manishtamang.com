@@ -209,6 +209,7 @@ export const changelog: { date: string; changes: string[] }[] = [
     changes: [
       "Added /slashes, an index of all my slash pages.",
       "Added all-time top artists and albums to /dashboard.",
+      "Added a daily.dev reading graph to /dashboard.",
     ],
   },
   {
