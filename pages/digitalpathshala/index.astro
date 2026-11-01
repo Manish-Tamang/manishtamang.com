@@ -2,9 +2,15 @@
 import { Image } from "astro:assets"
 import PageLayout from "@/layouts/PageLayout.astro"
 import Prose from "@/components/typography/Prose.astro"
+import VideoModal from "@/components/concerts/VideoModal.astro"
+import VideoThumbnail from "@/components/concerts/VideoThumbnail.astro"
+import office from "@/assets/images/dp-office.jpg"
 import townHall from "@/assets/images/dp-town-hall.jpg"
 
 const townHallCaption = "Group photo after my first Monthly Town Hall meeting in Digital Pathshala"
+const officeCaption = "Rupesh dai on the left, Sanjeev dai and Umesh dai on the top right"
+const coffeeCaption = "Raghav dai preparing special coffee for Mausam dai, Pranjal dai and me"
+const coffeeVideo = "https://2iw0lwaklqgp6qdp.public.blob.vercel-storage.com/dp/VID_20251016_093545_552-0HuWPeInV0mQmX5ZNFaxtOA6nGrSyL.mp4"
 ---
 
 <PageLayout
@@ -25,6 +31,17 @@ const townHallCaption = "Group photo after my first Monthly Town Hall meeting in
       about learning how things actually work in a professional environment. I built connections, collaborated with
       talented developers, and became part of a growing tech community in my own city.
     </p>
+    <figure>
+      <Image
+        src={office}
+        alt="Developers working at laptops and a large monitor in the Digital Pathshala office"
+        widths={[480, 720, 1080, 1440]}
+        sizes="(max-width: 768px) 100vw, 720px"
+        quality={75}
+        class="w-full rounded-lg border border-border"
+      />
+      <figcaption>{officeCaption}</figcaption>
+    </figure>
     <p>
       The people at DP made the experience even more special. CEO Manish Basnet sir is incredibly humble and treats
       everyone equally, always spreading positivity throughout the office. My brother, Rupesh Chaudary, who introduced
@@ -41,6 +58,10 @@ const townHallCaption = "Group photo after my first Monthly Town Hall meeting in
       My internship schedule itself was a challenge I'm proud of, attending college during the day and then working
       from 5:30 PM to 10:30 PM. It was tiring, but every moment was worth it.
     </p>
+    <!-- Before the paragraph, so the text wraps around it -->
+    <figure class="float-right mt-1 mb-2 ml-4 w-36 sm:ml-6 sm:w-52">
+      <VideoThumbnail src={coffeeVideo} label={coffeeCaption} caption={`${coffeeCaption}, Oct 16, 2025`} tall />
+    </figure>
     <p>
       Then there were the small but meaningful moments, coffee breaks with Raghav dai and Mausam dai. Mausam Gurung, the
       UI/UX Head, added a creative energy to the team that made collaboration even more enjoyable.
@@ -50,7 +71,7 @@ const townHallCaption = "Group photo after my first Monthly Town Hall meeting in
       atmosphere to the monthly town hall meetings on the first day of each month, everything contributed to a sense of
       belonging.
     </p>
-    <figure>
+    <figure class="clear-both">
       <Image
         src={townHall}
         alt={townHallCaption}
@@ -70,4 +91,5 @@ const townHallCaption = "Group photo after my first Monthly Town Hall meeting in
       forward in my journey as a developer.
     </p>
   </Prose>
+  <VideoModal />
 </PageLayout>
