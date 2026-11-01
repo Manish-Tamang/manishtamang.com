@@ -1,0 +1,244 @@
+---
+import PageLayout from "@/layouts/PageLayout.astro"
+import Heading from "@/components/typography/Heading.astro"
+import Prose from "@/components/typography/Prose.astro"
+import Text from "@/components/typography/Text.astro"
+import Link from "@/components/ui/Link.astro"
+import Separator from "@/components/ui/Separator.astro"
+import ToolItem from "@/components/uses/ToolItem.astro"
+import ArrowUpRight from "@/components/icons/ArrowUpRight.astro"
+import { designCredits, fonts, inspirations, launchDate, palette, services, stack } from "@/data/colophon"
+import { slashPages } from "@/data/slash-pages"
+import { legacyProjectSlugs, staticPages } from "@/lib/routes"
+import { getPosts } from "@/lib/blog"
+
+// Site age as whole years plus the days since the last anniversary
+function age(since: string, now = new Date()) {
+  const start = new Date(`${since}T00:00:00Z`)
+  let years = now.getUTCFullYear() - start.getUTCFullYear()
+  const anniversary = new Date(start)
+  anniversary.setUTCFullYear(start.getUTCFullYear() + years)
+  if (anniversary > now) anniversary.setUTCFullYear(start.getUTCFullYear() + --years)
+  return { years, days: Math.floor((now.getTime() - anniversary.getTime()) / 86_400_000) }
+}
+const live = age(launchDate)
+
+const postCount = (await getPosts()).length
+const pageCount = staticPages.length + postCount + legacyProjectSlugs.length + slashPages.length
+
+// Star count at build time; the line is left out if GitHub doesn't answer
+let stars: number | null = null
+try {
+  const response = await fetch("https://api.github.com/repos/Manish-Tamang/manishtamang.com", {
+    headers: { accept: "application/vnd.github+json" },
+  })
+  if (response.ok) stars = (await response.json()).stargazers_count ?? null
+} catch {}
+
+const sectionGrid = "mt-4 grid gap-x-6 gap-y-1 sm:grid-cols-2"
+---
+
+<PageLayout heading="Colophon" intro="How this website is made, and the people whose work shaped it." description="How manishtamang.com is made: the stack, typography, colours and the people whose work shaped it.">
+  <div class="space-y-16">
+    <section>
+      <Heading>About this website</Heading>
+      <Prose class="mt-3 max-w-none">
+        <p>
+          This website is my personal portfolio, my place on the internet. It's a digital canvas where I show my
+          skills, projects, and everything I'm passionate about.
+        </p>
+        <p>
+          My journey began in 2023 when I deployed my first portfolio, which I had copied from a{" "}
+          <a href="https://www.youtube.com/watch?v=ldwlOzRvYOU" target="_blank" rel="noopener noreferrer">YouTube</a> tutorial.
+          After passing my SEE examination, I built the second version, heavily inspired by{" "}
+          <a href="https://leerob.com/" target="_blank" rel="noopener noreferrer">Leerob's</a> portfolio. In March 2025 I
+          launched the third version, and the fourth was crafted from the ground up with a strong focus on minimalism.
+        </p>
+        <p>
+          This is the fifth version, rebuilt in Astro. Pages ship as plain HTML with almost no JavaScript, and all the
+          writing, photos and data live in the repository instead of a CMS.
+        </p>
+      </Prose>
+
+      <!-- Stat cards: colours from the old site's palette -->
+      <ul class="mt-8 grid gap-3 sm:grid-cols-3">
+        <li class="stat bg-[#FF6F4C]">
+          <p class="stat-label">Live for</p>
+          <p class="stat-value" data-site-age data-since={launchDate}>
+            {live.years}<span class="stat-unit">y</span> {live.days}<span class="stat-unit">d</span>
+          </p>
+          <p class="stat-note">since Apr 12, 2023</p>
+        </li>
+        <li class="stat bg-[#84A1F0]">
+          <p class="stat-label">Pages</p>
+          <p class="stat-value">{pageCount}</p>
+          <p class="stat-note">{postCount} posts · {legacyProjectSlugs.length} projects</p>
+        </li>
+        <li class="stat bg-[#3C905E]">
+          <p class="stat-label">{stars !== null ? "GitHub stars" : "Source"}</p>
+          <p class="stat-value">{stars !== null ? stars.toLocaleString("en-GB") : "Open"}</p>
+          <p class="stat-note">
+            <a href="https://github.com/Manish-Tamang/manishtamang.com" target="_blank" rel="noopener noreferrer" class="underline-offset-4 hover:underline">
+              {stars !== null ? "on GitHub" : "source on GitHub"}
+            </a>
+          </p>
+        </li>
+      </ul>
+    </section>
+
+    <section>
+      <Heading>Built with</Heading>
+      <ul class={sectionGrid}>
+        {stack.map((tool) => <li><ToolItem {...tool} /></li>)}
+      </ul>
+      <Text tone="muted" size="sm" class="mt-4">
+        The code is open source on <Link href="https://github.com/Manish-Tamang/manishtamang.com">GitHub</Link>.
+      </Text>
+    </section>
+
+    <section>
+      <Heading>Typography</Heading>
+      <ul class="mt-4 divide-y divide-border border-y border-border">
+        {fonts.map(({ name, role, url, sample, class: fontClass }) => (
+          <li class="grid gap-1 py-4 sm:grid-cols-[1fr_auto] sm:items-baseline sm:gap-6">
+            <p class:list={["truncate text-2xl text-heading", fontClass]}>{sample}</p>
+            <p class="text-sm sm:text-right">
+              {url ? <Link href={url}>{name}</Link> : <span class="text-heading">{name}</span>}
+              <span class="block text-xs text-muted-foreground">{role}</span>
+            </p>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section>
+      <Heading>Colours</Heading>
+      <Text tone="muted" size="sm" class="mt-2">
+        A quiet, green-tinted grey base with one purple accent and a yellow highlighter. Light and dark themes share
+        the same accents. Click a colour to copy it.
+      </Text>
+      <ul class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+        {palette.map(({ name, hex, use }) => (
+          <li>
+            <button
+              type="button"
+              data-copy={hex}
+              class="group w-full overflow-hidden rounded-lg border border-border text-left transition-colors hover:border-border-strong"
+            >
+              <span class="block h-14 border-b border-border" style={`background: ${hex}`}></span>
+              <span class="flex items-baseline justify-between gap-2 px-3 py-2">
+                <span class="text-sm text-heading">{name}</span>
+                <span class="font-mono text-xs text-muted-foreground uppercase" data-copy-label>{hex}</span>
+              </span>
+              <span class="block px-3 pb-2 text-xs text-muted-foreground">{use}</span>
+            </button>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section>
+      <Heading>APIs</Heading>
+      <ul class={sectionGrid}>
+        {services.map((tool) => <li><ToolItem {...tool} /></li>)}
+      </ul>
+    </section>
+
+    <section>
+      <Heading>Acknowledgements</Heading>
+      <Text tone="muted" size="sm" class="mt-2">Design ideas I borrowed, with thanks:</Text>
+      <ul class="mt-3 divide-y divide-border border-y border-border">
+        {designCredits.map(({ name, url, note }) => (
+          <li>
+            <a href={url} target="_blank" rel="noopener noreferrer" class="group flex items-baseline justify-between gap-4 py-3">
+              <span class="text-heading transition-colors group-hover:text-link-hover">{name}</span>
+              <span class="flex items-center gap-1 text-right text-sm text-muted-foreground">
+                {note}
+                <ArrowUpRight class="size-3 shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <Text tone="muted" size="sm" class="mt-8">
+        And the people whose sites inspired the design and development of this one:
+      </Text>
+      <ul class="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-sm">
+        {inspirations.map(({ name, url }) => (
+          <li><Link href={url}>{name}</Link></li>
+        ))}
+      </ul>
+      <Separator class="my-8" />
+      <Text tone="muted" size="sm">
+        And to many more talented developers and designers whose work has unknowingly shaped my approach. Thank you
+        all.
+      </Text>
+    </section>
+  </div>
+</PageLayout>
+
+<script>
+  // Keep the site age current between deploys (same maths as the frontmatter)
+  const ageEl = document.querySelector<HTMLElement>("[data-site-age]")
+  if (ageEl?.dataset.since) {
+    const start = new Date(`${ageEl.dataset.since}T00:00:00Z`)
+    const now = new Date()
+    let years = now.getUTCFullYear() - start.getUTCFullYear()
+    const anniversary = new Date(start)
+    anniversary.setUTCFullYear(start.getUTCFullYear() + years)
+    if (anniversary > now) anniversary.setUTCFullYear(start.getUTCFullYear() + --years)
+    const days = Math.floor((now.getTime() - anniversary.getTime()) / 86_400_000)
+    ageEl.innerHTML = `${years}<span class="stat-unit">y</span> ${days}<span class="stat-unit">d</span>`
+  }
+
+  for (const button of document.querySelectorAll<HTMLElement>("[data-copy]")) {
+    button.addEventListener("click", async () => {
+      const label = button.querySelector<HTMLElement>("[data-copy-label]")!
+      try {
+        await navigator.clipboard.writeText(button.dataset.copy!)
+        label.textContent = "Copied"
+        setTimeout(() => (label.textContent = button.dataset.copy!), 1200)
+      } catch {}
+    })
+  }
+</script>
+
+<style>
+  .stat {
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+    color: #fff;
+  }
+
+  .stat-label {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.9;
+  }
+
+  .stat-value {
+    margin-top: 0.85rem;
+    font-family: var(--font-mono);
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .stat-value :global(.stat-unit) {
+    margin-left: 0.15em;
+    margin-right: 0.1em;
+    font-size: 0.5em;
+    font-weight: 500;
+  }
+
+  .stat-note {
+    margin-top: 0.75rem;
+    font-size: 0.8rem;
+    opacity: 0.95;
+  }
+</style>

@@ -1,0 +1,33 @@
+---
+import PageLayout from "@/layouts/PageLayout.astro"
+import Heading from "@/components/typography/Heading.astro"
+import ArrowUpRight from "@/components/icons/ArrowUpRight.astro"
+import { bookmarks } from "@/data/bookmarks"
+---
+
+<PageLayout
+  heading="Bookmarks"
+  intro="A small collection of useful tools, resources, and places on the web that I keep coming back to."
+  description="Useful tools and resources for design, development and AI that Manish Tamang keeps coming back to."
+>
+  <div class="space-y-12">
+    {bookmarks.map(({ category, items }) => (
+      <section>
+        <Heading>{category}</Heading>
+        <ul class="mt-4 grid gap-x-8 gap-y-5 sm:grid-cols-2">
+          {items.map(({ title, url, description }) => (
+            <li>
+              <a href={url} target="_blank" rel="noopener noreferrer" class="group block">
+                <span class="flex items-center gap-1 font-medium text-heading transition-colors group-hover:text-link-hover">
+                  {title}
+                  <ArrowUpRight class="size-3.5 shrink-0 opacity-0 transition-opacity group-hover:opacity-100" />
+                </span>
+                <span class="mt-0.5 block text-sm text-muted-foreground">{description}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))}
+  </div>
+</PageLayout>

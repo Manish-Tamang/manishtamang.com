@@ -1,0 +1,213 @@
+---
+import { PUBLIC_CALENDLY_URL, PUBLIC_WEB3FORMS_ACCESS_KEY } from "astro:env/client"
+import PageLayout from "@/layouts/PageLayout.astro"
+import Heading from "@/components/typography/Heading.astro"
+import Text from "@/components/typography/Text.astro"
+import Button from "@/components/ui/Button.astro"
+import Input from "@/components/ui/Input.astro"
+import Link from "@/components/ui/Link.astro"
+import Separator from "@/components/ui/Separator.astro"
+import Textarea from "@/components/ui/Textarea.astro"
+import ArrowUpRight from "@/components/icons/ArrowUpRight.astro"
+
+const email = "hi@manishtamang.com"
+
+const emotions = [
+  { value: "happy", emoji: "😍", label: "Happy" },
+  { value: "thanks", emoji: "👋", label: "Thanks" },
+  { value: "gift", emoji: "🎁", label: "Gift" },
+]
+const categories = ["general", "help"]
+
+// Asking-for-help etiquette, shown when the "help" category is picked
+const helpTips = [
+  { title: "Don't ask to ask", url: "https://dontasktoask.com/", tip: "Skip “can I ask something?” and send the actual question." },
+  { title: "No meta questions", url: "https://nometa.xyz/", tip: "Instead of “anyone know React?”, ask the React question itself." },
+  { title: "The XY problem", url: "https://xyproblem.info/", tip: "Tell me what you're trying to achieve, not only the fix you tried." },
+]
+
+const choice =
+  "flex h-11 cursor-pointer items-center justify-center rounded-lg border border-border bg-subtle text-sm transition-colors hover:border-border-strong peer-checked:border-accent peer-checked:bg-accent/10 peer-checked:text-heading peer-focus-visible:ring-3 peer-focus-visible:ring-ring"
+---
+
+<PageLayout heading="Contact" description="Get in touch with Manish Tamang (golecodes).">
+  <Text>
+    It's currently <strong class="font-medium text-heading" data-nepal-time>…</strong> in <strong
+      class="font-medium text-heading">Nepal</strong
+    ><span data-availability></span>. Feel free to send me a message, I'll get back to you as soon as I can.
+  </Text>
+
+  <!-- Posts straight to Web3Forms; the script below sends it without leaving the page -->
+  <form action="https://api.web3forms.com/submit" method="POST" class="mt-10 space-y-6" data-contact-form>
+    <input type="hidden" name="access_key" value={PUBLIC_WEB3FORMS_ACCESS_KEY} />
+    <input type="checkbox" name="botcheck" class="hidden" tabindex="-1" autocomplete="off" />
+
+    <div class="space-y-2">
+      <label for="email" class="text-sm text-muted-foreground">
+        Your email address <span class="opacity-70">(required)</span>
+      </label>
+      <Input type="email" id="email" name="email" required autocomplete="email" placeholder="hi@example.com" class="h-11" />
+    </div>
+
+    <div class="space-y-2">
+      <label for="message" class="text-sm text-muted-foreground">
+        Your message <span class="opacity-70">(required)</span>
+      </label>
+      <Textarea id="message" name="message" required rows={5} placeholder="What's on your mind?" class="min-h-32" />
+    </div>
+
+    <div class="grid gap-6 sm:grid-cols-2">
+      <fieldset class="space-y-2">
+        <legend class="text-sm text-muted-foreground">Emotion</legend>
+        <div class="flex gap-2">
+          {emotions.map(({ value, emoji, label }) => (
+            <label class="relative">
+              <input type="radio" name="emotion" value={value} class="peer sr-only" />
+              <span class:list={[choice, "w-11 text-xl"]} title={label}>
+                <span aria-hidden="true">{emoji}</span>
+                <span class="sr-only">{label}</span>
+              </span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+
+      <fieldset class="space-y-2">
+        <legend class="text-sm text-muted-foreground">Category</legend>
+        <div class="flex gap-2">
+          {categories.map((category, index) => (
+            <label class="relative">
+              <input type="radio" name="category" value={category} checked={index === 0} class="peer sr-only" />
+              <span class:list={[choice, "px-5 capitalize"]}>{category}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+    </div>
+
+    <!-- Shown only while the "help" category is picked (pure CSS, see <style>) -->
+    <aside class="help-tips rounded-lg border border-dashed border-border-strong bg-subtle p-4" aria-label="Before you ask">
+      <p class="text-sm font-medium text-heading">Before you ask</p>
+      <p class="mt-1 text-sm text-muted-foreground">A few things that help me answer in one reply:</p>
+      <ul class="mt-3 space-y-2 text-sm">
+        {helpTips.map(({ title, url, tip }) => (
+          <li class="flex gap-2">
+            <span class="text-muted-foreground" aria-hidden="true">→</span>
+            <span>
+              <Link href={url}>{title}</Link>
+              <span class="block text-muted-foreground">{tip}</span>
+            </span>
+          </li>
+        ))}
+      </ul>
+    </aside>
+
+    <Button type="submit" class="w-full" data-submit>Send message</Button>
+    <p data-form-status role="status" aria-live="polite" class="min-h-5 text-center text-sm"></p>
+  </form>
+
+  <Separator class="my-12" />
+
+  {
+    PUBLIC_CALENDLY_URL && (
+      <section class="rounded-lg border border-border bg-subtle p-6 text-center">
+        <Heading class="text-xl!">Schedule a call</Heading>
+        <Text tone="muted" size="sm" class="mx-auto mt-2 max-w-sm">
+          The quickest way to start a conversation is a free 30-minute consultation.
+        </Text>
+        <Button href={PUBLIC_CALENDLY_URL} target="_blank" rel="noopener noreferrer" variant="secondary" class="mt-5">
+          Book a 30-min call <ArrowUpRight class="size-4" />
+        </Button>
+      </section>
+    )
+  }
+
+  <p class="mt-10 text-center text-sm text-muted-foreground">
+    You can also reach me directly at<br />
+    <Link href={`mailto:${email}`} class="text-base">{email}</Link>
+  </p>
+
+  <p class="mt-12 text-xs text-muted-foreground">
+    This page is inspired by <Link href="https://www.totaltypescript.com/contact">Total TypeScript</Link> and{" "}
+    <Link href="https://www.romanabashin.com/contact">Roman Abashin</Link>.
+  </p>
+</PageLayout>
+
+<script>
+  // Nepal time and a guess at what I'm doing, from the visitor's clock
+  const timeEl = document.querySelector<HTMLElement>("[data-nepal-time]")
+  const availabilityEl = document.querySelector<HTMLElement>("[data-availability]")
+
+  const availability = (hour: number, minute: number, weekday: string) => {
+    const time = hour + minute / 60
+    if (weekday === "Sat") return "It's Saturday! I'm likely chilling 🍹"
+    if (time >= 23 || time < 7) return "I'm likely sleeping 😴"
+    if (time >= 10 && time < 17.5) return "I'm likely at college 🎓"
+    return "I'm likely working 👨‍💻 or studying"
+  }
+
+  const updateTime = () => {
+    const now = new Date()
+    const zone = { timeZone: "Asia/Kathmandu" } as const
+    const parts = Object.fromEntries(
+      new Intl.DateTimeFormat("en-GB", { ...zone, hour: "numeric", minute: "numeric", weekday: "short", hourCycle: "h23" })
+        .formatToParts(now)
+        .map(({ type, value }) => [type, value]),
+    )
+    if (timeEl) timeEl.textContent = now.toLocaleTimeString("en-US", { ...zone, hour: "numeric", minute: "2-digit" })
+    if (availabilityEl) availabilityEl.textContent = ` and ${availability(Number(parts.hour), Number(parts.minute), parts.weekday)}`
+  }
+
+  updateTime()
+  setInterval(updateTime, 30_000)
+
+  // Send the form with fetch so the visitor stays on the page
+  const form = document.querySelector<HTMLFormElement>("[data-contact-form]")
+  if (form) {
+    const status = form.querySelector<HTMLElement>("[data-form-status]")!
+    const submit = form.querySelector<HTMLButtonElement>("[data-submit]")!
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault()
+      submit.disabled = true
+      submit.textContent = "Sending…"
+      status.textContent = ""
+      status.className = "min-h-5 text-center text-sm text-muted-foreground"
+
+      try {
+        const fields = Object.fromEntries(new FormData(form))
+        // Without the key Web3Forms answers 400; say so instead of a vague failure
+        if (!fields.access_key) throw new Error("missing access key")
+
+        const response = await fetch(form.action, {
+          method: "POST",
+          headers: { "content-type": "application/json", accept: "application/json" },
+          body: JSON.stringify(fields),
+        })
+        const data = await response.json().catch(() => ({}))
+        if (!response.ok || !data.success) throw new Error(data.message)
+
+        form.reset()
+        status.textContent = "Message sent. Thank you!"
+        status.className = "min-h-5 text-center text-sm text-success"
+      } catch (error) {
+        const reason = error instanceof Error && error.message ? ` (${error.message})` : ""
+        status.textContent = `Couldn't send your message${reason}. Please try again, or email me directly.`
+        status.className = "min-h-5 text-center text-sm text-danger"
+      } finally {
+        submit.disabled = false
+        submit.textContent = "Send message"
+      }
+    })
+  }
+</script>
+
+<style>
+  .help-tips {
+    display: none;
+  }
+
+  form:has(input[name="category"][value="help"]:checked) .help-tips {
+    display: block;
+  }
+</style>
