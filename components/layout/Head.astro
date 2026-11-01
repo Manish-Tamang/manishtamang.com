@@ -49,3 +49,9 @@ const ogImage = new URL(image, site.url).href
 <Font cssVariable="--font-inter" preload={[{ style: "normal", subset: "latin" }]} />
 <Font cssVariable="--font-myfont" preload />
 <ThemeScript />
+
+<!-- Umami: self-hosted (feeds /dashboard) and Umami Cloud, same as the old site -->
+<link rel="preconnect" href="https://analytics.manishtamang.com" />
+<link rel="dns-prefetch" href="https://cloud.umami.is" />
+<script is:inline defer src="https://analytics.manishtamang.com/script.js" data-website-id="d5fd3d82-d867-4e3d-badb-837ad2ff7f7d"></script>
+<script is:inline defer src="https://cloud.umami.is/script.js" data-website-id="87f8f3a2-7fad-4aed-b92d-5beeee4c4491"></script>
