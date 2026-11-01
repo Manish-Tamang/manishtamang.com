@@ -3,6 +3,7 @@ import { PUBLIC_FEEDBACK_FISH_ID } from "astro:env/client"
 import { site } from "@/lib/site"
 import Container from "./Container.astro"
 import ThemeSwitcher from "./ThemeSwitcher.astro"
+import Webring from "./Webring.astro"
 import Separator from "@/components/ui/Separator.astro"
 
 const year = new Date().getFullYear()
@@ -26,6 +27,8 @@ const badges = [
             class="hover:text-heading">GitHub</a
           >
         </p>
+        <!-- Desktop shows this under the sidebar instead -->
+        <Webring class="mt-3 md:hidden" />
         <div class="mt-3 mb-1 flex flex-wrap gap-2.5">
           {badges.map(({ href, src, alt }) => (
             <a

@@ -2,11 +2,12 @@
 /* Desktop navigation: a sticky left column. Small screens get MobileNav. */
 import { navGroups } from "@/lib/site"
 import { isActivePath, normalizePath } from "@/lib/path"
+import Webring from "./Webring.astro"
 
 const current = normalizePath(Astro.url.pathname)
 ---
 
-<aside class="sticky top-0 z-40 hidden max-h-dvh self-start overflow-y-auto pt-16 md:block">
+<aside class="sticky top-0 z-40 hidden max-h-dvh self-start overflow-y-auto pt-16 pb-4 md:block">
   <nav aria-label="Main" class="space-y-6">
     {navGroups.map(({ label, marker, links }) => (
       <div>
@@ -34,4 +35,19 @@ const current = normalizePath(Astro.url.pathname)
       </div>
     ))}
   </nav>
+
+  <!-- Slides in once the footer is on screen; sticky so short windows still show it -->
+  <Webring
+    data-sidebar-webring
+    class="invisible sticky bottom-0 mt-6 translate-y-2 opacity-0 transition-all duration-300 data-[visible]:visible data-[visible]:translate-y-0 data-[visible]:opacity-100"
+  />
 </aside>
+
+<script>
+  const webring = document.querySelector<HTMLElement>("[data-sidebar-webring]")
+  const footer = document.querySelector("footer")
+
+  if (webring && footer) {
+    new IntersectionObserver(([entry]) => webring.toggleAttribute("data-visible", entry.isIntersecting)).observe(footer)
+  }
+</script>

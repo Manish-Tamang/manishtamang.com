@@ -1,0 +1,36 @@
+---
+/* IndieWeb Webring links: previous site, the ring, next site. */
+import type { HTMLAttributes } from "astro/types";
+import ArrowLeft from "@/components/icons/ArrowLeft.astro";
+import ArrowRight from "@/components/icons/ArrowRight.astro";
+import SpiderWeb from "@/components/icons/SpiderWeb.astro";
+
+export type Props = HTMLAttributes<"div">;
+
+const { class: className, ...rest } = Astro.props;
+
+const link =
+  "flex size-7 items-center justify-center rounded-md transition-colors text-muted-foreground hover:bg-foreground/5 hover:text-heading";
+---
+
+<div
+  class:list={[
+    "inline-flex items-center gap-1 rounded-lg bg-background p-1",
+    className,
+  ]}
+  {...rest}
+>
+  <a
+    href="https://xn--sr8hvo.ws/previous"
+    aria-label="Previous site in the IndieWeb Webring"
+    class={link}><ArrowLeft class="size-4" /></a
+  >
+  <a href="https://xn--sr8hvo.ws" aria-label="An IndieWeb Webring" class={link}
+    ><SpiderWeb class="size-4" /></a
+  >
+  <a
+    href="https://xn--sr8hvo.ws/next"
+    aria-label="Next site in the IndieWeb Webring"
+    class={link}><ArrowRight class="size-4" /></a
+  >
+</div>
