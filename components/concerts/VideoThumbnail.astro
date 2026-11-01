@@ -10,19 +10,24 @@ export interface Props {
   src: string
   poster?: ImageMetadata
   label: string
+  /** Shown under the video in the player. */
+  caption?: string
   /** 16:9 instead of the default 1:1. */
   wide?: boolean
+  /** 3:4, for portrait phone videos. */
+  tall?: boolean
 }
 
-const { src, poster, label, wide = false } = Astro.props
+const { src, poster, label, caption, wide = false, tall = false } = Astro.props
 ---
 
 <button
   type="button"
   data-video-open={src}
   data-video-label={label}
+  data-video-caption={caption}
   aria-label={`Play video: ${label}`}
-  class:list={["group relative block w-full cursor-pointer overflow-hidden rounded-md bg-black", wide ? "aspect-video" : "aspect-square"]}
+  class:list={["group relative block w-full cursor-pointer overflow-hidden rounded-md bg-black", wide ? "aspect-video" : tall ? "aspect-[3/4]" : "aspect-square"]}
 >
   {poster ? (
     <Image src={poster} alt="" width={480} height={480} quality={80} format="webp" class="size-full object-cover opacity-80 transition-all duration-300 group-hover:scale-105 group-hover:opacity-100" />

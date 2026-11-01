@@ -6,7 +6,7 @@ import X from "@/components/icons/X.astro"
 
 <dialog data-video-modal class="m-auto max-h-none max-w-none bg-transparent p-0 backdrop:bg-black/90">
   <div class="relative flex items-center justify-center">
-    <video data-video-player playsinline preload="metadata" class="max-h-[85dvh] max-w-[92vw] cursor-pointer rounded-lg bg-black"></video>
+    <video data-video-player playsinline preload="auto" class="max-h-[85dvh] max-w-[92vw] cursor-pointer rounded-lg bg-black"></video>
 
     <span data-video-spinner hidden class="pointer-events-none absolute inset-0 flex items-center justify-center text-white">
       <LoaderCircle class="size-8 animate-spin" />
@@ -22,6 +22,7 @@ import X from "@/components/icons/X.astro"
 
     <input data-video-seek type="range" min="0" max="1000" value="0" aria-label="Seek" class="absolute inset-x-3 bottom-3 h-1 cursor-pointer accent-white" />
   </div>
+  <p data-video-caption hidden class="mx-auto mt-3 max-w-[92vw] px-2 text-center text-sm text-white"></p>
 </dialog>
 
 <script>
