@@ -1,0 +1,18 @@
+---
+/*
+ * Applies the saved theme before first paint so there is no flash.
+ * Uses the same "theme" localStorage key as next-themes on the old site,
+ * so visitors keep their preference across the migration.
+ */
+---
+
+<script is:inline>
+  ;(() => {
+    let stored = null
+    try {
+      stored = localStorage.getItem("theme")
+    } catch {}
+    const dark = stored === "dark" || ((!stored || stored === "system") && matchMedia("(prefers-color-scheme: dark)").matches)
+    document.documentElement.classList.toggle("dark", dark)
+  })()
+</script>

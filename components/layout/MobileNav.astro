@@ -1,0 +1,97 @@
+---
+/*
+ * Small-screen header from the Next.js site (components/layout/header): menu
+ * button and a dropdown that pushes the page down. Links outside `mobileLinks` sit in a compact list below them.
+ */
+import { mobileLinks, navGroups } from "@/lib/site"
+import { isActivePath, normalizePath } from "@/lib/path"
+import X from "@/components/icons/X.astro"
+
+const current = normalizePath(Astro.url.pathname)
+
+const primary = new Set<string>(mobileLinks.map(({ href }) => href))
+const more = navGroups.flatMap(({ links }) => links as readonly { href: string; label: string }[]).filter(({ href }) => !primary.has(href))
+---
+
+<header data-mobile-nav class="px-4 pt-8 md:hidden">
+  <div class="flex items-center">
+    <button
+      type="button"
+      data-nav-toggle
+      aria-expanded="false"
+      aria-controls="mobile-nav"
+      aria-label="Open menu"
+      class="-ml-2 cursor-pointer p-2 text-foreground/60 transition-colors hover:text-foreground"
+    >
+      <svg data-nav-open-icon width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+        <path
+          d="M0 4.99599C0 4.77599 0.105357 4.56501 0.292893 4.40945C0.48043 4.2539 0.734784 4.1665 1 4.1665H19C19.2652 4.1665 19.5196 4.2539 19.7071 4.40945C19.8946 4.56501 20 4.77599 20 4.99599C20 5.21598 19.8946 5.42696 19.7071 5.58252C19.5196 5.73808 19.2652 5.82547 19 5.82547H1C0.734784 5.82547 0.48043 5.73808 0.292893 5.58252C0.105357 5.42696 0 5.21598 0 4.99599ZM5 9.99942C5 9.77943 5.10536 9.56845 5.29289 9.41289C5.48043 9.25733 5.73478 9.16994 6 9.16994H19C19.2652 9.16994 19.5196 9.25733 19.7071 9.41289C19.8946 9.56845 20 9.77943 20 9.99942C20 10.2194 19.8946 10.4304 19.7071 10.586C19.5196 10.7415 19.2652 10.8289 19 10.8289H6C5.73478 10.8289 5.48043 10.7415 5.29289 10.586C5.10536 10.4304 5 10.2194 5 9.99942ZM11.8333 14.1742C11.5681 14.1742 11.3138 14.2616 11.1262 14.4172C10.9387 14.5727 10.8333 14.7837 10.8333 15.0037C10.8333 15.2237 10.9387 15.4347 11.1262 15.5902C11.3138 15.7458 11.5681 15.8332 11.8333 15.8332H19C19.2652 15.8332 19.5196 15.7458 19.7071 15.5902C19.8946 15.4347 20 15.2237 20 15.0037C20 14.7837 19.8946 14.5727 19.7071 14.4172C19.5196 14.2616 19.2652 14.1742 19 14.1742H11.8333Z"
+          fill="currentColor"></path>
+      </svg>
+      <X data-nav-close-icon class="hidden size-5" />
+    </button>
+  </div>
+
+  <nav
+    id="mobile-nav"
+    data-nav-panel
+    aria-label="Main"
+    class="mt-4 hidden flex-col gap-1 overflow-hidden rounded-2xl border border-border bg-background/80 p-2 shadow-lg backdrop-blur-md data-[open]:flex"
+  >
+    {mobileLinks.map(({ href, label, viewBox, paths }) => (
+      <a
+        href={href}
+        aria-current={isActivePath(current, href) ? "page" : undefined}
+        class="group flex items-center gap-3 rounded-xl px-4 py-3 text-base text-foreground/60 transition-all hover:bg-foreground/5 hover:text-foreground aria-[current=page]:bg-foreground/5 aria-[current=page]:text-foreground"
+      >
+        <span class="flex size-8 items-center justify-center rounded-lg bg-foreground/5 text-foreground/40 transition-colors group-aria-[current=page]:bg-foreground/10 group-aria-[current=page]:text-foreground">
+          <svg viewBox={viewBox} fill="currentColor" class="size-4" aria-hidden="true">
+            {paths.map((d) => <path fill-rule="evenodd" clip-rule="evenodd" d={d}></path>)}
+          </svg>
+        </span>
+        {label}
+      </a>
+    ))}
+
+    <ul class="mt-1 grid grid-cols-2 gap-1 border-t border-border pt-2">
+      {more.map(({ href, label }) => (
+        <li>
+          <a
+            href={href}
+            aria-current={isActivePath(current, href) ? "page" : undefined}
+            class="block rounded-xl px-4 py-2 text-sm text-foreground/60 transition-all hover:bg-foreground/5 hover:text-foreground aria-[current=page]:bg-foreground/5 aria-[current=page]:text-foreground"
+          >
+            {label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+</header>
+
+<script>
+  const root = document.querySelector<HTMLElement>("[data-mobile-nav]")
+  const toggle = root?.querySelector<HTMLElement>("[data-nav-toggle]")
+  const panel = root?.querySelector<HTMLElement>("[data-nav-panel]")
+
+  if (root && toggle && panel) {
+    const openIcon = toggle.querySelector("[data-nav-open-icon]")!
+    const closeIcon = toggle.querySelector("[data-nav-close-icon]")!
+
+    const setOpen = (open: boolean) => {
+      panel.toggleAttribute("data-open", open)
+      toggle.setAttribute("aria-expanded", String(open))
+      toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu")
+      openIcon.classList.toggle("hidden", open)
+      closeIcon.classList.toggle("hidden", !open)
+    }
+
+    toggle.addEventListener("click", () => setOpen(!panel.hasAttribute("data-open")))
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") setOpen(false)
+    })
+    document.addEventListener("click", (event) => {
+      if (!root.contains(event.target as Node)) setOpen(false)
+    })
+  }
+</script>

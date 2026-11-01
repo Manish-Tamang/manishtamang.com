@@ -1,0 +1,37 @@
+---
+/* Desktop navigation: a sticky left column. Small screens get MobileNav. */
+import { navGroups } from "@/lib/site"
+import { isActivePath, normalizePath } from "@/lib/path"
+
+const current = normalizePath(Astro.url.pathname)
+---
+
+<aside class="sticky top-0 z-40 hidden max-h-dvh self-start overflow-y-auto pt-16 md:block">
+  <nav aria-label="Main" class="space-y-6">
+    {navGroups.map(({ label, marker, links }) => (
+      <div>
+        {label && <p class="mb-2 text-xs text-muted-foreground">{label}</p>}
+        <ul class="flex flex-col gap-y-1.5">
+          {links.map(({ href, label: text }) => (
+            <li>
+              <a
+                href={href}
+                aria-current={isActivePath(current, href) ? "page" : undefined}
+                class="group flex items-center gap-2.5 text-sm text-muted-foreground transition-colors hover:text-heading aria-[current=page]:font-medium aria-[current=page]:text-link"
+              >
+                <span
+                  class:list={[
+                    "size-1.5 shrink-0 rounded-[2px] opacity-70 transition-opacity group-hover:opacity-100 group-aria-[current=page]:opacity-100",
+                    marker,
+                  ]}
+                  aria-hidden="true"
+                ></span>
+                {text}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </nav>
+</aside>

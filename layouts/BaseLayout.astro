@@ -1,0 +1,43 @@
+---
+import "@/styles/global.css"
+import Head, { type Props as HeadProps } from "@/components/layout/Head.astro"
+import Sidebar from "@/components/layout/Sidebar.astro"
+import MobileNav from "@/components/layout/MobileNav.astro"
+import Footer from "@/components/layout/Footer.astro"
+import ScrollTop from "@/components/layout/ScrollTop.astro"
+
+export type Props = HeadProps
+
+const props = Astro.props
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <Head {...props} />
+    <slot name="head" />
+  </head>
+  <body>
+    <a
+      href="#content"
+      class="sr-only rounded-md bg-primary px-3 py-2 text-sm text-primary-foreground focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50"
+    >
+      Skip to content
+    </a>
+    <!-- Sidebar + content, centred together as one unit -->
+    <div class="mx-auto w-full max-w-[62rem] md:grid md:grid-cols-[10rem_minmax(0,1fr)] md:gap-6 md:px-6">
+      <MobileNav />
+      <Sidebar />
+      <div class="flex min-h-dvh min-w-0 flex-col">
+        <main id="content" class="flex-1">
+          <slot />
+        </main>
+        <Footer />
+      </div>
+    </div>
+    <ScrollTop />
+    <script>
+      import "@/lib/client/external-links"
+    </script>
+  </body>
+</html>

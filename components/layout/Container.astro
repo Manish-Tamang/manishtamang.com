@@ -1,0 +1,20 @@
+---
+import type { HTMLAttributes } from "astro/types"
+
+export interface Props extends HTMLAttributes<"div"> {
+  size?: "prose" | "page" | "wide"
+  as?: "div" | "main" | "section" | "header" | "footer"
+}
+
+const { size = "page", as: Tag = "div", class: className, ...rest } = Astro.props
+
+const sizes = {
+  prose: "max-w-prose",
+  page: "max-w-page",
+  wide: "max-w-wide",
+}
+---
+
+<Tag class:list={["mx-auto w-full px-5 sm:px-6", sizes[size], className]} {...rest}>
+  <slot />
+</Tag>

@@ -1,0 +1,21 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro"
+import Container from "@/components/layout/Container.astro"
+import Heading from "@/components/typography/Heading.astro"
+import Text from "@/components/typography/Text.astro"
+import Button from "@/components/ui/Button.astro"
+---
+
+<BaseLayout title="Page Not Found" noindex>
+  <Container class="flex min-h-[70dvh] flex-col items-center justify-center pt-10 text-center md:pt-16">
+    <!-- Lazy so only the image for the current theme is downloaded -->
+    <img src="/images/light-404.webp" alt="404 - Page Not Found" width="900" height="489" loading="lazy" class="mb-8 block h-auto w-full max-w-md dark:hidden" />
+    <img src="/images/dark-404.webp" alt="404 - Page Not Found" width="900" height="546" loading="lazy" class="mb-8 hidden h-auto w-full max-w-md dark:block" />
+
+    <Heading level={1}>Page Not Found</Heading>
+    <Text size="lg" tone="muted" class="mt-4 mb-8 max-w-lg">
+      The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.
+    </Text>
+    <Button href="/">Go Back Home</Button>
+  </Container>
+</BaseLayout>

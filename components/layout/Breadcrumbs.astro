@@ -1,0 +1,47 @@
+---
+/**
+ * Auto-generates breadcrumbs from the current URL path.
+ * Home / Page / Slug — skipped on the homepage.
+ */
+export interface Props {
+  /** Override the final crumb label (defaults to the URL segment, title-cased). */
+  current?: string
+}
+
+const { current } = Astro.props
+const path = Astro.url.pathname.replace(/\/$/, "") || "/"
+
+// Don't render on homepage
+if (path === "/") return
+
+const segments = path.split("/").filter(Boolean)
+
+// Build crumbs: Home → intermediate segments → current page
+const crumbs: { label: string; href?: string }[] = [{ label: "Home", href: "/" }]
+
+for (let i = 0; i < segments.length; i++) {
+  const slug = segments[i]
+  const href = "/" + segments.slice(0, i + 1).join("/")
+  const isLast = i === segments.length - 1
+  const label = isLast && current
+    ? current
+    : slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
+
+  crumbs.push(isLast ? { label } : { label, href })
+}
+---
+
+<nav aria-label="Breadcrumb" class="mb-4">
+  <ol class="flex flex-wrap items-center gap-1 text-sm text-muted-foreground">
+    {crumbs.map((crumb, i) => (
+      <li class="flex items-center gap-1">
+        {i > 0 && <span class="select-none" aria-hidden="true">/</span>}
+        {crumb.href ? (
+          <a href={crumb.href} class="transition-colors hover:text-heading">{crumb.label}</a>
+        ) : (
+          <span class="text-heading">{crumb.label}</span>
+        )}
+      </li>
+    ))}
+  </ol>
+</nav>

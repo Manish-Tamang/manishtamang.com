@@ -1,0 +1,37 @@
+---
+/* Back-to-top button, shown once the page has been scrolled a good way. */
+import Button from "@/components/ui/Button.astro"
+---
+
+<Button
+  variant="secondary"
+  size="icon"
+  data-scroll-top
+  aria-label="Back to top"
+  tabindex="-1"
+  class="pointer-events-none fixed right-4 bottom-4 z-30 size-10 translate-y-2 opacity-0 transition-all duration-200 data-[visible]:pointer-events-auto data-[visible]:translate-y-0 data-[visible]:opacity-100 md:right-6 md:bottom-6"
+>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4" aria-hidden="true">
+    <path d="M12 19V5M5 12l7-7 7 7"></path>
+  </svg>
+</Button>
+
+<script>
+  const button = document.querySelector<HTMLElement>("[data-scroll-top]")
+
+  if (button) {
+    const update = () => {
+      const visible = window.scrollY > 500
+      button.toggleAttribute("data-visible", visible)
+      button.tabIndex = visible ? 0 : -1
+    }
+
+    addEventListener("scroll", update, { passive: true })
+    update()
+
+    button.addEventListener("click", () => {
+      const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches
+      scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" })
+    })
+  }
+</script>

@@ -1,0 +1,49 @@
+---
+import BaseLayout, { type Props as BaseProps } from "./BaseLayout.astro"
+import Container from "@/components/layout/Container.astro"
+import Breadcrumbs from "@/components/layout/Breadcrumbs.astro"
+import Heading from "@/components/typography/Heading.astro"
+import Text from "@/components/typography/Text.astro"
+import { pageUpdated } from "@/data/page-dates"
+import { normalizePath } from "@/lib/path"
+
+export interface Props extends BaseProps {
+  /** Visible page heading; also used as the <title> unless `title` is set. */
+  heading: string
+  /** Short line under the heading. */
+  intro?: string
+  size?: "prose" | "page" | "wide"
+  /** Last-changed date (YYYY-MM-DD). Defaults to this page's entry in data/page-dates.ts. */
+  updated?: string
+}
+
+const {
+  heading,
+  intro,
+  size = "page",
+  title = heading,
+  updated = pageUpdated[normalizePath(Astro.url.pathname)],
+  ...rest
+} = Astro.props
+
+const updatedLabel = updated
+  ? new Date(`${updated}T00:00:00`).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })
+  : null
+---
+
+<BaseLayout title={title} {...rest}>
+  <slot name="head" slot="head" />
+  <Container size={size} class="pt-10 md:pt-16">
+    <header class="mb-10">
+      <Breadcrumbs current={heading} />
+      <Heading level={1}>{heading}</Heading>
+      {updatedLabel && (
+        <p class="mt-2 text-sm text-muted-foreground">
+          <time datetime={updated}>{updatedLabel}</time>
+        </p>
+      )}
+      {intro && <Text tone="muted" class="mt-3">{intro}</Text>}
+    </header>
+    <slot />
+  </Container>
+</BaseLayout>

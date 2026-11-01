@@ -1,0 +1,176 @@
+---
+/*
+ * Mechanical light/dark key switch. Stores the choice under the same "theme"
+ * key as next-themes on the old site; until it's flipped, the OS setting wins.
+ */
+---
+
+<label class="switch" title="Toggle dark mode">
+  <input class="cb" type="checkbox" aria-label="Dark mode" data-theme-toggle />
+  <span class="toggle">
+    <span class="left">on</span>
+    <span class="right">off</span>
+  </span>
+</label>
+
+<style>
+  /* The switch - the box around the slider */
+  .switch {
+    font-size: 11px;
+    position: relative;
+    display: inline-block;
+    width: 5em;
+    height: 2.5em;
+    margin: 0 0.3em 0.3em;
+    user-select: none;
+  }
+
+  /* Hide default HTML checkbox */
+  .switch .cb {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .switch .cb:focus-visible + .toggle {
+    outline: 2px solid var(--ring);
+    outline-offset: 0.4em;
+  }
+
+  /* The slider */
+  .toggle {
+    position: absolute;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    background-color: #373737;
+    border-radius: 0.1em;
+    transition: 0.4s;
+    text-transform: uppercase;
+    font-weight: 700;
+    overflow: hidden;
+    box-shadow:
+      -0.3em 0 0 0 #373737,
+      -0.3em 0.3em 0 0 #373737,
+      0.3em 0 0 0 #373737,
+      0.3em 0.3em 0 0 #373737,
+      0 0.3em 0 0 #373737;
+  }
+
+  .toggle > .left {
+    position: absolute;
+    display: flex;
+    width: 50%;
+    height: 88%;
+    background-color: #f3f3f3;
+    color: #373737;
+    left: 0;
+    bottom: 0;
+    align-items: center;
+    justify-content: center;
+    transform-origin: right;
+    transform: rotateX(10deg);
+    transform-style: preserve-3d;
+    transition: all 150ms;
+  }
+
+  .left::before {
+    position: absolute;
+    content: "";
+    width: 100%;
+    height: 100%;
+    background-color: rgb(206, 206, 206);
+    transform-origin: center left;
+    transform: rotateY(90deg);
+  }
+
+  .left::after {
+    position: absolute;
+    content: "";
+    width: 100%;
+    height: 100%;
+    background-color: rgb(112, 112, 112);
+    transform-origin: center bottom;
+    transform: rotateX(90deg);
+  }
+
+  .toggle > .right {
+    position: absolute;
+    display: flex;
+    width: 50%;
+    height: 88%;
+    background-color: #f3f3f3;
+    color: rgb(206, 206, 206);
+    right: 1px;
+    bottom: 0;
+    align-items: center;
+    justify-content: center;
+    transform-origin: left;
+    transform: rotateX(10deg) rotateY(-45deg);
+    transform-style: preserve-3d;
+    transition: all 150ms;
+  }
+
+  .right::before {
+    position: absolute;
+    content: "";
+    width: 100%;
+    height: 100%;
+    background-color: rgb(206, 206, 206);
+    transform-origin: center right;
+    transform: rotateY(-90deg);
+  }
+
+  .right::after {
+    position: absolute;
+    content: "";
+    width: 100%;
+    height: 100%;
+    background-color: rgb(112, 112, 112);
+    transform-origin: center bottom;
+    transform: rotateX(90deg);
+  }
+
+  .switch input:checked + .toggle > .left {
+    transform: rotateX(10deg) rotateY(45deg);
+    color: rgb(206, 206, 206);
+  }
+
+  .switch input:checked + .toggle > .right {
+    transform: rotateX(10deg) rotateY(0deg);
+    color: #487bdb;
+  }
+</style>
+
+<script>
+  const media = matchMedia("(prefers-color-scheme: dark)")
+  const toggle = document.querySelector<HTMLInputElement>("[data-theme-toggle]")
+
+  function stored() {
+    try {
+      const value = localStorage.getItem("theme")
+      return value === "light" || value === "dark" ? value : null
+    } catch {
+      return null
+    }
+  }
+
+  function apply(dark: boolean) {
+    document.documentElement.classList.toggle("dark", dark)
+    if (toggle) toggle.checked = dark
+  }
+
+  toggle?.addEventListener("change", () => {
+    try {
+      localStorage.setItem("theme", toggle.checked ? "dark" : "light")
+    } catch {}
+    apply(toggle.checked)
+  })
+
+  // Follow the OS until a choice has been made
+  media.addEventListener("change", () => {
+    if (!stored()) apply(media.matches)
+  })
+
+  apply(stored() ? stored() === "dark" : media.matches)
+</script>

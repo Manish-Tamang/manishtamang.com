@@ -1,0 +1,51 @@
+---
+import { Font } from "astro:assets"
+import { site } from "@/lib/site"
+import ThemeScript from "./ThemeScript.astro"
+
+export interface Props {
+  /** Page title; the site title is used when omitted. */
+  title?: string
+  description?: string
+  image?: string
+  /** Keep the page out of search results (drafts, the design system page). */
+  noindex?: boolean
+  type?: "website" | "article"
+}
+
+const { title, description = site.description, image = site.ogImage, noindex = false, type = "website" } = Astro.props
+
+const fullTitle = title ? site.titleTemplate.replace("%s", title) : site.title
+const canonical = new URL(Astro.url.pathname.replace(/\/$/, "") || "/", site.url).href
+const ogImage = new URL(image, site.url).href
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+{noindex && <meta name="robots" content="noindex" />}
+
+<link rel="icon" href="/favicon.ico" sizes="any" />
+<link rel="icon" href="/icon-light-32x32.png" media="(prefers-color-scheme: light)" />
+<link rel="icon" href="/icon-dark-32x32.png" media="(prefers-color-scheme: dark)" />
+<link rel="alternate" type="application/rss+xml" title={site.name} href="/feed.xml" />
+<link rel="sitemap" href="/sitemap.xml" />
+
+<meta property="og:type" content={type} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:site_name" content={site.name} />
+<meta property="og:locale" content={site.locale} />
+<meta name="twitter:card" content="summary_large_image" />
+
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#161616" media="(prefers-color-scheme: dark)" />
+
+<!-- Preload only the upright Latin file; italic and latin-ext load on demand. -->
+<Font cssVariable="--font-inter" preload={[{ style: "normal", subset: "latin" }]} />
+<Font cssVariable="--font-myfont" preload />
+<ThemeScript />
