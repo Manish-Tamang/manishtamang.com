@@ -1,7 +1,0 @@
-export { AboutContent } from "./content"
-export { FeaturedSection } from "./featured-section"
-export { Education } from "./education"
-export { Firfirey } from "./firfirey"
-export { ToggleButton } from "./toggle-button"
-export { PrayerFlags } from "./prayer-flags"
-export { RandomFacts } from "./random-facts"

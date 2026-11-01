@@ -1,1 +1,0 @@
-export { PhotosGrid } from "./grid"

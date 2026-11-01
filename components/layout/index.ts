@@ -1,6 +1,0 @@
-export { Header } from "./header"
-export { Footer } from "./footer"
-export { default as CarbonAds } from "./carbon-ads"
-export { default as CarbonAdsLazy } from "./carbon-ads/lazy"
-export { ThemeToggle } from "./theme-toggle"
-export { OpenForProjects } from "./open-for-projects"
