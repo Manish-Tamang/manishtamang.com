@@ -2,10 +2,22 @@
 /*
  * Intro with the pixel character: idles on two frames, waves on hover.
  * Frames live in public/ because the script swaps them by URL.
+ * Also the site's h-card (microformats.org/wiki/h-card) for IndieWeb tools:
+ * the h-*, p-*, u-* classes have no styles, and the hidden block holds what
+ * the visible text doesn't say plainly.
  */
+import { site } from "@/lib/site"
 ---
 
-<section class="grid grid-cols-[1fr_auto] items-center gap-x-4 gap-y-6 md:gap-x-8">
+<section class="h-card grid grid-cols-[1fr_auto] items-center gap-x-4 gap-y-6 md:gap-x-8">
+  <div hidden>
+    <a class="p-name u-url u-uid" href={site.url}>{site.name}</a>
+    <span class="p-nickname">{site.handle}</span>
+    <a class="u-email" href="mailto:hi@manishtamang.com">hi@manishtamang.com</a>
+    <span class="p-locality">Kathmandu</span>
+    <span class="p-country-name">Nepal</span>
+  </div>
+
   <div>
     <h1 class="font-display text-3xl text-heading md:text-4xl">
       <span class="sr-only">Manish Gole Tamang (golecodes) — Developer &amp; Designer from Nepal</span>
@@ -14,8 +26,8 @@
         <span class="absolute inset-0 block translate-y-full transition-transform duration-500 group-hover:translate-y-0">@golecodes</span>
       </span>
     </h1>
-    <p class="mt-1 text-sm text-muted-foreground md:text-base">Developer &amp; Student</p>
-    <p class="mt-4 hidden md:block">
+    <p class="p-job-title mt-1 text-sm text-muted-foreground md:text-base">Developer &amp; Student</p>
+    <p class="p-note mt-4 hidden md:block">
       I craft minimal and functional digital experiences. Focused on clean design, thoughtful typography, and building
       with modern web technologies.
     </p>
@@ -30,7 +42,7 @@
       height="160"
       fetchpriority="high"
       draggable="false"
-      class="relative size-full object-contain select-none"
+      class="u-photo relative size-full object-contain select-none"
     />
   </div>
 
