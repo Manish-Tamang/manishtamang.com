@@ -1,6 +1,18 @@
-# manishtamang.com — Astro rebuild
+<div align="center">
 
-Base for the Astro migration of [manishtamang.com](https://manishtamang.com). No content yet: design system, layout and every legacy URL as a stub. Will move into a branch of the main repo once ready.
+# Manish Tamang - Personal Portfolio V5
+
+Welcome to my personal portfolio website, a showcase of my professional journey, technical skills, and creative endeavors. Rebuilt in Astro, pages ship as plain HTML with almost no JavaScript.
+
+[![Astro](https://img.shields.io/badge/Astro-BC52EE?logo=astro&logoColor=white&style=flat-square)](https://astro.build/) [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white&style=flat-square)](https://www.typescriptlang.org/) [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-06B6D4?logo=tailwindcss&logoColor=white&style=flat-square)](https://tailwindcss.com/) [![Supabase](https://img.shields.io/badge/Supabase-3FCF8E?logo=supabase&logoColor=white&style=flat-square)](https://supabase.com/) [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=white&style=flat-square)](https://www.postgresql.org/) [![Better Auth](https://img.shields.io/badge/Better%20Auth-black?logo=betterauth&logoColor=white&style=flat-square)](https://www.better-auth.com/) [![Resend](https://img.shields.io/badge/Resend-black?logo=resend&logoColor=white&style=flat-square)](https://resend.com/) [![Vercel](https://img.shields.io/badge/Vercel-black?logo=vercel&logoColor=white&style=flat-square)](https://vercel.com/) [![License](https://img.shields.io/badge/License-Reference%20Only-lightgrey?style=flat-square)](./LICENSE)
+
+Live site: [manishtamang.com](https://manishtamang.com)
+
+</div>
+
+<p align="center">
+  <img src="./public/images/screenshot.webp" alt="Homepage of manishtamang.com" width="860">
+</p>
 
 ## Commands
 
