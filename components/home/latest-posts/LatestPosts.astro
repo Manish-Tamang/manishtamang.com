@@ -1,0 +1,29 @@
+---
+import Heading from "@/components/typography/Heading.astro"
+import Link from "@/components/ui/Link.astro"
+import BlogCard from "./BlogCard.astro"
+import MobileBlogItem from "./MobileBlogItem.astro"
+import { getPosts } from "@/lib/blog"
+
+const posts = (await getPosts()).slice(0, 3)
+---
+
+<section>
+  <div class="flex items-baseline justify-between gap-4">
+    <Heading>Latest from Blog</Heading>
+    <Link href="/blog" class="shrink-0">All posts →</Link>
+  </div>
+
+  <!-- Cards run past the bottom edge; hovering one lifts it clear -->
+  <div class="relative mt-6 hidden h-[350px] flex-row items-end justify-center gap-2 pt-10 [clip-path:inset(-4rem_-4rem_0_-4rem)] md:flex">
+    {posts.map((post, index) => (
+      <div class="-mb-12 flex min-w-0 flex-1 justify-center">
+        <BlogCard post={post} index={index} />
+      </div>
+    ))}
+  </div>
+
+  <div class="mt-6 flex flex-col gap-4 md:hidden">
+    {posts.map((post) => <MobileBlogItem post={post} />)}
+  </div>
+</section>

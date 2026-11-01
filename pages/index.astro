@@ -1,0 +1,36 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro"
+import Container from "@/components/layout/Container.astro"
+import AboutSection from "@/components/home/about/AboutSection.astro"
+import FeaturedPhoto from "@/components/home/featured-photo/FeaturedPhoto.astro"
+import FeaturedProjects from "@/components/home/featured-projects/FeaturedProjects.astro"
+import Hero from "@/components/home/hero/Hero.astro"
+import LatestPosts from "@/components/home/latest-posts/LatestPosts.astro"
+import Quote from "@/components/home/quote/Quote.astro"
+import StickyNote from "@/components/home/sticky-notes/StickyNote.astro"
+import TrustedBy from "@/components/home/trusted-by/TrustedBy.astro"
+import { toJsonLd, websiteJsonLd } from "@/lib/seo"
+---
+
+<BaseLayout>
+  <script slot="head" type="application/ld+json" set:html={toJsonLd(websiteJsonLd)} />
+
+  <Container class="pt-10 md:pt-16">
+    <Hero />
+  </Container>
+
+  <Container class="relative mt-24">
+    <StickyNote id="note-1" background="/svg/sticky-green.svg" rotation={-9} class="-top-20 right-5 size-[110px] text-sm md:text-lg">
+      Manish Gole Tamang
+    </StickyNote>
+    <AboutSection />
+  </Container>
+
+  <Container class="mt-24 space-y-24">
+    <TrustedBy />
+    <FeaturedProjects />
+    <LatestPosts />
+    <Quote />
+    <FeaturedPhoto />
+  </Container>
+</BaseLayout>

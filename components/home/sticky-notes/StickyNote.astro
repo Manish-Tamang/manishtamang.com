@@ -1,0 +1,62 @@
+---
+/*
+ * Draggable note. Place it with position classes on `class`; the dragged
+ * offset is remembered per browser, relative to that spot.
+ */
+export interface Props {
+  id: string
+  rotation?: number
+  /** Public path of the image filling the note. */
+  background: string
+  label?: string
+  class?: string
+}
+
+const { id, rotation = 0, background, label, class: className } = Astro.props
+---
+
+<div
+  data-sticky-note={id}
+  role={label ? "img" : undefined}
+  aria-label={label}
+  class:list={["absolute z-10 cursor-move touch-none select-none", className]}
+>
+  <div
+    class="flex size-full items-center justify-center bg-cover bg-center p-3 text-center font-display leading-tight text-zinc-900 transition-transform duration-200 hover:scale-105"
+    style={{ backgroundImage: `url(${background})`, rotate: `${rotation}deg` }}
+  >
+    <slot />
+  </div>
+</div>
+
+<script>
+  for (const note of document.querySelectorAll<HTMLElement>("[data-sticky-note]")) {
+    const key = `sticky-note-${note.dataset.stickyNote}`
+    let offset = { x: 0, y: 0 }
+    let start: { x: number; y: number } | null = null
+
+    const place = () => (note.style.transform = `translate(${offset.x}px, ${offset.y}px)`)
+
+    try {
+      offset = JSON.parse(localStorage.getItem(key) ?? "") ?? offset
+      place()
+    } catch {}
+
+    note.addEventListener("pointerdown", (event) => {
+      event.preventDefault()
+      note.setPointerCapture(event.pointerId)
+      start = { x: event.clientX - offset.x, y: event.clientY - offset.y }
+    })
+    note.addEventListener("pointermove", (event) => {
+      if (!start) return
+      offset = { x: event.clientX - start.x, y: event.clientY - start.y }
+      place()
+    })
+    note.addEventListener("pointerup", () => {
+      start = null
+      try {
+        localStorage.setItem(key, JSON.stringify(offset))
+      } catch {}
+    })
+  }
+</script>

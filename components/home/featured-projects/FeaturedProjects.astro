@@ -1,0 +1,50 @@
+---
+import type { ImageMetadata } from "astro"
+import { Image } from "astro:assets"
+import Heading from "@/components/typography/Heading.astro"
+import Text from "@/components/typography/Text.astro"
+import Link from "@/components/ui/Link.astro"
+import ArrowUpRight from "@/components/icons/ArrowUpRight.astro"
+import { featuredProjects } from "@/data/home"
+
+const images = import.meta.glob<{ default: ImageMetadata }>("/assets/projects/*", { eager: true })
+
+const truncateWords = (text: string, maxWords: number) => {
+  const words = text.trim().split(/\s+/)
+  return words.length <= maxWords ? text : `${words.slice(0, maxWords).join(" ")}...`
+}
+---
+
+<section>
+  <div class="flex items-baseline justify-between gap-4">
+    <Heading>Featured Projects</Heading>
+    <Link href="/projects" class="shrink-0">All projects →</Link>
+  </div>
+  <ul class="mt-6 space-y-8">
+    {featuredProjects.map(({ title, tagline, excerpt, link, image }) => (
+      <li>
+        <a href={link} target="_blank" rel="noopener noreferrer" class="group flex flex-col gap-4 md:flex-row md:items-center md:gap-5">
+          <Image
+            src={images[`/assets/projects/${image}`].default}
+            alt={title}
+            widths={[180, 360, 720]}
+            sizes="(min-width: 768px) 180px, 100vw"
+            quality={75}
+            class="aspect-video w-full shrink-0 rounded-md bg-muted object-cover md:h-[110px] md:w-[180px] md:aspect-auto"
+          />
+          <div class="min-w-0 flex-1 space-y-1.5">
+            <div>
+              <p class="font-subsection text-heading transition-colors group-hover:text-link-hover">{title}</p>
+              <Text as="span" size="sm" class="block">{tagline}</Text>
+            </div>
+            <Text as="span" size="sm" tone="muted" class="line-clamp-2 block">{truncateWords(excerpt, 18)}</Text>
+            <span class="flex items-center gap-1 text-xs font-medium text-muted-foreground">
+              <span class="truncate">{link.replace(/^https?:\/\//, "")}</span>
+              <ArrowUpRight class="size-3 shrink-0 opacity-0 transition-opacity group-hover:opacity-100" />
+            </span>
+          </div>
+        </a>
+      </li>
+    ))}
+  </ul>
+</section>

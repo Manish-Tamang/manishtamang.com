@@ -1,0 +1,71 @@
+---
+/*
+ * Intro with the pixel character: idles on two frames, waves on hover.
+ * Frames live in public/ because the script swaps them by URL.
+ */
+---
+
+<section class="grid grid-cols-[1fr_auto] items-center gap-x-4 gap-y-6 md:gap-x-8">
+  <div>
+    <h1 class="font-display text-3xl text-heading md:text-4xl">
+      <span class="sr-only">Manish Gole Tamang (golecodes) — Developer &amp; Designer from Nepal</span>
+      <span aria-hidden="true" class="group relative inline-block overflow-hidden">
+        <span class="block transition-transform duration-500 group-hover:translate-y-full">Manish Tamang</span>
+        <span class="absolute inset-0 block translate-y-full transition-transform duration-500 group-hover:translate-y-0">@golecodes</span>
+      </span>
+    </h1>
+    <p class="mt-1 text-sm text-muted-foreground md:text-base">Developer &amp; Student</p>
+    <p class="mt-4 hidden md:block">
+      I craft minimal and functional digital experiences. Focused on clean design, thoughtful typography, and building
+      with modern web technologies.
+    </p>
+  </div>
+
+  <div data-character class="relative size-24 rounded-md md:size-40">
+    <div class="absolute inset-0 rounded-md bg-[url(/bg.svg)] bg-size-[32px] dark:hidden"></div>
+    <img
+      src="/character/12.webp"
+      alt="Profile character"
+      width="160"
+      height="160"
+      fetchpriority="high"
+      draggable="false"
+      class="relative size-full object-contain select-none"
+    />
+  </div>
+
+  <p class="col-span-2 text-sm md:hidden">
+    I craft minimal and functional digital experiences. Focused on clean design, thoughtful typography, and building
+    with modern web technologies.
+  </p>
+</section>
+
+<script>
+  const idle = ["/character/12.webp", "/character/13.webp"]
+  const hover = ["/character/16.webp", "/character/17.webp", "/character/18.webp"]
+  const character = document.querySelector<HTMLElement>("[data-character]")
+
+  if (character && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const image = character.querySelector("img")!
+    let frames = idle
+    let frame = 0
+
+    new Image().src = idle[1]
+
+    setInterval(() => {
+      frame = (frame + 1) % frames.length
+      image.src = frames[frame]
+    }, 400)
+
+    // Wave frames are only fetched once someone actually hovers
+    character.addEventListener("pointerenter", () => {
+      for (const src of hover) new Image().src = src
+      frames = hover
+      frame = 0
+    })
+    character.addEventListener("pointerleave", () => {
+      frames = idle
+      frame = 0
+    })
+  }
+</script>

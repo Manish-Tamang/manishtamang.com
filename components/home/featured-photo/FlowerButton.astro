@@ -1,0 +1,25 @@
+---
+import styles from "./flower-button.module.css"
+
+export interface Props {
+  text: string
+  href: string
+}
+
+const { text, href } = Astro.props
+const flowers = [1, 2, 3, 4, 5, 6]
+---
+
+<a href={href} class={styles.btn}>
+  <div class={styles.wrapper}>
+    <p class={styles.text}>{text}</p>
+    {flowers.map((n) => (
+      <div class:list={[styles.flower, styles[`flower${n}`]]}>
+        <div class={styles.petal}></div>
+        <div class:list={[styles.petal, styles.two]}></div>
+        <div class:list={[styles.petal, styles.three]}></div>
+        <div class:list={[styles.petal, styles.four]}></div>
+      </div>
+    ))}
+  </div>
+</a>

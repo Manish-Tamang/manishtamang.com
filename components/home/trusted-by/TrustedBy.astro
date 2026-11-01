@@ -1,0 +1,33 @@
+---
+import type { ImageMetadata } from "astro"
+import { Image } from "astro:assets"
+import Heading from "@/components/typography/Heading.astro"
+import Text from "@/components/typography/Text.astro"
+import { trustedLogos } from "@/data/home"
+
+const logos = import.meta.glob<{ default: ImageMetadata }>("/assets/logos/*", { eager: true })
+---
+
+<section>
+  <Heading>Trusted by</Heading>
+  <Text class="mt-2 mb-6">
+    I've worked with clients across travel, finance, and product teams for <strong class="font-semibold">3+ years</strong>,
+    shipping sites and tools that hold up in real use. I focus on clear UI, steady delivery, and partnerships built on
+    trust - not just a one-off handoff.
+  </Text>
+
+  <ul class="flex flex-wrap items-center justify-center gap-x-8 gap-y-6 sm:gap-x-10 sm:gap-y-8">
+    {trustedLogos.map(({ name, file }) => (
+      <li class="flex h-10 w-24 items-center justify-center opacity-70 grayscale transition-all duration-300 hover:opacity-100 hover:grayscale-0 sm:h-11 sm:w-28 dark:opacity-60" title={name}>
+        <Image
+          src={logos[`/assets/logos/${file}`].default}
+          alt={name}
+          height={44}
+          densities={[1, 2]}
+          draggable="false"
+          class="h-full w-auto max-w-full object-contain"
+        />
+      </li>
+    ))}
+  </ul>
+</section>

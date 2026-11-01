@@ -1,0 +1,29 @@
+---
+/*
+ * Card for the masonry About grid. Each tone pairs a pastel background with
+ * a foreground that clears WCAG AA (≥ 4.5:1) at small sizes.
+ */
+import type { HTMLAttributes } from "astro/types"
+
+type Tone = "blue" | "pink" | "green" | "yellow" | "brown" | "white" | "image"
+
+export interface Props extends HTMLAttributes<"div"> {
+  tone: Tone
+}
+
+const { tone, class: className, ...rest } = Astro.props
+
+const tones: Record<Tone, string> = {
+  blue: "bg-[#A0C4FF] text-[#12213b] p-5",
+  pink: "bg-[#F7CEFF] text-[#3b1446] p-5",
+  green: "bg-[#9AC372] text-[#18280b] p-5",
+  yellow: "bg-[#FFD86E] text-[#352600] p-5",
+  brown: "bg-[#4F4132] text-[#fbf6ef] p-5",
+  white: "bg-white text-zinc-900 ring-1 ring-black/8 ring-inset p-4",
+  image: "bg-muted",
+}
+---
+
+<div class:list={["relative flex md:mb-3 break-inside-avoid flex-col overflow-hidden rounded-2xl", tones[tone], className]} {...rest}>
+  <slot />
+</div>

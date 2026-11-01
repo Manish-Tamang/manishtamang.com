@@ -1,0 +1,23 @@
+---
+import Prose from "@/components/typography/Prose.astro"
+import StickyNote from "@/components/home/sticky-notes/StickyNote.astro"
+---
+
+<div class="relative">
+  <StickyNote
+    id="note-2"
+    background="/images/hunger-strike-cd.webp"
+    label="Hunger Strike CD"
+    rotation={8}
+    class="-top-14 right-0 size-[70px] md:size-[110px]"
+  />
+  <Prose class="max-w-none">
+    <blockquote>
+      I don't mind stealin' bread<br />
+      From the mouths of decadents<br />
+      But I can't feed on the powerless<br />
+      When my cup's already overfilled, yeah
+      <cite>Hunger Strike, Temple of the Dog</cite>
+    </blockquote>
+  </Prose>
+</div>

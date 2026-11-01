@@ -1,0 +1,108 @@
+---
+/*
+ * Spotify-style card with a vinyl record tucked into the bottom-right corner.
+ * Shows the favourite passed in, then swaps to what's playing via /api/now-playing.
+ */
+import ArrowUpRight from "@/components/icons/ArrowUpRight.astro"
+import BentoCard from "./BentoCard.astro"
+
+export interface Props {
+  title: string
+  artist: string
+  albumImageUrl: string
+  songUrl: string
+  class?: string
+}
+
+const { title, artist, albumImageUrl, songUrl, class: className } = Astro.props
+---
+
+<BentoCard data-now-playing tone="white" class:list={["group", className]}>
+  <div class="relative z-10 flex h-full flex-col justify-between">
+    <div>
+      <div class="mb-2 flex items-start justify-between">
+        <p class="flex items-center gap-1 text-[10px] font-bold tracking-wider whitespace-nowrap text-[#1DB954] uppercase">
+          <span data-np-dot hidden class="relative flex size-1.5">
+            <span class="absolute inline-flex size-full animate-ping rounded-full bg-[#1DB954] opacity-75"></span>
+            <span class="relative inline-flex size-1.5 rounded-full bg-[#1DB954]"></span>
+          </span>
+          <span data-np-label>Recent Favorite</span>
+        </p>
+        <svg class="size-4 shrink-0 text-[#1DB954]" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.494 17.308c-.216.354-.675.467-1.03.251-2.859-1.747-6.458-2.143-10.697-1.176-.406.093-.815-.162-.908-.568-.093-.406.162-.815.568-.908 4.636-1.06 8.599-.606 11.815 1.357.355.216.468.677.252 1.031v.013zm1.467-3.264c-.273.443-.849.584-1.292.311-3.272-2.012-8.259-2.593-12.127-1.417-.5.152-1.026-.131-1.178-.631-.152-.5.131-1.026.631-1.178 4.414-1.339 9.897-.687 13.655 1.619.443.273.584.85.311 1.296zm.127-3.411c-3.924-2.33-10.387-2.544-14.153-1.401-.602.182-1.242-.164-1.425-.766-.182-.602.164-1.242.766-1.425 4.316-1.31 11.439-1.062 15.961 1.621.542.321.72 1.022.399 1.564-.321.542-1.022.72-1.564.399l.016.008z"></path>
+        </svg>
+      </div>
+      <!-- Two copies scrolling by half their width, so the loop has no seam -->
+      <div class="mask-marquee overflow-hidden whitespace-nowrap">
+        <div class="inline-block animate-marquee text-sm font-bold text-zinc-900 motion-reduce:animate-none">
+          <span data-np-title class="inline-block pr-8">{title}</span><span data-np-title aria-hidden="true" class="inline-block pr-8">{title}</span>
+        </div>
+      </div>
+      <p data-np-artist class="line-clamp-1 text-[10px] text-zinc-500">{artist}</p>
+    </div>
+
+    <a
+      data-np-link
+      href={songUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="group/link flex w-fit items-center gap-1 text-[9px] font-bold text-[#1DB954] hover:underline"
+    >
+      View Track
+      <ArrowUpRight class="size-2 transition-transform group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5" />
+    </a>
+  </div>
+
+  <div class="absolute -right-10 -bottom-10 z-10 transition-all duration-500 group-hover:-right-4 group-hover:-bottom-4 group-hover:z-50 group-hover:scale-110">
+    <svg viewBox="0 0 179 171" fill="none" class="size-32" aria-hidden="true">
+      <circle cx="89.5" cy="104.5" r="89.5" fill="#121212"></circle>
+      <circle cx="89.501" cy="104.5" r="87.06" stroke="#282828" stroke-width="2"></circle>
+      <circle cx="89.4992" cy="104.5" r="80.3" stroke="#181818" stroke-width="0.5"></circle>
+      <circle cx="89.4995" cy="104.5" r="69.56" stroke="#181818" stroke-width="0.5"></circle>
+      <circle cx="89.4995" cy="104.5" r="65.98" stroke="#181818" stroke-width="0.5"></circle>
+      <circle cx="89.4999" cy="104.5" r="49.87" stroke="#181818" stroke-width="0.5"></circle>
+      <g data-np-disc style="transform-origin: 89.5px 104.5px">
+        <circle cx="89.5" cy="104.5" r="39.13" fill="#282828" stroke="#181818" stroke-width="0.5"></circle>
+        <defs>
+          <clipPath id="album-clip">
+            <circle cx="89.5" cy="104.5" r="35"></circle>
+          </clipPath>
+        </defs>
+        <image data-np-art href={albumImageUrl} x="54.5" y="69.5" width="70" height="70" clip-path="url(#album-clip)"></image>
+      </g>
+      <circle cx="89.5" cy="104.5" r="3.58" fill="#121212"></circle>
+      <circle cx="89.5" cy="104.5" r="3.33" stroke="white" stroke-opacity="0.2" stroke-width="0.5"></circle>
+    </svg>
+  </div>
+</BentoCard>
+
+<script>
+  import { pollNowPlaying } from "@/lib/client/now-playing"
+  import type { NowPlaying } from "@/lib/services/lastfm"
+
+  const root = document.querySelector<HTMLElement>("[data-now-playing]")
+
+  if (root) {
+    const $ = <T extends Element>(selector: string) => root.querySelector<T>(selector)!
+    const titles = root.querySelectorAll<HTMLElement>("[data-np-title]")
+    const artist = $<HTMLElement>("[data-np-artist]")
+    const label = $<HTMLElement>("[data-np-label]")
+    const dot = $<HTMLElement>("[data-np-dot]")
+    const link = $<HTMLAnchorElement>("[data-np-link]")
+    const art = $<SVGImageElement>("[data-np-art]")
+    const disc = $<SVGGElement>("[data-np-disc]")
+
+    const render = (song: NowPlaying) => {
+      if (!song.title || !song.artist) return
+      titles.forEach((title) => (title.textContent = song.title))
+      artist.textContent = song.artist
+      label.textContent = song.isPlaying ? "Now Playing" : "Last Played"
+      dot.hidden = !song.isPlaying
+      if (song.songUrl) link.href = song.songUrl
+      if (song.albumImageUrl) art.setAttribute("href", song.albumImageUrl)
+      disc.classList.toggle("animate-[spin_4s_linear_infinite]", song.isPlaying)
+    }
+
+    pollNowPlaying(render)
+  }
+</script>

@@ -1,0 +1,29 @@
+---
+import { Image } from "astro:assets"
+import ArrowUpRight from "@/components/icons/ArrowUpRight.astro"
+import { formatDate, type Post } from "@/lib/blog"
+
+export interface Props {
+  post: Post
+}
+
+const { id, data } = Astro.props.post
+---
+
+<a href={`/blog/${id}`} class="group flex items-start gap-4 rounded-xl bg-foreground/5 p-2 transition-all hover:bg-foreground/8">
+  <div class="h-16 w-[100px] shrink-0 overflow-hidden rounded-lg border border-zinc-200 bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-900">
+    {data.cover ? (
+      <Image src={data.cover} alt={data.title} width={200} quality={70} class="size-full object-cover grayscale transition-all duration-500 group-hover:grayscale-0" />
+    ) : (
+      <div class="flex size-full items-center justify-center text-[10px] text-zinc-400">No Image</div>
+    )}
+  </div>
+  <div class="min-w-0 flex-1 space-y-1 py-0.5">
+    <div class="flex items-center justify-between gap-2">
+      <h3 class="truncate text-sm leading-tight font-bold text-zinc-900 dark:text-zinc-100">{data.title}</h3>
+      <ArrowUpRight class="size-3 shrink-0 text-zinc-400" />
+    </div>
+    <p class="line-clamp-1 text-[11px] leading-tight text-zinc-500 dark:text-zinc-400">{data.description}</p>
+    <time datetime={data.date.toISOString()} class="block text-[9px] font-bold text-zinc-400 uppercase">{formatDate(data.date, { month: "short", day: "numeric" })}</time>
+  </div>
+</a>

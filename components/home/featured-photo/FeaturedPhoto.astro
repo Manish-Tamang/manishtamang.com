@@ -1,0 +1,24 @@
+---
+import { Image } from "astro:assets"
+import FlowerButton from "./FlowerButton.astro"
+import photo from "@/assets/photos/08-last-day-of-college-sushma-godawari-coll.jpg"
+
+const caption = "Last day of college, Sushma Godawari college"
+---
+
+<section>
+  <figure>
+    <Image
+      src={photo}
+      alt={caption}
+      widths={[640, 1024, 1600]}
+      sizes="(min-width: 768px) 768px, 100vw"
+      quality={75}
+      class="w-full rounded-md border border-border"
+    />
+    <figcaption class="mt-2 text-center text-xs text-muted-foreground italic">{caption}</figcaption>
+  </figure>
+  <div class="mt-8 flex justify-end">
+    <FlowerButton text="View photos" href="/photos" />
+  </div>
+</section>
