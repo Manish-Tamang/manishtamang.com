@@ -1,0 +1,15 @@
+---
+import ListFilter from "@/components/icons/ListFilter.astro"
+---
+
+<div class="mt-6 flex justify-end">
+  <details data-sort-menu class="relative">
+    <summary aria-label="Sort messages" class="flex size-8 cursor-pointer list-none items-center justify-center rounded-full text-foreground/60 transition-colors hover:bg-zinc-200/50 sm:size-10 dark:hover:bg-zinc-800/50">
+      <ListFilter class="size-4 sm:size-5" />
+    </summary>
+    <div class="absolute top-full right-0 z-20 mt-1 w-36 rounded-xl border border-zinc-200 bg-background p-1 shadow-lg dark:border-zinc-800">
+      <button type="button" data-sort="newest" class="w-full cursor-pointer rounded-lg bg-zinc-100 px-2 py-1.5 text-left text-sm dark:bg-zinc-800">Newest first</button>
+      <button type="button" data-sort="oldest" class="w-full cursor-pointer rounded-lg px-2 py-1.5 text-left text-sm">Oldest first</button>
+    </div>
+  </details>
+</div>

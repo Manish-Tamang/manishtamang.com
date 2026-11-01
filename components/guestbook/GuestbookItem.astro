@@ -1,0 +1,182 @@
+---
+import Badge from "@/components/ui/Badge.astro"
+import Input from "@/components/ui/Input.astro"
+import Heart from "@/components/icons/Heart.astro"
+import Link2 from "@/components/icons/Link2.astro"
+import Reply from "@/components/icons/Reply.astro"
+import Send from "@/components/icons/Send.astro"
+import Smile from "@/components/icons/Smile.astro"
+import Trash2 from "@/components/icons/Trash2.astro"
+import X from "@/components/icons/X.astro"
+import GuestbookMessage from "./GuestbookMessage.astro"
+import { timeAgo, type GuestbookEntry } from "@/lib/guestbook"
+
+export interface Props {
+  entry: GuestbookEntry
+  isAdmin: boolean
+}
+
+const { entry, isAdmin } = Astro.props
+
+const EMOJIS = ["❤️", "✨", "🔥", "🙌", "💯", "🚀", "😂", "😮"]
+const words = entry.message.split(/\s+/)
+const isLong = words.length > 60
+const hasReplies = Boolean(entry.replies?.length)
+
+const reveal = "opacity-100 transition-opacity sm:opacity-0 sm:group-hover:opacity-100 sm:focus-visible:opacity-100"
+const iconButton = "cursor-pointer p-0.5 text-zinc-400 transition-colors sm:p-1"
+const action = "flex cursor-pointer items-center gap-1 text-[11px] transition-colors sm:gap-1.5 sm:text-xs"
+const actionIcon = "size-3 transition-transform active:scale-125 sm:size-3.5"
+---
+
+<div
+  id={entry.id}
+  data-entry={entry.id}
+  data-name={entry.name}
+  class="group relative -m-2 mt-1 flex scroll-mt-24 gap-2 rounded-xl p-2 transition-all duration-700 target:bg-blue-500/5 target:ring-1 target:ring-blue-500/20 sm:gap-4 dark:target:bg-blue-500/10"
+>
+  {entry.likedByAdmin && (
+    <span class="absolute -right-1 bottom-2 z-10" title="Liked by Manish">
+      <span class="relative block">
+        <img src="https://github.com/Manish-Tamang.png" alt="" width="20" height="20" loading="lazy" class="size-4 rounded-full border border-white object-cover shadow-sm sm:size-5 dark:border-zinc-900" />
+        <span class="absolute -right-1 -bottom-1 rounded-full border border-white bg-red-500 p-0.5 dark:border-zinc-900">
+          <Heart class="size-1.5 fill-current text-white" />
+        </span>
+      </span>
+    </span>
+  )}
+
+  <div class="flex flex-col items-center">
+    <div class="relative size-8 shrink-0 sm:size-10">
+      {entry.image_url ? (
+        <img src={entry.image_url} alt="" width="40" height="40" loading="lazy" referrerpolicy="no-referrer" class="size-full rounded-sm border-2 border-white object-cover shadow-sm dark:border-zinc-800" />
+      ) : (
+        <span class="flex size-full items-center justify-center rounded-sm border-2 border-white bg-linear-to-br from-zinc-100 to-zinc-200 text-[11px] font-semibold shadow-sm sm:text-[13px] dark:border-zinc-800 dark:from-zinc-800 dark:to-zinc-900">{entry.name.charAt(0)}</span>
+      )}
+      <Heart data-heart-pop class="pointer-events-none absolute top-0 left-1/2 z-50 hidden size-6 -translate-x-1/2 -translate-y-8 animate-bounce fill-current text-red-500 drop-shadow-lg sm:size-8" />
+    </div>
+    {hasReplies && <div class="mt-2 mb-2 w-px flex-1 bg-zinc-200 dark:bg-zinc-800"></div>}
+  </div>
+
+  <div class="min-w-0 flex-1 space-y-1.5 sm:space-y-2">
+    <div class="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between sm:gap-0">
+      <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
+        <p class="text-sm leading-normal text-foreground md:text-base">{entry.name}</p>
+        {entry.isAdminAuthor && <Badge variant="accent">Admin</Badge>}
+        <span class="hidden text-xs font-normal text-zinc-500 sm:inline sm:text-sm">signed the guestbook</span>
+      </div>
+      <div class="flex items-center gap-1.5 sm:gap-2">
+        <time datetime={entry.timestamp} title={new Date(entry.timestamp).toUTCString()} class="font-mono text-[10px] text-zinc-400 sm:text-[11px]">{timeAgo(entry.timestamp)}</time>
+        <button type="button" data-action="copy" title="Copy link to this message" aria-label="Copy link" class:list={[iconButton, reveal, "hover:text-[#9AC372]"]}>
+          <Link2 class="size-3 sm:size-3.5" />
+        </button>
+        {(isAdmin || entry.isMine) && (
+          <button type="button" data-action="delete" aria-label="Delete message" class:list={[iconButton, reveal, "hover:text-red-500"]}>
+            <Trash2 class="size-3 sm:size-3.5" />
+          </button>
+        )}
+      </div>
+    </div>
+
+    <div class="text-[13px] leading-normal break-words whitespace-pre-wrap text-foreground sm:text-sm">
+      {isLong ? (
+        <>
+          <span data-short><GuestbookMessage text={`${words.slice(0, 60).join(" ")}...`} /></span>
+          <span data-full hidden><GuestbookMessage text={entry.message} /></span>
+          <button type="button" data-action="more" class="ml-1 cursor-pointer text-xs font-medium text-blue-500 transition-colors hover:text-blue-600 sm:text-[13px]">See more</button>
+        </>
+      ) : (
+        <GuestbookMessage text={entry.message} />
+      )}
+    </div>
+
+    {entry.attachment_url && (
+      <div class="group/img relative mt-2 aspect-16/10 max-w-full overflow-hidden rounded-lg border border-zinc-200 bg-black/5 shadow-sm transition-all duration-500 hover:border-zinc-300 sm:mt-3 sm:max-w-100 sm:rounded-xl dark:border-zinc-800 dark:bg-white/5 dark:hover:border-zinc-700">
+        <img src={entry.attachment_url} alt="Attachment" loading="lazy" draggable="false" class="size-full object-cover transition-transform duration-700 select-none group-hover/img:scale-[1.03]" />
+      </div>
+    )}
+
+    {entry.reactions.length > 0 && (
+      <div class="mt-1 flex justify-end">
+        {entry.reactions.map(({ emoji, count }) => (
+          <div class="ml-1 flex items-center gap-1 rounded-full border border-zinc-200 bg-zinc-100 px-1.5 py-0.5 text-[10px] text-zinc-500 dark:border-zinc-700 dark:bg-zinc-800">
+            <span>{emoji}</span>
+            <span>{count}</span>
+          </div>
+        ))}
+      </div>
+    )}
+
+    {isAdmin && (
+      <div class:list={["flex items-center gap-2 pt-1 sm:gap-4", reveal, "has-[details[open]]:opacity-100"]}>
+        <button type="button" data-action="like" data-liked={entry.likedByMe ? "true" : undefined} class:list={[action, entry.likedByMe ? "text-red-500" : "text-zinc-400 hover:text-red-500"]}>
+          <Heart class:list={[actionIcon, entry.likedByMe && "fill-current"]} />
+          <span class="hidden sm:inline">{entry.likedByMe ? "Liked" : "Like"}</span>
+        </button>
+
+        <details class="relative">
+          <summary class:list={[action, "list-none", entry.myReaction ? "text-blue-500" : "text-zinc-400 hover:text-blue-500"]}>
+            <Smile class={actionIcon} />
+            <span class="hidden sm:inline">React</span>
+          </summary>
+          <div class="absolute bottom-full left-0 z-20 mb-1 grid grid-cols-4 gap-0.5 rounded-xl border border-zinc-200 bg-white/95 p-1.5 shadow-2xl backdrop-blur-md sm:gap-1 sm:rounded-2xl sm:p-2 dark:border-zinc-800 dark:bg-zinc-900/95">
+            {EMOJIS.map((emoji) => (
+              <button type="button" data-action="react" data-emoji={emoji} class="flex size-8 cursor-pointer items-center justify-center rounded-lg text-lg transition-all hover:scale-125 hover:bg-zinc-200 active:scale-90 sm:size-9 sm:rounded-xl sm:text-xl dark:hover:bg-zinc-800">{emoji}</button>
+            ))}
+          </div>
+        </details>
+
+        <button type="button" data-action="reply" class:list={[action, "text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200"]}>
+          <Reply class="size-3 sm:size-3.5" />
+          <span class="hidden sm:inline">Reply</span>
+        </button>
+      </div>
+    )}
+
+    {isAdmin && (
+      <form data-reply-form hidden class="mt-2 flex gap-1.5 sm:mt-3 sm:gap-2">
+        <div class="relative flex-1">
+          <Input name="message" placeholder="Write a reply..." aria-label="Reply" required class="min-h-[34px] rounded-lg pr-8 text-xs sm:min-h-[38px] sm:rounded-xl sm:pr-10 sm:text-sm" />
+          <button type="button" data-action="cancel-reply" aria-label="Cancel reply" class="absolute top-1/2 right-2 -translate-y-1/2 cursor-pointer text-zinc-400 hover:text-zinc-600 sm:right-3">
+            <X class="size-3 sm:size-3.5" />
+          </button>
+        </div>
+        <button type="submit" class="glossy inline-flex h-[34px] cursor-pointer items-center rounded-lg px-3 text-xs sm:h-[38px] sm:rounded-xl sm:px-4 sm:text-sm">
+          <Send class="size-3 sm:mr-2 sm:size-3.5" />
+          <span class="hidden sm:inline">Post</span>
+        </button>
+      </form>
+    )}
+
+    {hasReplies && (
+      <div class="mt-2 space-y-1.5 border-l-2 border-zinc-100 pl-2 sm:space-y-2 sm:pl-4 dark:border-zinc-800/50">
+        {entry.replies!.map((reply) => (
+          <div data-entry={reply.id} class="group/reply relative flex gap-2 sm:gap-3">
+            {reply.image_url ? (
+              <img src={reply.image_url} alt="" width="32" height="32" loading="lazy" referrerpolicy="no-referrer" class="size-6 shrink-0 rounded-full border border-white object-cover shadow-sm sm:size-8 dark:border-zinc-800" />
+            ) : (
+              <span class="flex size-6 shrink-0 items-center justify-center rounded-full border border-white bg-muted text-[9px] shadow-sm sm:size-8 sm:text-[10px] dark:border-zinc-800">{reply.name.charAt(0)}</span>
+            )}
+            <div class="min-w-0 flex-1 space-y-0.5 sm:space-y-1">
+              <div class="flex flex-col gap-0.5 sm:flex-row sm:items-center sm:justify-between sm:gap-0">
+                <div class="flex items-center gap-1.5 sm:gap-2">
+                  <p class="text-[11px] font-medium text-zinc-900 sm:text-xs dark:text-zinc-100">{reply.name}</p>
+                  {reply.isAdminAuthor && <Badge variant="accent">Admin</Badge>}
+                </div>
+                <div class="flex items-center gap-1 sm:gap-2">
+                  <time datetime={reply.timestamp} class="font-mono text-[9px] text-zinc-400 sm:text-[10px]">{timeAgo(reply.timestamp)}</time>
+                  {(isAdmin || reply.isMine) && (
+                    <button type="button" data-action="delete" aria-label="Delete reply" class="cursor-pointer p-0.5 text-zinc-400 transition-colors hover:text-red-500 sm:p-1 sm:opacity-0 sm:group-hover/reply:opacity-100">
+                      <Trash2 class="size-2.5 sm:size-3" />
+                    </button>
+                  )}
+                </div>
+              </div>
+              <div class="text-xs leading-relaxed break-words text-zinc-600 sm:text-[13px] dark:text-zinc-400"><GuestbookMessage text={reply.message} /></div>
+            </div>
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+</div>

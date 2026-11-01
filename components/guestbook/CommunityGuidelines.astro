@@ -1,0 +1,21 @@
+---
+import HeartFull from "@/components/icons/HeartFull.astro"
+import Stars from "@/components/icons/Stars.astro"
+---
+
+<div class="mt-6 border-t border-dashed border-zinc-200 pt-4 sm:pt-6 dark:border-zinc-800">
+  <div class="flex items-center gap-3 rounded-lg border border-zinc-200/50 bg-zinc-100/30 p-3 transition-colors hover:bg-zinc-100/50 sm:gap-4 sm:p-4 dark:border-zinc-800/50 dark:bg-zinc-900/30 dark:hover:bg-zinc-900/50">
+    <div class="flex-1 space-y-0.5 sm:space-y-1">
+      <h2 class="flex items-center gap-1.5 text-[13px] font-semibold text-zinc-900 sm:gap-2 sm:text-sm md:text-[15px] dark:text-zinc-100">
+        <Stars class="size-3 text-blue-500 sm:size-3.5" />
+        Community Guidelines
+      </h2>
+      <p class="line-clamp-2 text-[11px] text-zinc-500 sm:text-xs md:text-[13px]">
+        Be kind, be respectful, and keep it creative. Your words help build this space.
+      </p>
+    </div>
+    <div class="flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-linear-to-br from-blue-100 to-purple-100 sm:size-12 dark:from-blue-900/40 dark:to-purple-900/40">
+      <HeartFull class="size-4 text-blue-500/50 sm:size-5" />
+    </div>
+  </div>
+</div>

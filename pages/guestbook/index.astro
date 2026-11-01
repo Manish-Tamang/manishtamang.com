@@ -1,0 +1,57 @@
+---
+import PageLayout from "@/layouts/PageLayout.astro"
+import CommunityGuidelines from "@/components/guestbook/CommunityGuidelines.astro"
+import DeleteDialog from "@/components/guestbook/DeleteDialog.astro"
+import GuestbookForm from "@/components/guestbook/GuestbookForm.astro"
+import GuestbookItem from "@/components/guestbook/GuestbookItem.astro"
+import SortMenu from "@/components/guestbook/SortMenu.astro"
+import { adminEmail, getUser } from "@/lib/auth"
+import { getGuestbookEntries, type GuestbookEntry } from "@/lib/guestbook"
+import { guestbookSeo } from "@/lib/guestbook/seo"
+import { toJsonLd } from "@/lib/seo"
+
+// Rendered per request: the page depends on who's signed in
+export const prerender = false
+
+const user = await getUser(Astro.request)
+const isAdmin = Boolean(adminEmail) && user?.email?.toLowerCase() === adminEmail
+
+let entries: GuestbookEntry[] = []
+try {
+  entries = await getGuestbookEntries(user?.email)
+} catch (error) {
+  console.error(error)
+}
+
+const { description, jsonLd } = guestbookSeo(entries)
+---
+
+<PageLayout
+  heading="Guestbook"
+  intro="Leave a comment below. It could be anything – appreciation, information, wisdom, anything good or bad about me or even humor."
+  description={description}
+>
+  <script type="application/ld+json" set:html={toJsonLd(jsonLd)} />
+
+  <GuestbookForm user={user} />
+  <SortMenu />
+
+  <div data-guestbook-list class="mt-2 flex flex-col gap-3 sm:gap-4">
+    {entries.length === 0 ? (
+      <div class="rounded-lg border border-dashed border-zinc-200 bg-white/50 py-8 text-center text-zinc-500 sm:py-10 dark:border-zinc-800 dark:bg-black/20">
+        <p class="text-xs sm:text-sm">No messages yet. Be the first to sign!</p>
+      </div>
+    ) : (
+      entries.map((entry) => <GuestbookItem entry={entry} isAdmin={isAdmin} />)
+    )}
+  </div>
+
+  <CommunityGuidelines />
+  <DeleteDialog />
+
+  <p data-toast role="status" hidden class="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-lg bg-heading px-3 py-2 text-sm text-background shadow-lg"></p>
+</PageLayout>
+
+<script>
+  import "@/lib/client/guestbook"
+</script>

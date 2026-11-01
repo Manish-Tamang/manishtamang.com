@@ -1,0 +1,13 @@
+---
+import Button from "@/components/ui/Button.astro"
+import Text from "@/components/typography/Text.astro"
+---
+
+<dialog data-delete-dialog class="m-auto w-[calc(100%-2rem)] max-w-100 rounded-2xl border border-zinc-200 bg-background p-6 text-foreground backdrop:bg-black/50 dark:border-zinc-800">
+  <p class="text-lg font-semibold text-heading">Delete message</p>
+  <Text size="sm" tone="muted" class="mt-1">Are you sure you want to delete this? This action cannot be undone.</Text>
+  <form method="dialog" class="mt-4 flex justify-end gap-2">
+    <Button type="submit" size="sm" variant="outline" value="cancel">Cancel</Button>
+    <button type="submit" value="delete" class="inline-flex h-9 cursor-pointer items-center rounded-xl bg-red-500 px-3.5 text-sm font-medium text-white hover:bg-red-600">Delete</button>
+  </form>
+</dialog>
