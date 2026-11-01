@@ -206,7 +206,10 @@ export const ai: { title: string; body: string }[] = [
 export const changelog: { date: string; changes: string[] }[] = [
   {
     date: "2026-11-01",
-    changes: ["Added /slashes, an index of all my slash pages."],
+    changes: [
+      "Added /slashes, an index of all my slash pages.",
+      "Added all-time top artists and albums to /dashboard.",
+    ],
   },
   {
     date: "2026-10-31",

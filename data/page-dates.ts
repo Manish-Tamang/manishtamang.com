@@ -16,7 +16,7 @@ export const pageUpdated: Record<string, string> = {
   "/uses": "2026-10-31",
   "/bookmarks": "2026-10-30",
   "/contact": "2026-10-02",
-  "/dashboard": "2026-10-21",
+  "/dashboard": "2026-11-01",
   "/digitalpathshala": "2026-10-30",
   "/colophon": "2026-10-20",
   "/manifest": "2025-11-08",
