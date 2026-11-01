@@ -148,6 +148,11 @@ export const sections: Section[] = [
         note: "Fuzzy finder for files, history and paths",
         url: "https://github.com/junegunn/fzf",
       },
+      {
+        name: "FFmpeg",
+        note: "Compressing videos from the terminal",
+        url: "https://ffmpeg.org/",
+      },
     ],
   },
   {
