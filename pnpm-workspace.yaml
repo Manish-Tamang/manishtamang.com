@@ -1,0 +1,5 @@
+minimumReleaseAgeExclude:
+  - '@astrojs/markdown-satteri@0.4.6'
+  - '@astrojs/prism@4.1.2'
+  - '@astrojs/telemetry@3.4.2'
+  - astro@7.4.4

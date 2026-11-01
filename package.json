@@ -1,0 +1,31 @@
+{
+  "name": "manishtamang-astro",
+  "type": "module",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=22.23.4"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "check:urls": "node scripts/check-urls.mjs",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^8.1.2",
+    "@astrojs/vercel": "^11.0.16",
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.4.4",
+    "better-auth": "~1.6.33",
+    "pg": "^8.23.1",
+    "sharp": "0.35.5",
+    "tailwindcss": "^4.3.3"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "@types/pg": "^8.23.1",
+    "typescript": "^6.0.3"
+  }
+}
