@@ -2,6 +2,7 @@
 import { Image } from "astro:assets"
 import PageLayout from "@/layouts/PageLayout.astro"
 import Prose from "@/components/typography/Prose.astro"
+import HCard from "@/components/shared/HCard.astro"
 import { verify } from "@/data/slash-pages"
 import pfp from "@/assets/images/pfp.png"
 
@@ -10,6 +11,7 @@ const others = verify.filter((account) => !account.follow)
 ---
 
 <PageLayout heading="Verify" description="The system of record for Manish Tamang's online identity.">
+  <HCard />
   <Prose class="max-w-none">
     <p>This page is the system of record for my online identity. The best places to follow me are:</p>
     <ul>

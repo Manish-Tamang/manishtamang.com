@@ -1,0 +1,22 @@
+---
+/*
+ * The site's h-card (microformats.org/wiki/h-card), for IndieWeb tools like
+ * webring sign-in and indiewebify.me. Hidden: it only needs to be in the HTML.
+ */
+import { site } from "@/lib/site"
+import pfp from "@/assets/images/pfp.png"
+---
+
+<div hidden class="h-card">
+  <a class="p-name u-url u-uid" href={site.url}>{site.name}</a>
+  <a class="u-photo" href={new URL(pfp.src, site.url).href}>Profile picture</a>
+  <span class="p-nickname">{site.handle}</span>
+  <a class="u-email" href="mailto:hi@manishtamang.com">hi@manishtamang.com</a>
+  <span class="p-job-title">Developer &amp; Student</span>
+  <span class="p-locality">Kathmandu</span>
+  <span class="p-country-name">Nepal</span>
+  <p class="p-note">
+    I craft minimal and functional digital experiences. Focused on clean design, thoughtful typography, and building
+    with modern web technologies.
+  </p>
+</div>
