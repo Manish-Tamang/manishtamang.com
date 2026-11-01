@@ -1,0 +1,64 @@
+---
+import { Image } from "astro:assets"
+import PageLayout from "@/layouts/PageLayout.astro"
+import Text from "@/components/typography/Text.astro"
+import Separator from "@/components/ui/Separator.astro"
+import miniGole from "@/assets/bio/mini-gole.png"
+import collegeDays from "@/assets/images/college-days.png"
+---
+
+<PageLayout heading="Bio" description="A personal journal by Manish Tamang (golecodes).">
+  <section class="grid items-start gap-8 sm:grid-cols-[1fr_auto]">
+    <div class="space-y-4">
+      <p class="text-xs font-semibold tracking-widest text-muted-foreground uppercase">Journal</p>
+      <Text>
+        Since childhood, I have been driven by curiosity and a deep passion for learning. I have always been eager to
+        explore new ideas and understand how things work, often looking at them from different perspectives.
+      </Text>
+      <Text>
+        I am naturally drawn to minimalism and clarity, preferring simplicity over anything cluttered or messy. From
+        the very beginning, I have carried a positive mindset toward growth, always seeking to learn, improve, and see
+        the bigger picture.
+      </Text>
+    </div>
+
+    <!-- Name card: the caption slides up on hover -->
+    <figure class="group relative h-48 w-40 overflow-hidden rounded-lg justify-self-center sm:justify-self-end">
+      <Image src={miniGole} alt="Manish Tamang as a kid" width={160} densities={[1, 2]} draggable="false" class="size-full object-cover opacity-90 select-none" />
+      <figcaption class="absolute inset-x-0 -bottom-16 flex flex-col gap-1 bg-subtle p-2 transition-[bottom] duration-500 group-hover:bottom-0">
+        <span class="font-display text-lg text-link">Manish Gole</span>
+        <span class="text-xs text-muted-foreground">My friends also call me Gole.</span>
+      </figcaption>
+    </figure>
+  </section>
+
+  <Separator class="my-10" />
+  <section class="grid items-center gap-8 sm:grid-cols-2">
+    <figure>
+      <Image
+        src={collegeDays}
+        alt="Two yellow school buses parked side by side at dusk, with students looking out of the windows"
+        widths={[320, 480, 720]}
+        sizes="(max-width: 640px) 100vw, 360px"
+        quality={78}
+        class="aspect-square w-full rounded-lg border border-border object-cover grayscale"
+      />
+      <figcaption class="mt-2 text-sm text-muted-foreground">Best days of my life, college days.</figcaption>
+    </figure>
+
+    <div class="space-y-4">
+      <Text>
+        I did my +2 in Science at Sushma Godawari College, majoring in Computer Science. Those two years are the ones I
+        keep going back to: the bus rides, the bench mates, and the friends who made even the long days easy.
+      </Text>
+      <Text>
+        It was also when I got serious about building things. I went to college during the day, then worked as a MERN
+        stack intern in the evenings, and I still can't believe how much fit into that time.
+      </Text>
+    </div>
+  </section>
+
+  <section id="journal" class="mt-12">
+    <Text tone="muted" size="sm">Journal entries coming soon.</Text>
+  </section>
+</PageLayout>

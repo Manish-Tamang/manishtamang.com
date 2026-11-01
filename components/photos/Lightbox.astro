@@ -1,0 +1,152 @@
+---
+/*
+ * Full-screen photo viewer for [data-photo] tiles. Native <dialog> gives
+ * focus trapping and Escape-to-close; this adds prev/next, arrow keys,
+ * swipe, click-to-zoom (pans with the pointer) and neighbour preloading.
+ */
+---
+
+<dialog
+  data-lightbox
+  aria-label="Photo viewer"
+  class="m-0 h-dvh max-h-none w-screen max-w-none bg-black/95 p-0 text-white backdrop:bg-black/80 open:flex open:flex-col"
+>
+  <div class="flex shrink-0 items-center justify-between gap-4 px-4 py-3 sm:px-6">
+    <p class="text-sm text-white/70 tabular-nums" data-lb-counter></p>
+    <button type="button" class="rounded-full p-2 text-white/80 transition-colors hover:bg-white/10 hover:text-white" aria-label="Close" data-lb-close>
+      <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path d="M18 6 6 18M6 6l12 12"></path>
+      </svg>
+    </button>
+  </div>
+
+  <div class="relative flex min-h-0 flex-1 items-center justify-center overflow-hidden px-12 sm:px-16" data-lb-stage>
+    <button type="button" class="absolute left-2 z-20 rounded-full bg-white/10 p-2 transition-colors hover:bg-white/20 sm:left-4" aria-label="Previous photo" data-lb-prev>
+      <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path d="m15 18-6-6 6-6"></path>
+      </svg>
+    </button>
+
+    <img
+      data-lb-image
+      alt=""
+      sizes="100vw"
+      decoding="async"
+      class="max-h-full max-w-full cursor-zoom-in object-contain transition-transform duration-200 select-none"
+      draggable="false"
+    />
+
+    <button type="button" class="absolute right-2 z-20 rounded-full bg-white/10 p-2 transition-colors hover:bg-white/20 sm:right-4" aria-label="Next photo" data-lb-next>
+      <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path d="m9 18 6-6-6-6"></path>
+      </svg>
+    </button>
+  </div>
+
+  <div class="flex min-h-16 shrink-0 flex-col items-center justify-center gap-1 px-6 py-4 text-center">
+    <p class="max-w-2xl text-sm font-medium" data-lb-caption></p>
+    <p class="text-xs text-white/55" data-lb-date></p>
+  </div>
+</dialog>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>("[data-lightbox]")
+  const tiles = [...document.querySelectorAll<HTMLElement>("[data-photo]")]
+
+  if (dialog && tiles.length) {
+    const img = dialog.querySelector<HTMLImageElement>("[data-lb-image]")!
+    const stage = dialog.querySelector<HTMLElement>("[data-lb-stage]")!
+    const counter = dialog.querySelector<HTMLElement>("[data-lb-counter]")!
+    const caption = dialog.querySelector<HTMLElement>("[data-lb-caption]")!
+    const date = dialog.querySelector<HTMLElement>("[data-lb-date]")!
+    const prev = dialog.querySelector<HTMLElement>("[data-lb-prev]")!
+    const next = dialog.querySelector<HTMLElement>("[data-lb-next]")!
+
+    let index = 0
+    let zoomed = false
+    let touchX: number | null = null
+
+    for (const button of [prev, next]) button.hidden = tiles.length < 2
+
+    const preload = (i: number) => {
+      const data = tiles[(i + tiles.length) % tiles.length].dataset
+      const image = new Image()
+      image.sizes = "100vw"
+      image.srcset = data.srcset ?? ""
+      image.src = data.src ?? ""
+    }
+
+    const setZoom = (on: boolean, event?: MouseEvent) => {
+      zoomed = on
+      img.classList.toggle("cursor-zoom-in", !on)
+      img.classList.toggle("cursor-zoom-out", on)
+      if (on && event) pan(event)
+      img.style.transform = on ? "scale(2.25)" : ""
+    }
+
+    const pan = (event: MouseEvent) => {
+      const rect = img.getBoundingClientRect()
+      const x = ((event.clientX - rect.left) / rect.width) * 100
+      const y = ((event.clientY - rect.top) / rect.height) * 100
+      img.style.transformOrigin = `${Math.min(100, Math.max(0, x))}% ${Math.min(100, Math.max(0, y))}%`
+    }
+
+    const show = (i: number) => {
+      index = (i + tiles.length) % tiles.length
+      const data = tiles[index].dataset
+      setZoom(false)
+      img.removeAttribute("src")
+      img.width = Number(data.width)
+      img.height = Number(data.height)
+      img.srcset = data.srcset ?? ""
+      img.src = data.src ?? ""
+      img.alt = data.alt ?? ""
+      counter.textContent = `${index + 1} / ${tiles.length}`
+      caption.textContent = data.caption ?? ""
+      date.textContent = data.date ?? ""
+      if (tiles.length > 1) {
+        preload(index + 1)
+        preload(index - 1)
+      }
+    }
+
+    tiles.forEach((tile, i) =>
+      tile.addEventListener("click", () => {
+        show(i)
+        document.documentElement.style.overflow = "hidden"
+        dialog.showModal()
+      }),
+    )
+
+    dialog.addEventListener("close", () => {
+      document.documentElement.style.overflow = ""
+      setZoom(false)
+      tiles[index].focus()
+    })
+
+    dialog.querySelector("[data-lb-close]")!.addEventListener("click", () => dialog.close())
+    prev.addEventListener("click", () => show(index - 1))
+    next.addEventListener("click", () => show(index + 1))
+
+    img.addEventListener("click", (event) => setZoom(!zoomed, event))
+    img.addEventListener("mousemove", (event) => zoomed && pan(event))
+
+    // Clicking the dark area around the photo closes the viewer
+    stage.addEventListener("click", (event) => {
+      if (event.target === stage) dialog.close()
+    })
+
+    dialog.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowLeft") show(index - 1)
+      if (event.key === "ArrowRight") show(index + 1)
+    })
+
+    stage.addEventListener("touchstart", (event) => (touchX = event.changedTouches[0]?.clientX ?? null), { passive: true })
+    stage.addEventListener("touchend", (event) => {
+      if (touchX === null || zoomed || tiles.length < 2) return
+      const delta = (event.changedTouches[0]?.clientX ?? 0) - touchX
+      touchX = null
+      if (Math.abs(delta) > 56) show(delta < 0 ? index + 1 : index - 1)
+    })
+  }
+</script>

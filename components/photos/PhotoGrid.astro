@@ -1,0 +1,95 @@
+---
+/*
+ * Photo wall: tile spans come from each photo's `format`. Everything is
+ * generated at build time — responsive tile images, a large srcset for the
+ * lightbox, and a 16px blur placeholder.
+ */
+import { join } from "node:path"
+import type { ImageMetadata } from "astro"
+import { Image, getImage } from "astro:assets"
+import sharp from "sharp"
+import photos from "@/data/photos.json"
+import Lightbox from "./Lightbox.astro"
+
+const files = import.meta.glob<{ default: ImageMetadata }>("/assets/photos/*.jpg", { eager: true })
+
+// Tile spans and the matching `sizes` hint (grid is 2 / 3 / 4 columns)
+const formats: Record<string, { span: string; cols: number }> = {
+  "1x1": { span: "col-span-1 row-span-1", cols: 1 },
+  "2x1": { span: "col-span-2 row-span-1", cols: 2 },
+  "1x2": { span: "col-span-1 row-span-2", cols: 1 },
+  "2x2": { span: "col-span-2 row-span-2", cols: 2 },
+}
+
+const dateFormat = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "long", year: "numeric" })
+
+const tiles = await Promise.all(
+  photos.map(async (photo) => {
+    const image = files[`/assets/photos/${photo.file}`]?.default
+    if (!image) throw new Error(`Missing photo file: ${photo.file}`)
+
+    const full = await getImage({ src: image, widths: [800, 1280, 1920, 2560], format: "webp", quality: 82 })
+    const placeholder = await sharp(join(process.cwd(), "assets/photos", photo.file))
+      .resize(16, 16, { fit: "inside" })
+      .webp({ quality: 30 })
+      .toBuffer()
+
+    const layout = formats[photo.format] ?? formats["1x1"]
+
+    return {
+      ...photo,
+      image,
+      layout,
+      full,
+      placeholder: `data:image/webp;base64,${placeholder.toString("base64")}`,
+      dateLabel: photo.date ? dateFormat.format(new Date(`${photo.date}T00:00:00`)) : "",
+    }
+  }),
+)
+---
+
+{
+  tiles.length === 0 ? (
+    <p class="py-12 text-center text-muted-foreground">No photos yet.</p>
+  ) : (
+    <ul class="grid auto-rows-[8.5rem] grid-flow-dense grid-cols-2 gap-1 sm:grid-cols-3 md:grid-cols-4">
+      {tiles.map(({ image, layout, full, placeholder, alt, caption, dateLabel }, index) => (
+        <li class:list={["relative overflow-hidden rounded-sm bg-muted", layout.span]}>
+          <!-- Blurred 16px preview shows until the real image paints over it -->
+          <span
+            class="absolute inset-0 scale-110 bg-cover bg-center blur-lg"
+            style={`background-image: url(${placeholder})`}
+            aria-hidden="true"
+          />
+          <button
+            type="button"
+            class="group absolute inset-0 cursor-zoom-in"
+            aria-label={`Open photo: ${caption || alt}`}
+            data-photo
+            data-src={full.src}
+            data-srcset={full.srcSet.attribute}
+            data-width={image.width}
+            data-height={image.height}
+            data-alt={alt}
+            data-caption={caption}
+            data-date={dateLabel}
+          >
+            <Image
+              src={image}
+              alt={alt}
+              width={768}
+              widths={[256, 384, 512, 640, 768]}
+              sizes={layout.cols === 2 ? "(max-width: 640px) 100vw, (max-width: 768px) 66vw, 360px" : "(max-width: 640px) 50vw, (max-width: 768px) 33vw, 180px"}
+              quality={72}
+              loading={index < 4 ? "eager" : "lazy"}
+              fetchpriority={index < 2 ? "high" : "auto"}
+              class="relative size-full object-cover transition-[transform,opacity] duration-300 group-hover:scale-[1.03] group-hover:opacity-90"
+            />
+          </button>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+<Lightbox />

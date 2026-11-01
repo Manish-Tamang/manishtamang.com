@@ -1,0 +1,42 @@
+---
+/*
+ * Firfirey (a Nepali paper pinwheel). Spins while hovered; clicking keeps it
+ * spinning until clicked again. CSS animation, no framework.
+ */
+import { Image } from "astro:assets"
+import wings from "@/assets/about/firfirey-wings.png"
+import stick from "@/assets/about/firfirey-stick.png"
+---
+
+<button type="button" class="firfirey relative flex w-fit flex-col items-center" aria-pressed="false" aria-label="Spin the firfirey" data-firfirey>
+  <Image src={wings} alt="" width={80} height={80} densities={[1, 2]} draggable="false" class="wings relative z-10 select-none" />
+  <!-- Only the width is fixed; the tall stick keeps its proportions, and the wings overlap its top -->
+  <Image src={stick} alt="" width={30} densities={[1, 2]} draggable="false" class="relative z-0 -mt-14 w-[30px] select-none" />
+</button>
+
+<style>
+  .wings {
+    transition: transform 0.5s ease-out;
+  }
+
+  .firfirey:hover .wings,
+  .firfirey[aria-pressed="true"] .wings {
+    animation:
+      spin 0.8s linear infinite,
+      wind-blur 0.2s linear infinite;
+  }
+
+  @keyframes wind-blur {
+    50% {
+      filter: blur(1.5px);
+    }
+  }
+</style>
+
+<script>
+  for (const button of document.querySelectorAll<HTMLElement>("[data-firfirey]")) {
+    button.addEventListener("click", () => {
+      button.setAttribute("aria-pressed", String(button.getAttribute("aria-pressed") !== "true"))
+    })
+  }
+</script>

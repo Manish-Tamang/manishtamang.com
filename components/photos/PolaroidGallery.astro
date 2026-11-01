@@ -1,0 +1,81 @@
+---
+/*
+ * Tilted polaroids with handwritten captions. Clicking one opens the shared
+ * photo lightbox (same [data-photo] contract as the /photos grid).
+ */
+import type { ImageMetadata } from "astro"
+import { Image, getImage } from "astro:assets"
+import Lightbox from "@/components/photos/Lightbox.astro"
+import type { Polaroid } from "@/data/about"
+
+export interface Props {
+  items: Polaroid[]
+}
+
+const { items } = Astro.props
+
+const files = import.meta.glob<{ default: ImageMetadata }>("/assets/{bio,images}/*.{jpg,png}", { eager: true })
+const find = (file: string) =>
+  files[`/assets/bio/${file}`]?.default ?? files[`/assets/images/${file}`]?.default
+
+const polaroids = await Promise.all(
+  items.map(async (item) => {
+    const image = find(item.file)
+    if (!image) throw new Error(`Missing polaroid image: ${item.file}`)
+    const full = await getImage({ src: image, widths: [800, 1280, 1920], format: "webp", quality: 82 })
+    return { ...item, image, full }
+  }),
+)
+---
+
+<ul class="grid grid-cols-2 justify-items-center gap-4 sm:grid-cols-4" aria-label="Polaroid memories">
+  {polaroids.map(({ image, full, caption, alt, rotate }) => (
+    <li class="w-full max-w-40" style={`transform: rotate(${rotate}deg)`}>
+      <button
+        type="button"
+        class="polaroid block w-full cursor-zoom-in bg-white px-2.5 pt-2.5 pb-3 text-left text-zinc-700"
+        aria-label={`Open photo: ${caption}`}
+        data-photo
+        data-src={full.src}
+        data-srcset={full.srcSet.attribute}
+        data-width={image.width}
+        data-height={image.height}
+        data-alt={alt}
+        data-caption={caption}
+        data-date=""
+      >
+        <Image
+          src={image}
+          alt={alt}
+          width={320}
+          widths={[160, 240, 320]}
+          sizes="(max-width: 640px) 40vw, 160px"
+          quality={70}
+          draggable="false"
+          class="aspect-square w-full bg-zinc-100 object-cover select-none"
+        />
+        <span class="block pt-2 text-center font-display text-xs leading-tight">{caption}</span>
+      </button>
+    </li>
+  ))}
+</ul>
+
+<Lightbox />
+
+<style>
+  .polaroid {
+    box-shadow:
+      0 6px 20px rgb(0 0 0 / 0.12),
+      0 2px 6px rgb(0 0 0 / 0.08);
+    transition:
+      transform 0.3s ease-out,
+      box-shadow 0.3s ease-out;
+  }
+
+  .polaroid:hover {
+    transform: translateY(-4px) scale(1.02) rotate(1deg);
+    box-shadow:
+      0 14px 36px rgb(0 0 0 / 0.16),
+      0 4px 10px rgb(0 0 0 / 0.1);
+  }
+</style>
