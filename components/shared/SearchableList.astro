@@ -1,0 +1,40 @@
+---
+/*
+ * Search box, sort button and year-grouped list, shared by /blog and /projects.
+ * Pass the rows as the default slot, each section marked with data-year.
+ */
+import Input from "@/components/ui/Input.astro"
+import ListFilter from "@/components/icons/ListFilter.astro"
+import Search from "@/components/icons/Search.astro"
+
+export interface Props {
+  /** Plural noun for the placeholder and the empty state, e.g. "posts". */
+  noun: string
+}
+
+const { noun } = Astro.props
+---
+
+<div class="mb-10 flex items-center gap-3">
+  <div class="relative flex-1">
+    <Search class="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+    <Input data-list-search type="search" placeholder={`Search ${noun}...`} aria-label={`Search ${noun}`} class="pl-9" />
+  </div>
+  <button type="button" data-list-sort class="flex h-10 shrink-0 cursor-pointer items-center gap-2 rounded-md border border-border px-3 text-sm text-muted-foreground transition-colors hover:border-border-strong hover:text-heading">
+    <ListFilter class="size-4" />
+    <span data-list-sort-label>Newest</span>
+  </button>
+</div>
+
+<div data-list class="space-y-10">
+  <slot />
+</div>
+
+<div data-list-empty hidden class="py-20 text-center">
+  <p class="font-medium text-heading">No {noun} found</p>
+  <p class="mt-1 text-sm text-muted-foreground">Try searching for something else</p>
+</div>
+
+<script>
+  import "@/lib/client/searchable-list"
+</script>

@@ -1,0 +1,54 @@
+---
+/*
+ * A row in the /blog and /projects lists. The data-* attributes are what
+ * lib/client/searchable-list.ts reads to filter and sort.
+ */
+import type { ImageMetadata } from "astro"
+import { Image } from "astro:assets"
+import ArrowUpRight from "@/components/icons/ArrowUpRight.astro"
+
+export interface Props {
+  href: string
+  title: string
+  description: string
+  date: Date
+  image?: ImageMetadata
+  /** Extra text to match when searching, on top of the title and description. */
+  keywords?: string[]
+}
+
+const { href, title, description, date, image, keywords = [] } = Astro.props
+
+const words = description.split(" ")
+const excerpt = words.length > 20 ? `${words.slice(0, 20).join(" ")}...` : description
+---
+
+<li data-item data-date={date.getTime()} data-search={[title, description, ...keywords].join(" ").toLowerCase()}>
+  <a href={href} class="group -mx-2 flex items-start gap-3 rounded-2xl p-2 transition-all hover:bg-foreground/5 sm:gap-5">
+    <div class="h-[60px] w-24 shrink-0 overflow-hidden rounded-lg border border-zinc-200 bg-zinc-100 sm:h-[86px] sm:w-[140px] dark:border-zinc-800 dark:bg-zinc-900">
+      {image ? (
+        <Image
+          src={image}
+          alt=""
+          widths={[140, 280]}
+          sizes="(min-width: 640px) 140px, 96px"
+          quality={70}
+          class="size-full scale-105 object-cover grayscale transition-all duration-500 group-hover:scale-100 group-hover:grayscale-0"
+        />
+      ) : (
+        <div class="flex size-full items-center justify-center text-[10px] font-bold text-zinc-400 uppercase">No Image</div>
+      )}
+    </div>
+
+    <div class="min-w-0 flex-1 space-y-1.5 py-0.5">
+      <div class="flex items-center justify-between gap-4">
+        <h3 class="line-clamp-1 text-[15px] leading-snug font-bold text-zinc-900 transition-colors group-hover:text-link-hover dark:text-zinc-100">{title}</h3>
+        <ArrowUpRight class="size-3.5 shrink-0 -translate-x-2 text-zinc-400 opacity-0 transition-all group-hover:translate-x-0 group-hover:opacity-100" />
+      </div>
+      <p class="line-clamp-2 text-[13px] leading-snug text-zinc-500 dark:text-zinc-400">{excerpt}</p>
+      <div class="flex flex-wrap items-center gap-1.5 pt-0.5 text-[10px] font-bold tracking-tighter text-zinc-400 uppercase tabular-nums">
+        <slot />
+      </div>
+    </div>
+  </a>
+</li>

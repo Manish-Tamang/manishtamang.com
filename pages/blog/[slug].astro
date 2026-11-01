@@ -1,0 +1,118 @@
+---
+import { Image } from "astro:assets"
+import { render } from "astro:content"
+import PageLayout from "@/layouts/PageLayout.astro"
+import Comments from "@/components/blog/Comments.astro"
+import Badge from "@/components/ui/Badge.astro"
+import Prose from "@/components/typography/Prose.astro"
+import Separator from "@/components/ui/Separator.astro"
+import { formatDate, getPosts, readingTime, viewCount, type Post } from "@/lib/blog"
+import { blogPostingJsonLd, toJsonLd } from "@/lib/seo"
+import { site } from "@/lib/site"
+
+export async function getStaticPaths() {
+  const posts = await getPosts()
+  return posts.map((post, index) => ({
+    params: { slug: post.id },
+    props: { post, newer: posts[index - 1], older: posts[index + 1] },
+  }))
+}
+
+interface Props {
+  post: Post
+  newer?: Post
+  older?: Post
+}
+
+const { post, newer, older } = Astro.props
+const { data } = post
+const { Content } = await render(post)
+const description = data.metaDescription ?? data.description
+---
+
+<PageLayout
+  heading={data.title}
+  title={data.title}
+  description={description}
+  image={data.cover?.src}
+  type="article"
+>
+  <Fragment slot="head">
+    <meta property="article:published_time" content={data.date.toISOString()} />
+    <script
+      type="application/ld+json"
+      set:html={toJsonLd(
+        blogPostingJsonLd({
+          title: data.title,
+          description,
+          url: new URL(`/blog/${post.id}`, site.url).href,
+          image: data.cover?.src,
+          published: data.date,
+          modified: data.updated,
+        }),
+      )}
+    />
+  </Fragment>
+
+  <p class="-mt-6 mb-8 flex flex-wrap gap-x-2 text-sm text-muted-foreground">
+    <span>Published <time datetime={data.date.toISOString()}>{formatDate(data.date)}</time></span>
+    <span aria-hidden="true">·</span>
+    <span>{readingTime(post)} min read</span>
+    <span aria-hidden="true">·</span>
+    <span class="tabular-nums"><span data-views={post.id}>{viewCount(post).toLocaleString("en-GB")}</span> views</span>
+    {data.ai && <a href="/ai" title="Written with AI help"><Badge variant="accent">AI</Badge></a>}
+  </p>
+
+  {
+    data.cover && (
+      <Image
+        src={data.cover}
+        alt={data.coverAlt ?? ""}
+        widths={[480, 720, 1080, 1440]}
+        sizes="(max-width: 768px) 100vw, 720px"
+        loading="eager"
+        fetchpriority="high"
+        class="mb-10 w-full rounded-lg border border-border"
+      />
+    )
+  }
+
+  <Prose class="max-w-none">
+    <Content />
+  </Prose>
+
+  <Comments />
+
+  <Separator class="mt-16 mb-6" />
+  <nav aria-label="More posts" class="grid gap-4 text-sm sm:grid-cols-2">
+    {
+      newer && (
+        <a href={`/blog/${newer.id}`} class="group">
+          <span class="block text-xs text-muted-foreground">← Newer</span>
+          <span class="text-heading group-hover:text-link-hover">{newer.data.title}</span>
+        </a>
+      )
+    }
+    {
+      older && (
+        <a href={`/blog/${older.id}`} class="group sm:col-start-2 sm:text-right">
+          <span class="block text-xs text-muted-foreground">Older →</span>
+          <span class="text-heading group-hover:text-link-hover">{older.data.title}</span>
+        </a>
+      )
+    }
+  </nav>
+</PageLayout>
+
+<script>
+  const counter = document.querySelector<HTMLElement>("[data-views]")
+
+  if (counter) {
+    fetch(`/api/blog-views/${counter.dataset.views}`, { method: "POST" })
+      .then((response) => (response.ok ? response.json() : null))
+      .then((data) => {
+        if (data) counter.textContent = data.views.toLocaleString("en-GB")
+      })
+      .catch(() => {})
+  }
+</script>

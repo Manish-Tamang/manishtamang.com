@@ -1,0 +1,304 @@
+---
+title: "To-Do List using HTML, CSS, Javascript"
+description: "To-Do List using HTML, CSS, Javascript"
+date: 2024-06-16T08:11:00.000Z
+updated: 2026-10-13T05:03:31Z
+cover: ./cover.webp
+coverAlt: "To-Do List using HTML, CSS, Javascript"
+---
+
+### Quick Preview
+
+\<iframe\
+  src="https://todayscontent.netlify.app/"\
+  title="Live Preview"\
+  width="100%"\
+  height="500"\
+  style=\{\{ aspectRatio: "16 / 9" \}\}\
+  frameborder="0"\
+/\>
+
+## HTML Structure
+
+The HTML structure defines the basic layout of the To-Do List application.
+
+### Code:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>TO-DO - Manish Tamang</title>
+    <link href="pink_dino%20(2).png" rel="shortcut icon" type="image/x-icon" />
+</head>
+<body>
+
+<section class="container">
+  <div class="heading">
+    <img class="heading__img" src="pink_dino%20(2).png" style="width: 30%; height: 30%;">
+    <h1 class="heading__title">To-Do List</h1>
+  </div>
+  <form class="form">
+    <div>
+      <label class="form__label" for="todo">~ Today I need to ~</label>
+      <input class="form__input" type="text" id="todo" name="to-do" size="30" autocomplete="off" required>
+      <button class="button"><span>Submit</span></button>
+    </div>
+  </form>
+  <div>
+    <ul class="toDoList"></ul>
+  </div>
+</section>
+<script src="script.js"></script>
+</body>
+</html>
+```
+
+### Key Components
+
+- Head Section: Includes meta tags for character set and viewport settings, links to CSS stylesheet, and title.
+- Body Section:
+- Section (container): The main container for the To-Do list application.
+- Heading: Contains an image and a title.
+- Form: Includes a label, an input field for adding new tasks, and a submit button.
+- To-Do List: An unordered list to display the tasks.
+
+## CSS Styling
+
+The CSS styles enhance the visual appearance of the To-Do List application.
+
+```css
+@import url("https://fonts.googleapis.com/css?family=Gochi+Hand");
+
+body {
+  background-color: #a39bd2;
+  min-height: 70vh;
+  padding: 1rem;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #494a4b;
+  font-family: "Gochi Hand", cursive;
+  text-align: center;
+  font-size: 130%;
+}
+
+@media only screen and (min-width: 500px) {
+  body {
+    min-height: 100vh;
+  }
+}
+
+.container {
+  width: 100%;
+  height: auto;
+  min-height: 500px;
+  max-width: 500px;
+  min-width: 250px;
+  background: #f1f5f8;
+  background-image: radial-gradient(#bfc0c1 7.2%, transparent 0);
+  background-size: 25px 25px;
+  border-radius: 20px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.heading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.heading__title {
+  transform: rotate(2deg);
+  padding: 0.2rem 1.2rem;
+  border-radius: 20% 5% 20% 5%/5% 20% 25% 20%;
+  background-color: rgba(255, 74, 231, 0.7);
+  font-size: 1.5rem;
+}
+
+@media only screen and (min-width: 500px) {
+  .heading__title {
+    font-size: 2rem;
+  }
+}
+
+.heading__img {
+  width: 24%;
+}
+
+.form__label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.form__input {
+  box-sizing: border-box;
+  background-color: transparent;
+  padding: 0.7rem;
+  border-bottom-right-radius: 15px 3px;
+  border-bottom-left-radius: 3px 15px;
+  border: solid 3px transparent;
+  border-bottom: dashed 3px #ea95e0;
+  font-family: "Gochi Hand", cursive;
+  font-size: 1rem;
+  color: rgba(63, 62, 65, 0.7);
+  width: 70%;
+  margin-bottom: 20px;
+}
+
+.form__input:focus {
+  outline: none;
+  border: solid 3px #ea95e0;
+}
+
+@media only screen and (min-width: 500px) {
+  .form__input {
+    width: 60%;
+  }
+}
+
+.button {
+  padding: 0;
+  border: none;
+  cursor: pointer;
+  transform: rotate(4deg);
+  transform-origin: center;
+  font-family: "Gochi Hand", cursive;
+  text-decoration: none;
+  padding-bottom: 3px;
+  border-radius: 5px;
+  box-shadow: 0 2px 0 #494a4b;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  background-color: rgba(255, 213, 0, 0.7);
+}
+
+.button span {
+  background: #f1f5f8;
+  display: block;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  border: 2px solid #494a4b;
+}
+
+.button:active, .button:focus {
+  transform: translateY(4px);
+  padding-bottom: 0px;
+  outline: 0;
+}
+
+.toDoList {
+  text-align: left;
+}
+
+.toDoList li {
+  position: relative;
+  padding: 0.5rem;
+}
+
+.toDoList li:hover {
+  text-decoration: line-through wavy #24bffb;
+}
+```
+
+### Key Styles
+
+- Body: Sets the background color, font, and overall alignment.
+- Container: Defines the main container's size, background, border-radius, and box-shadow.
+- Heading: Styles for the heading image and title.
+- Form: Styles for the form, including input fields and buttons.
+- To-Do List: Styles for the list and list items.
+
+## JavaScript Functionality
+
+The JavaScript code manages the To-Do List's dynamic behavior, including adding and removing tasks, and saving the list to local storage.
+
+```js
+(() => {
+  // state variables
+  let toDoListArray = JSON.parse(localStorage.getItem('toDoList')) || [];
+  // ui variables
+  const form = document.querySelector(".form");
+  const input = form.querySelector(".form__input");
+  const ul = document.querySelector(".toDoList");
+
+  // Load initial To-Do list items from local storage
+  loadToDoList();
+
+  // event listeners
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    let itemId = String(Date.now());
+    let toDoItem = input.value;
+    addItemToDOM(itemId, toDoItem);
+    addItemToArray(itemId, toDoItem);
+    input.value = '';
+  });
+
+  ul.addEventListener('click', e => {
+    let id = e.target.getAttribute('data-id')
+    if (!id) return;
+    removeItemFromDOM(id);
+    removeItemFromArray(id);
+  });
+
+  // functions
+  function loadToDoList() {
+    toDoListArray.forEach(item => {
+      addItemToDOM(item.itemId, item.toDoItem);
+    });
+  }
+
+  function addItemToDOM(itemId, toDoItem) {
+    const li = document.createElement('li')
+    li.setAttribute("data-id", itemId);
+    li.innerText = toDoItem;
+    ul.appendChild(li);
+  }
+
+  function addItemToArray(itemId, toDoItem) {
+    toDoListArray.push({ itemId, toDoItem });
+    updateLocalStorage();
+  }
+
+  function removeItemFromDOM(id) {
+    var li = document.querySelector('[data-id="' + id + '"]');
+    ul.removeChild(li);
+  }
+
+  function removeItemFromArray(id) {
+    toDoListArray = toDoListArray.filter(item => item.itemId !== id);
+    updateLocalStorage();
+  }
+
+  function updateLocalStorage() {
+    localStorage.setItem('toDoList', JSON.stringify(toDoListArray));
+  }
+})();
+```
+
+### Key Functions
+
+1. State Variables:
+- `toDoListArray`: Array to store to-do items, initialized from local storage.
+- `form`, `input`, `ul`: DOM elements for the form, input field, and list.
+1. Event Listeners:
+- Form Submit: Prevents default form submission, creates a new to-do item, and adds it to the DOM and array.
+- List Click: Removes the clicked to-do item from the DOM and array.
+1. Functions:
+- loadToDoList(): Loads initial items from local storage.
+- addItemToDOM(itemId, toDoItem): Adds a new item to the DOM.
+- addItemToArray(itemId, toDoItem): Adds a new item to the array and updates local storage.
+- removeItemFromDOM(id): Removes an item from the DOM.
+- removeItemFromArray(id): Removes an item from the array and updates local storage.
+- updateLocalStorage(): Updates local storage with the current state of the to-do list array.
+
+### Credits
+
+This To-Do List application was meticulously crafted by someone years ago. I saved the code because, in programming, we often reuse and build upon existing work—so no worries! 😁🥳

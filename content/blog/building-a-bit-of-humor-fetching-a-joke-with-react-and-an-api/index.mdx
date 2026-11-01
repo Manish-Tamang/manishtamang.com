@@ -1,0 +1,142 @@
+---
+title: "Building a Bit of Humor: Fetching a Joke with React and a JokeAPI"
+description: "This post explores how I used React and the Joke API to add a \"Random Programming Joke\" card to my portfolio. Learn how to fetch data from an API, manage component state, and handle asynchronous operations."
+metaDescription: "How I added a random programming joke card to my portfolio with React: fetching an API, managing state and handling async code."
+date: 2024-12-22T15:06:00.000Z
+updated: 2026-10-13T05:03:43Z
+cover: ./cover.webp
+coverAlt: "Building a Bit of Humor: Fetching a Joke with React and a JokeAPI"
+---
+
+## Building a Bit of Humor: Fetching a Joke with React and an API
+
+In the world of web development, sometimes it's fun to add a bit of personality and levity to your site. This post will explore how I added a simple "Random Programming Joke" card to my portfolio website using React and the Joke API. This seemingly minor feature involves concepts like API consumption, state management in React, and handling asynchronous operations.
+
+### The Core: `JokeCard.tsx`
+
+The heart of this feature lies within the `components/JokeCard.tsx` file:
+
+```ts
+ import React, { useEffect, useState } from "react";
+
+const JokeCard = () => {
+  const [joke, setJoke] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchJoke = async () => {
+      try {
+        const response = await fetch(
+          "https://v2.jokeapi.dev/joke/Programming?format=json"
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch joke");
+        }
+        const data = await response.json();
+        setJoke(data.joke || `${data.setup} - ${data.delivery}`);
+        setError(null);
+      } catch (error) {
+        console.error("Error fetching joke:", error);
+        setJoke(null);
+        setError("Oops! Something went wrong. Please try again.");
+      }
+    };
+
+    fetchJoke();
+  }, []);
+
+  return (
+    <article className="rounded-xl border-2 border-gray-100 bg-white dark:border-gray-800 dark:bg-gray-900">
+      <div className="flex items-start gap-4 p-4 sm:p-6 lg:p-8">
+        <div>
+          <h3 className="font-medium sm:text-lg text-gray-900 dark:text-gray-100">
+            <a href="https://jokeapi.dev/" className="hover:underline">
+              Random Programming Joke
+            </a>
+          </h3>
+          <p className="text-sm text-gray-700 dark:text-gray-300">
+            {error ? error : joke || "Loading joke..."}
+          </p>
+          <div className="mt-2 sm:flex sm:items-center sm:gap-2">
+            <p className="hidden sm:block sm:text-xs text-gray-500 dark:text-gray-400">
+              Joke API
+            </p>
+          </div>
+        </div>
+      </div>
+    </article>
+  );
+};
+export default JokeCard;
+```
+
+Let's break this down step-by-step:
+
+1. **Import Statements**
+   - `import React, { useEffect, useState } from 'react';`
+     - This line imports the necessary React hooks: `useEffect` (for side effects like API calls) and `useState` (for managing the component's state)
+1. **Component Definition**
+   - `const JokeCard = () => { ... }`
+     - This is a functional component called `JokeCard`
+1. **State Management**
+   - `const [joke, setJoke] = useState<string | null>(null);`
+     - The `joke` state variable will hold the joke text as a string. We initialize it to `null` to indicate that we don't have a joke yet.
+   - `const [error, setError] = useState<string | null>(null);`
+     - The `error` state variable holds error message, set to `null` initially.
+1. **`useEffect`** **Hook**
+   - `useEffect(() => { ... }, []);`
+     - The `useEffect` hook is used here to trigger the API call once after the component mounts (`[]` empty dependency array).
+1. **`fetchJoke`** **Function**
+   - `const fetchJoke = async () => { ... }`
+     - This function is declared as async because it involves asynchronous operations like fetching data.
+   - **Fetching Data**: `const response = await fetch('https://v2.jokeapi.dev/joke/\
+     Programming?format=json');`
+     - We use JavaScript's built-in `fetch` to make a `GET` request to the Joke API. The URL here is specifically requesting a "Programming" category joke in JSON format.
+   - **Error Handling**:
+     - `if (!response.ok) { throw new Error('Failed to fetch joke'); }`
+       - We check if the response was successful using `response.ok`. If not, we throw a new error, which will jump to the `catch` block.
+   - **Parsing JSON**: `const data = await response.json();`
+     - If the response is successful, we parse the JSON data from the response body.
+   - **Setting State**:
+     - `setJoke(data.joke || '${data.setup} - ${data.delivery}');`
+       - The API returns jokes in two formats: as a single `joke` string, or with a `setup` and `delivery`. If `data.joke` exists, we use that; otherwise, we construct the joke string from setup and delivery.
+     - `setError(null)`: if the API call is successful, the value of the error state will be null.\
+       URL), we set the `joke` state to `null` and update the `error` state.
+1. **JSX Rendering**
+
+### How It All Comes Together
+
+1. **Initial Render**: When the component mounts, the `useEffect` hook triggers the `fetchJoke` function to get data from the API
+1. **Data Fetching**: The fetch method is used to send a request to the specified URL and gets data from the API.
+1. **State Updates**: The fetched data is used to update the state variable, causing the component to re-render and display the joke.
+1. **Error Handling**: If anything goes wrong, the `error` state gets updated which will display the error message, such as "Failed to fetch joke" or "Something went wrong. Please try again"
+1. **UI Display**: The UI will then display the joke inside a card component or a "Loading..." message while the data is being fetched.
+
+### Key Takeaways
+
+- **Asynchronous Operations:** API calls are asynchronous, meaning they take time to complete. We use `async/await` to handle them elegantly.
+- **`useState`** **Hook**: This hook is fundamental for creating interactive interfaces, enabling the component to update and re-render as the joke data changes.
+- **`useEffect`** **Hook:** `useEffect` helps us perform side-effects after render such as API calls. The empty array in dependency makes sure that it is called only once.
+- **Error Handling**: It's essential to handle potential errors when fetching data from external APIs, ensuring a better user experience.
+- **UI:** The UI is responsive so that the user can easily view the Joke Card.
+
+### Integration
+
+To integrate this component into your homepage, you would simply import and use it within your main page component (`pages/index.tsx`):
+
+```ts
+ import JokeCard from "components/JokeCard";
+export default function Home() {
+  return (
+    <div>
+      <JokeCard />
+    </div>
+  );
+}
+```
+
+### Conclusion
+
+Fetching and displaying data from an API might seem complex, but it can be broken down into smaller, more understandable parts, as we've seen here. This approach demonstrates how to handle asynchronous operations and state updates in a React component, all while adding a small piece of fun to the website. The `JokeCard` component makes use of the Joke API and provides a light-hearted addition to the website, while also showcasing real-world application of React and API handling techniques.
+
+This structure provides a foundation for handling other dynamic content on your website, allowing you to connect to all types of APIs and create compelling user experiences!

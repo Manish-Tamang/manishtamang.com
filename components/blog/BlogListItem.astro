@@ -1,0 +1,19 @@
+---
+import ListRow from "@/components/shared/ListRow.astro"
+import { formatDate, viewCount, type Post } from "@/lib/blog"
+
+export interface Props {
+  post: Post
+}
+
+const { post } = Astro.props
+const { id, data } = post
+---
+
+<ListRow href={`/blog/${id}`} title={data.title} description={data.description} date={data.date} image={data.cover}>
+  <time datetime={data.date.toISOString()}>{formatDate(data.date, { month: "short", day: "numeric" })}</time>
+  <span aria-hidden="true">•</span>
+  <span>{viewCount(post).toLocaleString("en-GB")} views</span>
+  {data.ai && <span aria-hidden="true">•</span>}
+  {data.ai && <span title="Written with AI help">AI</span>}
+</ListRow>

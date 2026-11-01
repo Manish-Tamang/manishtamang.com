@@ -1,0 +1,151 @@
+---
+title: "Integrating Web3Forms in React Contact Form"
+description: "Integrating Web3Forms in React Contact form"
+date: 2024-06-08T16:29:00.000Z
+updated: 2026-10-13T05:03:53Z
+cover: ./cover.webp
+coverAlt: "Integrating Web3Forms in React Contact Form"
+---
+
+This blog will guide you through the steps to integrate Web3Forms into your React project using `react-hook-form`
+
+## Prerequisites
+
+Make sure you have a React project set up. If not, you can create one using Create React App:
+
+```bash
+npx create-react-app my-app
+cd my-app
+```
+
+### Obtain Web3Forms API Key
+
+1. Go to [Web3Forms](https://web3forms.com/).
+1. Click on the "Create your Access Key" button.\
+   
+1. Enter your email address in which you want an email for contact form  and click "Create Access Key".
+1. Copy the access key from the email sent to you by Web3Forms.\
+   
+
+### Install Dependencies
+
+```bash
+npm install @web3forms/react react-hook-form
+```
+
+### Create the Contact Form Component
+
+Create a new file named Contact.ts in your components folder and paste the following code:
+
+```tsx
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import useWeb3Forms from '@web3forms/react';
+
+export default function SimpleContactForm() {
+  const { register, handleSubmit, reset } = useForm();
+  
+  // Replace with your access key from Web3Forms
+  const accessKey = 'YOUR_ACCESS_KEY_HERE';
+
+  const { submit } = useWeb3Forms({
+    access_key: accessKey,
+    settings: {
+      from_name: 'Contact Form',
+      subject: 'New Contact Form Submission'
+    },
+    onSuccess: (message) => {
+      alert('Form submitted successfully!');
+      reset();
+    },
+    onError: (message) => {
+      alert('Error submitting form!');
+    }
+  });
+
+  return (
+    <div className="max-w-md mx-auto p-6">
+      <h2 className="text-2xl font-bold mb-4">Contact Us</h2>
+      
+      <form onSubmit={handleSubmit(submit)} className="space-y-4">
+        <div>
+          <label htmlFor="name" className="block mb-2">
+            Name
+          </label>
+          <input
+            id="name"
+            type="text"
+            {...register('name', { required: true })}
+            className="w-full border rounded px-3 py-2"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="email" className="block mb-2">
+            Email
+          </label>
+          <input
+            id="email"
+            type="email"
+            {...register('email', { required: true })}
+            className="w-full border rounded px-3 py-2"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="message" className="block mb-2">
+            Message
+          </label>
+          <textarea
+            id="message"
+            {...register('message', { required: true })}
+            rows={4}
+            className="w-full border rounded px-3 py-2"
+          />
+        </div>
+
+        <button
+          type="submit"
+          className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+        >
+          Send Message
+        </button>
+      </form>
+    </div>
+  );
+}
+```
+
+You can directly paste it into your contact components and replace your access key in line number 21.
+
+**Here's Quick Explanation of the code:**
+
+1. Import Statements: Import necessary packages including `react`, `react-hook-form`, and `@web3forms/react`.
+1. State Management: Use React's `useState` to manage form state, success state, and result state.
+1. Form Registration: Use `react-hook-form` to register form inputs and handle form submission.
+1. Web3Forms Integration: Configure `useWeb3Forms` with an access key, form settings, and success/error handlers.
+1. Form Structure: Create a form with input fields for name, email, phone, and message. Each input field uses the `register` method from `react-hook-form`.
+1. Submit Button: Add a submit button that triggers form submission.
+
+### Using the Contact Component
+
+Finally, import and use the `Contact` component in your main application or any other component:
+
+```tsx
+import React from 'react';
+import Contact from './components/Contact';
+
+function App() {
+  return (
+    <div className="App">
+      <Contact />
+    </div>
+  );
+}
+
+export default App;
+```
+
+With these steps, you have successfully integrated Web3Forms into your React project. You can now use this form to collect contact information and handle submissions with Web3Forms.
+
+Thank You. Happy Coding ❤️

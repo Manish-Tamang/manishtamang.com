@@ -1,0 +1,108 @@
+---
+title: "Do you love me? Turkish Button Code."
+description: "Do you love me? Turkish Button Code."
+date: 2024-06-12T12:20:00.000Z
+updated: 2026-10-13T05:03:48Z
+cover: ./cover.webp
+coverAlt: "Do you love me? Turkish Button Code."
+---
+
+## Before Copying code make sure you followed me on instagram. Happy Coding ❤️
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Do You Love Me? | Manish Tamang</title>
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+      }
+
+      h1 {
+        margin-bottom: 20px;
+      }
+
+      .button-container {
+        display: flex;
+        gap: 20px;
+      }
+
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .yes-button {
+        background-color: green;
+        color: white;
+      }
+
+      .no-button {
+        background-color: red;
+        color: white;
+        position: relative;
+      }
+
+      .button-wrapper {
+        perspective: 400px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Do you love me?</h1>
+    <div class="button-container">
+      <button class="yes-button">Yes</button>
+      <div class="button-wrapper">
+        <button class="no-button" id="noButton">No</button>
+      </div>
+    </div>
+
+    <script>
+      const noButton = document.getElementById('noButton');
+      const distanceBetween = (p1x, p1y, p2x, p2y) => {
+        const dx = p1x - p2x;
+        const dy = p1y - p2y;
+        return Math.sqrt(dx * dx + dy * dy);
+      };
+      const bx =
+        noButton.parentNode.offsetLeft +
+        noButton.offsetLeft +
+        noButton.offsetWidth / 2;
+      const by =
+        noButton.parentNode.offsetTop + noButton.offsetTop + noButton.offsetHeight / 2;
+      const radius = Math.max(
+        noButton.offsetWidth * 0.75,
+        noButton.offsetHeight * 0.75,
+        100
+      );
+    //   Follow codewithmanish_ in Instagram for More Amazing Projects etc.
+      document.addEventListener('mousemove', (event) => {
+        const dist = distanceBetween(event.clientX, event.clientY, bx, by);
+        const angle = Math.atan2(event.clientY - by, event.clientX - bx);
+        const ox = -1 * Math.cos(angle) * Math.max(radius - dist, 0);
+        const oy = -1 * Math.sin(angle) * Math.max(radius - dist, 0);
+        const rx = oy / 2;
+        const ry = -ox / 2;
+        noButton.style.transition = 'all 0.1s ease';
+        noButton.style.transform = `translate(${ox}px, ${oy}px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+        noButton.style.boxShadow = `0px ${Math.abs(oy)}px ${
+          (Math.abs(oy) / radius) * 40
+        }px rgba(0,0,0,.15)`;
+      });
+    </script>
+  </body>
+</html>
+```

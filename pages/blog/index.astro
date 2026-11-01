@@ -1,0 +1,26 @@
+---
+import PageLayout from "@/layouts/PageLayout.astro"
+import BlogListItem from "@/components/blog/BlogListItem.astro"
+import SearchableList from "@/components/shared/SearchableList.astro"
+import YearGroup from "@/components/shared/YearGroup.astro"
+import { getPosts } from "@/lib/blog"
+
+const posts = await getPosts()
+const years = [...new Set(posts.map(({ data }) => data.date.getUTCFullYear()))]
+---
+
+<PageLayout
+  heading="Blog"
+  intro="I've been writing online since 2023, mostly about web development, blogging and tech. Use the search below to filter by title."
+  description="Articles and notes by Manish Tamang (golecodes) on web development and design."
+>
+  <SearchableList noun="posts">
+    {years.map((year) => (
+      <YearGroup year={year}>
+        {posts
+          .filter(({ data }) => data.date.getUTCFullYear() === year)
+          .map((post) => <BlogListItem post={post} />)}
+      </YearGroup>
+    ))}
+  </SearchableList>
+</PageLayout>

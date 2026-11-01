@@ -1,0 +1,80 @@
+---
+title: "Self-Hosting Umami: An Open Source Alternative to Google Analytics on Vercel"
+description: "In this tutorial, learn how to self-host Umami, an open-source alternative to Google Analytics, on Vercel without using the terminal. We'll guide you through forking the Umami repository on GitHub, setting up a PostgreSQL database, and configuring environment variables directly in Vercel. With this setup, you can track your website's performance while keeping full control over your data."
+metaDescription: "Self-host Umami, an open-source Google Analytics alternative, on Vercel without the terminal, and keep full control of your data."
+date: 2024-11-01T13:09:00.000Z
+updated: 2026-10-13T05:04:09Z
+cover: ./cover.webp
+coverAlt: "Self-Hosting Umami: An Open Source Alternative to Google Analytics on Vercel"
+---
+
+<figure>
+
+![](./image-01.webp)
+
+</figure>
+
+\
+Umami is a privacy-focused web analytics solution that allows you to track your website's performance without compromising your data. In this guide, we’ll walk you through the process of self-hosting Umami on Vercel by cloning its repository, creating a PostgreSQL database, and configuring the necessary environment variables.
+
+## Prerequisites
+
+Before you start, make sure you have the following:
+
+- A Vercel account.
+- A PostgreSQL database instance (you can use services like [Neon](https://neon.tech/) or [Heroku Postgres](https://www.heroku.com/postgres/)).
+- Basic knowledge of Git and command-line usage.
+
+## Step 1: Fork the Umami Repository
+
+1. Go to the Umami GitHub repository: Visit the [Umami repository.](https://github.com/umami-software/umami)
+1. Fork the repository: Click the Fork button in the upper right corner of the page to create a copy of the Umami repository under your GitHub account.
+
+## Step 2: Create a PostgreSQL Database
+
+Next, create a PostgreSQL database instance:
+
+1. Sign up for a PostgreSQL service (like ElephantSQL).
+1. Create a new database instance.
+1. After the instance is created, note down the connection URL, which will look something like this
+
+```bash
+postgres://user:password@hostname:port/database
+```
+
+## Step 3: Deploy to Vercel
+
+Now, let’s deploy your forked Umami project to Vercel:
+
+1. Go to the Vercel dashboard: Visit [Vercel](https://vercel.com).
+1. Click on "New Project": In your Vercel dashboard, click on the "New Project" button.
+1. Import your GitHub repository: Connect your GitHub account if you haven’t already, and select your forked Umami repository from the list.
+1. Configure your deployment settings: Vercel will automatically detect the framework used. Click on "**Deploy**" to start the deployment process.
+
+## Step 4: Set Up Environment Variables in Vercel
+
+After the deployment, you need to set up environment variables:
+
+1. Navigate to your Vercel project settings: Click on your project in the Vercel dashboard.
+1. Go to the "Settings" tab: Find the "Environment Variables" section.
+1. Add a new environment variable:
+- Key: `DATABASE_URL`
+- Value: Your PostgreSQL connection URL from Step 2.
+1. Save your changes.
+
+## Step 5: Finalize Your Deployment
+
+1. Vercel will automatically handle your deployment and initialize the necessary settings using the provided environment variables.
+1. After a few moments, your Umami instance will be live! You can find the URL for your Umami dashboard in the Vercel dashboard.
+
+## Step 6: Access Your Umami Dashboard
+
+1. Open your Umami dashboard: Navigate to the URL provided by Vercel after deployment.
+1. Create an admin user: For the first time, you’ll need to create an admin account by clicking on "Sign Up" and filling out the required information.
+
+## Conclusion
+
+Congratulations! You have successfully self-hosted Umami on Vercel by forking the repository and connecting it to a PostgreSQL database without using the terminal. This setup provides you with a powerful analytics tool while maintaining full control over your data.
+
+If you have any questions or run into issues, feel free to leave a comment below!\
+Happy coding ❤️

@@ -1,0 +1,32 @@
+---
+/*
+ * Utterances comments, stored as GitHub issues in Manish-tamang/comments.
+ * Issues are matched by page title, so the title format in Head.astro must
+ * stay "<post title> | Manish Tamang" or existing threads stop showing.
+ */
+---
+
+<div data-comments class="mt-12"></div>
+
+<script>
+  const container = document.querySelector("[data-comments]")
+  const theme = () => (document.documentElement.classList.contains("dark") ? "github-dark" : "github-light")
+
+  if (container) {
+    const script = document.createElement("script")
+    script.src = "https://utteranc.es/client.js"
+    script.async = true
+    script.crossOrigin = "anonymous"
+    script.setAttribute("repo", "Manish-tamang/comments")
+    script.setAttribute("issue-term", "title")
+    script.setAttribute("theme", theme())
+    container.append(script)
+
+    // Follow the site's theme switcher once the iframe is up
+    new MutationObserver(() => {
+      container
+        .querySelector("iframe")
+        ?.contentWindow?.postMessage({ type: "set-theme", theme: theme() }, "https://utteranc.es")
+    }).observe(document.documentElement, { attributes: true, attributeFilter: ["class"] })
+  }
+</script>

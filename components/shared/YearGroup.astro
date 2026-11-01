@@ -1,0 +1,17 @@
+---
+export interface Props {
+  year: number
+}
+
+const { year } = Astro.props
+---
+
+<section data-year={year}>
+  <div class="flex items-center gap-4">
+    <span class="font-mono text-xs font-semibold tracking-wider text-muted-foreground">{year}</span>
+    <div class="h-px flex-1 bg-border"></div>
+  </div>
+  <ul class="mt-6 space-y-3">
+    <slot />
+  </ul>
+</section>

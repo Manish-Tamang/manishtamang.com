@@ -1,0 +1,194 @@
+---
+title: "How to Send Dynamic Emails with Next.js, TypeScript, and Nodemailer"
+description: "Learn how to send dynamic emails using Next.js, TypeScript, and Nodemailer in this step-by-step guide. We'll create a simple form that captures user input and sends personalized emails with just a few lines of code. Perfect for adding email functionality to your Next.js projects!"
+metaDescription: "Send dynamic, personalised emails with Next.js, TypeScript and Nodemailer in this step-by-step guide, from the form to the inbox."
+date: 2024-08-10T03:36:00.000Z
+updated: 2026-10-14T12:09:13Z
+cover: ./cover.webp
+coverAlt: "How to Send Dynamic Emails with Next.js, TypeScript, and Nodemailer"
+---
+
+In this tutorial, I'll walk you through the steps to create a simple email-sending feature using Next.js, TypeScript, and Nodemailer. We'll be creating a form that captures user input and then sends a dynamic email to the provided address. Let's dive in!
+
+### Setting Up the Project
+
+First, ensure you have a Next.js project set up. If you don't, you can quickly create one by running:
+
+```bash
+npx create-next-app@latest
+```
+
+Navigate to your project directory:
+
+```bash
+cd your-project-name
+```
+
+Next, install the required dependencies:
+
+```bash
+npm install nodemailer
+```
+
+We'll be using Gmail's SMTP server to send emails. For that, you'll need to create an `.env` file at the root of your project and add your Gmail credentials:
+
+```text
+GMAIL_USER="your-email@gmail.com"
+GMAIL_PASS="your-app-password"
+```
+
+> **Note**\
+> It's recommended to use an App Password instead of your regular password for security reasons. You can generate one from your Google Account settings.
+
+> **Note**\
+> This tutorial uses Gmail for simplicity. If you later switch to a sender on your own domain, check your SPF, DKIM, DMARC and MX records with a tool like the [MailSenpai DNS checker](https://en.mailsenpai.com/email-dns-checker/) to check sender authentication and identify DNS issues.
+
+### Creating the Email Form Component
+
+Let's start by creating a simple form in `app/page.tsx.` This form will take the user's name and email address:
+
+```tsx
+"use client";
+
+import { useState } from "react";
+
+export default function SimpleForm() {
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [message, setMessage] = useState<string>("");
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const res = await fetch("/api/send-email", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name, email }),
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+      setMessage("Email sent successfully!");
+    } else {
+      setMessage(`Error: ${data.error}`);
+    }
+  };
+
+  return (
+    <div className="max-w-md mx-auto mt-10">
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Name
+          </label>
+          <input
+            type="text"
+            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Email
+          </label>
+          <input
+            type="email"
+            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </div>
+
+        <button
+          type="submit"
+          className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        >
+          Submit
+        </button>
+      </form>
+      {message && <p className="mt-4 text-center">{message}</p>}
+    </div>
+  );
+}
+```
+
+This component handles the form submission and sends a POST request to our API route with the user's name and email.
+
+### Creating the API Route to Send Emails
+
+Next, let's create an API route that will handle the email-sending logic. In your `app/api/send-email/route.ts` file, add the following code:
+
+```ts
+import nodemailer from "nodemailer";
+import { NextResponse } from "next/server";
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_PASS,
+  },
+});
+
+export async function POST(request: Request) {
+  try {
+    const { name, email } = await request.json();
+
+    if (!name || !email) {
+      return NextResponse.json(
+        { error: "Name and email are required" },
+        { status: 400 }
+      );
+    }
+
+    const emailContent = `
+      Hello ${name}!
+
+      This is a test email.
+
+      Thank you!
+    `;
+
+    await transporter.sendMail({
+      from: process.env.GMAIL_USER,
+      to: email,
+      subject: "Test Dynamic Email",
+      text: emailContent,
+    });
+
+    return NextResponse.json({ message: "Email sent successfully" });
+  } catch (error) {
+    console.error("Error in send-email API:", error);
+    return NextResponse.json(
+      { error: "Failed to send email" },
+      { status: 500 }
+    );
+  }
+}
+```
+
+This code sets up a Nodemailer transporter using Gmail's SMTP service. It listens for POST requests, extracts the name and email from the request body, and sends a simple email with the provided details.
+
+### Testing the Email Form
+
+With everything set up, start your Next.js development server:
+
+```bash
+npm run dev
+```
+
+Navigate to `http://localhost:3000` in your browser. You should see the form we created earlier. Fill in your name and email, and hit "Submit." If everything is configured correctly, you should receive an email in your inbox shortly!
+
+### Conclusion
+
+In this tutorial, we built a simple form that sends dynamic emails using Next.js, TypeScript, and Nodemailer. This basic setup can be extended with more complex email templates, additional form fields, or even a database integration for storing email records.
+
+Feel free to experiment and adapt the code to fit your project's needs. Happy coding!
+
+Make sure you  followed me in [Instagram](https://www.instagram.com/codewithmanish_/) and here is [Guestbook](https://manishtamang.com/guestbook) for any reviews about me.

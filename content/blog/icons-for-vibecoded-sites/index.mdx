@@ -1,0 +1,136 @@
+---
+title: "7 Icon Libraries to Make Your Vibecoded Site Feel Alive"
+description: "Why every AI-generated website ends up with the same Lucide icons, and seven libraries that help your vibecoded site stand out."
+date: 2026-07-08T16:31:00.000Z
+updated: 2026-10-13T05:11:22Z
+cover: ./cover.webp
+coverAlt: "7 Icon Libraries to Make Your Vibecoded Site Feel Alive"
+---
+
+Open ten "AI-built" landing pages in a row and you'll notice something strange: they all use the exact same icons. Same outline arrow. Same chevron. Same bell. Same little `X` in the corner of every dialog. That's not a coincidence, it's a default, and it's one of the easiest things to fix.
+
+## Why Every Vibecoded Site Uses the Same Icons
+
+Most AI coding tools like v0, Bolt, Lovable, Cursor, and Google Studio build UI on top of shadcn/ui and Tailwind CSS, since that's the stack they see the most in training data. Late 2024, shadcn/ui made Lucide its default icon set. So `lucide-react` now installs automatically the moment a project scaffolds shadcn, and every icon in the UI comes from it by default: the `X` in dialogs, `ChevronDown` in selects, `Check` in checkboxes. Lucide isn't a bad icon set. It's just become the invisible default nobody actually chooses anymore.
+
+AI models don't really have taste of their own, they lean on whatever pattern shows up most in training data. A vague prompt like "modern, vibrant startup site" tends to produce the same look every time: purple gradients, rounded cards, and the same handful of icons. One research project mined millions of Reddit posts about AI-built websites and ranked the visual tells people use to spot them. Shadcn and Tailwind defaults topped that list, and mentions of these tells jumped roughly 150x between 2023 and 2024. Icon choice is part of that fingerprint, even when nobody can quite name why a site "feels AI-made."
+
+The fix isn't complicated: swap the default icon set for something with more intention behind it. Here are seven solid options.
+
+## 1\. Material Symbols & Icons (Google Fonts)
+
+Google's current icon system, built as a variable font with four adjustable axes: fill, weight, grade, and optical size. One icon file can morph from a thin 20px inline glyph to a bold 48px hero icon without swapping assets, which is handy for state changes like a heart icon filling in on click. Comes in outlined, rounded, and sharp styles, over 3,000 icons, Apache 2.0 licensed.
+
+- [fonts.google.com/icons](https://fonts.google.com/icons)
+
+## 2\. Animate UI Icons
+
+Lucide icons animated with Motion (formerly Framer Motion). If you're already using Lucide but want icons that actually do something on hover or click, like drawing themselves in or bouncing, this wraps them in ready-made micro-interactions you install through the shadcn CLI. A good middle ground if a full icon-set swap feels like too much right now.
+
+- [animate-ui.com/docs/icons](https://animate-ui.com/docs/icons)
+
+## 3\. Untitled UI Icons
+
+1,100+ free line icons built specifically to behave well inside Figma component overrides, with a distinctive 60% corner-smoothing curve and 2px stroke that gives them a slightly softer, more "designed" feel than most default sets. Free tier is generous enough for most projects; there's a larger paid set if you outgrow it.
+
+- [untitledui.com/free-icons](https://www.untitledui.com/free-icons)
+
+## 4\. Phosphor Icons
+
+Around 1,200+ base icons, each available in six weights: thin, light, regular, bold, fill, and duotone, all through a single `weight` prop. MIT licensed, tree-shakable, and available for React, Vue, Flutter, and plain web. The duotone weight gives interfaces a more premium look than a flat outline set, without extra design work.
+
+- [phosphoricons.com](https://phosphoricons.com/)
+
+## 5\. Heroicons
+
+Built by the Tailwind CSS team, so it pairs naturally with any Tailwind-heavy project. Deliberately small, around 300 icons across outline, solid, mini, and micro sizes, but every icon is polished and MIT licensed. Good pick when you want restraint rather than a massive catalog.
+
+- [heroicons.com](https://heroicons.com/)
+
+## 6\. Lineicons
+
+A much bigger catalog, 27,988+ icons, available as SVG, icon fonts, React components, and Figma assets. Useful when a project needs unusually specific or niche icons that smaller curated sets don't cover.
+
+- [lineicons.com/icons](https://lineicons.com/icons)
+
+## 7\. Hugeicons (Stroke Rounded)
+
+Clean 1.5px stroke icons with rounded caps on a 24px grid, around 5,400+ free icons in this style, out of a much larger 54,000+ icon library across ten styles on the Pro plan. The rounded stroke reads friendlier than Lucide's default weight, which makes it a good fit for consumer or lifestyle products.
+
+- [hugeicons.com/icons/stroke-rounded](https://hugeicons.com/icons/stroke-rounded)
+
+## Bonus (No Promotion, Just a Great Bookmark)
+
+If you also need brand and product logos rather than UI icons, [Svgl](https://svgl.app/) is worth keeping open in a tab. It's a categorized, searchable library of SVG logos with light and dark variants, ready to copy as raw SVG or React/Svelte components.
+
+## A SKILL.md for AI Coding Agents
+
+If you're using Claude Code, Cursor, or any agent that reads a `SKILL.md` before scaffolding a UI, drop this in your project so it stops defaulting to whatever the training data considers "normal."
+
+```markdown
+---
+name: icon-library-selection
+description: Use when scaffolding, styling, or adding icons to a web UI. Prevents defaulting to the generic Lucide-via-shadcn icon set and encourages a deliberate icon choice that matches the product's tone.
+---
+ 
+# Icon Library Selection
+ 
+## Rule
+ 
+Do not silently install `lucide-react` just because shadcn/ui pulled it in as a
+dependency. Before adding icons to a project, pick a library on purpose based
+on the product's tone, then stay consistent with it across the whole UI.
+ 
+## Decision guide
+ 
+- Need variable weight/fill for animated state changes (like a heart filling
+  in) -> Material Symbols
+- Already using Lucide but want motion/micro-interactions -> Animate UI Icons
+- Need a clean, Figma-native line set with a softer feel -> Untitled UI Icons
+- Need multiple weights (thin to bold, duotone) from one import -> Phosphor
+  Icons
+- Building on Tailwind and want a small, restrained set -> Heroicons
+- Need a very large or niche catalog -> Lineicons
+- Want a friendly, rounded stroke aesthetic -> Hugeicons (Stroke Rounded)
+- Need brand/product logos, not UI icons -> Svgl (https://svgl.app)
+ 
+## Installation reference
+ 
+Material Symbols (Google Fonts, no npm install required):
+ 
+\`\`\`html
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+\`\`\`
+ 
+Phosphor Icons:
+ 
+\`\`\`bash
+npm install @phosphor-icons/react
+\`\`\`
+ 
+Heroicons:
+ 
+\`\`\`bash
+npm install @heroicons/react
+\`\`\`
+ 
+Hugeicons:
+ 
+\`\`\`bash
+npm install @hugeicons/react @hugeicons/core-free-icons
+\`\`\`
+ 
+## Consistency rule
+ 
+Once a library is chosen for a project, use it for every icon in that project.
+Mixing stroke weights or styles from multiple libraries in the same interface
+is a stronger visual "AI generated" signal than using Lucide alone would be.
+ 
+## Do not
+ 
+- Do not reach for `lucide-react` by default without checking this file first.
+- Do not mix icon libraries within the same view.
+- Do not use emoji as icons in production UI.
+```
+
+Save that as `SKILL.md` (or add it to your existing skills folder), point your agent at it, and the next vibecoded pass through your UI won't come back looking like every other one.
