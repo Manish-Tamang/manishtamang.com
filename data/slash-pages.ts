@@ -210,6 +210,9 @@ export const changelog: { date: string; changes: string[] }[] = [
       "Added /slashes, an index of all my slash pages.",
       "Added all-time top artists and albums to /dashboard.",
       "Added a daily.dev reading graph to /dashboard.",
+      "Added an IndieWeb Webring bar and an h-card.",
+      "Brought back Carbon ads and Umami analytics.",
+      "Restored the old mobile navbar and About grid on phones.",
     ],
   },
   {
