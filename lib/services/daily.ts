@@ -1,5 +1,6 @@
 /* daily.dev bookmarks, ported from the Next.js site. */
 import { DAILY_API_KEY } from "astro:env/server"
+import type { Contribution } from "@/lib/services/github"
 
 export type DailyBookmarkSource = {
   id: string
@@ -192,4 +193,47 @@ export async function getDailyBookmarks(options?: {
         asString(payload.pagination?.endCursor),
     },
   }
+}
+
+const DAY = 24 * 60 * 60 * 1000
+const DAILY_USER_ID = "9bTEOLMUm8JBRVg82HmiV"
+const toDay = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Kathmandu" }).format
+
+export type ReadingActivity = {
+  days: Contribution[]
+  streak: { current: number; longest: number; total: number } | null
+}
+
+// Reads per day for the last year, plus the streak. Comes from the GraphQL API daily.dev's own app
+// uses: no key or monthly quota, but undocumented, so it may change without notice.
+export async function getReadingActivity(): Promise<ReadingActivity> {
+  const now = Date.now()
+  const response = await fetch("https://api.daily.dev/graphql", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      query: "query($id: ID!, $after: String!, $before: String!) { userReadHistory(id: $id, after: $after, before: $before) { date reads } userStreakProfile(id: $id) { current max total } }",
+      variables: { id: DAILY_USER_ID, after: new Date(now - 371 * DAY).toISOString(), before: new Date(now + DAY).toISOString() },
+    }),
+  })
+  if (!response.ok) throw new Error(`daily.dev GraphQL ${response.status}`)
+
+  const { data, errors } = await response.json()
+  if (errors?.length || !data?.userReadHistory) throw new Error("daily.dev GraphQL returned no read history")
+
+  const reads = new Map<string, number>()
+  for (const { date, reads: count } of data.userReadHistory as { date: string; reads: number }[]) {
+    const day = toDay(new Date(date))
+    reads.set(day, (reads.get(day) ?? 0) + count)
+  }
+
+  // Only days with reads come back, so fill the gaps to keep the graph's columns aligned
+  const days = Array.from({ length: 371 }, (_, index) => {
+    const date = toDay(new Date(now - (370 - index) * DAY))
+    const count = reads.get(date) ?? 0
+    return { date, count, level: Math.min(Math.ceil(count / 2), 4) }
+  })
+
+  const profile = data.userStreakProfile as { current: number; max: number; total: number } | null
+  return { days, streak: profile && { current: profile.current, longest: profile.max, total: profile.total } }
 }

@@ -3,7 +3,7 @@
  * the rest of the page working.
  */
 import { getAllViews } from "@/lib/blog/views"
-import type { DailyBookmark } from "@/lib/services/daily"
+import { getReadingActivity, type DailyBookmark, type ReadingActivity } from "@/lib/services/daily"
 import { getContributions, type Contribution } from "@/lib/services/github"
 import { getRecentTracks, getTopAlbums, getTopArtists, type RecentTrack, type TopItem } from "@/lib/services/lastfm"
 import { getUmamiRecentSessions, getUmamiTotals } from "@/lib/services/umami"
@@ -65,6 +65,15 @@ const getGraph = async (): Promise<Contribution[]> => {
   }
 }
 
+const getReading = async (): Promise<ReadingActivity> => {
+  try {
+    return await getReadingActivity()
+  } catch (error) {
+    console.error("Failed to fetch daily.dev reading history:", error)
+    return { days: [], streak: null }
+  }
+}
+
 const getViews = async (): Promise<Record<string, number>> => {
   try {
     return await getAllViews()
@@ -76,7 +85,7 @@ const getViews = async (): Promise<Record<string, number>> => {
 
 // All at once, so the page waits for the slowest source rather than the sum of them
 export async function getDashboardData(origin: URL) {
-  const [wakatime, totals, sessions, bookmarks, tracks, topArtists, topAlbums, contributions, views] = await Promise.all([
+  const [wakatime, totals, sessions, bookmarks, tracks, topArtists, topAlbums, contributions, reading, views] = await Promise.all([
     getWakaTime(),
     getUmamiTotals(),
     getUmamiRecentSessions(3),
@@ -85,7 +94,8 @@ export async function getDashboardData(origin: URL) {
     getArtists(),
     getAlbums(),
     getGraph(),
+    getReading(),
     getViews(),
   ])
-  return { wakatime, totals, sessions, bookmarks, tracks, topArtists, topAlbums, contributions, views }
+  return { wakatime, totals, sessions, bookmarks, tracks, topArtists, topAlbums, contributions, reading, views }
 }

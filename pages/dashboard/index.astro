@@ -16,7 +16,7 @@ import { getDashboardData } from "@/lib/dashboard"
 export const prerender = false
 Astro.response.headers.set("cache-control", "public, s-maxage=60, stale-while-revalidate=86400")
 
-const { wakatime, totals, sessions, bookmarks, tracks, topArtists, topAlbums, contributions, views } = await getDashboardData(Astro.url)
+const { wakatime, totals, sessions, bookmarks, tracks, topArtists, topAlbums, contributions, reading, views } = await getDashboardData(Astro.url)
 ---
 
 <PageLayout heading="Dashboard" description="Live coding activity, site traffic, blog statistics and what Manish Tamang is reading and listening to.">
@@ -34,6 +34,14 @@ const { wakatime, totals, sessions, bookmarks, tracks, topArtists, topAlbums, co
         A quick view of my activity and open-source contribution streak on <Link href="https://github.com/Manish-Tamang">GitHub</Link>.
       </Fragment>
       <ContributionGraph contributions={contributions} />
+    </DashboardSection>
+
+    <DashboardSection title="Reading Overview">
+      <Fragment slot="description">
+        Articles I read each day on <Link href="https://app.daily.dev/manishtamang">daily.dev</Link>.
+        {reading.streak && `Current streak ${reading.streak.current} days, longest ${reading.streak.longest}, total ${reading.streak.total}.`}
+      </Fragment>
+      <ContributionGraph contributions={reading.days} color="206, 61, 243" noun="read" empty="Reading graph is unavailable right now." />
     </DashboardSection>
 
     <DashboardSection title="Site Traffic">
