@@ -16,7 +16,7 @@ import { getDashboardData } from "@/lib/dashboard"
 export const prerender = false
 Astro.response.headers.set("cache-control", "public, s-maxage=60, stale-while-revalidate=86400")
 
-const { wakatime, totals, sessions, bookmarks, tracks, topArtists, topAlbums, contributions, reading, views } = await getDashboardData(Astro.url)
+const { wakatime, totals, sessions, bookmarks, tracks, topArtists, topAlbums, contributions, reading, coding, views } = await getDashboardData(Astro.url)
 ---
 
 <PageLayout heading="Dashboard" description="Live coding activity, site traffic, blog statistics and what Manish Tamang is reading and listening to.">
@@ -42,6 +42,11 @@ const { wakatime, totals, sessions, bookmarks, tracks, topArtists, topAlbums, co
         {reading.streak && `Current streak ${reading.streak.current} days, longest ${reading.streak.longest}, total ${reading.streak.total}.`}
       </Fragment>
       <ContributionGraph contributions={reading.days} color="206, 61, 243" noun="read" empty="Reading graph is unavailable right now." />
+    </DashboardSection>
+
+    <DashboardSection title="Coding Overview">
+      <Fragment slot="description">Hours I coded each day, from <Link href="https://wakatime.com/@manishtamang">WakaTime</Link>.</Fragment>
+      <ContributionGraph contributions={coding} color="59, 130, 246" noun="hour" empty="Coding graph is unavailable right now." />
     </DashboardSection>
 
     <DashboardSection title="Site Traffic">

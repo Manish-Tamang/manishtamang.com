@@ -1,5 +1,6 @@
 /* WakaTime all-time stats, ported from the Next.js site. */
 import { WAKATIME_ACCESS_TOKEN } from "astro:env/server"
+import type { Contribution } from "@/lib/services/github"
 
 export interface WakaTimeSummary {
   totalSeconds: number
@@ -84,4 +85,19 @@ export async function getWakaTimeStats(): Promise<WakaTimeApiResponse> {
     },
     updatedAt: new Date().toISOString(),
   };
+}
+
+// Hours coded per day for the last year. The public endpoint behind the heatmap on my
+// WakaTime profile: needs no token, but it's undocumented, so it may change without notice.
+const PUBLIC_DAYS_ENDPOINT = "https://wakatime.com/api/v1/users/683edc2d-f7c3-4c58-a817-73299e89b1b3/insights/days/public";
+
+export async function getCodingActivity(): Promise<Contribution[]> {
+  const response = await fetch(PUBLIC_DAYS_ENDPOINT);
+  if (!response.ok) throw new Error(`WakaTime days ${response.status}`);
+
+  const days: { date: string; total: number }[] = (await response.json())?.data?.days ?? [];
+  return days.map(({ date, total }) => {
+    const hours = total / 3600;
+    return { date, count: Math.round(hours * 10) / 10, level: Math.min(Math.ceil(hours / 3), 4) };
+  });
 }
