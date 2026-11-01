@@ -1,0 +1,68 @@
+---
+import DashIcon from "./DashIcon.astro"
+import type { DailyBookmark } from "@/lib/services/daily"
+
+export interface Props {
+  bookmarks: DailyBookmark[]
+}
+
+const { bookmarks } = Astro.props
+
+const formatDate = (value: string | null) => {
+  const date = value ? new Date(value) : null
+  if (!date || Number.isNaN(date.getTime())) return null
+  return date.toLocaleDateString("en-US", { timeZone: "Asia/Kathmandu", month: "short", day: "numeric", year: "numeric" })
+}
+
+const hostname = (url: string) => {
+  try {
+    return new URL(url).hostname.replace(/^www\./, "")
+  } catch {
+    return url.replace(/^https?:\/\//, "")
+  }
+}
+---
+
+{bookmarks.length > 0 ? (
+  <div class="space-y-3">
+    {bookmarks.map((bookmark) => {
+      const savedAt = formatDate(bookmark.bookmarkedAt ?? bookmark.createdAt)
+      return (
+        <article class="group flex items-start gap-4 rounded-2xl bg-zinc-50/70 px-4 py-3 transition-all hover:bg-zinc-100/80 dark:bg-zinc-900/60 dark:hover:bg-zinc-800/60">
+          {bookmark.image ? (
+            <img src={bookmark.image} alt="" loading="lazy" class="mt-0.5 size-16 shrink-0 rounded-xl bg-zinc-200 object-cover dark:bg-zinc-800" />
+          ) : (
+            <div class="mt-0.5 flex size-16 shrink-0 items-center justify-center rounded-xl bg-zinc-200/80 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+              <DashIcon name="Bookmark" class="size-4" />
+            </div>
+          )}
+          <div class="min-w-0 flex-1 space-y-1.5">
+            <a href={bookmark.url} target="_blank" rel="noopener noreferrer" class="flex items-start gap-2">
+              <p class="min-w-0 flex-1 text-[15px] leading-snug font-semibold text-zinc-900 group-hover:underline dark:text-zinc-100">{bookmark.title}</p>
+              <DashIcon name="ExternalLink" class="mt-1 size-3.5 shrink-0 text-zinc-400" />
+            </a>
+            {bookmark.summary && <p class="line-clamp-2 text-[13px] leading-relaxed text-zinc-600 dark:text-zinc-400">{bookmark.summary}</p>}
+            <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-zinc-500 dark:text-zinc-400">
+              <span class="rounded-md bg-zinc-200/70 px-2 py-0.5 dark:bg-zinc-800/80">{bookmark.source?.name ?? hostname(bookmark.url)}</span>
+              {bookmark.readTime && (
+                <span class="inline-flex items-center gap-1"><DashIcon name="Clock3" class="size-3" />{bookmark.readTime} min</span>
+              )}
+              <span class="inline-flex items-center gap-1"><DashIcon name="ThumbsUp" class="size-3" />{bookmark.numUpvotes}</span>
+              <span class="inline-flex items-center gap-1"><DashIcon name="MessageCircle" class="size-3" />{bookmark.numComments}</span>
+              {savedAt && <span>{savedAt}</span>}
+            </div>
+            {bookmark.tags.length > 0 && (
+              <div class="flex flex-wrap gap-1.5 pt-0.5">
+                {bookmark.tags.slice(0, 3).map((tag) => (
+                  <span class="rounded-md bg-zinc-200/50 px-1.5 py-0.5 text-[11px] text-zinc-500 dark:bg-zinc-800/60 dark:text-zinc-400">#{tag}</span>
+                ))}
+              </div>
+            )}
+          </div>
+        </article>
+      )
+    })}
+  </div>
+) : (
+  <div class="rounded-xl bg-zinc-50/70 p-4 text-sm text-zinc-600 dark:bg-zinc-900/60 dark:text-zinc-400">No daily.dev bookmarks available right now.</div>
+)}

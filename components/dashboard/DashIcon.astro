@@ -1,0 +1,13 @@
+---
+import { icons, type IconName } from "@/components/dashboard/icons"
+
+export interface Props {
+  name: IconName
+  class?: string
+}
+
+const { name, class: className } = Astro.props
+const svg = icons[name].replace("<svg", `<svg class="${className ?? ""}" aria-hidden="true"`)
+---
+
+<Fragment set:html={svg} />

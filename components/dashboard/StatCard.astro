@@ -1,0 +1,37 @@
+---
+export interface Props {
+  label: string
+  value: string
+  bgColor: string
+  subtitle?: string
+}
+
+const { label, value, bgColor, subtitle } = Astro.props
+
+// "12h 30m" and "4 hrs 12 mins" both show big numbers with small units
+const parts = value.split(" ").map((part) => {
+  const match = part.match(/^([\d,.]+)([a-z]+)$/i)
+  if (match) return { number: match[1], unit: match[2] }
+  return /^[a-z]+$/i.test(part) ? { unit: part } : { number: part }
+})
+---
+
+<div class="group relative">
+  <div class="pointer-events-none absolute top-2.5 left-1/2 z-0 -translate-x-1/2 opacity-0 transition-all duration-300 group-hover:-top-[35px] group-hover:opacity-100">
+    <img src="/images/frog.webp" alt="" width="70" height="70" loading="lazy" class="object-contain" />
+  </div>
+  <article class="relative z-10 rounded-lg p-5 transition-all duration-300 hover:translate-y-[3px] hover:shadow-[0_-8px_0px_0px_rgba(0,0,0,0.15)]" style={{ backgroundColor: bgColor }}>
+    <p class="font-mono text-[10px] font-semibold tracking-widest text-zinc-100 uppercase">{label}</p>
+    <div class:list={["font-mono tracking-tight text-white", subtitle ? "mt-2" : "mt-3"]}>
+      <span class="inline-flex flex-wrap items-baseline gap-1">
+        {parts.map(({ number, unit }) => (
+          <span class="inline-flex items-baseline">
+            {number && <span class="text-2xl font-bold">{number}</span>}
+            {unit && <span class="ml-0.5 text-xs font-medium">{unit}</span>}
+          </span>
+        ))}
+      </span>
+    </div>
+    {subtitle && <p class="mt-1 text-[10px] text-white">{subtitle}</p>}
+  </article>
+</div>

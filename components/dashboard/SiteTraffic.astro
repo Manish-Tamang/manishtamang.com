@@ -1,0 +1,93 @@
+---
+import DashIcon from "./DashIcon.astro"
+import { formatKathmandu } from "@/lib/date"
+import { browserIcons, browserName, deviceIcons, deviceName, matchIcon, osIcons, osName, type IconName } from "@/components/dashboard/icons"
+import type { UmamiSession, UmamiTotals } from "@/lib/services/umami"
+
+export interface Props {
+  totals: UmamiTotals | null
+  sessions: UmamiSession[]
+}
+
+const { totals, sessions } = Astro.props
+
+const stats: { key: keyof UmamiTotals; label: string; icon: IconName }[] = [
+  { key: "visitors", label: "Visitors", icon: "BsFillPeopleFill" },
+  { key: "visits", label: "Visits", icon: "FaRepeat" },
+  { key: "views", label: "Views", icon: "MdRemoveRedEye" },
+]
+
+const count = new Intl.NumberFormat("en-US")
+const empty = "rounded-xl bg-zinc-50/70 p-4 text-sm text-zinc-600 dark:bg-zinc-900/60 dark:text-zinc-400"
+
+const formatTime = (timestamp?: number) =>
+  timestamp ? formatKathmandu(timestamp, { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }) : "Unknown time"
+
+const countryCode = (country?: string) => (country && /^[a-z]{2}$/i.test(country.trim()) ? country.trim().toLowerCase() : null)
+
+const regions = new Intl.DisplayNames(["en"], { type: "region" })
+const countryName = (country?: string) => {
+  const code = countryCode(country)
+  return code ? regions.of(code.toUpperCase()) : country
+}
+---
+
+{totals ? (
+  <dl class="grid grid-cols-3 divide-x divide-border rounded-2xl bg-zinc-50/70 py-4 dark:bg-zinc-900/60">
+    {stats.map(({ key, label, icon }) => (
+      <div class="min-w-0 px-3 sm:px-5">
+        <dt class="flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400">
+          <DashIcon name={icon} class="size-3 shrink-0" />
+          {label}
+        </dt>
+        <dd class="mt-1 font-mono text-lg font-bold tracking-tight text-zinc-900 sm:text-2xl dark:text-zinc-50">{count.format(totals[key])}</dd>
+      </div>
+    ))}
+  </dl>
+) : (
+  <div class={empty}>Analytics totals are unavailable right now.</div>
+)}
+
+{sessions.length > 0 ? (
+  <ul class="divide-y divide-border rounded-2xl bg-zinc-50/70 px-4 dark:bg-zinc-900/60">
+    {sessions.slice(0, 3).map((session) => {
+      const path = session.url || "/"
+      const code = countryCode(session.country)
+      const details = [
+        { label: browserName(session.browser), icon: matchIcon(session.browser, browserIcons) },
+        { label: deviceName(session.device), icon: matchIcon(session.device, deviceIcons) },
+      ].filter(({ label }) => label)
+
+      return (
+        <li class="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-x-3 gap-y-1 py-3 sm:grid-cols-[auto_minmax(0,1fr)_auto]">
+          <span class="row-span-2 flex size-9 items-center justify-center rounded-lg bg-zinc-200/70 text-zinc-800 sm:row-span-1 dark:bg-zinc-800 dark:text-zinc-200" title={osName(session.os)}>
+            <DashIcon name={matchIcon(session.os, osIcons)} class="size-5" />
+          </span>
+          <div class="min-w-0">
+            <p class="truncate text-sm font-medium text-zinc-900 dark:text-zinc-100">{path === "/" ? "Homepage visit" : `Visited ${path}`}</p>
+            <p class="mt-0.5 flex flex-wrap items-center gap-x-2.5 text-xs text-zinc-500 dark:text-zinc-400">
+              {session.os && <span>{osName(session.os)}</span>}
+              {details.map(({ label, icon }) => (
+                <span class="inline-flex items-center gap-1">
+                  <DashIcon name={icon} class="size-3 shrink-0" />
+                  {label}
+                </span>
+              ))}
+              {!session.os && details.length === 0 && <span>Unknown device</span>}
+            </p>
+          </div>
+          <div class="flex items-center gap-1.5 text-xs text-zinc-500 sm:flex-col sm:items-end sm:gap-0.5 dark:text-zinc-400">
+            <span class="inline-flex items-center gap-1.5">
+              {code && <img src={`https://flagcdn.com/w40/${code}.png`} alt="" width="20" height="14" loading="lazy" class="h-3.5 w-5 object-contain object-right" />}
+              {countryName(session.country)}
+            </span>
+            <span class="sm:hidden">·</span>
+            <time>{formatTime(session.visitedAt ?? session.createdAt)}</time>
+          </div>
+        </li>
+      )
+    })}
+  </ul>
+) : (
+  <div class={empty}>No recent sessions available.</div>
+)}

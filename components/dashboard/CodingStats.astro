@@ -1,0 +1,33 @@
+---
+import StatCard from "./StatCard.astro"
+import { formatKathmandu } from "@/lib/date"
+import type { WakaTimeApiResponse } from "@/lib/services/wakatime"
+
+export interface Props {
+  wakatime: WakaTimeApiResponse | null
+}
+
+const { wakatime } = Astro.props
+
+const summary = wakatime?.summary
+const bestDay = summary?.bestDayDate
+  ? new Date(summary.bestDayDate).toLocaleDateString("en-US", { timeZone: "UTC", month: "short", day: "numeric", year: "numeric" })
+  : undefined
+const updatedAt = wakatime ? formatKathmandu(wakatime.updatedAt, { hour: "numeric", minute: "2-digit" }) : null
+---
+
+<div class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+  <StatCard label="Total Time Coded" value={summary?.totalTimeText ?? "N/A"} bgColor="#FF6F4C" subtitle="since sep 2 2024" />
+  <StatCard label="Daily Average" value={summary?.dailyAverageText ?? "N/A"} bgColor="#84A1F0" subtitle="Over a Year" />
+  <StatCard label="Best Day" value={summary?.bestDayText ?? "N/A"} bgColor="#3C905E" subtitle={bestDay} />
+</div>
+<div class="flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400">
+  <div class:list={["size-1.5 rounded-full", wakatime ? "animate-pulse bg-green-500" : "bg-red-500"]}></div>
+  <p>{wakatime ? "Live synced from WakaTime" : "WakaTime is unavailable right now"}</p>
+  {updatedAt && (
+    <>
+      <span>•</span>
+      <p>Updated at {updatedAt}</p>
+    </>
+  )}
+</div>

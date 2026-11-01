@@ -1,0 +1,57 @@
+---
+import type { Contribution } from "@/lib/services/github"
+
+export interface Props {
+  contributions: Contribution[]
+}
+
+const { contributions } = Astro.props
+
+const ROWS = 7
+const COLUMNS = 52
+const LEVELS = ["rgba(107, 114, 128, 0.125)", "rgba(34, 197, 94, 0.25)", "rgba(34, 197, 94, 0.5)", "rgba(34, 197, 94, 0.75)", "rgb(34, 197, 94)"]
+
+// Full weeks, then this week up to today, so the last column ends on today
+const expected = (COLUMNS - 1) * ROWS + new Date().getDay() + 1
+const recent = contributions.slice(-expected)
+const padding: Contribution[] = Array.from({ length: Math.max(expected - recent.length, 0) }, () => ({ date: "", count: 0, level: 0 }))
+const tiles = [...padding, ...recent]
+---
+
+<div class="overflow-x-auto">
+  {contributions.length > 0 ? (
+    <div data-contributions class="grid w-max grid-flow-col grid-rows-7 gap-0.5">
+      {tiles.map(({ date, count, level }) => (
+        <div
+          class="size-[9px] rounded-[2px]"
+          style={{ backgroundColor: LEVELS[level] ?? "transparent" }}
+          data-tip={date ? `${count} contribution${count === 1 ? "" : "s"} on ${date}` : undefined}
+        ></div>
+      ))}
+    </div>
+  ) : (
+    <p class="text-sm text-muted-foreground">Contribution graph is unavailable right now.</p>
+  )}
+</div>
+
+<!-- One shared tooltip: fixed, so the scrolling graph can't clip it -->
+<div data-contributions-tip hidden class="pointer-events-none fixed z-50 -translate-x-1/2 -translate-y-full rounded-sm bg-black px-2 py-1 text-[10px] whitespace-nowrap text-white"></div>
+
+<script>
+  const graph = document.querySelector<HTMLElement>("[data-contributions]")
+  const tip = document.querySelector<HTMLElement>("[data-contributions-tip]")
+
+  if (graph && tip) {
+    graph.addEventListener("pointerover", (event) => {
+      const tile = (event.target as HTMLElement).closest<HTMLElement>("[data-tip]")
+      tip.hidden = !tile
+      if (!tile) return
+
+      const { left, top, width } = tile.getBoundingClientRect()
+      tip.textContent = tile.dataset.tip!
+      tip.style.left = `${left + width / 2}px`
+      tip.style.top = `${top - 4}px`
+    })
+    graph.addEventListener("pointerleave", () => (tip.hidden = true))
+  }
+</script>

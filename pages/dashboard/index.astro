@@ -1,0 +1,67 @@
+---
+import PageLayout from "@/layouts/PageLayout.astro"
+import Link from "@/components/ui/Link.astro"
+import BlogStats from "@/components/dashboard/BlogStats.astro"
+import CodingStats from "@/components/dashboard/CodingStats.astro"
+import ContributionGraph from "@/components/dashboard/ContributionGraph.astro"
+import DailyBookmarks from "@/components/dashboard/DailyBookmarks.astro"
+import DashboardSection from "@/components/dashboard/DashboardSection.astro"
+import RecentlyListened from "@/components/dashboard/RecentlyListened.astro"
+import SiteTraffic from "@/components/dashboard/SiteTraffic.astro"
+import { getDashboardData } from "@/lib/dashboard"
+
+// Rendered on request. The CDN refreshes it in the background, so visitors get a stored copy
+// straight away instead of waiting on six APIs, even if nobody has visited for hours.
+export const prerender = false
+Astro.response.headers.set("cache-control", "public, s-maxage=60, stale-while-revalidate=86400")
+
+const { wakatime, totals, sessions, bookmarks, tracks, contributions, views } = await getDashboardData(Astro.url)
+---
+
+<PageLayout heading="Dashboard" description="Live coding activity, site traffic, blog statistics and what Manish Tamang is reading and listening to.">
+  <div class="space-y-12">
+    <DashboardSection title="Coding Activity">
+      <Fragment slot="description">
+        Real-time coding statistics from <Link href="https://wakatime.com/@manishtamang">WakaTime</Link>. Tracking my
+        development journey across all projects and languages.
+      </Fragment>
+      <CodingStats wakatime={wakatime} />
+    </DashboardSection>
+
+    <DashboardSection title="Contribution Graph">
+      <Fragment slot="description">
+        A quick view of my activity and open-source contribution streak on <Link href="https://github.com/Manish-Tamang">GitHub</Link>.
+      </Fragment>
+      <ContributionGraph contributions={contributions} />
+    </DashboardSection>
+
+    <DashboardSection title="Site Traffic">
+      <Fragment slot="description">
+        Visitors, visits, and page views from
+        <Link href="https://analytics.manishtamang.com/share/jFK5VpX2c6h2JgRg/manishtamang.com">Umami</Link> since Oct 18,
+        2024. Recent sessions show the latest 3 visits.
+      </Fragment>
+      <SiteTraffic totals={totals} sessions={sessions} />
+    </DashboardSection>
+
+    <DashboardSection title="Blog Statistics">
+      <Fragment slot="description">Views and reactions across all blog posts.</Fragment>
+      <BlogStats views={views} />
+    </DashboardSection>
+
+    <DashboardSection title="Reading List">
+      <Fragment slot="description">Latest articles I saved on <Link href="https://app.daily.dev/bookmarks">daily.dev</Link>.</Fragment>
+      <DailyBookmarks bookmarks={bookmarks} />
+    </DashboardSection>
+
+    <DashboardSection title="Recently Listened">
+      <Fragment slot="description">The last few songs I played on Spotify, via <Link href="https://www.last.fm/user/golecodes">Last.fm</Link>.</Fragment>
+      <RecentlyListened tracks={tracks} />
+    </DashboardSection>
+
+    <p class="text-xs text-muted-foreground">
+      This page is inspired by <Link href="https://theodorusclarence.com/statistics">Theodorus Clarence (Blog stats)</Link> and
+      <Link href="https://victoreke.com/">Victor Eke (Contribution Graph)</Link>.
+    </p>
+  </div>
+</PageLayout>

@@ -1,0 +1,81 @@
+---
+import DashIcon from "./DashIcon.astro"
+import blogReactions from "@/data/blog/reactions.json"
+import blogViews from "@/data/blog/views.json"
+
+export interface Props {
+  /** Live counts; the build-time snapshot fills any gaps. */
+  views: Record<string, number>
+}
+
+const { views: live } = Astro.props
+
+const reactions = blogReactions as Record<string, number>
+const snapshot = blogViews as Record<string, number>
+const rows = __BLOG_INDEX__
+  .map(({ slug, title }) => ({
+    slug,
+    title,
+    views: live[slug] ?? snapshot[slug] ?? 0,
+    reactions: reactions[slug] ?? 0,
+  }))
+  .sort((a, b) => b.views - a.views || b.reactions - a.reactions)
+
+const count = new Intl.NumberFormat("en-US")
+const heading = "h-10 px-2 text-xs font-medium text-muted-foreground"
+const cell = "px-2 py-2 tabular-nums font-medium text-zinc-700 dark:text-zinc-300"
+---
+
+<div class="space-y-3 rounded-xl bg-zinc-50/70 p-3 dark:bg-zinc-900/60">
+  <div class="flex items-center justify-between gap-3 px-1">
+    <p class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Sorted by <span data-stats-label>Most Views</span></p>
+    <button type="button" data-stats-sort class="flex cursor-pointer items-center gap-2 rounded-xl border border-zinc-200 bg-white px-3 py-1.5 text-sm font-medium text-zinc-700 transition-all hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-300 dark:hover:border-zinc-700 dark:hover:bg-zinc-900">
+      <DashIcon name="ListFilter" class="size-4" />
+      <span data-stats-label>Most Views</span>
+    </button>
+  </div>
+
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="border-b border-border">
+          <th class:list={[heading, "w-12 text-right"]}>#</th>
+          <th class:list={[heading, "text-left"]}>Post</th>
+          <th class:list={[heading, "text-right"]}>Views</th>
+          <th class:list={[heading, "text-right"]}>Reactions</th>
+        </tr>
+      </thead>
+      <tbody data-stats-rows>
+        {rows.map(({ slug, title, views, reactions }, index) => (
+          <tr data-views={views} data-reactions={reactions} class="border-b border-border last:border-0 hover:bg-zinc-100/70 dark:hover:bg-zinc-800/40">
+            <td data-rank class="px-2 py-2 text-right text-zinc-500 tabular-nums dark:text-zinc-400">{index + 1}</td>
+            <td class="max-w-88 truncate px-2 py-2 font-medium text-zinc-800 dark:text-zinc-100">
+              <a href={`/blog/${slug}`} class="hover:underline">{title}</a>
+            </td>
+            <td class:list={[cell, "text-right"]}>{count.format(views)}</td>
+            <td class:list={[cell, "text-right"]}>{count.format(reactions)}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  const body = document.querySelector<HTMLElement>("[data-stats-rows]")
+  let byViews = true
+
+  document.querySelector("[data-stats-sort]")?.addEventListener("click", () => {
+    byViews = !byViews
+    const [first, second] = byViews ? (["views", "reactions"] as const) : (["reactions", "views"] as const)
+    const rows = [...body!.querySelectorAll<HTMLElement>("tr")].sort(
+      (a, b) =>
+        Number(b.dataset[first]) - Number(a.dataset[first]) || Number(b.dataset[second]) - Number(a.dataset[second]),
+    )
+    rows.forEach((row, index) => (row.querySelector("[data-rank]")!.textContent = String(index + 1)))
+    body!.replaceChildren(...rows)
+    for (const label of document.querySelectorAll("[data-stats-label]")) {
+      label.textContent = byViews ? "Most Views" : "Most Reactions"
+    }
+  })
+</script>
