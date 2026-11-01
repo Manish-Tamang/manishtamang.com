@@ -7,11 +7,13 @@
  * the visible text doesn't say plainly.
  */
 import { site } from "@/lib/site"
+import pfp from "@/assets/images/pfp.png"
 ---
 
 <section class="h-card grid grid-cols-[1fr_auto] items-center gap-x-4 gap-y-6 md:gap-x-8">
   <div hidden>
     <a class="p-name u-url u-uid" href={site.url}>{site.name}</a>
+    <a class="u-photo" href={new URL(pfp.src, site.url).href}>Profile picture</a>
     <span class="p-nickname">{site.handle}</span>
     <a class="u-email" href="mailto:hi@manishtamang.com">hi@manishtamang.com</a>
     <span class="p-locality">Kathmandu</span>
@@ -42,7 +44,7 @@ import { site } from "@/lib/site"
       height="160"
       fetchpriority="high"
       draggable="false"
-      class="u-photo relative size-full object-contain select-none"
+      class="relative size-full object-contain select-none"
     />
   </div>
 
