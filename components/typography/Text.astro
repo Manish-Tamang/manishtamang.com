@@ -1,0 +1,27 @@
+---
+import type { HTMLAttributes } from "astro/types"
+
+export interface Props extends HTMLAttributes<"p"> {
+  as?: "p" | "span" | "div"
+  size?: "xs" | "sm" | "base" | "lg"
+  tone?: "default" | "muted"
+}
+
+const { as: Tag = "p", size = "base", tone = "default", class: className, ...rest } = Astro.props
+
+const sizes = {
+  xs: "text-xs",
+  sm: "text-sm",
+  base: "text-base",
+  lg: "text-lg",
+}
+
+const tones = {
+  default: "text-foreground",
+  muted: "text-muted-foreground",
+}
+---
+
+<Tag class:list={[sizes[size], tones[tone], className]} {...rest}>
+  <slot />
+</Tag>

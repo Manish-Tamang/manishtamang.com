@@ -1,0 +1,24 @@
+---
+import type { HTMLAttributes } from "astro/types"
+
+export interface Props extends HTMLAttributes<"div"> {
+  /** Makes the whole card a link. */
+  href?: string
+}
+
+const { href, class: className, ...rest } = Astro.props
+
+const Tag = href ? "a" : "div"
+---
+
+<Tag
+  href={href}
+  class:list={[
+    "block rounded-lg border border-border bg-background p-5",
+    href && "transition-colors hover:border-border-strong hover:bg-subtle",
+    className,
+  ]}
+  {...rest}
+>
+  <slot />
+</Tag>

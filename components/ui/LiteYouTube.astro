@@ -1,0 +1,46 @@
+---
+/*
+ * YouTube embed that ships only a thumbnail. The real player (500 KB+ of
+ * YouTube scripts) loads when the visitor presses play.
+ */
+import type { ImageMetadata } from "astro"
+import { Image } from "astro:assets"
+
+export interface Props {
+  id: string
+  title: string
+  thumbnail: ImageMetadata
+}
+
+const { id, title, thumbnail } = Astro.props
+---
+
+<div class="relative aspect-video w-full overflow-hidden rounded-lg border border-border bg-muted" data-lite-youtube={id} data-title={title}>
+  <button type="button" class="group absolute inset-0" aria-label={`Play video: ${title}`}>
+    <Image src={thumbnail} alt="" widths={[480]} sizes="(max-width: 768px) 100vw, 576px" class="size-full object-cover" />
+    <span class="absolute inset-0 flex items-center justify-center bg-black/10 transition-colors group-hover:bg-black/25">
+      <span class="flex h-11 w-16 items-center justify-center rounded-xl bg-[#ff0033] text-white shadow-lg transition-transform group-hover:scale-105">
+        <svg class="ml-0.5 size-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg>
+      </span>
+    </span>
+  </button>
+</div>
+
+<script>
+  for (const box of document.querySelectorAll<HTMLElement>("[data-lite-youtube]")) {
+    box.querySelector("button")?.addEventListener(
+      "click",
+      () => {
+        const iframe = document.createElement("iframe")
+        iframe.src = `https://www.youtube-nocookie.com/embed/${box.dataset.liteYoutube}?autoplay=1&rel=0&modestbranding=1&playsinline=1`
+        iframe.title = box.dataset.title ?? "YouTube video"
+        iframe.allow = "autoplay; clipboard-write; encrypted-media; picture-in-picture"
+        iframe.allowFullscreen = true
+        iframe.referrerPolicy = "strict-origin-when-cross-origin"
+        iframe.className = "absolute inset-0 size-full"
+        box.replaceChildren(iframe)
+      },
+      { once: true },
+    )
+  }
+</script>

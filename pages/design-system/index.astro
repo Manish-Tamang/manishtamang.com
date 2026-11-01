@@ -1,0 +1,160 @@
+---
+/*
+ * Living style guide: every token and component in one place, so taste
+ * changes in tokens.css can be judged at a glance. Not in the sitemap; noindex.
+ */
+import PageLayout from "@/layouts/PageLayout.astro"
+import Heading from "@/components/typography/Heading.astro"
+import Text from "@/components/typography/Text.astro"
+import Prose from "@/components/typography/Prose.astro"
+import Badge from "@/components/ui/Badge.astro"
+import Button from "@/components/ui/Button.astro"
+import Card from "@/components/ui/Card.astro"
+import Input from "@/components/ui/Input.astro"
+import Kbd from "@/components/ui/Kbd.astro"
+import Link from "@/components/ui/Link.astro"
+import Separator from "@/components/ui/Separator.astro"
+import Textarea from "@/components/ui/Textarea.astro"
+
+const colors = [
+  "background",
+  "heading",
+  "foreground",
+  "muted",
+  "muted-foreground",
+  "subtle",
+  "border",
+  "border-strong",
+  "primary",
+  "primary-foreground",
+  "accent",
+  "link",
+  "highlight",
+  "green",
+  "blue",
+  "purple",
+  "pink",
+  "orange",
+  "yellow",
+]
+
+// Full class names so Tailwind can see them.
+const typeScale = [
+  ["4xl", "text-4xl"],
+  ["3xl", "text-3xl"],
+  ["2xl", "text-2xl"],
+  ["xl", "text-xl"],
+  ["lg", "text-lg"],
+  ["base", "text-base"],
+  ["sm", "text-sm"],
+  ["xs", "text-xs"],
+]
+const weights = [200, 300, 400, 600, 700]
+---
+
+<PageLayout heading="Design system" intro="Tokens, typography and components. Modelled on recurse.com. Edit styles/tokens.css to change the look." noindex>
+  <div class="space-y-16">
+    <section class="space-y-4">
+      <Heading>Colors</Heading>
+      <div class="grid grid-cols-2 gap-3 sm:grid-cols-3">
+        {colors.map((name) => (
+          <div class="overflow-hidden rounded-lg border border-border">
+            <div class="h-14" style={`background: var(--${name})`}></div>
+            <p class="px-3 py-2 font-mono text-xs text-muted-foreground">{name}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="space-y-4">
+      <Heading>Type scale</Heading>
+      <div class="space-y-3">
+        {typeScale.map(([name, className]) => (
+          <div class="flex items-baseline gap-4">
+            <span class="w-12 shrink-0 font-mono text-xs text-muted-foreground">{name}</span>
+            <span class:list={[className, "truncate font-medium"]}>Instrument Sans</span>
+          </div>
+        ))}
+      </div>
+      <div class="flex flex-wrap gap-x-6 gap-y-2 pt-2">
+        {weights.map((weight) => (
+          <span class="text-lg" style={`font-weight: ${weight}`}>{weight} <span class="italic">Italic</span></span>
+        ))}
+      </div>
+    </section>
+
+    <section class="space-y-4">
+      <Heading>Headings and text</Heading>
+      <Heading level={1} size="4xl">Page title (h1, 700)</Heading>
+      <Heading level={2}>Section heading (h2, 200)</Heading>
+      <Heading level={3}>Sub-section (h3, 600)</Heading>
+      <Text>Body text in the default tone. The quick brown fox jumps over the lazy dog, then naps on a warm rock in Kathmandu.</Text>
+      <Text tone="muted" size="sm">Muted small text for metadata, dates and captions.</Text>
+    </section>
+
+    <section class="space-y-4">
+      <Heading>Buttons</Heading>
+      <div class="flex flex-wrap items-center gap-2">
+        <Button>Primary</Button>
+        <Button variant="secondary">Secondary</Button>
+        <Button variant="outline">Outline</Button>
+        <Button variant="ghost">Ghost</Button>
+        <Button size="sm">Small</Button>
+        <Button disabled>Disabled</Button>
+      </div>
+    </section>
+
+    <section class="space-y-4">
+      <Heading>Badges, links, keys</Heading>
+      <div class="flex flex-wrap items-center gap-2">
+        <Badge>Default</Badge>
+        <Badge variant="outline">Outline</Badge>
+        <Badge variant="accent">Accent</Badge>
+      </div>
+      <Text>
+        An <Link href="/about">inline link</Link>, an <Link href="https://astro.build">external link</Link>, and a
+        <Link href="/blog" variant="nav">nav link</Link>. Press <Kbd>⌘</Kbd> <Kbd>K</Kbd>.
+      </Text>
+    </section>
+
+    <section class="space-y-4">
+      <Heading>Cards</Heading>
+      <div class="grid gap-3 sm:grid-cols-2">
+        <Card>
+          <Heading level={3}>Static card</Heading>
+          <Text tone="muted" size="sm" class="mt-1">A plain container with a border.</Text>
+        </Card>
+        <Card href="/projects">
+          <Heading level={3}>Link card</Heading>
+          <Text tone="muted" size="sm" class="mt-1">The whole card is clickable.</Text>
+        </Card>
+      </div>
+    </section>
+
+    <section class="space-y-4">
+      <Heading>Form fields</Heading>
+      <div class="max-w-sm space-y-3">
+        <Input placeholder="Your name" />
+        <Textarea placeholder="Leave a message…" />
+        <Button>Send</Button>
+      </div>
+    </section>
+
+    <Separator />
+
+    <section class="space-y-4">
+      <Heading>Prose</Heading>
+      <Prose>
+        <p>Long-form content for blog posts. It has <a href="#">links</a>, <strong>bold text</strong>, and <code>inline code</code>.</p>
+        <h2>A section heading</h2>
+        <p>Paragraphs keep a comfortable measure and generous line height for reading.</p>
+        <ul>
+          <li>First list item</li>
+          <li>Second list item</li>
+        </ul>
+        <blockquote>A pull quote, large and light, <mark>with a highlighted phrase.</mark><cite>Someone, somewhere</cite></blockquote>
+        <pre><code>const greeting = "namaste"</code></pre>
+      </Prose>
+    </section>
+  </div>
+</PageLayout>

@@ -1,0 +1,22 @@
+---
+import type { HTMLAttributes } from "astro/types"
+
+export interface Props extends HTMLAttributes<"span"> {
+  variant?: "default" | "outline" | "accent"
+}
+
+const { variant = "default", class: className, ...rest } = Astro.props
+
+const variants = {
+  default: "bg-muted text-muted-foreground",
+  outline: "border border-border text-muted-foreground",
+  accent: "bg-accent/10 text-accent",
+}
+---
+
+<span
+  class:list={["inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium", variants[variant], className]}
+  {...rest}
+>
+  <slot />
+</span>

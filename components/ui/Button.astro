@@ -1,0 +1,105 @@
+---
+import type { HTMLAttributes } from "astro/types"
+
+type Variant = "primary" | "secondary" | "outline" | "ghost"
+type Size = "sm" | "md" | "icon"
+
+export type Props = (HTMLAttributes<"button"> | HTMLAttributes<"a">) & {
+  variant?: Variant
+  size?: Size
+  /** Renders an <a> instead of a <button>. */
+  href?: string
+}
+
+const { variant = "primary", size = "md", href, class: className, ...rest } = Astro.props
+
+// primary/secondary are Alfsight's glossy and raised buttons (alfsight/apps/web global.css),
+// recoloured with the --button-* tokens.
+const variants: Record<Variant, string> = {
+  primary: "glossy rounded-xl",
+  secondary: "raised rounded-xl text-heading",
+  outline: "rounded-xl border border-border text-heading hover:border-border-strong hover:bg-subtle",
+  ghost: "rounded-full text-muted-foreground hover:bg-muted hover:text-heading",
+}
+
+const sizes: Record<Size, string> = {
+  sm: "h-9 px-3.5 text-sm gap-1.5",
+  md: "h-11 px-4.5 text-base gap-2",
+  icon: "size-9",
+}
+
+const classes = [
+  "inline-flex shrink-0 items-center justify-center font-medium whitespace-nowrap select-none transition-colors",
+  "disabled:pointer-events-none disabled:opacity-50",
+  variants[variant],
+  sizes[size],
+  className,
+]
+
+const buttonType = (rest as HTMLAttributes<"button">).type ?? "button"
+---
+
+{
+  href ? (
+    <a href={href} class:list={classes} {...(rest as HTMLAttributes<"a">)}>
+      <slot />
+    </a>
+  ) : (
+    <button class:list={classes} {...(rest as HTMLAttributes<"button">)} type={buttonType}>
+      <slot />
+    </button>
+  )
+}
+
+<style>
+  .glossy,
+  .raised {
+    transition:
+      box-shadow 200ms ease,
+      transform 100ms ease,
+      background-color 200ms ease;
+  }
+
+  .glossy:active,
+  .raised:active {
+    transform: scale(0.98);
+  }
+
+  .glossy {
+    color: var(--button-foreground);
+    background: linear-gradient(to bottom, var(--button-top), var(--button-bottom));
+    box-shadow:
+      inset 0 0 0 2px var(--button-ring),
+      inset 0 0 0 3px rgb(255 255 255 / 0.45),
+      inset 0 0 10px rgb(255 255 255 / 0.3);
+  }
+
+  .glossy:hover {
+    box-shadow:
+      inset 0 0 0 2px var(--button-ring),
+      inset 0 0 0 3px rgb(255 255 255 / 0.7),
+      inset 0 0 20px rgb(255 255 255 / 0.55);
+  }
+
+  .raised {
+    background: var(--background);
+    box-shadow:
+      0 0 0 1px rgb(0 0 0 / 0.08),
+      0 1px 2px rgb(0 0 0 / 0.05);
+  }
+
+  .raised:hover {
+    background: var(--subtle);
+  }
+
+  :global(.dark) .raised {
+    background: var(--muted);
+    box-shadow:
+      0 0 0 1px rgb(255 255 255 / 0.08),
+      inset 0 1px 0 rgb(255 255 255 / 0.06);
+  }
+
+  :global(.dark) .raised:hover {
+    background: var(--border);
+  }
+</style>

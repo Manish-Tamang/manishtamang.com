@@ -1,0 +1,10 @@
+---
+/* Dashed line breaker, carried over from the Next.js site's LineBreaker. */
+import type { HTMLAttributes } from "astro/types"
+
+export type Props = HTMLAttributes<"hr">
+
+const { class: className, ...rest } = Astro.props
+---
+
+<hr class:list={["border-0 border-t-[1.5px] border-dashed border-border", className]} {...rest} />

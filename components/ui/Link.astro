@@ -1,0 +1,28 @@
+---
+import type { HTMLAttributes } from "astro/types"
+
+export interface Props extends HTMLAttributes<"a"> {
+  href: string
+  /** "inline" for links inside text, "nav" for standalone muted links. */
+  variant?: "inline" | "nav"
+}
+
+const { href, variant = "inline", class: className, ...rest } = Astro.props
+
+const external = /^https?:\/\//.test(href) && !href.startsWith("https://manishtamang.com")
+
+const variants = {
+  inline: "text-link underline-offset-[0.2em] hover:underline hover:text-link-hover dark:underline",
+  nav: "text-muted-foreground hover:text-heading",
+}
+---
+
+<a
+  href={href}
+  target={external ? "_blank" : undefined}
+  rel={external ? "noopener noreferrer" : undefined}
+  class:list={["transition-colors", variants[variant], className]}
+  {...rest}
+>
+  <slot />{external && <span class="sr-only"> (opens in a new tab)</span>}
+</a>

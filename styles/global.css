@@ -1,0 +1,103 @@
+@import "tailwindcss";
+@import "./tokens.css";
+@import "./prose.css";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    font-feature-settings: var(--font-features);
+    background: var(--color-background);
+    color: var(--color-foreground);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    scrollbar-gutter: stable;
+  }
+
+  body {
+    min-height: 100dvh;
+    font-size: var(--text-base);
+    line-height: var(--text-base--line-height);
+  }
+
+  /* Anchor links stop below the sticky mobile top bar */
+  @media (max-width: 47.99rem) {
+    html {
+      scroll-padding-top: 4.5rem;
+    }
+  }
+
+  ::selection {
+    background: var(--selection);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  /* Tailwind v4 resets buttons to the default cursor; anything clickable gets a pointer */
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  [role="radio"],
+  label:has(> input[type="radio"], > input[type="checkbox"]),
+  summary,
+  select {
+    cursor: pointer;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Highlighter marker, as on recurse.com pull quotes */
+  mark {
+    color: inherit;
+    background: linear-gradient(
+      transparent 40%,
+      var(--color-highlight) 40%,
+      var(--color-highlight) 90%,
+      transparent 90%
+    );
+    padding-inline: 0.1em;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+
+  /* A translucent band turns muddy on dark; use a solid grey marker */
+  .dark mark {
+    color: var(--color-foreground);
+    background: var(--color-highlight);
+    border-radius: 2px;
+  }
+
+  img,
+  video {
+    max-width: 100%;
+    height: auto;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@utility mask-marquee {
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}

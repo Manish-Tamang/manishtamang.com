@@ -1,0 +1,181 @@
+/*
+ * Design tokens — the only place raw values live.
+ * Components use the semantic names (bg-background, text-muted-foreground, …),
+ * so changing taste means editing this file, not components.
+ *
+ * Current direction: modelled on recurse.com — Inter, warm green-tinted greys,
+ * ultralight section headings and bold display headings — with a purple
+ * accent (#966bc3) and yellow text selection.
+ */
+
+:root {
+  color-scheme: light;
+
+  /* Palette */
+  --green: #3dc06c;
+  --green-strong: #23a050;
+  --blue: #4d9bd8;
+  --purple: #966bc3;
+  --pink: #d95a88;
+  --orange: #e6a56e;
+  --yellow: #e7dd6f;
+  --highlight: #fff480;
+
+  /* Neutrals */
+  --background: #ffffff;
+  --heading: #2a2d2d;
+  --foreground: #2a2d2d;
+  --muted: #eef0f0;
+  --muted-foreground: #626a6a;
+  --subtle: #f7f8f8;
+  --border: #d7dada;
+  --border-strong: #b5bfbf;
+
+  /* Interactive */
+  --primary: var(--purple);
+  --primary-border: rgb(122 79 168 / 0.6);
+  --primary-foreground: #ffffff;
+
+  /* Glossy button (Alfsight style) in purple, centred on #966bc3 */
+  --button-top: #ad87d8;
+  --button-bottom: #8a5db9;
+  --button-ring: #7a4fa8;
+  --button-foreground: #ffffff;
+  --accent: var(--purple);
+  --link: var(--purple);
+  --link-hover: var(--link);
+  --ring: rgb(150 107 195 / 0.45);
+  --danger: var(--pink);
+  --success: var(--green);
+
+  --selection: rgb(255 244 128 / 0.7);
+}
+
+:root.dark {
+  color-scheme: dark;
+
+  --highlight: #666666;
+
+  --background: #161616;
+  --heading: #f1f1f1;
+  --foreground: #f1f1f1;
+  --muted: #2c2c2c;
+  --muted-foreground: #f1f1f1;
+  --subtle: #222222;
+  --border: #333333;
+  --border-strong: #666666;
+
+  --primary: var(--purple);
+  --primary-border: rgb(185 150 224 / 0.5);
+  --primary-foreground: #ffffff;
+  /* Lifted for contrast on the dark background */
+  --accent: #cfb6ee;
+  --link: #f1f1f1;
+  --link-hover: #bbbbbb;
+  --ring: rgb(185 150 224 / 0.5);
+
+  --selection: #666666;
+
+  /* Components hardcoded to zinc (guestbook, dashboard) brighten with everything else */
+  --color-zinc-300: #f1f1f1;
+  --color-zinc-400: #f1f1f1;
+  --color-zinc-500: #f1f1f1;
+}
+
+@theme inline {
+  /* Colors */
+  --color-background: var(--background);
+  --color-heading: var(--heading);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-subtle: var(--subtle);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-primary: var(--primary);
+  --color-primary-border: var(--primary-border);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-link: var(--link);
+  --color-link-hover: var(--link-hover);
+  --color-ring: var(--ring);
+  --color-danger: var(--danger);
+  --color-success: var(--success);
+  --color-highlight: var(--highlight);
+
+  --color-green: var(--green);
+  --color-blue: var(--blue);
+  --color-purple: var(--purple);
+  --color-pink: var(--pink);
+  --color-orange: var(--orange);
+  --color-yellow: var(--yellow);
+
+  /* Fonts (loaded by Astro's Fonts API) */
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-myfont);
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;
+}
+
+@theme {
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  --animate-marquee: marquee 10s linear infinite;
+
+  /* Type scale — [size, line-height, tracking] */
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1.1rem;
+  --text-sm: 0.85rem;
+  --text-sm--line-height: 1.3rem;
+  --text-base: 1rem;
+  --text-base--line-height: 1.6rem;
+  --text-lg: 1.125rem;
+  --text-lg--line-height: 1.7rem;
+  --text-xl: 1.375rem;
+  --text-xl--line-height: 1.9rem;
+  --text-2xl: 2rem;
+  --text-2xl--line-height: 2.6rem;
+  --text-3xl: 2.5rem;
+  --text-3xl--line-height: 2.85rem;
+  --text-3xl--letter-spacing: -0.015em;
+  --text-4xl: 3.4rem;
+  --text-4xl--line-height: 3.67rem;
+  --text-4xl--letter-spacing: -0.02em;
+  /* Pull quotes */
+  --text-quote: 1.75rem;
+  --text-quote--line-height: 2.54rem;
+
+  /* Heading weights: bold display, ultralight sections, semibold sub-sections */
+  --font-weight-hero: 700;
+  --font-weight-section: 200;
+  --font-weight-subsection: 600;
+  --font-weight-quote: 300;
+
+  /* Inter: tailed lowercase l (cv05) and rounded quotes/commas (ss03) */
+  --font-features: "cv05", "ss03";
+
+  /* Layout widths */
+  --container-prose: 36rem;
+  --container-page: 48rem;
+  --container-wide: 64rem;
+
+  /* Radius: one 4px corner everywhere (rounded-full stays for pills) */
+  --radius-xs: 0.25rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.25rem;
+  --radius-lg: 0.25rem;
+  --radius-xl: 0.25rem;
+  --radius-2xl: 0.25rem;
+
+  /* Motion */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --default-transition-duration: 160ms;
+  --default-transition-timing-function: var(--ease-out-soft);
+}
