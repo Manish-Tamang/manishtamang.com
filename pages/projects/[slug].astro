@@ -1,0 +1,67 @@
+---
+import { Image } from "astro:assets"
+import { getCollection, render, type CollectionEntry } from "astro:content"
+import PageLayout from "@/layouts/PageLayout.astro"
+import Badge from "@/components/ui/Badge.astro"
+import Link from "@/components/ui/Link.astro"
+import Prose from "@/components/typography/Prose.astro"
+import { formatDate, readingTime } from "@/lib/blog"
+
+export async function getStaticPaths() {
+  const projects = await getCollection("projects")
+  return projects.map((project) => ({ params: { slug: project.id }, props: { project } }))
+}
+
+interface Props {
+  project: CollectionEntry<"projects">
+}
+
+const { project } = Astro.props
+const { data } = project
+const { Content } = await render(project)
+---
+
+<PageLayout
+  heading={data.title}
+  intro={data.description}
+  description={data.metaDescription ?? data.description}
+  image={data.cover.src}
+>
+  <p class="-mt-6 mb-8 flex flex-wrap gap-x-2 text-sm text-muted-foreground">
+    <span>Built <time datetime={data.date.toISOString()}>{formatDate(data.date)}</time></span>
+    <span aria-hidden="true">·</span>
+    <span>{readingTime(project)} min read</span>
+    {data.projectUrl && (
+      <>
+        <span aria-hidden="true">·</span>
+        <Link href={data.projectUrl}>Live Demo</Link>
+      </>
+    )}
+    {data.githubUrl && (
+      <>
+        <span aria-hidden="true">·</span>
+        <Link href={data.githubUrl}>Code</Link>
+      </>
+    )}
+  </p>
+
+  <Image
+    src={data.cover}
+    alt={data.coverAlt ?? data.title}
+    widths={[480, 720, 1080, 1440]}
+    sizes="(max-width: 768px) 100vw, 720px"
+    loading="eager"
+    fetchpriority="high"
+    class="mb-10 aspect-video w-full rounded-lg border border-border object-cover"
+  />
+
+  <Prose class="max-w-none">
+    <Content />
+  </Prose>
+
+  {data.tech.length > 0 && (
+    <ul class="mt-10 flex flex-wrap gap-2" aria-label="Tech stack">
+      {data.tech.map((tech) => <li><Badge variant="outline">{tech}</Badge></li>)}
+    </ul>
+  )}
+</PageLayout>

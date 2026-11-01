@@ -1,0 +1,26 @@
+---
+import { getCollection } from "astro:content"
+import PageLayout from "@/layouts/PageLayout.astro"
+import ProjectListItem from "@/components/projects/ProjectListItem.astro"
+import SearchableList from "@/components/shared/SearchableList.astro"
+import YearGroup from "@/components/shared/YearGroup.astro"
+
+const projects = (await getCollection("projects")).sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+const years = [...new Set(projects.map(({ data }) => data.date.getUTCFullYear()))]
+---
+
+<PageLayout
+  heading="Projects"
+  intro="Here are some of the projects I've worked on. Each project represents a unique challenge and learning experience."
+  description="Projects by Manish Tamang (golecodes) — web applications, experiments, and creative builds."
+>
+  <SearchableList noun="projects">
+    {years.map((year) => (
+      <YearGroup year={year}>
+        {projects
+          .filter(({ data }) => data.date.getUTCFullYear() === year)
+          .map((project) => <ProjectListItem project={project} />)}
+      </YearGroup>
+    ))}
+  </SearchableList>
+</PageLayout>

@@ -1,0 +1,17 @@
+---
+import type { CollectionEntry } from "astro:content"
+import ListRow from "@/components/shared/ListRow.astro"
+import { formatDate } from "@/lib/blog"
+
+export interface Props {
+  project: CollectionEntry<"projects">
+}
+
+const { id, data } = Astro.props.project
+---
+
+<ListRow href={`/projects/${id}`} title={data.title} description={data.description} date={data.date} image={data.cover} keywords={data.tech}>
+  <time datetime={data.date.toISOString()}>{formatDate(data.date, { month: "short", day: "numeric" })}</time>
+  {data.tech.length > 0 && <span aria-hidden="true">•</span>}
+  {data.tech.length > 0 && <span>{data.tech.slice(0, 3).join(", ")}</span>}
+</ListRow>
