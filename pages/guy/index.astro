@@ -1,0 +1,35 @@
+---
+import PageLayout from "@/layouts/PageLayout.astro"
+import Link from "@/components/ui/Link.astro"
+import { guy } from "@/data/slash-pages"
+
+const article = (word: string) => (/^[aeiou]/i.test(word) ? "an" : "a")
+---
+
+<PageLayout
+  heading="Guy"
+  intro="The things I'm a guy for, in no particular order."
+  description="The things Manish Tamang is a guy for, in no particular order."
+>
+  <ul class="space-y-6">
+    {guy.map(({ thing, ending = "guy.", tooltip }) => (
+      <li>
+        <p class="font-section text-2xl text-heading">
+          I'm {article(thing)}
+          {tooltip ? (
+            <span class="group relative inline-block cursor-help" tabindex="0">
+              <mark>{thing}</mark>
+              <span class="pointer-events-none absolute bottom-full left-1/2 mb-1 -translate-x-1/2 rounded-sm bg-black px-2 py-1 text-xs font-normal whitespace-nowrap text-white opacity-0 transition-opacity group-hover:opacity-100 group-focus:opacity-100" role="tooltip">{tooltip}</span>
+            </span>
+          ) : (
+            <mark>{thing}</mark>
+          )} {ending}
+        </p>
+      </li>
+    ))}
+  </ul>
+
+  <p class="mt-12 text-sm text-muted-foreground">
+    <Link href="https://canion.blog/guy/">Andrew Canion</Link> coined /guy in the IndieWeb.
+  </p>
+</PageLayout>

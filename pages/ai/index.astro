@@ -1,0 +1,22 @@
+---
+import PageLayout from "@/layouts/PageLayout.astro"
+import Heading from "@/components/typography/Heading.astro"
+import Link from "@/components/ui/Link.astro"
+import Text from "@/components/typography/Text.astro"
+import { ai } from "@/data/slash-pages"
+---
+
+<PageLayout heading="AI" intro="How I use, and don't use, AI." description="How Manish Tamang uses, and doesn't use, AI in his work and on this website.">
+  <div class="space-y-10">
+    {ai.map(({ title, body }) => (
+      <section>
+        <Heading>{title}</Heading>
+        <Text class="mt-2">{body}</Text>
+      </section>
+    ))}
+  </div>
+
+  <p class="mt-12 text-sm text-muted-foreground">
+    This page is inspired by <Link href="https://www.bydamo.la/p/ai-manifesto">Damola Morenikeji's /ai manifesto</Link>.
+  </p>
+</PageLayout>

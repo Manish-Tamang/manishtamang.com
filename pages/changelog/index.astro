@@ -1,0 +1,20 @@
+---
+import PageLayout from "@/layouts/PageLayout.astro"
+import { changelog } from "@/data/slash-pages"
+
+const format = (date: string) =>
+  new Date(`${date}T00:00:00`).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })
+---
+
+<PageLayout heading="Changelog" intro="Changes to this website." description="Every notable change to manishtamang.com, from the first Next.js version to the Astro rebuild.">
+  <ol class="space-y-10">
+    {changelog.map(({ date, changes }) => (
+      <li class="grid gap-2 sm:grid-cols-[7rem_1fr] sm:gap-6">
+        <time datetime={date} class="text-sm text-muted-foreground tabular-nums sm:pt-0.5">{format(date)}</time>
+        <ul class="list-disc space-y-1.5 pl-5 marker:text-muted-foreground">
+          {changes.map((change) => <li>{change}</li>)}
+        </ul>
+      </li>
+    ))}
+  </ol>
+</PageLayout>

@@ -1,0 +1,65 @@
+---
+import { Image } from "astro:assets"
+import PageLayout from "@/layouts/PageLayout.astro"
+import Link from "@/components/ui/Link.astro"
+import Heading from "@/components/typography/Heading.astro"
+import Text from "@/components/typography/Text.astro"
+import hero from "@/assets/images/chris-cornell.webp"
+
+const songs = [
+  { title: "Hunger Strike", band: "Temple of the Dog", year: 1991 },
+  { title: "Outshined", band: "Soundgarden", year: 1991 },
+  { title: "Black Hole Sun", band: "Soundgarden", year: 1994 },
+  { title: "Like a Stone", band: "Audioslave", year: 2002 },
+  { title: "I Am the Highway", band: "Audioslave", year: 2002 },
+  { title: "Be Yourself", band: "Audioslave", year: 2005 },
+  { title: "Sunshower", band: "Solo", year: 1998 },
+]
+---
+
+<PageLayout
+  heading="Chris Cornell"
+  intro="A small tribute to the voice I grew up with."
+  description="A tribute to Chris Cornell, and the songs of his I keep coming back to."
+>
+  <figure class="relative mb-12 overflow-hidden rounded-xl bg-black">
+    <Image
+      src={hero}
+      alt="Chris Cornell on stage, one arm stretched out toward the crowd"
+      widths={[640, 1024, 1600, 2000]}
+      sizes="(min-width: 768px) 768px, 100vw"
+      quality={80}
+      format="webp"
+      loading="eager"
+      fetchpriority="high"
+      class="aspect-[5/2] w-full object-cover object-[50%_30%]"
+    />
+    <figcaption class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-5 pt-12 pb-4 text-white">
+      <p class="text-lg font-semibold">Chris Cornell</p>
+      <p class="text-sm text-white/75 tabular-nums">20 July 1964 – 18 May 2017</p>
+    </figcaption>
+  </figure>
+
+  <div class="space-y-4">
+    <Text>
+      Four octaves, a scream that could turn into a whisper mid-line, and songs that somehow got heavier the quieter
+      they got. Chris Cornell fronted Soundgarden, Temple of the Dog and Audioslave, and made a solo career on top of
+      all three.
+    </Text>
+    <Text>
+      I'm a huge fan. These are the songs of his I keep coming back to, the ones that have been on every playlist I've
+      ever made.
+    </Text>
+  </div>
+
+  <section class="mt-12">
+    <Heading>Favourite songs</Heading>
+    <ul class="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-sm">
+      {songs.map(({ title, band }) => (
+        <li><Link href={`https://open.spotify.com/search/${encodeURIComponent(`${title} ${band === "Solo" ? "Chris Cornell" : band}`)}`}>{title}</Link></li>
+      ))}
+    </ul>
+  </section>
+
+  <Text tone="muted" class="mt-12 italic">Rest easy, Chris. Say hello to heaven.</Text>
+</PageLayout>

@@ -1,0 +1,26 @@
+---
+import PageLayout from "@/layouts/PageLayout.astro"
+import Link from "@/components/ui/Link.astro"
+import X from "@/components/icons/X.astro"
+import { nope } from "@/data/slash-pages"
+---
+
+<PageLayout heading="Nope" intro="Things I don't want to do." description="The things Manish Tamang doesn't like or doesn't want to do, so nobody has to ask twice.">
+  <ul class="space-y-3">
+    {nope.map(({ item, note }) => (
+      <li class="flex items-start gap-3">
+        <span class="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-danger/15 text-danger" aria-hidden="true">
+          <X class="size-3" />
+        </span>
+        <div class="min-w-0 flex-1">
+          <p class="text-heading">{item}</p>
+          {note && <p class="mt-0.5 text-sm text-muted-foreground">{note}</p>}
+        </div>
+      </li>
+    ))}
+  </ul>
+
+  <p class="mt-12 text-sm text-muted-foreground">
+    Inspired by <Link href="https://baty.net/nope/">Jack Baty's /nope</Link> page.
+  </p>
+</PageLayout>

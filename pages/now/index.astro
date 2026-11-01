@@ -1,0 +1,26 @@
+---
+import PageLayout from "@/layouts/PageLayout.astro"
+import Heading from "@/components/typography/Heading.astro"
+import Link from "@/components/ui/Link.astro"
+import NowPlayingPlayer from "@/components/now/NowPlayingPlayer.astro"
+import { now } from "@/data/slash-pages"
+---
+
+<PageLayout heading="Now" intro="What I'm focused on at the moment." description="What Manish Tamang is focused on at the moment.">
+  <div class="space-y-10">
+    {now.map(({ heading, items }) => (
+      <section>
+        <Heading level={3}>{heading}</Heading>
+        <ul class="mt-2 list-disc space-y-1.5 pl-5 marker:text-muted-foreground">
+          {items.map((item) => <li>{item}</li>)}
+        </ul>
+      </section>
+    ))}
+
+    <NowPlayingPlayer />
+  </div>
+
+  <p class="mt-12 text-sm text-muted-foreground">
+    This is a <Link href="https://nownownow.com/about">now page</Link>, an idea from Derek Sivers.
+  </p>
+</PageLayout>

@@ -1,0 +1,29 @@
+---
+/* One shared player for the page, opened by any VideoThumbnail. */
+import LoaderCircle from "@/components/icons/LoaderCircle.astro"
+import X from "@/components/icons/X.astro"
+---
+
+<dialog data-video-modal class="m-auto max-h-none max-w-none bg-transparent p-0 backdrop:bg-black/90">
+  <div class="relative flex items-center justify-center">
+    <video data-video-player playsinline preload="metadata" class="max-h-[85dvh] max-w-[92vw] cursor-pointer rounded-lg bg-black"></video>
+
+    <span data-video-spinner hidden class="pointer-events-none absolute inset-0 flex items-center justify-center text-white">
+      <LoaderCircle class="size-8 animate-spin" />
+    </span>
+
+    <button type="button" data-video-toggle aria-label="Play" hidden class="absolute top-1/2 left-1/2 flex size-16 -translate-x-1/2 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-sm">
+      <svg viewBox="0 0 24 24" fill="currentColor" class="ml-1 size-7" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l11-6.5a1 1 0 0 0 0-1.72l-11-6.5A1 1 0 0 0 8 5.5Z"></path></svg>
+    </button>
+
+    <button type="button" data-video-close aria-label="Close video" class="absolute top-3 right-3 flex size-9 cursor-pointer items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-sm">
+      <X class="size-4" />
+    </button>
+
+    <input data-video-seek type="range" min="0" max="1000" value="0" aria-label="Seek" class="absolute inset-x-3 bottom-3 h-1 cursor-pointer accent-white" />
+  </div>
+</dialog>
+
+<script>
+  import "@/lib/client/video-modal"
+</script>

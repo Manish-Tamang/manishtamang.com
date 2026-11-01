@@ -1,0 +1,160 @@
+---
+import type { ImageMetadata } from "astro";
+import { Image, getImage } from "astro:assets";
+import PageLayout from "@/layouts/PageLayout.astro";
+import VideoModal from "@/components/concerts/VideoModal.astro";
+import VideoThumbnail from "@/components/concerts/VideoThumbnail.astro";
+import Heading from "@/components/typography/Heading.astro";
+import Text from "@/components/typography/Text.astro";
+import Lightbox from "@/components/photos/Lightbox.astro";
+import { concerts } from "@/data/slash-pages";
+
+const sorted = [...concerts].sort((a, b) => b.date.localeCompare(a.date));
+const years = [...new Set(sorted.map(({ date }) => date.slice(0, 4)))];
+
+const formatMonth = (date: string) =>
+  new Date(`${date}T00:00:00`).toLocaleDateString("en-GB", {
+    month: "short",
+    year: "numeric",
+  });
+
+const format = (date: string) =>
+  new Date(`${date}T00:00:00`).toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+
+const allImages = import.meta.glob<{ default: ImageMetadata }>(
+  "/assets/concerts/*",
+  { eager: true },
+);
+const concertImage = (file: string) =>
+  allImages[`/assets/concerts/${file}`]?.default;
+
+// Pre-optimise each concert image so we can pass data attrs to the lightbox
+const optimised = new Map<
+  string,
+  { src: string; srcset: string; width: number; height: number }
+>();
+for (const c of sorted) {
+  if (!c.image) continue;
+  const raw = concertImage(c.image);
+  if (!raw) continue;
+  const opt = await getImage({
+    src: raw,
+    widths: [256, 512, 1024],
+    format: "webp",
+    quality: 80,
+  });
+  optimised.set(c.image, {
+    src: opt.src,
+    srcset: opt.srcSet.attribute,
+    width: raw.width,
+    height: raw.height,
+  });
+}
+---
+
+<PageLayout heading="Concerts" intro="Concerts and live shows I've been to." description="Concerts and live shows Manish Tamang has been to, with photos and clips from each night.">
+  <div class="space-y-12">
+    {
+      years.map((year) => (
+        <section>
+          <Heading>{year}</Heading>
+          <div class="mt-4 space-y-6">
+            {sorted
+              .filter(({ date }) => date.startsWith(year))
+              .map(({ date, approximate, artist, venue, city, image, video, caption }) => {
+                const opt = image ? optimised.get(image) : undefined;
+                return (
+                  <article>
+                    <div class="flex items-start justify-between gap-4">
+                      <div class="min-w-0 space-y-0.5">
+                        <p class="flex items-center gap-2 font-medium text-heading">
+                          {artist}
+                        </p>
+                        {(venue || city) && (
+                          <Text size="sm">
+                            {[venue, city].filter(Boolean).join(", ")}
+                          </Text>
+                        )}
+                      </div>
+                      <time
+                        datetime={date}
+                        class="shrink-0 pt-0.5 text-xs text-foreground tabular-nums"
+                      >
+                        {approximate ? formatMonth(date) : format(date)}
+                      </time>
+                    </div>
+                    {opt && (
+                      <figure class:list={["mt-3", video ? "grid grid-cols-2 gap-3" : "max-w-[10rem]"]}>
+                        <button
+                          type="button"
+                          class="block w-full cursor-pointer overflow-hidden rounded-md"
+                          data-photo
+                          data-src={opt.src}
+                          data-srcset={opt.srcset}
+                          data-width={opt.width}
+                          data-height={opt.height}
+                          data-alt={caption || `${artist} live`}
+                          data-caption={caption}
+                          data-date={format(date)}
+                        >
+                          <Image
+                            src={concertImage(image!)!}
+                            alt={caption || `${artist} live`}
+                            width={video ? 480 : 160}
+                            height={video ? 480 : 160}
+                            quality={80}
+                            format="webp"
+                            class="aspect-square w-full grayscale-100 object-cover transition-transform duration-200 hover:scale-105"
+                          />
+                        </button>
+                      {video && (
+                        <VideoThumbnail
+                          src={video}
+                          poster={concertImage(image!)!}
+                          label={`${artist} live at ${venue}`}
+                        />
+                      )}
+                        {caption && (
+                          <figcaption class:list={[video ? "col-span-2 -mt-1.5" : "mt-1.5"]}>
+                            <Text
+                              as="span"
+                              size="xs"
+                              class="block italic"
+                            >
+                              {caption}
+                            </Text>
+                          </figcaption>
+                        )}
+                      </figure>
+                    )}
+                    {!opt && video && (
+                      <figure class="mt-3 w-1/2">
+                        <VideoThumbnail
+                          src={video}
+                          label={`${artist} live at ${venue}`}
+                          wide
+                        />
+                        {caption && (
+                          <figcaption class="mt-1.5">
+                            <Text as="span" size="xs" class="block italic">
+                              {caption}
+                            </Text>
+                          </figcaption>
+                        )}
+                      </figure>
+                    )}
+                  </article>
+                );
+              })}
+          </div>
+        </section>
+      ))
+    }
+  </div>
+  <Lightbox />
+  <VideoModal />
+</PageLayout>

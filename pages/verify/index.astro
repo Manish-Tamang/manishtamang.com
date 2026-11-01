@@ -1,0 +1,62 @@
+---
+import { Image } from "astro:assets"
+import PageLayout from "@/layouts/PageLayout.astro"
+import Prose from "@/components/typography/Prose.astro"
+import { verify } from "@/data/slash-pages"
+import pfp from "@/assets/images/pfp.png"
+
+const follow = verify.filter((account) => account.follow)
+const others = verify.filter((account) => !account.follow)
+---
+
+<PageLayout heading="Verify" description="The system of record for Manish Tamang's online identity.">
+  <Prose class="max-w-none">
+    <p>This page is the system of record for my online identity. The best places to follow me are:</p>
+    <ul>
+      <li>Right here on this website (<a href="/feed.xml">via RSS</a>)</li>
+      {follow.map(({ platform, handle, url }) => (
+        <li>{platform}: <a href={url} rel="me">{handle}</a></li>
+      ))}
+    </ul>
+
+    <p>I also control the following personal accounts:</p>
+    <ul>
+      {others.map(({ platform, handle, url }) => (
+        <li>{platform}: <a href={url} rel="me">{handle}</a></li>
+      ))}
+    </ul>
+
+    <figure>
+      <Image
+        src={pfp}
+        alt="Black line drawing of me with long wavy hair and a collared shirt"
+        width={160}
+        height={160}
+        densities={[1, 2]}
+        class="w-40! rounded-lg border border-border bg-white"
+      />
+      <figcaption class="text-left!">
+        This is the profile picture I've generally used across my socials since 2023. Illustration by
+        <a href="https://weareskribbl.com/different-people/woman-illustration/"> Skribbl</a>.
+      </figcaption>
+    </figure>
+
+    <p>I own and control the domain <a href="https://manishtamang.com" rel="me">manishtamang.com</a>.</p>
+
+    <p>
+      My email addresses are <a href="mailto:hi@manishtamang.com" rel="me">hi@manishtamang.com</a> and
+      <a href="mailto:maneshtamang833@gmail.com" rel="me"> maneshtamang833@gmail.com</a>.
+    </p>
+
+    <p>
+      If there's an account claiming to be me that's not on this list, it's probably an impersonator. If it's offering
+      to fix your website for free, it's definitely an impersonator.
+    </p>
+
+    <hr />
+
+    <p>
+      <small>Some content of this page is probably copied from <a href="https://www.mollywhite.net/verify/">Molly White</a>.</small>
+    </p>
+  </Prose>
+</PageLayout>

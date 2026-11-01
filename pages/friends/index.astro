@@ -1,0 +1,23 @@
+---
+import PageLayout from "@/layouts/PageLayout.astro"
+import Link from "@/components/ui/Link.astro"
+import { inspirations } from "@/data/colophon"
+---
+
+<PageLayout
+  heading="Friends"
+  intro="People on the internet I like, admire or learn from."
+  description="People on the internet Manish Tamang likes, admires and learns from, with links so you can find them too."
+>
+  <ul class="grid gap-x-8 gap-y-2 sm:grid-cols-2">
+    {inspirations.map(({ name, url }) => (
+      <li>
+        <Link href={url}>{name}</Link>
+      </li>
+    ))}
+  </ul>
+
+  <p class="mt-12 text-sm text-muted-foreground">
+    <Link href="https://slashfriends.org/">/friends</Link> pages were started by <Link href="https://nickgray.net/">Nick Gray</Link>.
+  </p>
+</PageLayout>
