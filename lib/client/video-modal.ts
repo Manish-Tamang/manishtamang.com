@@ -1,4 +1,4 @@
-/* The concert video player: opens from a thumbnail, click to pause, drag to seek. */
+/* The shared video player: opens from a thumbnail, click or space to pause, drag or arrow keys to seek. */
 const modal = document.querySelector<HTMLDialogElement>("[data-video-modal]")
 
 if (modal) {
@@ -6,6 +6,7 @@ if (modal) {
   const toggle = modal.querySelector<HTMLElement>("[data-video-toggle]")!
   const spinner = modal.querySelector<HTMLElement>("[data-video-spinner]")!
   const seek = modal.querySelector<HTMLInputElement>("[data-video-seek]")!
+  const time = modal.querySelector<HTMLElement>("[data-video-time]")!
   const caption = modal.querySelector<HTMLElement>("p[data-video-caption]")!
 
   // Give the buffer a head start so playback doesn't stall straight away, but never
@@ -17,6 +18,8 @@ if (modal) {
     video.removeEventListener("canplaythrough", start)
     video.play().catch(() => (toggle.hidden = false))
   }
+
+  const clock = (seconds: number) => `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2, "0")}`
 
   const togglePlay = () => (video.paused ? video.play() : video.pause())
 
@@ -43,6 +46,17 @@ if (modal) {
   video.addEventListener("canplay", () => (spinner.hidden = true))
   video.addEventListener("timeupdate", () => {
     if (video.duration) seek.value = String((video.currentTime / video.duration) * 1000)
+    time.textContent = `${clock(video.currentTime)} / ${clock(video.duration || 0)}`
+  })
+
+  // Space pauses, arrows skip 5s (Escape closes via the dialog itself)
+  modal.addEventListener("keydown", (event) => {
+    if (event.target === seek) return
+    if (event.key === " ") {
+      event.preventDefault()
+      togglePlay()
+    } else if (event.key === "ArrowRight") video.currentTime += 5
+    else if (event.key === "ArrowLeft") video.currentTime -= 5
   })
   seek.addEventListener("input", () => {
     if (video.duration) video.currentTime = (Number(seek.value) / 1000) * video.duration

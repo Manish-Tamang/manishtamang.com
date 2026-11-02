@@ -20,6 +20,8 @@ import X from "@/components/icons/X.astro"
       <X class="size-4" />
     </button>
 
+    <span data-video-time class="pointer-events-none absolute bottom-6 left-4 rounded bg-black/60 px-1.5 py-0.5 text-xs text-white tabular-nums backdrop-blur-sm">0:00</span>
+
     <input data-video-seek type="range" min="0" max="1000" value="0" aria-label="Seek" class="absolute inset-x-3 bottom-3 h-1 cursor-pointer accent-white" />
   </div>
   <p data-video-caption hidden class="mx-auto mt-3 max-w-[92vw] px-2 text-center text-sm text-white"></p>
