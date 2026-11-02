@@ -1,64 +1,131 @@
 ---
-import { Image } from "astro:assets"
-import PageLayout from "@/layouts/PageLayout.astro"
-import Text from "@/components/typography/Text.astro"
-import Separator from "@/components/ui/Separator.astro"
-import miniGole from "@/assets/bio/mini-gole.png"
-import collegeDays from "@/assets/images/college-days.png"
+import { Image } from "astro:assets";
+import PageLayout from "@/layouts/PageLayout.astro";
+import VideoThumbnail from "@/components/concerts/VideoThumbnail.astro";
+import VideoModal from "@/components/concerts/VideoModal.astro";
+import Text from "@/components/typography/Text.astro";
+import miniGole from "@/assets/bio/mini-gole.png";
+import classmates from "@/assets/images/classmates.jpg";
 ---
 
-<PageLayout heading="Bio" description="A personal journal by Manish Tamang (golecodes).">
+<PageLayout
+  heading="Bio"
+  description="A personal journal by Manish Tamang (golecodes)."
+>
   <section class="grid items-start gap-8 sm:grid-cols-[1fr_auto]">
     <div class="space-y-4">
-      <p class="text-xs font-semibold tracking-widest text-muted-foreground uppercase">Journal</p>
       <Text>
-        Since childhood, I have been driven by curiosity and a deep passion for learning. I have always been eager to
-        explore new ideas and understand how things work, often looking at them from different perspectives.
+        Since childhood, I have been driven by curiosity and a deep passion for
+        learning. I have always been eager to explore new ideas and understand
+        how things work, often looking at them from different perspectives.
       </Text>
       <Text>
-        I am naturally drawn to minimalism and clarity, preferring simplicity over anything cluttered or messy. From
-        the very beginning, I have carried a positive mindset toward growth, always seeking to learn, improve, and see
-        the bigger picture.
+        I am naturally drawn to minimalism and clarity, preferring simplicity
+        over anything cluttered or messy. From the very beginning, I have
+        carried a positive mindset toward growth, always seeking to learn,
+        improve, and see the bigger picture.
       </Text>
     </div>
 
     <!-- Name card: the caption slides up on hover -->
-    <figure class="group relative h-48 w-40 overflow-hidden rounded-lg justify-self-center sm:justify-self-end">
-      <Image src={miniGole} alt="Manish Tamang as a kid" width={160} densities={[1, 2]} draggable="false" class="size-full object-cover opacity-90 select-none" />
-      <figcaption class="absolute inset-x-0 -bottom-16 flex flex-col gap-1 bg-subtle p-2 transition-[bottom] duration-500 group-hover:bottom-0">
+    <figure
+      class="group relative h-48 w-40 overflow-hidden rounded-lg justify-self-center sm:justify-self-end"
+    >
+      <Image
+        src={miniGole}
+        alt="Manish Tamang as a kid"
+        width={160}
+        densities={[1, 2]}
+        draggable="false"
+        class="size-full object-cover opacity-90 select-none"
+      />
+      <figcaption
+        class="absolute inset-x-0 -bottom-16 flex flex-col gap-1 bg-subtle p-2 transition-[bottom] duration-500 group-hover:bottom-0"
+      >
         <span class="font-display text-lg text-link">Manish Gole</span>
-        <span class="text-xs text-muted-foreground">My friends also call me Gole.</span>
+        <span class="text-xs text-muted-foreground"
+          >My friends also call me Gole.</span
+        >
       </figcaption>
     </figure>
   </section>
 
-  <Separator class="my-10" />
-  <section class="grid items-center gap-8 sm:grid-cols-2">
+  <div class="mt-10 space-y-4">
+    <Text>
+      I was born in Bhojpur, Nepal, in 2008. I moved to Itahari for school, then
+      to Kathmandu after the 6th grade, and later back to Itahari for my +2. Now
+      I'm in Kathmandu again, working on small client projects, freelancing, and
+      trying to figure out the next few years.
+    </Text>
+    <Text>
+      In the 6th grade I saw QBasic on a projector for the first time, and that
+      was it. I knew I wanted to go toward computers. In 7th and 8th grade, my
+      computer teacher, Nishan sir, made the basics feel easy, and I loved
+      solving QBasic problems.
+    </Text>
+    <Text>
+      My web journey started in 9th grade, around 2021–2022. My new computer
+      teacher at Prashanti Academy, Millan Sunuwar Rawacha sir (<a
+        href="https://www.youtube.com/@millan.977"
+        class="text-link hover:underline">his YouTube channel</a
+      >), saw some potential in me and asked, why not build a website for the
+      school? I said, why not, I can do anything.
+    </Text>
+    <Text>
+      I went home to my brother's Acer laptop. All I knew was that a website is
+      a collection of web pages, and I only knew how to make one in Notepad. I
+      never thought about hosting. A few days later I showed him my page on a
+      pen drive. He liked it, but said it wasn't a real task yet: now host it
+      and make it public.
+    </Text>
+    <Text>
+      I had no idea what that meant, so I did some research, found Netlify, and
+      put my first site online under my own name at <a
+        href="https://manishtamang.netlify.app/"
+        class="text-link hover:underline">manishtamang.netlify.app</a
+      >. More of that time is in <a
+        href="/blog/my-personal-journey-with-prashanti-academy-a-tale-of-growth-and-gratitude"
+        class="text-link hover:underline">my Prashanti Academy post</a
+      >.
+    </Text>
+    <Text>
+      After that I wanted to build dynamic sites. I spent almost six months on
+      PHP because it was trending, then found Next.js and left PHP behind. I
+      still couldn't make a properly dynamic site, until I learned about CMSs
+      and started building with Sanity. They even sent me some merch: a t-shirt
+      in 2023 and a sweatshirt in 2024.
+    </Text>
+    <div class="my-8 grid items-start gap-6 sm:grid-cols-2">
     <figure>
       <Image
-        src={collegeDays}
-        alt="Two yellow school buses parked side by side at dusk, with students looking out of the windows"
-        widths={[320, 480, 720]}
+        src={classmates}
+        alt="Ten classmates in school uniform posing together in a classroom with teal walls"
+        widths={[320, 480, 640]}
         sizes="(max-width: 640px) 100vw, 360px"
         quality={78}
-        class="aspect-square w-full rounded-lg border border-border object-cover grayscale"
+        class="w-full rounded-lg border border-border"
       />
-      <figcaption class="mt-2 text-sm text-muted-foreground">Best days of my life, college days.</figcaption>
+      <figcaption class="mt-2 text-sm text-muted-foreground">
+        Photo with boys, Sushma godawari college
+      </figcaption>
     </figure>
-
-    <div class="space-y-4">
-      <Text>
-        I did my +2 in Science at Sushma Godawari College, majoring in Computer Science. Those two years are the ones I
-        keep going back to: the bus rides, the bench mates, and the friends who made even the long days easy.
-      </Text>
-      <Text>
-        It was also when I got serious about building things. I went to college during the day, then worked as a MERN
-        stack intern in the evenings, and I still can't believe how much fit into that time.
-      </Text>
+    <figure>
+      <VideoThumbnail
+        src="https://shhe8ako63pfhxto.public.blob.vercel-storage.com/video_20250904_web.mp4"
+        label="Preparation of the welcome program, Sep 4, 2025"
+        caption="Preparation of the welcome program, Sep 4, 2025"
+        wide
+      />
+      <figcaption class="mt-2 text-sm text-muted-foreground">
+        Video clicked on Sep 4, 2025, preparation of the welcome program
+      </figcaption>
+    </figure>
     </div>
-  </section>
-
-  <section id="journal" class="mt-12">
-    <Text tone="muted" size="sm">Journal entries coming soon.</Text>
-  </section>
+    <Text>
+      The journey is still going. I make minimal sites, freelance, and build
+      projects. I've earned a bit along the way, and I'm still learning and
+      working out what I'm for, and what's next.
+    </Text>
+  </div>
+  <VideoModal />
 </PageLayout>
