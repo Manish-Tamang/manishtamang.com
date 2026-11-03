@@ -1,0 +1,80 @@
+---
+/*
+ * Long-form personal pages (/about, /bio, /digitalpathshala), laid out like
+ * abhisekmishra.com/about: breadcrumbs, an optional 240px photo banner, then the story in
+ * a 592px column (wrap it in <Prose class="prose-story">, see prose.css), and
+ * the last-updated date as a quiet line at the end. The heading is only for
+ * screen readers and the tab title; the breadcrumb names the page on screen.
+ * The banner's description shows only in the image viewer.
+ */
+import type { ImageMetadata } from "astro"
+import BaseLayout, { type Props as BaseProps } from "./BaseLayout.astro"
+import Container from "@/components/layout/Container.astro"
+import Breadcrumbs from "@/components/layout/Breadcrumbs.astro"
+import BlurImage from "@/components/ui/BlurImage.astro"
+import { pageUpdated } from "@/data/page-dates"
+import { normalizePath } from "@/lib/path"
+
+export interface Props extends BaseProps {
+  heading: string
+  banner?: ImageMetadata
+  bannerAlt?: string
+  /** Shown in the image viewer only. */
+  bannerCaption?: string
+  /** Where the 240px crop sits, e.g. "center 28%". */
+  bannerPosition?: string
+  /** Last-changed date (YYYY-MM-DD). Defaults to this page's entry in data/page-dates.ts. */
+  updated?: string
+}
+
+const {
+  heading,
+  banner,
+  bannerAlt,
+  bannerCaption,
+  bannerPosition = "center",
+  title = heading,
+  updated = pageUpdated[normalizePath(Astro.url.pathname)],
+  ...rest
+} = Astro.props
+
+const updatedLabel = updated
+  ? new Date(`${updated}T00:00:00`).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })
+  : null
+---
+
+<BaseLayout title={title} {...rest}>
+  <slot name="head" slot="head" />
+  <Container class="pt-10 md:pt-16">
+    <article class="max-w-[37rem]">
+      <Breadcrumbs current={heading} />
+      <h1 class="sr-only">{heading}</h1>
+
+      {banner && (
+        <BlurImage
+          src={banner}
+          alt={bannerAlt ?? ""}
+          widths={[592, 1184, 1500]}
+          sizes="(max-width: 640px) 100vw, 592px"
+          quality={78}
+          loading="eager"
+          position={bannerPosition}
+          data-zoom
+          data-caption={bannerCaption}
+          class="h-60 w-full rounded-lg object-cover"
+        />
+      )}
+
+      <!-- 28px under the banner as on the reference; 24px under the breadcrumbs (16 + 8) without one -->
+      <div class:list={[banner ? "mt-7" : "mt-2"]}>
+        <slot />
+      </div>
+
+      {updatedLabel && (
+        <p class="mt-10 text-xs text-muted-foreground tabular-nums">
+          Last updated <time datetime={updated}>{updatedLabel}</time>
+        </p>
+      )}
+    </article>
+  </Container>
+</BaseLayout>
