@@ -1,10 +1,12 @@
 ---
+/*
+ * In StoryLayout, with abhisekmishra.com/about's rhythm: the intro as a 24px
+ * lead, 14/22 body, and section titles at body size (semibold) with 32px above
+ * and 12px below, so the sections are told apart by type, not by rules and gaps.
+ */
 import type { ImageMetadata } from "astro"
 import { Image } from "astro:assets"
-import PageLayout from "@/layouts/PageLayout.astro"
-import Heading from "@/components/typography/Heading.astro"
-import Text from "@/components/typography/Text.astro"
-import Separator from "@/components/ui/Separator.astro"
+import StoryLayout from "@/layouts/StoryLayout.astro"
 import LiteYouTube from "@/components/ui/LiteYouTube.astro"
 import Firfirey from "@/components/about/Firfirey.astro"
 import PolaroidGallery from "@/components/photos/PolaroidGallery.astro"
@@ -23,30 +25,38 @@ const icons = import.meta.glob<{ default: (props: Record<string, unknown>) => un
   eager: true,
 })
 const socialIcon = (name: string) => icons[`/assets/social/${name}.svg`]?.default
+
+const section = "mt-8"
+const sectionTitle = "mb-3 text-sm font-subsection text-heading"
+const sectionIntro = "-mt-1 mb-4 text-sm text-muted-foreground"
+// Date pills are one 22px line tall, so they sit level with the name beside them
+const datePill = "w-fit shrink-0 rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground tabular-nums"
+// 40px logos beside two 22px lines: 2px down centres them on the pair
+const logo = "mt-0.5 size-10 shrink-0 rounded-full border border-border"
 ---
 
-<PageLayout
+<StoryLayout
   heading="About"
- 
   description="Learn about Manish Gole Tamang (golecodes), developer and designer from Kathmandu, Nepal."
 >
-  <div class="space-y-14">
-    <section class="space-y-6">
-      <p class="font-display text-2xl leading-snug text-heading">{intro}</p>
+  <section>
+    <p class="mb-3 font-display text-lead text-heading">{intro}</p>
 
-      <div class="grid items-center gap-8 sm:grid-cols-[1fr_auto]">
-        <div class="space-y-4">
-          <Text>
-            Driven by a love for web development, I'm an 18-year-old full stack aspirant from{" "}
-            <span class="font-display text-lg text-heading">Kathmandu, Nepal</span>. My coding journey began early, and
-            since then I've dedicated myself to crafting engaging web experiences using technologies like React,
-            Next.js, and Tailwind CSS.
-          </Text>
-          <Text>I'm constantly seeking new challenges and learning opportunities to refine my skills.</Text>
-        </div>
-        <div class="justify-self-center sm:justify-self-end"><Firfirey /></div>
+    <div class="grid items-center gap-6 sm:grid-cols-[minmax(0,1fr)_auto]">
+      <div class="space-y-6 text-sm">
+        <p>
+          Driven by a love for web development, I'm an 18-year-old full stack aspirant from{" "}
+          <!-- leading-none keeps the larger display face from stretching its line -->
+          <span class="font-display text-base leading-none text-heading">Kathmandu, Nepal</span>. My coding journey
+          began early, and since then I've dedicated myself to crafting engaging web experiences using technologies like
+          React, Next.js, and Tailwind CSS.
+        </p>
+        <p>I'm constantly seeking new challenges and learning opportunities to refine my skills.</p>
       </div>
+      <div class="justify-self-center sm:justify-self-end"><Firfirey /></div>
+    </div>
 
+    <div class="mt-6 flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
       <ul class="flex flex-wrap items-center gap-4" aria-label="Elsewhere">
         {socials.map(({ name, url, icon }) => {
           const Icon = socialIcon(icon) as any
@@ -68,104 +78,104 @@ const socialIcon = (name: string) => icons[`/assets/social/${name}.svg`]?.defaul
       </ul>
 
       <div>
-        <p class="text-sm text-muted-foreground">Favourite game</p>
-        <Image src={farCryDark} alt="Far Cry 3" width={144} densities={[1, 2]} draggable="false" class="mt-1 -ml-1 w-36 grayscale-50 select-none dark:hidden" />
-        <Image src={farCryLight} alt="Far Cry 3" width={144} densities={[1, 2]} draggable="false" class="mt-1 -ml-1 hidden w-36 grayscale-50 select-none dark:block" />
+        <p class="text-xs text-muted-foreground">Favourite game</p>
+        <Image src={farCryDark} alt="Far Cry 3" width={112} densities={[1, 2]} draggable="false" class="mt-1 -ml-1 w-28 grayscale-50 select-none dark:hidden" />
+        <Image src={farCryLight} alt="Far Cry 3" width={112} densities={[1, 2]} draggable="false" class="mt-1 -ml-1 hidden w-28 grayscale-50 select-none dark:block" />
       </div>
-    </section>
+    </div>
+  </section>
 
-    <Separator />
+  <!-- The polaroids tilt and cast shadows, so they get a little more air than a section -->
+  <div class="mt-10 mb-12">
     <PolaroidGallery items={aboutPolaroids} />
-    <Separator />
-
-    <section>
-      <Heading>Work</Heading>
-      <ul class="mt-5 space-y-6">
-        {work.map(({ company, role, location, dates, logo, url, highlights }) => (
-          <li class="flex gap-3">
-            <Image src={aboutImage(logo)} alt="" width={40} height={40} densities={[1, 2]} class="size-10 shrink-0 rounded-full border border-border bg-white object-contain" />
-            <div class="min-w-0 flex-1">
-              <div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-                <div class="min-w-0">
-                  <a href={url} class="font-medium text-heading hover:text-link">{company}</a>
-                  <p class="text-sm text-muted-foreground">{role} · {location}</p>
-                </div>
-                <span class="w-fit shrink-0 rounded-full bg-muted px-2.5 py-0.5 text-xs text-muted-foreground tabular-nums">{dates}</span>
-              </div>
-              <ul class="mt-2 list-disc space-y-1 pl-4 text-sm text-foreground marker:text-muted-foreground">
-                {highlights.map((highlight) => <li>{highlight}</li>)}
-              </ul>
-              <a href={url} class="mt-2 inline-block text-sm text-link hover:underline">Read the full story →</a>
-            </div>
-          </li>
-        ))}
-      </ul>
-    </section>
-
-    <Separator />
-
-    <section>
-      <Heading>Education</Heading>
-      <ul class="mt-5 space-y-5">
-        {education.map(({ institution, degree, dates, logo }) => (
-          <li class="flex items-center gap-3">
-            <Image src={aboutImage(logo)} alt="" width={40} height={40} densities={[1, 2]} class="size-10 shrink-0 rounded-full border border-border object-cover" />
-            <div class="flex min-w-0 flex-1 flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-              <div class="min-w-0">
-                <p class="font-medium text-heading">{institution}</p>
-                <p class="text-sm text-muted-foreground">{degree}</p>
-              </div>
-              <span class="w-fit shrink-0 rounded-full bg-muted px-2.5 py-0.5 text-xs text-muted-foreground tabular-nums">{dates}</span>
-            </div>
-          </li>
-        ))}
-      </ul>
-    </section>
-
-    <Separator />
-
-    <section>
-      <Heading>Featured</Heading>
-      <Text tone="muted" class="mt-2">Some of my recent media features, including an interview and a spotlight on my portfolio.</Text>
-      <ul class="mt-5 grid gap-4 sm:grid-cols-3">
-        {featured.map(({ title, url, source, date, image }) => (
-          <li>
-            <a href={url} target="_blank" rel="noopener noreferrer" class="group block">
-              <span class="block aspect-video overflow-hidden rounded-lg border border-border bg-muted">
-                <Image
-                  src={aboutImage(image)}
-                  alt=""
-                  width={360}
-                  widths={[240, 360, 540]}
-                  sizes="(max-width: 640px) 100vw, 190px"
-                  quality={70}
-                  class="size-full object-cover grayscale transition duration-300 group-hover:scale-[1.03] group-hover:grayscale-0"
-                />
-              </span>
-              <span class="mt-2 block text-sm font-medium leading-snug text-heading group-hover:text-link-hover">{title}</span>
-              <span class="mt-1 flex items-center justify-between gap-2 text-xs text-muted-foreground">
-                <span class="truncate">{source}</span>
-                <span class="shrink-0">{date}</span>
-              </span>
-            </a>
-          </li>
-        ))}
-      </ul>
-    </section>
-
-    <Separator />
-
-    <section>
-      <Heading>Random facts</Heading>
-      <Text tone="muted" class="mt-2">A few stray notes from along the way.</Text>
-      <div class="mt-5 space-y-6">
-        {randomFacts.map(({ text, youtubeId, youtubeTitle }) => (
-          <div class="space-y-3">
-            <Text>{text}</Text>
-            {youtubeId && <LiteYouTube id={youtubeId} title={youtubeTitle} thumbnail={aboutImage(`youtube-${youtubeId}.jpg`)} />}
-          </div>
-        ))}
-      </div>
-    </section>
   </div>
-</PageLayout>
+
+  <section class={section}>
+    <h2 class={sectionTitle}>Work</h2>
+    <ul class="space-y-6">
+      {work.map(({ company, role, location, dates, logo: file, url, highlights }) => (
+        <li class="flex gap-3">
+          <Image src={aboutImage(file)} alt="" width={40} height={40} densities={[1, 2]} class:list={[logo, "bg-white object-contain"]} />
+          <div class="min-w-0 flex-1 text-sm">
+            <div class="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+              <div class="min-w-0">
+                <a href={url} class="font-subsection text-heading transition-colors hover:text-link">{company}</a>
+                <p class="text-muted-foreground">{role} · {location}</p>
+              </div>
+              <span class={datePill}>{dates}</span>
+            </div>
+            <ul class="mt-2 list-disc space-y-1 pl-4 marker:text-muted-foreground">
+              {highlights.map((highlight) => <li>{highlight}</li>)}
+            </ul>
+            <a
+              href={url}
+              class="mt-2 inline-block text-link decoration-current/35 decoration-1 underline-offset-[0.2em] hover:underline"
+            >
+              Read the full story →
+            </a>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class={section}>
+    <h2 class={sectionTitle}>Education</h2>
+    <ul class="space-y-4">
+      {education.map(({ institution, degree, dates, logo: file }) => (
+        <li class="flex gap-3">
+          <Image src={aboutImage(file)} alt="" width={40} height={40} densities={[1, 2]} class:list={[logo, "object-cover"]} />
+          <div class="flex min-w-0 flex-1 flex-col gap-1 text-sm sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+            <div class="min-w-0">
+              <p class="font-subsection text-heading">{institution}</p>
+              <p class="text-muted-foreground">{degree}</p>
+            </div>
+            <span class={datePill}>{dates}</span>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class={section}>
+    <h2 class={sectionTitle}>Featured</h2>
+    <p class={sectionIntro}>Some of my recent media features, including an interview and a spotlight on my portfolio.</p>
+    <ul class="grid gap-3 sm:grid-cols-3">
+      {featured.map(({ title, url, source, date, image }) => (
+        <li>
+          <a href={url} target="_blank" rel="noopener noreferrer" class="group block">
+            <span class="block aspect-video overflow-hidden rounded-lg border border-border bg-muted">
+              <Image
+                src={aboutImage(image)}
+                alt=""
+                width={360}
+                widths={[190, 380, 570]}
+                sizes="(max-width: 640px) 100vw, 190px"
+                quality={70}
+                class="size-full object-cover grayscale transition duration-300 group-hover:scale-[1.03] group-hover:grayscale-0"
+              />
+            </span>
+            <span class="mt-2 block text-sm font-medium text-heading transition-colors group-hover:text-link-hover">{title}</span>
+            <span class="flex items-center justify-between gap-2 text-xs text-muted-foreground tabular-nums">
+              <span class="truncate">{source}</span>
+              <span class="shrink-0">{date}</span>
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class={section}>
+    <h2 class={sectionTitle}>Random facts</h2>
+    <p class={sectionIntro}>A few stray notes from along the way.</p>
+    <div class="space-y-6 text-sm">
+      {randomFacts.map(({ text, youtubeId, youtubeTitle }) => (
+        <div class="space-y-3">
+          <p>{text}</p>
+          {youtubeId && <LiteYouTube id={youtubeId} title={youtubeTitle} thumbnail={aboutImage(`youtube-${youtubeId}.jpg`)} />}
+        </div>
+      ))}
+    </div>
+  </section>
+</StoryLayout>
