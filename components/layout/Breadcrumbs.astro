@@ -31,15 +31,25 @@ for (let i = 0; i < segments.length; i++) {
 }
 ---
 
+<!--
+  Path-style trail in mono: links are small chips that tint on hover, slashes sit
+  back in the border colour, and the current page is the only full-strength item.
+  The row keeps the 22px line of text-sm so it still lines up with the sidebar.
+-->
 <nav aria-label="Breadcrumb" class="mb-4">
-  <ol class="flex flex-wrap items-center gap-1 text-sm text-muted-foreground">
+  <ol class="flex flex-wrap items-center gap-x-1.5 font-mono text-xs leading-[1.375rem] text-muted-foreground">
     {crumbs.map((crumb, i) => (
-      <li class="flex items-center gap-1">
-        {i > 0 && <span class="select-none" aria-hidden="true">/</span>}
+      <li class="flex items-center gap-x-1.5">
+        {i > 0 && <span class="text-border-strong select-none" aria-hidden="true">/</span>}
         {crumb.href ? (
-          <a href={crumb.href} class="transition-colors hover:text-heading">{crumb.label}</a>
+          <a
+            href={crumb.href}
+            class="-mx-1 rounded-sm px-1 transition-colors hover:bg-foreground/5 hover:text-heading"
+          >
+            {crumb.label}
+          </a>
         ) : (
-          <span class="text-heading">{crumb.label}</span>
+          <span aria-current="page" class="text-heading">{crumb.label}</span>
         )}
       </li>
     ))}
