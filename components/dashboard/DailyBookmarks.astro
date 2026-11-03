@@ -38,10 +38,10 @@ const hostname = (url: string) => {
           )}
           <div class="min-w-0 flex-1 space-y-1.5">
             <a href={bookmark.url} target="_blank" rel="noopener noreferrer" class="flex items-start gap-2">
-              <p class="min-w-0 flex-1 text-[15px] leading-snug font-semibold text-zinc-900 group-hover:underline dark:text-zinc-100">{bookmark.title}</p>
+              <p class="min-w-0 flex-1 text-base font-subsection text-zinc-900 group-hover:underline dark:text-zinc-100">{bookmark.title}</p>
               <DashIcon name="ExternalLink" class="mt-1 size-3.5 shrink-0 text-zinc-400" />
             </a>
-            {bookmark.summary && <p class="line-clamp-2 text-[13px] leading-relaxed text-zinc-600 dark:text-zinc-400">{bookmark.summary}</p>}
+            {bookmark.summary && <p class="line-clamp-2 text-sm text-zinc-600 dark:text-zinc-400">{bookmark.summary}</p>}
             <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-zinc-500 dark:text-zinc-400">
               <span class="rounded-md bg-zinc-200/70 px-2 py-0.5 dark:bg-zinc-800/80">{bookmark.source?.name ?? hostname(bookmark.url)}</span>
               {bookmark.readTime && (
@@ -54,7 +54,7 @@ const hostname = (url: string) => {
             {bookmark.tags.length > 0 && (
               <div class="flex flex-wrap gap-1.5 pt-0.5">
                 {bookmark.tags.slice(0, 3).map((tag) => (
-                  <span class="rounded-md bg-zinc-200/50 px-1.5 py-0.5 text-[11px] text-zinc-500 dark:bg-zinc-800/60 dark:text-zinc-400">#{tag}</span>
+                  <span class="rounded-md bg-zinc-200/50 px-1.5 py-0.5 text-xs text-zinc-500 dark:bg-zinc-800/60 dark:text-zinc-400">#{tag}</span>
                 ))}
               </div>
             )}
