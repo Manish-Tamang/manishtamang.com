@@ -13,6 +13,8 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    font-optical-sizing: auto;
+    text-size-adjust: 100%;
     scrollbar-gutter: stable;
   }
 
@@ -20,6 +22,7 @@
     min-height: 100dvh;
     font-size: var(--text-base);
     line-height: var(--text-base--line-height);
+    letter-spacing: var(--text-base--letter-spacing);
   }
 
   /* Anchor links stop below the sticky mobile top bar */
@@ -30,6 +33,16 @@
   }
 
   ::selection {
+    background: var(--selection);
+  }
+
+  /* lib/client/selection.ts paints the selection as rounded marker strokes on a
+     canvas; the native highlight only stays in form fields, where it can't reach */
+  .rounded-selection ::selection {
+    background: transparent;
+  }
+
+  .rounded-selection :is(input, textarea, [contenteditable], [contenteditable] *)::selection {
     background: var(--selection);
   }
 
