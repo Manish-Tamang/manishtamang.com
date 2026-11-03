@@ -9,7 +9,6 @@ import type { ImageMetadata } from "astro"
 import { Image, getImage } from "astro:assets"
 import sharp from "sharp"
 import photos from "@/data/photos.json"
-import Lightbox from "./Lightbox.astro"
 
 const files = import.meta.glob<{ default: ImageMetadata }>("/assets/photos/*.jpg", { eager: true })
 
@@ -91,5 +90,3 @@ const tiles = await Promise.all(
     </ul>
   )
 }
-
-<Lightbox />
