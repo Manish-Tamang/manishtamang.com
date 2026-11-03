@@ -25,9 +25,9 @@ const recentFavorite = {
 
 // Shared card typography: quiet, so the cards read as content rather than a type specimen
 const eyebrow = "text-xs opacity-75"
-const title = "text-[0.95rem] leading-snug font-medium"
-const body = "text-[0.8rem] leading-relaxed opacity-80"
-const cardLink = "mt-3 inline-flex w-fit items-center gap-1 text-[0.8rem] font-medium underline-offset-4 hover:underline"
+const title = "font-medium"
+const body = "text-sm opacity-80"
+const cardLink = "mt-3 inline-flex w-fit items-center gap-1 text-sm font-medium underline-offset-[0.2em] hover:underline"
 ---
 
 <section>
@@ -73,7 +73,7 @@ const cardLink = "mt-3 inline-flex w-fit items-center gap-1 text-[0.8rem] font-m
 
       <!-- White on green by design: it balances the card visually (large display text) -->
       <BentoCard tone="green" class="order-4 flex-1 justify-between text-white md:order-none">
-        <p class="font-display text-xl leading-snug">Welcome to my corner on the internet :)</p>
+        <p class="font-display text-xl">Welcome to my corner on the internet :)</p>
         <a href="/about" class={cardLink}>My journey <ArrowUpRight class="size-3.5" /></a>
       </BentoCard>
 
