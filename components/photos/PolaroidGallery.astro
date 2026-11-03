@@ -1,11 +1,10 @@
 ---
 /*
  * Tilted polaroids with handwritten captions. Clicking one opens the shared
- * photo lightbox (same [data-photo] contract as the /photos grid).
+ * photo lightbox in BaseLayout (same [data-photo] contract as the /photos grid).
  */
 import type { ImageMetadata } from "astro"
 import { Image, getImage } from "astro:assets"
-import Lightbox from "@/components/photos/Lightbox.astro"
 import type { Polaroid } from "@/data/about"
 
 export interface Props {
@@ -59,8 +58,6 @@ const polaroids = await Promise.all(
     </li>
   ))}
 </ul>
-
-<Lightbox />
 
 <style>
   .polaroid {
