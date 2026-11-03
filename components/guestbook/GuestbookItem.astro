@@ -33,7 +33,7 @@ const actionIcon = "size-3 transition-transform active:scale-125 sm:size-3.5"
   id={entry.id}
   data-entry={entry.id}
   data-name={entry.name}
-  class="group relative -m-2 mt-1 flex scroll-mt-24 gap-2 rounded-xl p-2 transition-all duration-700 target:bg-blue-500/5 target:ring-1 target:ring-blue-500/20 sm:gap-4 dark:target:bg-blue-500/10"
+  class="group relative -mx-2 flex scroll-mt-24 gap-2 rounded-xl p-2 transition-all duration-700 target:bg-blue-500/5 target:ring-1 target:ring-blue-500/20 sm:gap-4 dark:target:bg-blue-500/10"
 >
   {entry.likedByAdmin && (
     <span class="absolute -right-1 bottom-2 z-10" title="Liked by Manish">
@@ -61,9 +61,9 @@ const actionIcon = "size-3 transition-transform active:scale-125 sm:size-3.5"
   <div class="min-w-0 flex-1 space-y-1.5 sm:space-y-2">
     <div class="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between sm:gap-0">
       <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
-        <p class="text-sm text-foreground md:text-base">{entry.name}</p>
+        <p class="text-sm font-subsection text-heading">{entry.name}</p>
         {entry.isAdminAuthor && <Badge variant="accent">Admin</Badge>}
-        <span class="hidden text-xs font-normal text-zinc-500 sm:inline sm:text-sm">signed the guestbook</span>
+        <span class="hidden text-sm text-muted-foreground sm:inline">signed the guestbook</span>
       </div>
       <div class="flex items-center gap-1.5 sm:gap-2">
         <time datetime={entry.timestamp} title={new Date(entry.timestamp).toUTCString()} class="font-mono text-xs text-zinc-400">{timeAgo(entry.timestamp)}</time>
