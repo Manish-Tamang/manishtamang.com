@@ -1,12 +1,13 @@
 ---
+/*
+ * In StoryLayout, with the same rhythm as /about: the Nepal time as a 24px lead
+ * running into the intro, then the form, with every control 40px tall.
+ */
 import { PUBLIC_CALENDLY_URL, PUBLIC_WEB3FORMS_ACCESS_KEY } from "astro:env/client"
-import PageLayout from "@/layouts/PageLayout.astro"
-import Heading from "@/components/typography/Heading.astro"
-import Text from "@/components/typography/Text.astro"
+import StoryLayout from "@/layouts/StoryLayout.astro"
 import Button from "@/components/ui/Button.astro"
 import Input from "@/components/ui/Input.astro"
 import Link from "@/components/ui/Link.astro"
-import Separator from "@/components/ui/Separator.astro"
 import Textarea from "@/components/ui/Textarea.astro"
 import ArrowUpRight from "@/components/icons/ArrowUpRight.astro"
 
@@ -26,44 +27,49 @@ const helpTips = [
   { title: "The XY problem", url: "https://xyproblem.info/", tip: "Tell me what you're trying to achieve, not only the fix you tried." },
 ]
 
+// Field labels sit 6px above their control; every control is one 40px height
+const fieldLabel = "mb-1.5 block text-sm text-muted-foreground"
 const choice =
-  "flex h-11 cursor-pointer items-center justify-center rounded-lg border border-border bg-subtle text-sm transition-colors hover:border-border-strong peer-checked:border-accent peer-checked:bg-accent/10 peer-checked:text-heading peer-focus-visible:ring-3 peer-focus-visible:ring-ring"
+  "flex h-10 cursor-pointer items-center justify-center rounded-lg border border-border bg-subtle text-sm transition-colors hover:border-border-strong peer-checked:border-accent peer-checked:bg-accent/10 peer-checked:text-heading peer-focus-visible:ring-3 peer-focus-visible:ring-ring"
 ---
 
-<PageLayout heading="Contact" description="Get in touch with Manish Tamang (golecodes).">
-  <Text>
-    It's currently <strong class="font-medium text-heading" data-nepal-time>…</strong> in <strong
-      class="font-medium text-heading">Nepal</strong
-    ><span data-availability></span>. Feel free to send me a message, I'll get back to you as soon as I can.
-  </Text>
+<StoryLayout heading="Contact" description="Get in touch with Manish Tamang (golecodes).">
+  <p class="text-sm">
+    <span class="mb-3 block font-lead text-lead text-heading">
+      It's currently <strong class="font-subsection" data-nepal-time>…</strong> in <strong class="font-subsection"
+        >Nepal</strong
+      ><span data-availability></span>.
+    </span>
+    Feel free to send me a message, I'll get back to you as soon as I can.
+  </p>
 
   <!-- Posts straight to Web3Forms; the script below sends it without leaving the page -->
-  <form action="https://api.web3forms.com/submit" method="POST" class="mt-10 space-y-6" data-contact-form>
+  <form action="https://api.web3forms.com/submit" method="POST" class="mt-8 space-y-5" data-contact-form>
     <input type="hidden" name="access_key" value={PUBLIC_WEB3FORMS_ACCESS_KEY} />
     <input type="checkbox" name="botcheck" class="hidden" tabindex="-1" autocomplete="off" />
 
-    <div class="space-y-2">
-      <label for="email" class="text-sm text-muted-foreground">
+    <div>
+      <label for="email" class={fieldLabel}>
         Your email address <span class="opacity-70">(required)</span>
       </label>
-      <Input type="email" id="email" name="email" required autocomplete="email" placeholder="hi@example.com" class="h-11" />
+      <Input type="email" id="email" name="email" required autocomplete="email" placeholder="hi@example.com" />
     </div>
 
-    <div class="space-y-2">
-      <label for="message" class="text-sm text-muted-foreground">
+    <div>
+      <label for="message" class={fieldLabel}>
         Your message <span class="opacity-70">(required)</span>
       </label>
       <Textarea id="message" name="message" required rows={5} placeholder="What's on your mind?" class="min-h-32" />
     </div>
 
-    <div class="grid gap-6 sm:grid-cols-2">
-      <fieldset class="space-y-2">
-        <legend class="text-sm text-muted-foreground">Emotion</legend>
+    <div class="grid gap-5 sm:grid-cols-2">
+      <fieldset>
+        <legend class={fieldLabel}>Emotion</legend>
         <div class="flex gap-2">
           {emotions.map(({ value, emoji, label }) => (
             <label class="relative">
               <input type="radio" name="emotion" value={value} class="peer sr-only" />
-              <span class:list={[choice, "w-11 text-xl"]} title={label}>
+              <span class:list={[choice, "w-10 text-lg"]} title={label}>
                 <span aria-hidden="true">{emoji}</span>
                 <span class="sr-only">{label}</span>
               </span>
@@ -72,13 +78,13 @@ const choice =
         </div>
       </fieldset>
 
-      <fieldset class="space-y-2">
-        <legend class="text-sm text-muted-foreground">Category</legend>
+      <fieldset>
+        <legend class={fieldLabel}>Category</legend>
         <div class="flex gap-2">
           {categories.map((category, index) => (
             <label class="relative">
               <input type="radio" name="category" value={category} checked={index === 0} class="peer sr-only" />
-              <span class:list={[choice, "px-5 capitalize"]}>{category}</span>
+              <span class:list={[choice, "px-4 capitalize"]}>{category}</span>
             </label>
           ))}
         </div>
@@ -87,8 +93,8 @@ const choice =
 
     <!-- Shown only while the "help" category is picked (pure CSS, see <style>) -->
     <aside class="help-tips rounded-lg border border-dashed border-border-strong bg-subtle p-4" aria-label="Before you ask">
-      <p class="text-sm font-medium text-heading">Before you ask</p>
-      <p class="mt-1 text-sm text-muted-foreground">A few things that help me answer in one reply:</p>
+      <p class="text-sm font-subsection text-heading">Before you ask</p>
+      <p class="text-sm text-muted-foreground">A few things that help me answer in one reply:</p>
       <ul class="mt-3 space-y-2 text-sm">
         {helpTips.map(({ title, url, tip }) => (
           <li class="flex gap-2">
@@ -102,36 +108,36 @@ const choice =
       </ul>
     </aside>
 
-    <Button type="submit" class="w-full" data-submit>Send message</Button>
-    <p data-form-status role="status" aria-live="polite" class="min-h-5 text-center text-sm"></p>
+    <div>
+      <Button type="submit" class="h-10 w-full text-sm" data-submit>Send message</Button>
+      <p data-form-status role="status" aria-live="polite" class="mt-2 min-h-5.5 text-center text-sm"></p>
+    </div>
   </form>
-
-  <Separator class="my-12" />
 
   {
     PUBLIC_CALENDLY_URL && (
-      <section class="rounded-lg border border-border bg-subtle p-6 text-center">
-        <Heading class="text-xl!">Schedule a call</Heading>
-        <Text tone="muted" size="sm" class="mx-auto mt-2 max-w-sm">
+      <section class="mt-8 rounded-lg border border-border bg-subtle p-5 text-center">
+        <h2 class="text-sm font-subsection text-heading">Schedule a call</h2>
+        <p class="mx-auto max-w-sm text-sm text-muted-foreground">
           The quickest way to start a conversation is a free 30-minute consultation.
-        </Text>
-        <Button href={PUBLIC_CALENDLY_URL} target="_blank" rel="noopener noreferrer" variant="secondary" class="mt-5">
+        </p>
+        <Button href={PUBLIC_CALENDLY_URL} target="_blank" rel="noopener noreferrer" variant="secondary" class="mt-4 h-10 text-sm">
           Book a 30-min call <ArrowUpRight class="size-4" />
         </Button>
       </section>
     )
   }
 
-  <p class="mt-10 text-center text-sm text-muted-foreground">
+  <p class="mt-8 text-center text-sm text-muted-foreground">
     You can also reach me directly at<br />
-    <Link href={`mailto:${email}`} class="text-base">{email}</Link>
+    <Link href={`mailto:${email}`} class="font-subsection">{email}</Link>
   </p>
 
-  <p class="mt-12 text-xs text-muted-foreground">
+  <p class="mt-8 text-xs text-muted-foreground">
     This page is inspired by <Link href="https://www.totaltypescript.com/contact">Total TypeScript</Link> and{" "}
     <Link href="https://www.romanabashin.com/contact">Roman Abashin</Link>.
   </p>
-</PageLayout>
+</StoryLayout>
 
 <script>
   // Nepal time and a guess at what I'm doing, from the visitor's clock
@@ -172,7 +178,7 @@ const choice =
       submit.disabled = true
       submit.textContent = "Sending…"
       status.textContent = ""
-      status.className = "min-h-5 text-center text-sm text-muted-foreground"
+      status.className = "mt-2 min-h-5.5 text-center text-sm text-muted-foreground"
 
       try {
         const fields = Object.fromEntries(new FormData(form))
@@ -189,11 +195,11 @@ const choice =
 
         form.reset()
         status.textContent = "Message sent. Thank you!"
-        status.className = "min-h-5 text-center text-sm text-success"
+        status.className = "mt-2 min-h-5.5 text-center text-sm text-success"
       } catch (error) {
         const reason = error instanceof Error && error.message ? ` (${error.message})` : ""
         status.textContent = `Couldn't send your message${reason}. Please try again, or email me directly.`
-        status.className = "min-h-5 text-center text-sm text-danger"
+        status.className = "mt-2 min-h-5.5 text-center text-sm text-danger"
       } finally {
         submit.disabled = false
         submit.textContent = "Send message"
