@@ -1,0 +1,36 @@
+---
+/*
+ * <Image> with a blurred preview of itself painted in its box until the photo
+ * loads. The box is already sized by the image's width and height (or by the
+ * classes given), so the preview holds the exact spot and nothing moves when
+ * the photo arrives.
+ *
+ * `position` crops the photo and its preview the same way (object-position),
+ * so the sharp image lands exactly over the blurred one.
+ */
+import type { ImageMetadata } from "astro"
+import { Image, type LocalImageProps } from "astro:assets"
+import { blurPlaceholder } from "@/lib/placeholder"
+
+export type Props = LocalImageProps & {
+  /** CSS position for cropped (object-cover) images, e.g. "center 30%". */
+  position?: string
+}
+
+const { src, position = "center", style, ...rest } = Astro.props
+
+const image: ImageMetadata = "then" in src ? (await src).default : src
+const preview = await blurPlaceholder(image)
+
+const previewStyle = [
+  preview && `background-image: ${preview}`,
+  "background-size: cover",
+  `background-position: ${position}`,
+  `object-position: ${position}`,
+  typeof style === "string" && style,
+]
+  .filter(Boolean)
+  .join("; ")
+---
+
+<Image src={image} style={previewStyle} {...rest} />
