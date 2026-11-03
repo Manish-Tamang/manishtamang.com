@@ -11,9 +11,12 @@ const { href, variant = "inline", class: className, ...rest } = Astro.props
 
 const external = /^https?:\/\//.test(href) && !href.startsWith("https://manishtamang.com")
 
+// As on abhisekmishra.com: the underline arrives (or, in dark mode, fills in) on hover
+// in a faint tint of the text colour, sitting 0.2em below the baseline
 const variants = {
-  inline: "text-link underline-offset-[0.2em] hover:underline hover:text-link-hover dark:underline",
-  nav: "text-muted-foreground hover:text-heading",
+  inline:
+    "text-link decoration-current/35 decoration-1 underline-offset-[0.2em] hover:underline hover:text-link-hover dark:underline dark:hover:decoration-current",
+  nav: "text-muted-foreground decoration-current/35 decoration-1 underline-offset-[0.2em] hover:text-heading hover:underline",
 }
 ---
 
@@ -21,7 +24,7 @@ const variants = {
   href={href}
   target={external ? "_blank" : undefined}
   rel={external ? "noopener noreferrer" : undefined}
-  class:list={["transition-colors", variants[variant], className]}
+  class:list={["transition-[color,text-decoration-color] duration-200", variants[variant], className]}
   {...rest}
 >
   <slot />{external && <span class="sr-only"> (opens in a new tab)</span>}
