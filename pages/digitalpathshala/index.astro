@@ -1,7 +1,12 @@
 ---
-import { Image } from "astro:assets"
-import PageLayout from "@/layouts/PageLayout.astro"
+/*
+ * The internship story in StoryLayout (abhisekmishra.com/about's layout). The
+ * office photo is the banner; who's who in it shows with the full photo in the
+ * image viewer.
+ */
+import StoryLayout from "@/layouts/StoryLayout.astro"
 import Prose from "@/components/typography/Prose.astro"
+import BlurImage from "@/components/ui/BlurImage.astro"
 import VideoModal from "@/components/concerts/VideoModal.astro"
 import VideoThumbnail from "@/components/concerts/VideoThumbnail.astro"
 import office from "@/assets/images/dp-office.jpg"
@@ -13,14 +18,16 @@ const coffeeCaption = "Raghav dai preparing special coffee for Mausam dai, Pranj
 const coffeeVideo = "https://2iw0lwaklqgp6qdp.public.blob.vercel-storage.com/dp/VID_20251016_093545_552-0HuWPeInV0mQmX5ZNFaxtOA6nGrSyL.mp4"
 ---
 
-<PageLayout
+<StoryLayout
   heading="Digital Pathshala"
-  intro="My MERN stack internship in Itahari, from September 2025."
- 
   description="Manish Tamang's MERN stack internship at Digital Pathshala, Itahari."
+  banner={office}
+  bannerAlt="Developers working at laptops and a large monitor in the Digital Pathshala office"
+  bannerCaption={officeCaption}
 >
-  <Prose class="max-w-none">
+  <Prose class="prose-story">
     <p>
+      <span class="lead">My MERN stack internship in Itahari, from September 2025.</span>
       My journey with Digital Pathshala (DP) is something I'll always be proud of. Located at the heart of Itahari, DP
       is not just one of the biggest IT companies and institutes in the city, but also a place where I truly began my
       professional growth.
@@ -31,17 +38,6 @@ const coffeeVideo = "https://2iw0lwaklqgp6qdp.public.blob.vercel-storage.com/dp/
       about learning how things actually work in a professional environment. I built connections, collaborated with
       talented developers, and became part of a growing tech community in my own city.
     </p>
-    <figure>
-      <Image
-        src={office}
-        alt="Developers working at laptops and a large monitor in the Digital Pathshala office"
-        widths={[480, 720, 1080, 1440]}
-        sizes="(max-width: 768px) 100vw, 720px"
-        quality={75}
-        class="w-full rounded-lg border border-border"
-      />
-      <figcaption>{officeCaption}</figcaption>
-    </figure>
     <p>
       The people at DP made the experience even more special. CEO Manish Basnet sir is incredibly humble and treats
       everyone equally, always spreading positivity throughout the office. My brother, Rupesh Chaudary, who introduced
@@ -58,8 +54,10 @@ const coffeeVideo = "https://2iw0lwaklqgp6qdp.public.blob.vercel-storage.com/dp/
       My internship schedule itself was a challenge I'm proud of, attending college during the day and then working
       from 5:30 PM to 10:30 PM. It was tiring, but every moment was worth it.
     </p>
-    <!-- Before the paragraph, so the text wraps around it -->
-    <figure class="float-right mt-1 mb-2 ml-4 w-36 sm:ml-6 sm:w-52">
+    <!-- Before the paragraph, so the text wraps around it. A float ignores the paragraph's
+         24px top margin, so mt-7.5 (24px + 6px down to the cap height of 14/22 text) lines
+         its top up with the first line's letters. The description shows in the video player. -->
+    <figure class="float-right mt-7.5 mb-3 ml-5 w-36 sm:ml-6 sm:w-48">
       <VideoThumbnail src={coffeeVideo} label={coffeeCaption} caption={`${coffeeCaption}, Oct 16, 2025`} tall />
     </figure>
     <p>
@@ -72,13 +70,13 @@ const coffeeVideo = "https://2iw0lwaklqgp6qdp.public.blob.vercel-storage.com/dp/
       belonging.
     </p>
     <figure class="clear-both">
-      <Image
+      <BlurImage
         src={townHall}
         alt={townHallCaption}
-        widths={[480, 720, 1080, 1440]}
-        sizes="(max-width: 768px) 100vw, 720px"
-        quality={75}
-        class="w-full rounded-lg border border-border"
+        widths={[592, 1184, 1500]}
+        sizes="(max-width: 640px) 100vw, 592px"
+        quality={78}
+        data-zoom
       />
       <figcaption>{townHallCaption}</figcaption>
     </figure>
@@ -92,4 +90,4 @@ const coffeeVideo = "https://2iw0lwaklqgp6qdp.public.blob.vercel-storage.com/dp/
     </p>
   </Prose>
   <VideoModal />
-</PageLayout>
+</StoryLayout>
