@@ -205,6 +205,18 @@ export const ai: { title: string; body: string }[] = [
 
 export const changelog: { date: string; changes: string[] }[] = [
   {
+    date: "2026-11-03",
+    changes: [
+      "Rewrote /bio as a story with childhood photos, and gave /about, /uses and /digitalpathshala the same calmer layout.",
+      "Retuned the type for Inter: whole-pixel line heights, tracking that changes with size, and in-between weights.",
+      "New image viewer with a blurred backdrop, thumbnails, swipe and arrow keys; photos in posts open in it too.",
+      "Photos load with a blurred preview in their place instead of an empty box.",
+      "Text selection is now a rounded marker highlight.",
+      "Breadcrumbs are now a mono path trail, and links underline softly on hover.",
+      "Cards across the site use the shared type sizes, without uppercase labels.",
+    ],
+  },
+  {
     date: "2026-11-01",
     changes: [
       "Added /slashes, an index of all my slash pages.",
