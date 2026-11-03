@@ -1,5 +1,9 @@
 ---
-import PageLayout from "@/layouts/PageLayout.astro"
+/*
+ * In StoryLayout, with the same rhythm as /about: a lead that runs into the
+ * intro, then the form, and the messages under a body-size title.
+ */
+import StoryLayout from "@/layouts/StoryLayout.astro"
 import CommunityGuidelines from "@/components/guestbook/CommunityGuidelines.astro"
 import DeleteDialog from "@/components/guestbook/DeleteDialog.astro"
 import GuestbookForm from "@/components/guestbook/GuestbookForm.astro"
@@ -26,20 +30,31 @@ try {
 const { description, jsonLd } = guestbookSeo(entries)
 ---
 
-<PageLayout
-  heading="Guestbook"
-  intro="Leave a comment below. It could be anything – appreciation, information, wisdom, anything good or bad about me or even humor."
-  description={description}
->
+<StoryLayout heading="Guestbook" description={description}>
   <script type="application/ld+json" set:html={toJsonLd(jsonLd)} />
 
-  <GuestbookForm user={user} />
-  <SortMenu />
+  <p class="text-sm text-muted-foreground">
+    <span class="mb-3 block font-lead text-lead text-heading">Leave a comment below.</span>
+    It could be anything – appreciation, information, wisdom, anything good or bad about me or even humor.
+  </p>
 
-  <div data-guestbook-list class="mt-2 flex flex-col gap-3 sm:gap-4">
+  <div class="mt-6">
+    <GuestbookForm user={user} />
+  </div>
+
+  <!-- Same title rhythm as /about: 32px above, 12px below; the sort menu sits on the title's line -->
+  <div class="mt-8 mb-3 flex items-center justify-between">
+    <h2 class="text-sm font-subsection text-heading">Messages</h2>
+    <SortMenu />
+  </div>
+
+  <!-- Entries pad 8px around themselves (room for the highlight ring on a linked
+       message), so the list starts 8px higher and 8px apart: 12px from the title to
+       the first avatar, 24px between messages, the same as a paragraph gap -->
+  <div data-guestbook-list class="-mt-2 flex flex-col gap-2">
     {entries.length === 0 ? (
-      <div class="rounded-lg border border-dashed border-zinc-200 bg-white/50 py-8 text-center text-zinc-500 sm:py-10 dark:border-zinc-800 dark:bg-black/20">
-        <p class="text-xs sm:text-sm">No messages yet. Be the first to sign!</p>
+      <div class="mt-2 rounded-lg border border-dashed border-border py-8 text-center">
+        <p class="text-sm text-muted-foreground">No messages yet. Be the first to sign!</p>
       </div>
     ) : (
       entries.map((entry) => <GuestbookItem entry={entry} isAdmin={isAdmin} />)
@@ -50,7 +65,7 @@ const { description, jsonLd } = guestbookSeo(entries)
   <DeleteDialog />
 
   <p data-toast role="status" hidden class="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-lg bg-heading px-3 py-2 text-sm text-background shadow-lg"></p>
-</PageLayout>
+</StoryLayout>
 
 <script>
   import "@/lib/client/guestbook"
