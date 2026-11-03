@@ -1,152 +1,274 @@
 ---
 /*
- * Full-screen photo viewer for [data-photo] tiles. Native <dialog> gives
- * focus trapping and Escape-to-close; this adds prev/next, arrow keys,
- * swipe, click-to-zoom (pans with the pointer) and neighbour preloading.
+ * Full-screen image viewer, after abhisekmishra.com: a dark blurred backdrop,
+ * the image with its caption and a thumbnail rail underneath. Mounted once in
+ * BaseLayout; lib/client/lightbox.ts opens it from [data-photo] tiles and from
+ * images in posts or marked [data-zoom]. Native <dialog> gives focus trapping
+ * and Escape-to-close.
  */
 ---
 
-<dialog
-  data-lightbox
-  aria-label="Photo viewer"
-  class="m-0 h-dvh max-h-none w-screen max-w-none bg-black/95 p-0 text-white backdrop:bg-black/80 open:flex open:flex-col"
->
-  <div class="flex shrink-0 items-center justify-between gap-4 px-4 py-3 sm:px-6">
-    <p class="text-sm text-white/70 tabular-nums" data-lb-counter></p>
-    <button type="button" class="rounded-full p-2 text-white/80 transition-colors hover:bg-white/10 hover:text-white" aria-label="Close" data-lb-close>
-      <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+<dialog data-lightbox aria-label="Image viewer" class="lightbox">
+  <div class="lightbox__inner" data-lb-surface>
+    <button type="button" class="lightbox__close" aria-label="Close" data-lb-close>
+      <svg viewBox="0 0 24 24" aria-hidden="true">
         <path d="M18 6 6 18M6 6l12 12"></path>
       </svg>
     </button>
-  </div>
 
-  <div class="relative flex min-h-0 flex-1 items-center justify-center overflow-hidden px-12 sm:px-16" data-lb-stage>
-    <button type="button" class="absolute left-2 z-20 rounded-full bg-white/10 p-2 transition-colors hover:bg-white/20 sm:left-4" aria-label="Previous photo" data-lb-prev>
-      <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-        <path d="m15 18-6-6 6-6"></path>
-      </svg>
-    </button>
+    <div class="lightbox__stage" data-lb-stage>
+      <img data-lb-image alt="" sizes="min(92vw, 920px)" decoding="async" draggable="false" class="lightbox__img" />
+    </div>
 
-    <img
-      data-lb-image
-      alt=""
-      sizes="100vw"
-      decoding="async"
-      class="max-h-full max-w-full cursor-zoom-in object-contain transition-transform duration-200 select-none"
-      draggable="false"
-    />
-
-    <button type="button" class="absolute right-2 z-20 rounded-full bg-white/10 p-2 transition-colors hover:bg-white/20 sm:right-4" aria-label="Next photo" data-lb-next>
-      <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-        <path d="m9 18 6-6-6-6"></path>
-      </svg>
-    </button>
-  </div>
-
-  <div class="flex min-h-16 shrink-0 flex-col items-center justify-center gap-1 px-6 py-4 text-center">
-    <p class="max-w-2xl text-sm font-medium" data-lb-caption></p>
-    <p class="text-xs text-white/55" data-lb-date></p>
+    <div class="lightbox__foot">
+      <div class="lightbox__text">
+        <p class="lightbox__caption" data-lb-caption></p>
+        <p class="lightbox__date" data-lb-date></p>
+      </div>
+      <div class="lightbox__rail" data-lb-rail></div>
+    </div>
   </div>
 </dialog>
 
 <script>
-  const dialog = document.querySelector<HTMLDialogElement>("[data-lightbox]")
-  const tiles = [...document.querySelectorAll<HTMLElement>("[data-photo]")]
-
-  if (dialog && tiles.length) {
-    const img = dialog.querySelector<HTMLImageElement>("[data-lb-image]")!
-    const stage = dialog.querySelector<HTMLElement>("[data-lb-stage]")!
-    const counter = dialog.querySelector<HTMLElement>("[data-lb-counter]")!
-    const caption = dialog.querySelector<HTMLElement>("[data-lb-caption]")!
-    const date = dialog.querySelector<HTMLElement>("[data-lb-date]")!
-    const prev = dialog.querySelector<HTMLElement>("[data-lb-prev]")!
-    const next = dialog.querySelector<HTMLElement>("[data-lb-next]")!
-
-    let index = 0
-    let zoomed = false
-    let touchX: number | null = null
-
-    for (const button of [prev, next]) button.hidden = tiles.length < 2
-
-    const preload = (i: number) => {
-      const data = tiles[(i + tiles.length) % tiles.length].dataset
-      const image = new Image()
-      image.sizes = "100vw"
-      image.srcset = data.srcset ?? ""
-      image.src = data.src ?? ""
-    }
-
-    const setZoom = (on: boolean, event?: MouseEvent) => {
-      zoomed = on
-      img.classList.toggle("cursor-zoom-in", !on)
-      img.classList.toggle("cursor-zoom-out", on)
-      if (on && event) pan(event)
-      img.style.transform = on ? "scale(2.25)" : ""
-    }
-
-    const pan = (event: MouseEvent) => {
-      const rect = img.getBoundingClientRect()
-      const x = ((event.clientX - rect.left) / rect.width) * 100
-      const y = ((event.clientY - rect.top) / rect.height) * 100
-      img.style.transformOrigin = `${Math.min(100, Math.max(0, x))}% ${Math.min(100, Math.max(0, y))}%`
-    }
-
-    const show = (i: number) => {
-      index = (i + tiles.length) % tiles.length
-      const data = tiles[index].dataset
-      setZoom(false)
-      img.removeAttribute("src")
-      img.width = Number(data.width)
-      img.height = Number(data.height)
-      img.srcset = data.srcset ?? ""
-      img.src = data.src ?? ""
-      img.alt = data.alt ?? ""
-      counter.textContent = `${index + 1} / ${tiles.length}`
-      caption.textContent = data.caption ?? ""
-      date.textContent = data.date ?? ""
-      if (tiles.length > 1) {
-        preload(index + 1)
-        preload(index - 1)
-      }
-    }
-
-    tiles.forEach((tile, i) =>
-      tile.addEventListener("click", () => {
-        show(i)
-        document.documentElement.style.overflow = "hidden"
-        dialog.showModal()
-      }),
-    )
-
-    dialog.addEventListener("close", () => {
-      document.documentElement.style.overflow = ""
-      setZoom(false)
-      tiles[index].focus()
-    })
-
-    dialog.querySelector("[data-lb-close]")!.addEventListener("click", () => dialog.close())
-    prev.addEventListener("click", () => show(index - 1))
-    next.addEventListener("click", () => show(index + 1))
-
-    img.addEventListener("click", (event) => setZoom(!zoomed, event))
-    img.addEventListener("mousemove", (event) => zoomed && pan(event))
-
-    // Clicking the dark area around the photo closes the viewer
-    stage.addEventListener("click", (event) => {
-      if (event.target === stage) dialog.close()
-    })
-
-    dialog.addEventListener("keydown", (event) => {
-      if (event.key === "ArrowLeft") show(index - 1)
-      if (event.key === "ArrowRight") show(index + 1)
-    })
-
-    stage.addEventListener("touchstart", (event) => (touchX = event.changedTouches[0]?.clientX ?? null), { passive: true })
-    stage.addEventListener("touchend", (event) => {
-      if (touchX === null || zoomed || tiles.length < 2) return
-      const delta = (event.changedTouches[0]?.clientX ?? 0) - touchX
-      touchX = null
-      if (Math.abs(delta) > 56) show(delta < 0 ? index + 1 : index - 1)
-    })
-  }
+  import "@/lib/client/lightbox"
 </script>
+
+<style is:global>
+  /* Images in posts and [data-zoom] images open in the viewer */
+  .prose img:not(a img),
+  img[data-zoom] {
+    cursor: zoom-in;
+  }
+
+  .lightbox {
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    max-height: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #fff;
+    overflow: hidden;
+  }
+
+  .lightbox::backdrop {
+    background: rgb(18 18 18 / 0.9);
+    backdrop-filter: blur(6px);
+  }
+
+  /* Fades in and out; the global reduced-motion rule makes this instant */
+  .lightbox,
+  .lightbox::backdrop {
+    opacity: 0;
+    transition:
+      opacity 0.2s var(--ease-out-soft),
+      display 0.2s allow-discrete,
+      overlay 0.2s allow-discrete;
+  }
+
+  .lightbox[open],
+  .lightbox[open]::backdrop {
+    opacity: 1;
+  }
+
+  @starting-style {
+    .lightbox[open],
+    .lightbox[open]::backdrop {
+      opacity: 0;
+    }
+  }
+
+  .lightbox :focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 3px;
+  }
+
+  .lightbox__inner {
+    height: 100%;
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: 0.875rem;
+    /* Top clears the close button (24px + 40px) by 8px */
+    padding: 4.5rem 1.5rem 1.5rem;
+  }
+
+  /* Centred in the space between the close button's clearance and the caption */
+  .lightbox__stage {
+    position: relative;
+    min-height: 0;
+    display: grid;
+    grid-template-rows: minmax(0, 1fr);
+    place-items: center;
+    touch-action: pan-y;
+  }
+
+  .lightbox__img {
+    width: auto;
+    height: auto;
+    max-width: min(88%, 920px);
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: var(--radius-lg);
+    user-select: none;
+  }
+
+  .lightbox__img[data-pageable] {
+    cursor: pointer;
+  }
+
+  .lightbox__close {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 9999px;
+    background: rgb(255 255 255 / 0.14);
+    transition: background-color 0.15s;
+  }
+
+  .lightbox__close:hover {
+    background: rgb(255 255 255 / 0.26);
+  }
+
+  .lightbox__close svg {
+    width: 1.125rem;
+    height: 1.125rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+  }
+
+  .lightbox__foot {
+    display: grid;
+    justify-items: center;
+    gap: 1.5rem;
+    min-width: 0;
+  }
+
+  .lightbox__text {
+    max-width: 56ch;
+    text-align: center;
+  }
+
+  .lightbox__text:not(:has(p:not([hidden]))) {
+    display: none;
+  }
+
+  .lightbox__caption {
+    color: rgb(255 255 255 / 0.78);
+  }
+
+  .lightbox__date {
+    font-size: var(--text-sm);
+    line-height: var(--text-sm--line-height);
+    letter-spacing: var(--text-sm--letter-spacing);
+    color: rgb(255 255 255 / 0.5);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .lightbox__rail {
+    width: 100%;
+    display: flex;
+    justify-content: safe center;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding-block: 0.25rem;
+    scrollbar-width: none;
+  }
+
+  .lightbox__rail:empty {
+    display: none;
+  }
+
+  .lightbox__thumb {
+    flex: none;
+    width: 60px;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-radius: var(--radius-sm);
+    background: rgb(255 255 255 / 0.1);
+    opacity: 0.45;
+    transition: opacity 0.2s;
+  }
+
+  .lightbox__thumb:hover {
+    opacity: 0.8;
+  }
+
+  .lightbox__thumb[aria-current="true"] {
+    opacity: 1;
+    box-shadow: 0 0 0 2px #fff;
+  }
+
+  .lightbox__thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    user-select: none;
+  }
+
+  /* One image: centre it in the window instead of stacking it on a rail */
+  .lightbox[data-single] .lightbox__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+  }
+
+  .lightbox[data-single] .lightbox__stage {
+    display: block;
+    width: 100%;
+  }
+
+  .lightbox[data-single] .lightbox__img {
+    display: block;
+    margin: 0 auto;
+    max-height: min(84svh, calc(100svh - 120px));
+  }
+
+  @media (max-width: 40rem) {
+    .lightbox__inner,
+    .lightbox[data-single] .lightbox__inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      padding: 1rem;
+    }
+
+    .lightbox__close {
+      position: static;
+      flex: none;
+      margin-bottom: 0.875rem;
+    }
+
+    .lightbox__stage {
+      width: 100%;
+      grid-template-rows: auto;
+    }
+
+    .lightbox__img,
+    .lightbox[data-single] .lightbox__img {
+      max-width: 100%;
+      max-height: 60svh;
+    }
+
+    .lightbox__foot {
+      width: 100%;
+      gap: 1.375rem;
+    }
+
+    .lightbox__thumb {
+      width: 52px;
+    }
+  }
+</style>
