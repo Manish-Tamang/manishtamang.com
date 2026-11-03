@@ -25,7 +25,7 @@ const hasReplies = Boolean(entry.replies?.length)
 
 const reveal = "opacity-100 transition-opacity sm:opacity-0 sm:group-hover:opacity-100 sm:focus-visible:opacity-100"
 const iconButton = "cursor-pointer p-0.5 text-zinc-400 transition-colors sm:p-1"
-const action = "flex cursor-pointer items-center gap-1 text-[11px] transition-colors sm:gap-1.5 sm:text-xs"
+const action = "flex cursor-pointer items-center gap-1 text-xs transition-colors sm:gap-1.5"
 const actionIcon = "size-3 transition-transform active:scale-125 sm:size-3.5"
 ---
 
@@ -51,7 +51,7 @@ const actionIcon = "size-3 transition-transform active:scale-125 sm:size-3.5"
       {entry.image_url ? (
         <img src={entry.image_url} alt="" width="40" height="40" loading="lazy" referrerpolicy="no-referrer" class="size-full rounded-sm border-2 border-white object-cover shadow-sm dark:border-zinc-800" />
       ) : (
-        <span class="flex size-full items-center justify-center rounded-sm border-2 border-white bg-linear-to-br from-zinc-100 to-zinc-200 text-[11px] font-semibold shadow-sm sm:text-[13px] dark:border-zinc-800 dark:from-zinc-800 dark:to-zinc-900">{entry.name.charAt(0)}</span>
+        <span class="flex size-full items-center justify-center rounded-sm border-2 border-white bg-linear-to-br from-zinc-100 to-zinc-200 text-xs font-semibold shadow-sm sm:text-sm dark:border-zinc-800 dark:from-zinc-800 dark:to-zinc-900">{entry.name.charAt(0)}</span>
       )}
       <Heart data-heart-pop class="pointer-events-none absolute top-0 left-1/2 z-50 hidden size-6 -translate-x-1/2 -translate-y-8 animate-bounce fill-current text-red-500 drop-shadow-lg sm:size-8" />
     </div>
@@ -61,12 +61,12 @@ const actionIcon = "size-3 transition-transform active:scale-125 sm:size-3.5"
   <div class="min-w-0 flex-1 space-y-1.5 sm:space-y-2">
     <div class="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between sm:gap-0">
       <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
-        <p class="text-sm leading-normal text-foreground md:text-base">{entry.name}</p>
+        <p class="text-sm text-foreground md:text-base">{entry.name}</p>
         {entry.isAdminAuthor && <Badge variant="accent">Admin</Badge>}
         <span class="hidden text-xs font-normal text-zinc-500 sm:inline sm:text-sm">signed the guestbook</span>
       </div>
       <div class="flex items-center gap-1.5 sm:gap-2">
-        <time datetime={entry.timestamp} title={new Date(entry.timestamp).toUTCString()} class="font-mono text-[10px] text-zinc-400 sm:text-[11px]">{timeAgo(entry.timestamp)}</time>
+        <time datetime={entry.timestamp} title={new Date(entry.timestamp).toUTCString()} class="font-mono text-xs text-zinc-400">{timeAgo(entry.timestamp)}</time>
         <button type="button" data-action="copy" title="Copy link to this message" aria-label="Copy link" class:list={[iconButton, reveal, "hover:text-[#9AC372]"]}>
           <Link2 class="size-3 sm:size-3.5" />
         </button>
@@ -78,12 +78,12 @@ const actionIcon = "size-3 transition-transform active:scale-125 sm:size-3.5"
       </div>
     </div>
 
-    <div class="text-[13px] leading-normal break-words whitespace-pre-wrap text-foreground sm:text-sm">
+    <div class="text-sm break-words whitespace-pre-wrap text-foreground">
       {isLong ? (
         <>
           <span data-short><GuestbookMessage text={`${words.slice(0, 60).join(" ")}...`} /></span>
           <span data-full hidden><GuestbookMessage text={entry.message} /></span>
-          <button type="button" data-action="more" class="ml-1 cursor-pointer text-xs font-medium text-blue-500 transition-colors hover:text-blue-600 sm:text-[13px]">See more</button>
+          <button type="button" data-action="more" class="ml-1 cursor-pointer text-xs font-medium text-blue-500 transition-colors hover:text-blue-600 sm:text-sm">See more</button>
         </>
       ) : (
         <GuestbookMessage text={entry.message} />
@@ -99,7 +99,7 @@ const actionIcon = "size-3 transition-transform active:scale-125 sm:size-3.5"
     {entry.reactions.length > 0 && (
       <div class="mt-1 flex justify-end">
         {entry.reactions.map(({ emoji, count }) => (
-          <div class="ml-1 flex items-center gap-1 rounded-full border border-zinc-200 bg-zinc-100 px-1.5 py-0.5 text-[10px] text-zinc-500 dark:border-zinc-700 dark:bg-zinc-800">
+          <div class="ml-1 flex items-center gap-1 rounded-full border border-zinc-200 bg-zinc-100 px-1.5 py-0.5 text-xs text-zinc-500 dark:border-zinc-700 dark:bg-zinc-800">
             <span>{emoji}</span>
             <span>{count}</span>
           </div>
@@ -155,16 +155,16 @@ const actionIcon = "size-3 transition-transform active:scale-125 sm:size-3.5"
             {reply.image_url ? (
               <img src={reply.image_url} alt="" width="32" height="32" loading="lazy" referrerpolicy="no-referrer" class="size-6 shrink-0 rounded-full border border-white object-cover shadow-sm sm:size-8 dark:border-zinc-800" />
             ) : (
-              <span class="flex size-6 shrink-0 items-center justify-center rounded-full border border-white bg-muted text-[9px] shadow-sm sm:size-8 sm:text-[10px] dark:border-zinc-800">{reply.name.charAt(0)}</span>
+              <span class="flex size-6 shrink-0 items-center justify-center rounded-full border border-white bg-muted text-xs shadow-sm sm:size-8 dark:border-zinc-800">{reply.name.charAt(0)}</span>
             )}
             <div class="min-w-0 flex-1 space-y-0.5 sm:space-y-1">
               <div class="flex flex-col gap-0.5 sm:flex-row sm:items-center sm:justify-between sm:gap-0">
                 <div class="flex items-center gap-1.5 sm:gap-2">
-                  <p class="text-[11px] font-medium text-zinc-900 sm:text-xs dark:text-zinc-100">{reply.name}</p>
+                  <p class="text-xs font-medium text-zinc-900 dark:text-zinc-100">{reply.name}</p>
                   {reply.isAdminAuthor && <Badge variant="accent">Admin</Badge>}
                 </div>
                 <div class="flex items-center gap-1 sm:gap-2">
-                  <time datetime={reply.timestamp} class="font-mono text-[9px] text-zinc-400 sm:text-[10px]">{timeAgo(reply.timestamp)}</time>
+                  <time datetime={reply.timestamp} class="font-mono text-xs text-zinc-400">{timeAgo(reply.timestamp)}</time>
                   {(isAdmin || reply.isMine) && (
                     <button type="button" data-action="delete" aria-label="Delete reply" class="cursor-pointer p-0.5 text-zinc-400 transition-colors hover:text-red-500 sm:p-1 sm:opacity-0 sm:group-hover/reply:opacity-100">
                       <Trash2 class="size-2.5 sm:size-3" />
@@ -172,7 +172,7 @@ const actionIcon = "size-3 transition-transform active:scale-125 sm:size-3.5"
                   )}
                 </div>
               </div>
-              <div class="text-xs leading-relaxed break-words text-zinc-600 sm:text-[13px] dark:text-zinc-400"><GuestbookMessage text={reply.message} /></div>
+              <div class="text-xs break-words text-zinc-600 sm:text-sm dark:text-zinc-400"><GuestbookMessage text={reply.message} /></div>
             </div>
           </div>
         ))}
