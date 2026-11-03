@@ -17,7 +17,7 @@ const { user } = Astro.props
 ---
 
 {user ? (
-  <form data-guestbook-form data-user={user.id} class="space-y-4 rounded-lg border border-foreground/5 bg-foreground/5 p-5 shadow-sm transition-all dark:border-zinc-800">
+  <form data-guestbook-form data-user={user.id} class="rounded-lg border border-foreground/5 bg-foreground/5 p-4 dark:border-zinc-800">
     <div class="flex gap-3">
       {user.image ? (
         <img src={user.image} alt="" width="40" height="40" referrerpolicy="no-referrer" class="size-10 shrink-0 rounded-sm border border-zinc-100 object-cover dark:border-zinc-800" />
@@ -26,8 +26,8 @@ const { user } = Astro.props
       )}
       <div class="min-w-0 flex-1 space-y-3">
         <div class="flex items-center justify-between">
-          <p class="text-sm font-medium text-zinc-600 dark:text-zinc-400">
-            Signed in as <span class="text-zinc-900 dark:text-zinc-100">{user.name}</span>
+          <p class="text-sm text-muted-foreground">
+            Signed in as <span class="font-subsection text-heading">{user.name}</span>
           </p>
           <button type="button" data-sign-out class="cursor-pointer text-xs text-zinc-400 transition-colors hover:text-zinc-600 dark:hover:text-zinc-200">Sign out</button>
         </div>
@@ -55,14 +55,14 @@ const { user } = Astro.props
     </div>
   </form>
 ) : (
-  <div class="flex flex-col items-start gap-6 rounded-lg border border-foreground/5 bg-foreground/5 p-6 text-start">
-    <div class="space-y-2">
-      <h2 class="text-xl font-semibold text-zinc-900 dark:text-zinc-100">Sign the Guestbook</h2>
-      <p class="text-sm text-foreground md:text-base">Log in to leave a message and join the building of this space.</p>
+  <div class="flex flex-col items-start gap-4 rounded-lg border border-foreground/5 bg-foreground/5 p-4 text-start">
+    <div>
+      <h2 class="text-sm font-subsection text-heading">Sign the guestbook</h2>
+      <p class="text-sm text-muted-foreground">Log in to leave a message and join the building of this space.</p>
     </div>
     <div class="grid w-full grid-cols-2 gap-3">
-      <Button variant="outline" data-sign-in="github" class="h-12 gap-2 rounded-lg"><GitHub class="size-4" /> GitHub</Button>
-      <Button variant="outline" data-sign-in="google" class="h-12 gap-2 rounded-lg"><Google class="size-4" /> Google</Button>
+      <Button variant="outline" data-sign-in="github" class="h-10 gap-2 rounded-lg"><GitHub class="size-4" /> GitHub</Button>
+      <Button variant="outline" data-sign-in="google" class="h-10 gap-2 rounded-lg"><Google class="size-4" /> Google</Button>
     </div>
   </div>
 )}
