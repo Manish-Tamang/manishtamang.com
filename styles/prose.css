@@ -8,12 +8,14 @@
   .prose {
     font-size: var(--text-base);
     line-height: var(--text-base--line-height);
+    letter-spacing: var(--text-base--letter-spacing);
     color: var(--color-foreground);
     max-width: var(--container-prose);
   }
 
+  /* One blank line between blocks keeps text on the line-height grid */
   .prose > * + * {
-    margin-top: 1.6em;
+    margin-top: var(--text-base--line-height);
   }
 
   .prose :is(h2, h3, h4) {
@@ -23,7 +25,8 @@
 
   .prose h2 {
     font-size: var(--text-2xl);
-    line-height: 1.3;
+    line-height: var(--text-2xl--line-height);
+    letter-spacing: var(--text-2xl--letter-spacing);
     font-weight: var(--font-weight-section);
     margin-top: 2em;
   }
@@ -31,30 +34,32 @@
   .prose h3 {
     font-size: var(--text-lg);
     line-height: var(--text-lg--line-height);
+    letter-spacing: var(--text-lg--letter-spacing);
     font-weight: var(--font-weight-subsection);
     margin-top: 2em;
   }
 
   .prose :is(h2, h3, h4) + * {
-    margin-top: 0.5em;
+    margin-top: 0.75rem;
   }
 
+  /* Always underlined, but with a faint line that fills in on hover */
   .prose a {
     color: var(--color-link);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
     text-underline-offset: 0.2em;
+    transition: text-decoration-color 0.2s;
   }
 
   .prose a:hover {
     color: var(--color-link-hover);
-    text-decoration: underline;
-  }
-
-  .dark .prose a {
-    text-decoration: underline;
+    text-decoration-color: currentColor;
   }
 
   .prose strong {
-    font-weight: 600;
+    font-weight: var(--font-weight-subsection);
     color: var(--color-heading);
   }
 
@@ -71,7 +76,7 @@
   }
 
   .prose li + li {
-    margin-top: 0.4em;
+    margin-top: 0.5rem;
   }
 
   .prose li::marker {
@@ -85,6 +90,7 @@
     padding-left: 2.75rem;
     font-size: var(--text-quote);
     line-height: var(--text-quote--line-height);
+    letter-spacing: var(--text-quote--letter-spacing);
     font-weight: var(--font-weight-quote);
     color: var(--color-heading);
   }
@@ -107,8 +113,9 @@
     margin-top: 1rem;
     font-size: var(--text-base);
     line-height: var(--text-base--line-height);
+    letter-spacing: var(--text-base--letter-spacing);
     font-style: normal;
-    font-weight: 600;
+    font-weight: var(--font-weight-subsection);
     color: var(--color-purple);
   }
 
@@ -125,6 +132,7 @@
   .prose :not(pre) > code {
     font-family: var(--font-mono);
     font-size: 0.875em;
+    letter-spacing: 0;
     background: var(--color-muted);
     border-radius: var(--radius-sm);
     padding: 0.15em 0.35em;
@@ -135,7 +143,8 @@
   .prose pre {
     font-family: var(--font-mono);
     font-size: var(--text-sm);
-    line-height: 1.6;
+    line-height: var(--text-sm--line-height);
+    letter-spacing: 0;
     background: var(--color-subtle);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
@@ -162,7 +171,8 @@
     color: var(--shiki-dark);
   }
 
-  .prose :is(img, video) {
+  /* Not inside buttons: video thumbnails frame their own preview */
+  .prose :is(img, video):not(button *) {
     border-radius: var(--radius-lg);
     border: 1px solid var(--color-border);
   }
@@ -176,8 +186,10 @@
   }
 
   .prose figcaption {
-    margin-top: 0.6em;
+    margin-top: 0.5rem;
     font-size: var(--text-sm);
+    line-height: var(--text-sm--line-height);
+    letter-spacing: var(--text-sm--letter-spacing);
     color: var(--color-muted-foreground);
     text-align: center;
   }
@@ -195,6 +207,64 @@
   }
 
   .prose th {
-    font-weight: 600;
+    font-weight: var(--font-weight-subsection);
+  }
+
+  /*
+   * Story pages (StoryLayout: /bio, /digitalpathshala), after
+   * abhisekmishra.com/about: 14/22 body with a 24px paragraph gap, an opening
+   * .lead at 24px that runs into the first paragraph, and small centred
+   * captions that read as descriptions rather than text.
+   */
+  .prose-story {
+    max-width: none;
+    font-size: var(--text-sm);
+    line-height: var(--text-sm--line-height);
+    letter-spacing: var(--text-sm--letter-spacing);
+  }
+
+  .prose-story > * + * {
+    margin-top: 1.5rem;
+  }
+
+  .prose-story .lead {
+    display: block;
+    margin-bottom: 0.75rem;
+    font-size: var(--text-lead);
+    line-height: var(--text-lead--line-height);
+    letter-spacing: var(--text-lead--letter-spacing);
+    font-weight: var(--font-weight-lead);
+    color: var(--color-heading);
+  }
+
+  .prose-story figure {
+    margin-block: 2rem;
+  }
+
+  .prose-story figcaption {
+    margin-top: 0.5rem;
+    font-size: var(--text-xs);
+    line-height: var(--text-xs--line-height);
+    letter-spacing: var(--text-xs--letter-spacing);
+    text-wrap: balance;
+  }
+
+  /* The pull quote steps down to the lead's size, so it stays in proportion with 14px body */
+  .prose-story blockquote {
+    margin-block: 2rem;
+    padding-left: 2.25rem;
+    font-size: var(--text-lead);
+    line-height: var(--text-lead--line-height);
+    letter-spacing: var(--text-lead--letter-spacing);
+  }
+
+  .prose-story blockquote::before {
+    font-size: 3.5rem;
+  }
+
+  .prose-story blockquote cite {
+    font-size: var(--text-sm);
+    line-height: var(--text-sm--line-height);
+    letter-spacing: var(--text-sm--letter-spacing);
   }
 }
