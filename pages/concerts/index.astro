@@ -6,7 +6,6 @@ import VideoModal from "@/components/concerts/VideoModal.astro";
 import VideoThumbnail from "@/components/concerts/VideoThumbnail.astro";
 import Heading from "@/components/typography/Heading.astro";
 import Text from "@/components/typography/Text.astro";
-import Lightbox from "@/components/photos/Lightbox.astro";
 import { concerts } from "@/data/slash-pages";
 
 const sorted = [...concerts].sort((a, b) => b.date.localeCompare(a.date));
@@ -155,6 +154,5 @@ for (const c of sorted) {
       ))
     }
   </div>
-  <Lightbox />
   <VideoModal />
 </PageLayout>
