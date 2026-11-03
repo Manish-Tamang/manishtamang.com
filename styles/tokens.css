@@ -4,8 +4,8 @@
  * so changing taste means editing this file, not components.
  *
  * Current direction: modelled on recurse.com — Inter, warm green-tinted greys,
- * ultralight section headings and bold display headings — with a purple
- * accent (#966bc3) and yellow text selection.
+ * light section headings and strong display headings — with a purple accent
+ * (#966bc3) and yellow text selection. Type metrics and the rounded selection  
  */
 
 :root {
@@ -129,34 +129,56 @@
 
   --animate-marquee: marquee 10s linear infinite;
 
-  /* Type scale — [size, line-height, tracking] */
+  /*
+   * Type scale — [size, line-height, tracking], after abhisekmishra.com:
+   * every line-height is a whole pixel (sharp edges, sidebar and content lines
+   * line up), body leading is ~1.57 and tightens as text grows, and tracking
+   * follows Inter's dynamic metrics (rsms.me/inter/dynmetrics): neutral at
+   * 12px, slightly negative for body, about -0.022em at display sizes.
+   */
   --text-xs: 0.75rem;
-  --text-xs--line-height: 1.1rem;
-  --text-sm: 0.85rem;
-  --text-sm--line-height: 1.3rem;
+  --text-xs--line-height: 1.125rem;
+  --text-xs--letter-spacing: 0em;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.375rem;
+  --text-sm--letter-spacing: -0.006em;
   --text-base: 1rem;
-  --text-base--line-height: 1.6rem;
+  --text-base--line-height: 1.5625rem;
+  --text-base--letter-spacing: -0.011em;
   --text-lg: 1.125rem;
-  --text-lg--line-height: 1.7rem;
+  --text-lg--line-height: 1.75rem;
+  --text-lg--letter-spacing: -0.014em;
   --text-xl: 1.375rem;
-  --text-xl--line-height: 1.9rem;
+  --text-xl--line-height: 1.875rem;
+  --text-xl--letter-spacing: -0.018em;
   --text-2xl: 2rem;
-  --text-2xl--line-height: 2.6rem;
+  --text-2xl--line-height: 2.5rem;
+  --text-2xl--letter-spacing: -0.021em;
   --text-3xl: 2.5rem;
-  --text-3xl--line-height: 2.85rem;
-  --text-3xl--letter-spacing: -0.015em;
-  --text-4xl: 3.4rem;
-  --text-4xl--line-height: 3.67rem;
-  --text-4xl--letter-spacing: -0.02em;
+  --text-3xl--line-height: 3rem;
+  --text-3xl--letter-spacing: -0.022em;
+  --text-4xl: 3.5rem;
+  --text-4xl--line-height: 3.875rem;
+  --text-4xl--letter-spacing: -0.022em;
+  /* Opening line of a page, running into the first paragraph (abhisekmishra.com's intro) */
+  --text-lead: 1.5rem;
+  --text-lead--line-height: 2rem;
+  --text-lead--letter-spacing: -0.019em;
   /* Pull quotes */
   --text-quote: 1.75rem;
-  --text-quote--line-height: 2.54rem;
+  --text-quote--line-height: 2.5rem;
+  --text-quote--letter-spacing: -0.02em;
 
-  /* Heading weights: bold display, ultralight sections, semibold sub-sections */
-  --font-weight-hero: 700;
-  --font-weight-section: 200;
-  --font-weight-subsection: 600;
+  /*
+   * Heading weights. Inter is variable, so weights sit between the named stops
+   * like the reference's 480/560: a 200 heading looked thinner than the 16px
+   * body beside it, and 700 titles read heavier than the rest of the page.
+   */
+  --font-weight-hero: 650;
+  --font-weight-section: 300;
+  --font-weight-subsection: 560;
   --font-weight-quote: 300;
+  --font-weight-lead: 480;
 
   /* Inter: tailed lowercase l (cv05) and rounded quotes/commas (ss03) */
   --font-features: "cv05", "ss03";
