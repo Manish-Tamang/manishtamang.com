@@ -1,10 +1,15 @@
 ---
+/*
+ * In StoryLayout, with the same rhythm as /about: the intro as a 24px lead,
+ * section titles at body size (semibold) with 32px above and 12px below. Rows
+ * and cards that tint on hover pull their padding outside the column (-mx), so
+ * their contents stay on the column's left edge.
+ */
 import type { ImageMetadata } from "astro"
 import { Image } from "astro:assets"
-import PageLayout from "@/layouts/PageLayout.astro"
-import Heading from "@/components/typography/Heading.astro"
+import StoryLayout from "@/layouts/StoryLayout.astro"
 import Link from "@/components/ui/Link.astro"
-import Separator from "@/components/ui/Separator.astro"
+import BlurImage from "@/components/ui/BlurImage.astro"
 import ToolItem from "@/components/uses/ToolItem.astro"
 import { gear, laptop, sections } from "@/data/uses"
 import laptopImage from "@/assets/uses/acer-aspire-14.png"
@@ -13,20 +18,26 @@ import terminalImage from "@/assets/uses/terminal.webp"
 const gearImages = import.meta.glob<{ default: ImageMetadata }>("/assets/uses/{keyboard,mouse,mic}.png", { eager: true })
 
 const toc = [{ id: "hardware", title: "Hardware" }, ...sections.map(({ id, title }) => ({ id, title }))]
+
+const section = "mt-8 scroll-mt-8"
+const sectionTitle = "mb-3 text-sm font-subsection text-heading"
 ---
 
-<PageLayout
+<StoryLayout
   heading="Uses"
-  intro="The hardware, software and tools I use for development, design and everyday work."
   description="Tools, software, and hardware Manish Tamang (golecodes) uses for development and design."
 >
-  <nav aria-label="Sections" class="-mt-4 mb-12">
-    <ul class="flex flex-wrap gap-2">
+  <p class="font-lead text-lead text-heading">
+    The hardware, software and tools I use for development, design and everyday work.
+  </p>
+
+  <nav aria-label="Sections" class="mt-4">
+    <ul class="flex flex-wrap gap-1.5">
       {toc.map(({ id, title }) => (
         <li>
           <a
             href={`#${id}`}
-            class="block rounded-full border border-border px-3 py-1 text-xs text-muted-foreground transition-colors hover:border-border-strong hover:text-heading"
+            class="block rounded-full border border-border px-2.5 py-0.5 text-xs text-muted-foreground transition-colors hover:border-border-strong hover:text-heading"
           >
             {title}
           </a>
@@ -35,76 +46,77 @@ const toc = [{ id: "hardware", title: "Hardware" }, ...sections.map(({ id, title
     </ul>
   </nav>
 
-  <div class="space-y-16">
-    <section id="hardware" class="scroll-mt-8">
-      <Heading>Hardware</Heading>
+  <section id="hardware" class={section}>
+    <h2 class={sectionTitle}>Hardware</h2>
 
-      <a
-        href={laptop.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="group mt-5 flex flex-col items-center gap-5 rounded-xl p-5 transition-colors hover:bg-subtle sm:flex-row"
-      >
-        <Image src={laptopImage} alt="" width={160} densities={[1, 2]} class="w-36 shrink-0 sm:w-40" />
-        <div class="min-w-0 text-center sm:text-left">
-          <p class="text-xs text-muted-foreground">Main machine</p>
-          <p class="mt-0.5 text-lg font-medium text-heading group-hover:text-link-hover">{laptop.name}</p>
-          <ul class="mt-3 flex flex-wrap justify-center gap-1.5 sm:justify-start">
-            {laptop.specs.map((spec) => <li class="rounded-full bg-muted px-2.5 py-0.5 text-xs text-foreground">{spec}</li>)}
-          </ul>
-        </div>
-      </a>
+    <a
+      href={laptop.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="group -mx-3 -mt-3 flex flex-col items-center gap-5 rounded-xl p-3 transition-colors hover:bg-subtle sm:flex-row"
+    >
+      <Image src={laptopImage} alt="" width={160} densities={[1, 2]} class="w-36 shrink-0 sm:w-40" />
+      <div class="min-w-0 text-center sm:text-left">
+        <p class="text-xs text-muted-foreground">Main machine</p>
+        <p class="font-subsection text-heading transition-colors group-hover:text-link-hover">{laptop.name}</p>
+        <ul class="mt-2 flex flex-wrap justify-center gap-1.5 sm:justify-start">
+          {laptop.specs.map((spec) => <li class="rounded-full bg-muted px-2 py-0.5 text-xs text-foreground">{spec}</li>)}
+        </ul>
+      </div>
+    </a>
 
-      <ul class="mt-3 grid grid-cols-3 gap-3">
-        {gear.map(({ name, model, detail, image }) => (
-          <li class="rounded-xl p-3 text-center sm:p-4">
-            <Image
-              src={gearImages[`/assets/uses/${image}.png`].default}
-              alt={`${model} ${name.toLowerCase()}`}
-              width={220}
-              widths={[160, 220, 330]}
-              sizes="(max-width: 640px) 30vw, 220px"
-              class="mx-auto aspect-square w-full max-w-36 object-contain"
-            />
-            <p class="mt-2 text-xs text-muted-foreground">{name}</p>
-            <p class="text-sm font-medium text-heading">{model}</p>
-            <p class="text-xs text-muted-foreground">{detail}</p>
+    <!-- The card above ends in 12px of padding, so 4px more makes the usual 16px -->
+    <ul class="mt-1 grid grid-cols-3 gap-3">
+      {gear.map(({ name, model, detail, image }) => (
+        <li class="text-center">
+          <Image
+            src={gearImages[`/assets/uses/${image}.png`].default}
+            alt={`${model} ${name.toLowerCase()}`}
+            width={190}
+            widths={[128, 190, 285]}
+            sizes="(max-width: 640px) 30vw, 128px"
+            class="mx-auto aspect-square w-full max-w-32 object-contain"
+          />
+          <p class="mt-2 text-xs text-muted-foreground">{name}</p>
+          <p class="text-sm font-medium text-heading">{model}</p>
+          <p class="text-xs text-muted-foreground">{detail}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  {sections.map(({ id, title, tools }) => (
+    <section id={id} class={section}>
+      <h2 class={sectionTitle}>{title}</h2>
+      <!-- ToolItem rows carry 8px of padding top and bottom; pulling the list up 8px
+           keeps the title's 12px gap to the first icon, like every other section -->
+      <ul class="-mt-2 grid gap-x-6 sm:grid-cols-2">
+        {tools.map((tool) => (
+          <li>
+            <ToolItem {...tool} />
           </li>
         ))}
       </ul>
+      {id === "terminal" && (
+        <figure class="mt-4">
+          <BlurImage
+            src={terminalImage}
+            alt="Ubuntu terminal with Zsh and the Pure prompt, running in Windows Terminal"
+            widths={[592, 1184]}
+            sizes="(max-width: 640px) 100vw, 592px"
+            data-zoom
+            class="w-full rounded-lg border border-border"
+          />
+          <figcaption class="mt-2 text-center text-xs text-balance text-muted-foreground">
+            My desktop: Ubuntu on WSL2 in Windows Terminal, with the Seelen UI dock and the Nusa notch.
+          </figcaption>
+        </figure>
+      )}
     </section>
+  ))}
 
-    {sections.map(({ id, title, tools }) => (
-      <section id={id} class="scroll-mt-8">
-        <Heading>{title}</Heading>
-        <ul class="mt-4 grid gap-x-6 gap-y-1 sm:grid-cols-2">
-          {tools.map((tool) => (
-            <li>
-              <ToolItem {...tool} />
-            </li>
-          ))}
-        </ul>
-        {id === "terminal" && (
-          <figure class="mt-6">
-            <Image
-              src={terminalImage}
-              alt="Ubuntu terminal with Zsh and the Pure prompt, running in Windows Terminal"
-              widths={[480, 720, 1080]}
-              sizes="(max-width: 768px) 100vw, 720px"
-              class="w-full rounded-lg border border-border"
-            />
-            <figcaption class="mt-2 text-right text-xs text-muted-foreground">
-              My desktop: Ubuntu on WSL2 in Windows Terminal, with the Seelen UI dock and the Nusa notch.
-            </figcaption>
-          </figure>
-        )}
-      </section>
-    ))}
-  </div>
-
-  <Separator class="mt-16 mb-6" />
-  <p class="text-sm text-muted-foreground">
+  <p class="mt-10 text-sm text-muted-foreground">
     Curious what other people use? Browse <Link href="https://uses.tech/">uses.tech</Link> for setups shared by people
     around the web.
   </p>
-</PageLayout>
+</StoryLayout>
