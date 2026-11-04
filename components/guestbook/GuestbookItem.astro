@@ -9,6 +9,7 @@ import Smile from "@/components/icons/Smile.astro"
 import Trash2 from "@/components/icons/Trash2.astro"
 import X from "@/components/icons/X.astro"
 import GuestbookMessage from "./GuestbookMessage.astro"
+import { MAX_MESSAGE } from "@/lib/guestbook/rich-text"
 import { timeAgo, type GuestbookEntry } from "@/lib/guestbook"
 
 export interface Props {
@@ -81,12 +82,12 @@ const actionIcon = "size-3 transition-transform active:scale-125 sm:size-3.5"
     <div class="text-sm break-words whitespace-pre-wrap text-foreground">
       {isLong ? (
         <>
-          <span data-short><GuestbookMessage text={`${words.slice(0, 60).join(" ")}...`} /></span>
-          <span data-full hidden><GuestbookMessage text={entry.message} /></span>
+          <span data-short><GuestbookMessage text={`${words.slice(0, 60).join(" ")}...`} format={entry.format} /></span>
+          <span data-full hidden><GuestbookMessage text={entry.message} format={entry.format} /></span>
           <button type="button" data-action="more" class="ml-1 cursor-pointer text-xs font-medium text-blue-500 transition-colors hover:text-blue-600 sm:text-sm">See more</button>
         </>
       ) : (
-        <GuestbookMessage text={entry.message} />
+        <GuestbookMessage text={entry.message} format={entry.format} />
       )}
     </div>
 
@@ -136,7 +137,7 @@ const actionIcon = "size-3 transition-transform active:scale-125 sm:size-3.5"
     {isAdmin && (
       <form data-reply-form hidden class="mt-2 flex gap-1.5 sm:mt-3 sm:gap-2">
         <div class="relative flex-1">
-          <Input name="message" placeholder="Write a reply..." aria-label="Reply" required class="min-h-[34px] rounded-lg pr-8 text-xs sm:min-h-[38px] sm:rounded-xl sm:pr-10 sm:text-sm" />
+          <Input name="message" placeholder="Write a reply..." aria-label="Reply" required maxlength={MAX_MESSAGE} data-rich-text class="min-h-[34px] rounded-lg pr-8 text-xs sm:min-h-[38px] sm:rounded-xl sm:pr-10 sm:text-sm" />
           <button type="button" data-action="cancel-reply" aria-label="Cancel reply" class="absolute top-1/2 right-2 -translate-y-1/2 cursor-pointer text-zinc-400 hover:text-zinc-600 sm:right-3">
             <X class="size-3 sm:size-3.5" />
           </button>
@@ -172,7 +173,7 @@ const actionIcon = "size-3 transition-transform active:scale-125 sm:size-3.5"
                   )}
                 </div>
               </div>
-              <div class="text-xs break-words text-zinc-600 sm:text-sm dark:text-zinc-400"><GuestbookMessage text={reply.message} /></div>
+              <div class="text-xs break-words text-zinc-600 sm:text-sm dark:text-zinc-400"><GuestbookMessage text={reply.message} format={reply.format} /></div>
             </div>
           </div>
         ))}
