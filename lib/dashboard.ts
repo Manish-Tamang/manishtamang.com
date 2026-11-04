@@ -102,21 +102,36 @@ const getReactionTotals = async (): Promise<Record<string, number>> => {
   }
 }
 
+// Past this, a source counts as down and its section renders empty, so one slow API
+// can't hold the page. Only matters when the CDN has no copy (see the page's headers).
+const SOURCE_TIMEOUT = 3500
+
+function within<T>(promise: Promise<T>, fallback: T, name: string): Promise<T> {
+  let timer: ReturnType<typeof setTimeout> | undefined
+  const timeout = new Promise<T>((resolve) => {
+    timer = setTimeout(() => {
+      console.warn(`Dashboard: ${name} took over ${SOURCE_TIMEOUT}ms, rendering without it`)
+      resolve(fallback)
+    }, SOURCE_TIMEOUT)
+  })
+  return Promise.race([promise, timeout]).finally(() => clearTimeout(timer))
+}
+
 // All at once, so the page waits for the slowest source rather than the sum of them
 export async function getDashboardData(origin: URL) {
   const [wakatime, totals, sessions, bookmarks, tracks, topArtists, topAlbums, contributions, reading, coding, views, reactions] = await Promise.all([
-    getWakaTime(),
-    getUmamiTotals(),
-    getUmamiRecentSessions(3),
-    getBookmarks(origin),
-    getTracks(),
-    getArtists(),
-    getAlbums(),
-    getGraph(),
-    getReading(),
-    getCoding(),
-    getViews(),
-    getReactionTotals(),
+    within(getWakaTime(), null, "WakaTime"),
+    within(getUmamiTotals(), null, "Umami totals"),
+    within(getUmamiRecentSessions(3), [], "Umami sessions"),
+    within(getBookmarks(origin), [], "daily.dev bookmarks"),
+    within(getTracks(), [], "Last.fm tracks"),
+    within(getArtists(), [], "Last.fm artists"),
+    within(getAlbums(), [], "Last.fm albums"),
+    within(getGraph(), [], "GitHub contributions"),
+    within(getReading(), { days: [], streak: null }, "daily.dev reading"),
+    within(getCoding(), [], "WakaTime days"),
+    within(getViews(), {}, "blog views"),
+    within(getReactionTotals(), {}, "blog reactions"),
   ])
   return { wakatime, totals, sessions, bookmarks, tracks, topArtists, topAlbums, contributions, reading, coding, views, reactions }
 }
