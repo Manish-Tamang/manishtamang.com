@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro"
 import { SUPABASE_URL } from "astro:env/server"
 import { adminEmail, getUser } from "@/lib/auth"
-import { getGuestbookEntries, TABLE } from "@/lib/guestbook"
+import { fetchGuestbookRows, shapeGuestbookEntries, TABLE } from "@/lib/guestbook"
 import { sendGuestbookEmails } from "@/lib/guestbook/email"
 import { MAX_MESSAGE } from "@/lib/guestbook/rich-text"
 import { supabase } from "@/lib/services/supabase"
@@ -17,8 +17,8 @@ const findEntry = async (id: string, columns: string) => {
 
 export const GET: APIRoute = async ({ request }) => {
   try {
-    const user = await getUser(request)
-    return Response.json({ entries: await getGuestbookEntries(user?.email) })
+    const [user, rows] = await Promise.all([getUser(request), fetchGuestbookRows()])
+    return Response.json({ entries: shapeGuestbookEntries(rows, user?.email) })
   } catch (error) {
     console.error(error)
     return fail("Failed to fetch", 500)
