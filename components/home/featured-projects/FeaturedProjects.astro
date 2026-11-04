@@ -1,6 +1,6 @@
 ---
 import type { ImageMetadata } from "astro"
-import { Image } from "astro:assets"
+import BlurImage from "@/components/ui/BlurImage.astro"
 import Heading from "@/components/typography/Heading.astro"
 import Text from "@/components/typography/Text.astro"
 import Link from "@/components/ui/Link.astro"
@@ -24,7 +24,7 @@ const truncateWords = (text: string, maxWords: number) => {
     {featuredProjects.map(({ title, tagline, excerpt, link, image }) => (
       <li>
         <a href={link} target="_blank" rel="noopener noreferrer" class="group flex flex-col gap-4 md:flex-row md:items-center md:gap-5">
-          <Image
+          <BlurImage
             src={images[`/assets/projects/${image}`].default}
             alt={title}
             widths={[180, 360, 720]}
