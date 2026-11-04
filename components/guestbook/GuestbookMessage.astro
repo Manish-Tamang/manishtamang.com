@@ -1,13 +1,16 @@
 ---
-import { linkParts } from "@/lib/guestbook"
+/*
+ * A guestbook message as safe HTML: rich text for new messages, linked URLs for
+ * plain ones from before (lib/guestbook/rich-text.ts escapes everything else).
+ */
+import { messageHtml, richTextClass, type MessageFormat } from "@/lib/guestbook/rich-text"
 
 export interface Props {
   text: string
+  format: MessageFormat
 }
 
-const { text } = Astro.props
+const { text, format } = Astro.props
 ---
 
-{linkParts(text).map((part, index) =>
-  index % 2 ? <a href={part} target="_blank" rel="noopener noreferrer" class="text-link underline underline-offset-4">{part}</a> : part,
-)}
+<span class={richTextClass} set:html={messageHtml(text, format)} />
