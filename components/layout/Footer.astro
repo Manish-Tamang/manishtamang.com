@@ -1,5 +1,4 @@
 ---
-import { PUBLIC_FEEDBACK_FISH_ID } from "astro:env/client"
 import { site } from "@/lib/site"
 import Container from "./Container.astro"
 import ThemeSwitcher from "./ThemeSwitcher.astro"
@@ -42,16 +41,6 @@ const badges = [
         </div>
       </div>
       <div class="ml-auto flex flex-col items-end gap-4">
-        <!-- {PUBLIC_FEEDBACK_FISH_ID && (
-          <button type="button" data-feedback-fish class="inline-flex cursor-pointer items-center gap-1.5 text-xs text-muted-foreground transition-colors hover:text-heading">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-3.5" aria-hidden="true">
-              <circle cx="12" cy="12" r="10"></circle>
-              <path d="M12 16v-4"></path>
-              <path d="M12 8h.01"></path>
-            </svg>
-            Feedback
-          </button>
-        )} -->
         <ThemeSwitcher />
       </div>
     </div>
@@ -73,4 +62,3 @@ const badges = [
   </Container>
 </footer>
 
-{PUBLIC_FEEDBACK_FISH_ID && <script is:inline defer src={`https://feedback.fish/ff.js?pid=${PUBLIC_FEEDBACK_FISH_ID}`}></script>}
