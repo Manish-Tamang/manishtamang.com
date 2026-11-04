@@ -3,6 +3,7 @@
  * the rest of the page working.
  */
 import { getAllViews } from "@/lib/blog/views"
+import { getAllReactions } from "@/lib/blog/reactions"
 import { getReadingActivity, type DailyBookmark, type ReadingActivity } from "@/lib/services/daily"
 import { getContributions, type Contribution } from "@/lib/services/github"
 import { getRecentTracks, getTopAlbums, getTopArtists, type RecentTrack, type TopItem } from "@/lib/services/lastfm"
@@ -92,9 +93,18 @@ const getViews = async (): Promise<Record<string, number>> => {
   }
 }
 
+const getReactionTotals = async (): Promise<Record<string, number>> => {
+  try {
+    return await getAllReactions()
+  } catch (error) {
+    console.error("Failed to fetch blog reactions:", error)
+    return {}
+  }
+}
+
 // All at once, so the page waits for the slowest source rather than the sum of them
 export async function getDashboardData(origin: URL) {
-  const [wakatime, totals, sessions, bookmarks, tracks, topArtists, topAlbums, contributions, reading, coding, views] = await Promise.all([
+  const [wakatime, totals, sessions, bookmarks, tracks, topArtists, topAlbums, contributions, reading, coding, views, reactions] = await Promise.all([
     getWakaTime(),
     getUmamiTotals(),
     getUmamiRecentSessions(3),
@@ -106,6 +116,7 @@ export async function getDashboardData(origin: URL) {
     getReading(),
     getCoding(),
     getViews(),
+    getReactionTotals(),
   ])
-  return { wakatime, totals, sessions, bookmarks, tracks, topArtists, topAlbums, contributions, reading, coding, views }
+  return { wakatime, totals, sessions, bookmarks, tracks, topArtists, topAlbums, contributions, reading, coding, views, reactions }
 }
