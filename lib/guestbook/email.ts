@@ -1,6 +1,7 @@
 /* Guestbook notification emails, sent through Resend's API. */
 import { RESEND_API_KEY } from "astro:env/server"
 import { adminEmail } from "@/lib/auth"
+import { richTextHtml } from "./rich-text"
 
 const escapeHtml = (text: string) =>
   text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;")
@@ -16,7 +17,8 @@ async function send(email: { from: string; to: string; subject: string; html: st
 
 export async function sendGuestbookEmails({ id, name, email, message }: { id: string; name: string; email: string; message: string }) {
   const safeName = escapeHtml(name)
-  const safeMessage = escapeHtml(message || "(image)")
+  // New messages are rich text; richTextHtml escapes everything but its own tags
+  const safeMessage = message ? richTextHtml(message) : "(image)"
   const dateStr = new Date().toLocaleDateString("en-US", {
     weekday: "long",
     year: "numeric",
