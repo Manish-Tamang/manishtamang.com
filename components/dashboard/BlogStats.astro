@@ -1,23 +1,23 @@
 ---
 import DashIcon from "./DashIcon.astro"
-import blogReactions from "@/data/blog/reactions.json"
 import blogViews from "@/data/blog/views.json"
+import { snapshotCounts, total } from "@/lib/blog/reactions"
 
 export interface Props {
-  /** Live counts; the build-time snapshot fills any gaps. */
+  /** Live counts; the build-time snapshots fill any gaps. */
   views: Record<string, number>
+  reactions: Record<string, number>
 }
 
-const { views: live } = Astro.props
+const { views: live, reactions: liveReactions } = Astro.props
 
-const reactions = blogReactions as Record<string, number>
 const snapshot = blogViews as Record<string, number>
 const rows = __BLOG_INDEX__
   .map(({ slug, title }) => ({
     slug,
     title,
     views: live[slug] ?? snapshot[slug] ?? 0,
-    reactions: reactions[slug] ?? 0,
+    reactions: liveReactions[slug] ?? total(snapshotCounts(slug)),
   }))
   .sort((a, b) => b.views - a.views || b.reactions - a.reactions)
 
