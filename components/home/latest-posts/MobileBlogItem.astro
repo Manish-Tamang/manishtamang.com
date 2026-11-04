@@ -1,5 +1,5 @@
 ---
-import { Image } from "astro:assets"
+import BlurImage from "@/components/ui/BlurImage.astro"
 import ArrowUpRight from "@/components/icons/ArrowUpRight.astro"
 import { formatDate, type Post } from "@/lib/blog"
 
@@ -13,7 +13,7 @@ const { id, data } = Astro.props.post
 <a href={`/blog/${id}`} class="group flex items-center gap-4 rounded-xl bg-foreground/5 p-2 transition-colors hover:bg-foreground/8">
   <div class="h-16 w-[100px] shrink-0 overflow-hidden rounded-lg border border-border bg-muted">
     {data.cover ? (
-      <Image src={data.cover} alt={data.title} width={200} quality={70} class="size-full object-cover grayscale transition-all duration-500 group-hover:grayscale-0" />
+      <BlurImage src={data.cover} alt={data.title} width={200} quality={70} class="size-full object-cover grayscale transition-all duration-500 group-hover:grayscale-0" />
     ) : (
       <div class="flex size-full items-center justify-center text-xs text-muted-foreground">No image</div>
     )}
