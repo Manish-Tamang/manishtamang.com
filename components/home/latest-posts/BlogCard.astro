@@ -1,5 +1,5 @@
 ---
-import { Image } from "astro:assets"
+import BlurImage from "@/components/ui/BlurImage.astro"
 import GitHub from "@/components/icons/GitHub.astro"
 import { formatDate, type Post } from "@/lib/blog"
 
@@ -23,7 +23,7 @@ const rotations = ["-rotate-3", "rotate-1", "rotate-3"]
 >
   <div class="relative h-36 w-full overflow-hidden rounded-t-xl bg-muted">
     {data.cover ? (
-      <Image src={data.cover} alt={data.title} widths={[260, 520]} sizes="260px" quality={75} class="size-full object-cover transition-transform duration-500 group-hover:scale-110" />
+      <BlurImage src={data.cover} alt={data.title} widths={[260, 520]} sizes="260px" quality={75} class="size-full object-cover transition-transform duration-500 group-hover:scale-110" />
     ) : (
       <div class="flex size-full items-center justify-center">
         <GitHub class="size-8 text-zinc-400/20" />
