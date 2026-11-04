@@ -36,7 +36,12 @@ export default defineConfig({
 
   // The Next.js site serves /about, never /about/ — keep URLs identical.
   trailingSlash: "never",
-  build: { format: "file" },
+  build: {
+    format: "file",
+    // The site's CSS is ~18 KB (~5 KB compressed). Inlining it saves the round trip that
+    // held the first paint on slow phones, for a few KB more per page.
+    inlineStylesheets: "always",
+  },
 
   env: {
     schema: {
