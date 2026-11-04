@@ -4,7 +4,7 @@
  * columns; the last card in each stretches so the bottoms line up. On phones the
  * columns dissolve (`contents`) and the cards reflow into the old two-column grid.
  */
-import { Image } from "astro:assets"
+import { Image, getImage } from "astro:assets"
 import BlurImage from "@/components/ui/BlurImage.astro"
 import Heading from "@/components/typography/Heading.astro"
 import Text from "@/components/typography/Text.astro"
@@ -17,10 +17,13 @@ import miniGole from "@/assets/images/mini-gole.jpg"
 import profile from "@/assets/images/profile.png"
 import hungerStrikeAlbum from "@/assets/images/hunger-strike-album.png"
 
+// The disc shows the cover at 70px; the source is a 350 KB PNG
+const albumArt = await getImage({ src: hungerStrikeAlbum, width: 140, format: "webp", quality: 75 })
+
 const recentFavorite = {
   title: "Hunger Strike",
   artist: "Temple of the Dog",
-  albumImageUrl: hungerStrikeAlbum.src,
+  albumImageUrl: albumArt.src,
   songUrl: "https://open.spotify.com/track/0W7AbEauB7cP4pidLclApe",
 }
 
@@ -45,13 +48,17 @@ const cardLink = "mt-3 inline-flex w-fit items-center gap-1 text-sm font-medium 
       </BentoCard>
 
       <BentoCard tone="image" class="order-3 col-span-2 min-h-50 flex-1 md:order-none md:col-span-1 md:min-h-80">
+        <!-- The largest thing on a phone's first screen: load it right away, and size it
+             for the card (a 200px-tall banner on phones, a tall column on desktop) -->
         <BlurImage
           src={miniGole}
           alt="Manish as a kid, standing in front of a stone wall"
           width={800}
-          widths={[280, 420, 560, 800]}
-          sizes="(max-width: 768px) 100vw, 232px"
-          quality={70}
+          widths={[320, 480, 640, 800]}
+          sizes="(max-width: 768px) 100vw, 480px"
+          quality={60}
+          loading="eager"
+          fetchpriority="high"
           class="absolute inset-0 size-full object-cover"
         />
         <div class="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/65 to-transparent px-4 pt-10 pb-3">
