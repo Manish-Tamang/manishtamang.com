@@ -1,16 +1,16 @@
 ---
 import type { ImageMetadata } from "astro"
 import BlurImage from "@/components/ui/BlurImage.astro"
-import PageLayout from "@/layouts/PageLayout.astro"
-import Heading from "@/components/typography/Heading.astro"
+import StoryLayout from "@/layouts/StoryLayout.astro"
 import Link from "@/components/ui/Link.astro"
-import Separator from "@/components/ui/Separator.astro"
 import { bucketList, learningGoals } from "@/data/manifest"
 
 const images = import.meta.glob<{ default: ImageMetadata }>("/assets/manifest/*", { eager: true })
 const imageFor = (file?: string) => (file ? images[`/assets/manifest/${file}`]?.default : undefined)
 
 const doneCount = bucketList.filter(({ done }) => done).length
+
+const sectionTitle = "text-sm font-subsection text-heading"
 
 // Lucide-style line icons for the learning goals
 const icons = {
@@ -23,27 +23,32 @@ const icons = {
 }
 ---
 
-<PageLayout heading="Manifest" description="The goals, bucket list and things Manish Tamang wants to do, written down to keep himself honest.">
-  <p class="text-foreground">
+<!-- In StoryLayout, with the same rhythm as /about and /uses: a 24px lead, then
+     body-size section titles with 32px above and 12px below -->
+<StoryLayout heading="Manifest" description="The goals, bucket list and things Manish Tamang wants to do, written down to keep himself honest.">
+  <p class="text-sm">
+    <span class="mb-3 block font-lead text-lead text-heading">
+      My goals, bucket list and the things I want to do, written down to keep myself honest.
+    </span>
     If you'd like to sponsor anything on this list, reach out through the <Link href="/contact">contact page</Link>.
     Your support means a lot and will be thanked on a page dedicated to my sponsors.
   </p>
 
-  <div class="mt-12 space-y-14">
-    <section>
+  <div>
+    <section class="mt-8">
       <div class="flex items-baseline justify-between gap-4">
-        <Heading>Bucket list</Heading>
-        <p class="text-sm text-muted-foreground tabular-nums">{doneCount} of {bucketList.length} done</p>
+        <h2 class={sectionTitle}>Bucket list</h2>
+        <p class="text-xs text-muted-foreground tabular-nums">{doneCount} of {bucketList.length} done</p>
       </div>
       <div class="mt-3 h-1 overflow-hidden rounded-full bg-muted" aria-hidden="true">
         <div class="h-full rounded-full bg-accent" style={`width: ${(doneCount / bucketList.length) * 100}%`}></div>
       </div>
 
-      <ul class="mt-5 divide-y divide-border border-y border-border">
+      <ul class="mt-3 divide-y divide-border border-y border-border">
         {bucketList.map(({ title, done, image }) => {
           const photo = imageFor(image)
           return (
-            <li class="flex items-center gap-3 py-3">
+            <li class="flex items-center gap-3 py-2.5">
               <button
                 type="button"
                 role="checkbox"
@@ -75,24 +80,25 @@ const icons = {
           )
         })}
       </ul>
-      <p data-bucket-message role="status" aria-live="polite" class="mt-3 min-h-5 text-sm text-danger"></p>
+      <p data-bucket-message role="status" aria-live="polite" class="mt-2 min-h-5.5 text-sm text-danger"></p>
     </section>
 
-    <section>
-      <Heading>Learning goals</Heading>
-      <ul class="mt-4 grid gap-3 sm:grid-cols-3">
+    <!-- The bucket list's message line (8 + 22px) already sits above, so 8px more gives the usual gap -->
+    <section class="mt-2">
+      <h2 class:list={[sectionTitle, "mb-3"]}>Learning goals</h2>
+      <ul class="grid gap-3 sm:grid-cols-3">
         {learningGoals.map(({ title, description, icon, color }, index) => (
-          <li class="group flex flex-col rounded-lg border border-border bg-background p-5 transition-colors hover:border-border-strong">
+          <li class="group flex flex-col rounded-lg border border-border bg-background p-4 transition-colors hover:border-border-strong">
             <span
-              class="flex size-10 items-center justify-center rounded-lg text-white transition-transform group-hover:-rotate-6"
+              class="flex size-9 items-center justify-center rounded-lg text-white transition-transform group-hover:-rotate-6"
               style={`background: ${color}`}
               aria-hidden="true"
             >
-              <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" set:html={icons[icon]} />
+              <svg class="size-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" set:html={icons[icon]} />
             </span>
-            <p class="mt-4 font-medium text-heading">{title}</p>
-            <p class="mt-1 flex-1 text-sm text-muted-foreground">{description}</p>
-            <p class="mt-5 flex items-center justify-between border-t border-dashed border-border pt-3 text-xs text-muted-foreground">
+            <p class="mt-3 text-sm font-subsection text-heading">{title}</p>
+            <p class="flex-1 text-xs text-muted-foreground">{description}</p>
+            <p class="mt-4 flex items-center justify-between border-t border-dashed border-border pt-3 text-xs text-muted-foreground">
               <span class="tabular-nums">Goal {String(index + 1).padStart(2, "0")}</span>
               <span class="flex items-center gap-1.5">
                 <span class="size-1.5 rounded-full" style={`background: ${color}`}></span>
@@ -105,11 +111,10 @@ const icons = {
     </section>
   </div>
 
-  <Separator class="mt-14 mb-6" />
-  <p class="text-sm text-muted-foreground">
+  <p class="mt-8 text-sm text-muted-foreground">
     The bucket list is inspired by <Link href="https://theodorusclarence.com/bucket-list">Theodorus Clarence</Link>.
   </p>
-</PageLayout>
+</StoryLayout>
 
 <style>
   @media (hover: hover) {
