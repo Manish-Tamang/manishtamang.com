@@ -205,6 +205,15 @@ export const ai: { title: string; body: string }[] = [
 
 export const changelog: { date: string; changes: string[] }[] = [
   {
+    date: "2026-11-04",
+    changes: [
+      "Brought back the old blog post reactions, with every count from the old site.",
+      "Photos across the site now load with a blurred preview, including the ones in blog posts.",
+      "Gave /guestbook and /contact the same calmer layout as /about.",
+      "Rewrote /llms.txt with page descriptions, projects and dated posts.",
+    ],
+  },
+  {
     date: "2026-11-03",
     changes: [
       "Rewrote /bio as a story with childhood photos, and gave /about, /uses and /digitalpathshala the same calmer layout.",
