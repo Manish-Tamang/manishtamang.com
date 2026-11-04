@@ -1,5 +1,5 @@
 ---
-import { Image } from "astro:assets"
+import BlurImage from "@/components/ui/BlurImage.astro"
 import PageLayout from "@/layouts/PageLayout.astro"
 import Prose from "@/components/typography/Prose.astro"
 import HCard from "@/components/shared/HCard.astro"
@@ -29,7 +29,7 @@ const others = verify.filter((account) => !account.follow)
     </ul>
 
     <figure>
-      <Image
+      <BlurImage
         src={pfp}
         alt="Black line drawing of me with long wavy hair and a collared shirt"
         width={160}
