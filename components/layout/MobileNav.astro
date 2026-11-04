@@ -42,7 +42,7 @@ const more = navGroups.flatMap(({ links }) => links as readonly { href: string; 
       <a
         href={href}
         aria-current={isActivePath(current, href) ? "page" : undefined}
-        class="group flex items-center gap-3 rounded-xl px-4 py-3 text-base text-foreground/60 transition-all hover:bg-foreground/5 hover:text-foreground aria-[current=page]:bg-foreground/5 aria-[current=page]:text-foreground"
+        class="group flex items-center gap-3 rounded-xl px-4 py-3 text-sm text-foreground/60 transition-all hover:bg-foreground/5 hover:text-foreground aria-[current=page]:bg-foreground/5 aria-[current=page]:text-foreground"
       >
         <span class="flex size-8 items-center justify-center rounded-lg bg-foreground/5 text-foreground/40 transition-colors group-aria-[current=page]:bg-foreground/10 group-aria-[current=page]:text-foreground">
           <svg viewBox={viewBox} fill="currentColor" class="size-4" aria-hidden="true">
