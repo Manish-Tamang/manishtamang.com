@@ -34,6 +34,11 @@ export default defineConfig({
     },
   },
 
+  // Fetch a page's HTML as soon as its link is hovered or focused, so the click opens it
+  // from cache, like the Next.js site's <Link> did. Fetch only: Astro's clientPrerender
+  // would run the page's scripts on hover and count blog views nobody made.
+  prefetch: { prefetchAll: true, defaultStrategy: "hover" },
+
   // The Next.js site serves /about, never /about/ — keep URLs identical.
   trailingSlash: "never",
   build: {
