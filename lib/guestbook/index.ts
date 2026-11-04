@@ -22,6 +22,9 @@ export type GuestbookEntry = {
   likesCount: number
   likedByMe: boolean
   likedByAdmin: boolean
+  /** The admin's emoji, shown as a badge on their avatar like the heart */
+  adminReaction: string | null
+  /** Everyone else's reactions, counted by emoji */
   reactions: GuestbookReaction[]
   myReaction: string | null
   replies?: GuestbookEntry[]
@@ -54,8 +57,11 @@ function toPublicEntry(entry: RawGuestbookEntry, viewerEmail?: string | null): G
   const likes = entry.likes || []
   const reactions = entry.reactions || []
 
+  const fromAdmin = (reaction: string) => Boolean(adminEmail) && reactionEmail(reaction) === adminEmail
+  const adminReaction = reactions.find(fromAdmin)
+
   const counts = new Map<string, number>()
-  for (const reaction of reactions) {
+  for (const reaction of reactions.filter((reaction) => !fromAdmin(reaction))) {
     const emoji = reactionEmoji(reaction)
     counts.set(emoji, (counts.get(emoji) ?? 0) + 1)
   }
@@ -75,6 +81,7 @@ function toPublicEntry(entry: RawGuestbookEntry, viewerEmail?: string | null): G
     likesCount: likes.length,
     likedByMe: Boolean(viewer) && likes.some((email) => normalizeEmail(email) === viewer),
     likedByAdmin: Boolean(adminEmail) && likes.some((email) => normalizeEmail(email) === adminEmail),
+    adminReaction: adminReaction ? reactionEmoji(adminReaction) : null,
     reactions: [...counts].map(([emoji, count]) => ({ emoji, count })),
     myReaction: myReaction ? reactionEmoji(myReaction) : null,
   }
