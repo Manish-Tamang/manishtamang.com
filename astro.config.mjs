@@ -73,7 +73,6 @@ export default defineConfig({
       // Anon key only: the guestbook uploads images straight to Supabase Storage from the browser
       PUBLIC_SUPABASE_URL: envField.string({ context: "client", access: "public", optional: true }),
       PUBLIC_SUPABASE_ANON_KEY: envField.string({ context: "client", access: "public", optional: true }),
-      PUBLIC_FEEDBACK_FISH_ID: envField.string({ context: "client", access: "public", optional: true }),
       PUBLIC_CALENDLY_URL: envField.string({ context: "client", access: "public", optional: true }),
     },
   },
