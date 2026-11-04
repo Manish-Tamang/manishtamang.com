@@ -2,8 +2,9 @@
  * HTML for the guestbook emails: a thank-you to whoever signed it and a
  * notification to me. The wording and order are the old Next.js site's
  * emails (greeting, one line, the message, the date, a button, a sign-off);
- * the look is the new site's: the yeti peeking over a purple bar, Inter and
- * the site's colours. Tables and inline styles only, so Gmail, Outlook and Apple Mail
+ * the look is the new site's, kept plain (white, one column): my avatar as the
+ * sender line, the message as a card like a guestbook entry, Inter and the
+ * site's colours. Tables and inline styles only, so Gmail, Outlook and Apple Mail
  * render it the same; Inter where the client has it, system sans otherwise.
  *
  * `message` must already be safe HTML (richTextHtml escapes everything).
@@ -22,13 +23,13 @@ const color = {
   muted: "#626a6a",
   border: "#d7dada",
   subtle: "#f7f8f8",
-  page: "#eef0f0",
 }
 
 const font = "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif"
 
-// Every block starts on the same 40px left edge as the yeti and the title
-const PAD = 40
+// A plain 560px column like Vercel's emails, with a gutter on small screens
+const WIDTH = 560
+const GUTTER = 24
 
 const escape = (text: string) =>
   text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;")
@@ -59,20 +60,31 @@ const styleMessage = (html: string) =>
       `<code style="padding:1px 4px;border-radius:3px;background-color:#eef0f0;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">`,
     )
 
-// The label sits inside the box above the message, as on the old site
-const quote = (label: string, html: string) => `
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0;">
+// The message as a card, laid out like a guestbook entry: who wrote it and when,
+// then the message. The label above it is the old emails' "Your message".
+const card = ({ label, name, avatarUrl, date, html }: { label: string; name: string; avatarUrl?: string | null; date: string; html: string }) => `
+<p style="margin:0 0 8px;font-family:${font};font-size:13px;line-height:20px;color:${color.muted};">${label}</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0;border:1px solid ${color.border};border-radius:8px;border-collapse:separate;">
   <tr>
-    <td style="padding:14px 16px;background-color:${color.subtle};border-left:3px solid ${color.purple};border-radius:0 6px 6px 0;font-family:${font};font-size:14px;line-height:22px;color:${color.text};word-break:break-word;">
-      <p style="margin:0 0 6px;font-family:${font};font-size:13px;line-height:20px;font-weight:600;color:${color.heading};">${label}</p>
-      <div style="white-space:pre-wrap;">${styleMessage(html)}</div>
+    <td style="padding:16px;">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          ${
+            avatarUrl
+              ? `<td style="padding:0 10px 0 0;vertical-align:middle;"><img src="${avatarUrl}" width="24" height="24" alt="" style="display:block;width:24px;height:24px;border-radius:50%;border:0;"></td>`
+              : ""
+          }
+          <td style="vertical-align:middle;font-family:${font};font-size:14px;line-height:22px;">
+            <span style="font-weight:600;color:${color.heading};">${escape(name)}</span><span style="color:${color.muted};">&nbsp;&nbsp;·&nbsp;&nbsp;${date}</span>
+          </td>
+        </tr>
+      </table>
+      <div style="margin:10px 0 0;font-family:${font};font-size:14px;line-height:22px;color:${color.text};white-space:pre-wrap;word-break:break-word;">${styleMessage(html)}</div>
     </td>
   </tr>
 </table>`
 
-
-
-function layout({ title, preheader, logoUrl, body }: { title: string; preheader: string; logoUrl: string; body: string }) {
+function layout({ title, preheader, avatarUrl, body }: { title: string; preheader: string; avatarUrl: string; body: string }) {
   const year = new Date().getFullYear()
   return `<!doctype html>
 <html lang="en">
@@ -84,33 +96,41 @@ function layout({ title, preheader, logoUrl, body }: { title: string; preheader:
 <title>${escape(title)}</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 </head>
-<body style="margin:0;padding:0;background-color:${color.page};">
+<body style="margin:0;padding:0;background-color:#ffffff;">
 <!-- Inbox preview text -->
 <div style="display:none;max-height:0;overflow:hidden;opacity:0;">${escape(preheader)}</div>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:${color.page};">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#ffffff;">
   <tr>
-    <td align="center" style="padding:32px 16px 40px;">
-      <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;">
-        <!-- The yeti peeks over the bar: its hands sit right on the card's top edge -->
+    <td align="center" style="padding:40px ${GUTTER}px;">
+      <!-- One plain column: the sender line, the text and the footer share its left edge -->
+      <table role="presentation" width="${WIDTH}" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:${WIDTH}px;">
+        <!-- Sender line: my avatar, name and site -->
         <tr>
-          <td style="padding:0 ${PAD}px;line-height:0;font-size:0;">
-            <a href="${SITE}"><img src="${logoUrl}" width="69" height="56" alt="Manish Tamang" style="display:block;border:0;width:69px;height:56px;"></a>
+          <td>
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td style="padding:0 12px 0 0;vertical-align:middle;">
+                  <a href="${SITE}"><img src="${avatarUrl}" width="40" height="40" alt="Manish Tamang" style="display:block;width:40px;height:40px;border-radius:50%;border:1px solid ${color.border};"></a>
+                </td>
+                <td style="vertical-align:middle;font-family:${font};">
+                  <div style="font-size:14px;line-height:20px;font-weight:600;color:${color.heading};">Manish Tamang</div>
+                  <div style="font-size:12px;line-height:18px;"><a href="${SITE}" style="color:${color.muted};text-decoration:none;">manishtamang.com</a></div>
+                </td>
+              </tr>
+            </table>
           </td>
         </tr>
-        <tr><td style="height:6px;line-height:6px;font-size:0;background-color:${color.purple};border-radius:4px 4px 0 0;">&nbsp;</td></tr>
         <tr>
-          <td style="padding:32px ${PAD}px 36px;background-color:#ffffff;border:1px solid ${color.border};border-top:0;border-radius:0 0 4px 4px;">
-            <h1 style="margin:0 0 12px;font-family:${font};font-size:26px;line-height:32px;font-weight:600;letter-spacing:-0.02em;color:${color.heading};">${escape(title)}</h1>
+          <td style="padding:28px 0 0;">
+            <h1 style="margin:0 0 16px;font-family:${font};font-size:18px;line-height:26px;font-weight:600;letter-spacing:-0.014em;color:${color.heading};">${escape(title)}</h1>
             ${body}
           </td>
         </tr>
         <tr>
-          <td style="padding:20px ${PAD}px 0;">
-            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="font-family:${font};font-size:12px;line-height:18px;color:${color.muted};">
-              <tr>
-                <td>© ${year} <a href="${SITE}" style="color:${color.muted};text-decoration:none;">Manish Tamang</a></td>
-              </tr>
-            </table>
+          <td style="padding:36px 0 0;">
+            <div style="border-top:1px solid ${color.border};padding-top:20px;font-family:${font};font-size:12px;line-height:18px;color:${color.muted};">
+              © ${year} <a href="${SITE}" style="color:${color.muted};text-decoration:underline;">Manish Tamang</a>
+            </div>
           </td>
         </tr>
       </table>
@@ -129,7 +149,10 @@ export type GuestbookEmail = {
   message: string
   hasImage: boolean
   postedAt: Date
-  logoUrl?: string
+  /** The visitor's Google or GitHub picture, shown on the message card */
+  avatarUrl?: string | null
+  /** My picture in the sender line; defaults to the one on the site */
+  myAvatarUrl?: string
 }
 
 // "4 November 2026 at 14:57", in Nepal time
@@ -143,9 +166,14 @@ const sentLabel = (date: Date) =>
     minute: "2-digit",
   })
 
-const message = (label: string, { message, hasImage }: GuestbookEmail) =>
-  quote(label, message || `<span style="color:${color.muted};">(An image, no text)</span>`) +
-  (message && hasImage ? p("With an image attached.", `margin:8px 0 0;color:${color.muted};`) : "")
+const message = (label: string, entry: GuestbookEmail) =>
+  card({
+    label,
+    name: entry.name,
+    avatarUrl: entry.avatarUrl,
+    date: sentLabel(entry.postedAt),
+    html: entry.message || `<span style="color:${color.muted};">(An image, no text)</span>`,
+  }) + (entry.message && entry.hasImage ? muted("With an image attached.", "margin:8px 0 0;") : "")
 
 const muted = (html: string, extra = "") => p(html, `font-size:13px;line-height:20px;color:${color.muted};${extra}`)
 
@@ -157,12 +185,11 @@ export function thankYouEmail(entry: GuestbookEmail) {
   return layout({
     title: "Thank you for your message",
     preheader: "Thank you for leaving a message in my guestbook.",
-    logoUrl: entry.logoUrl ?? `${SITE}/images/email/yeti.png`,
+    avatarUrl: entry.myAvatarUrl ?? `${SITE}/images/email/avatar.png`,
     body: [
       p(`Hello <strong style="font-weight:600;color:${color.heading};">${escape(entry.name)}</strong>,`),
       p("Thank you for leaving a message in my guestbook. I truly appreciate your feedback and support.", "margin:0 0 20px;"),
       message("Your message", entry),
-      muted(`Sent on ${sentLabel(entry.postedAt)}`, "margin:12px 0 0;"),
       button(`${SITE}/guestbook#${entry.id}`, "View your message"),
       signOff,
     ].join("\n"),
@@ -174,7 +201,7 @@ export function notificationEmail(entry: GuestbookEmail) {
   return layout({
     title: "New guestbook entry",
     preheader: `A new message was just posted to your guestbook by ${entry.name}.`,
-    logoUrl: entry.logoUrl ?? `${SITE}/images/email/yeti.png`,
+    avatarUrl: entry.myAvatarUrl ?? `${SITE}/images/email/avatar.png`,
     body: [
       p(`Hello <strong style="font-weight:600;color:${color.heading};">Manish</strong>,`),
       p(
@@ -182,7 +209,6 @@ export function notificationEmail(entry: GuestbookEmail) {
         "margin:0 0 20px;",
       ),
       message("Message content", entry),
-      muted(`Sent on ${sentLabel(entry.postedAt)}`, "margin:12px 0 0;"),
       button(`${SITE}/guestbook#${entry.id}`, "View the message"),
       signOff,
     ].join("\n"),
