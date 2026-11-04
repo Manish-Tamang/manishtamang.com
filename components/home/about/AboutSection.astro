@@ -5,6 +5,7 @@
  * columns dissolve (`contents`) and the cards reflow into the old two-column grid.
  */
 import { Image } from "astro:assets"
+import BlurImage from "@/components/ui/BlurImage.astro"
 import Heading from "@/components/typography/Heading.astro"
 import Text from "@/components/typography/Text.astro"
 import ArrowUpRight from "@/components/icons/ArrowUpRight.astro"
@@ -44,7 +45,7 @@ const cardLink = "mt-3 inline-flex w-fit items-center gap-1 text-sm font-medium 
       </BentoCard>
 
       <BentoCard tone="image" class="order-3 col-span-2 min-h-50 flex-1 md:order-none md:col-span-1 md:min-h-80">
-        <Image
+        <BlurImage
           src={miniGole}
           alt="Manish as a kid, standing in front of a stone wall"
           width={800}
