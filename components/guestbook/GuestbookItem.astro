@@ -28,6 +28,14 @@ const reveal = "opacity-100 transition-opacity sm:opacity-0 sm:group-hover:opaci
 const iconButton = "cursor-pointer p-0.5 text-zinc-400 transition-colors sm:p-1"
 const action = "flex cursor-pointer items-center gap-1 text-xs transition-colors sm:gap-1.5"
 const actionIcon = "size-3 transition-transform active:scale-125 sm:size-3.5"
+
+// The admin's like and emoji show the same way: small round badges on their avatar
+const adminTitle = [entry.likedByAdmin && "Liked", entry.adminReaction && `reacted ${entry.adminReaction}`]
+  .filter(Boolean)
+  .join(" and ")
+// Round badges with a ring in the page colour. The heart stays a small 14px dot; the
+// emoji badge is 18px with a 12px emoji, so it reads next to the 20px avatar
+const badge = "flex items-center justify-center rounded-full border border-background"
 ---
 
 <div
@@ -36,12 +44,19 @@ const actionIcon = "size-3 transition-transform active:scale-125 sm:size-3.5"
   data-name={entry.name}
   class="group relative -mx-2 flex scroll-mt-24 gap-2 rounded-xl p-2 transition-all duration-700 target:bg-blue-500/5 target:ring-1 target:ring-blue-500/20 sm:gap-4 dark:target:bg-blue-500/10"
 >
-  {entry.likedByAdmin && (
-    <span class="absolute -right-1 bottom-2 z-10" title="Liked by Manish">
+  {(entry.likedByAdmin || entry.adminReaction) && (
+    <span class="absolute -right-1 bottom-2 z-10" title={`${adminTitle.charAt(0).toUpperCase()}${adminTitle.slice(1)} by Manish`}>
       <span class="relative block">
-        <img src="https://github.com/Manish-Tamang.png" alt="" width="20" height="20" loading="lazy" class="size-4 rounded-full border border-white object-cover shadow-sm sm:size-5 dark:border-zinc-900" />
-        <span class="absolute -right-1 -bottom-1 rounded-full border border-white bg-red-500 p-0.5 dark:border-zinc-900">
-          <Heart class="size-1.5 fill-current text-white" />
+        <img src="https://github.com/Manish-Tamang.png" alt="" width="20" height="20" loading="lazy" class="size-4 rounded-full border border-background object-cover shadow-sm sm:size-5" />
+        <span class="absolute -right-2 -bottom-2 flex items-end -space-x-1">
+          {entry.adminReaction && (
+            <span class:list={[badge, "size-4.5 bg-background text-xs leading-none shadow-sm"]}>{entry.adminReaction}</span>
+          )}
+          {entry.likedByAdmin && (
+            <span class:list={[badge, "size-3.5 bg-red-500"]}>
+              <Heart class="size-2 fill-current text-white" />
+            </span>
+          )}
         </span>
       </span>
     </span>
@@ -120,9 +135,19 @@ const actionIcon = "size-3 transition-transform active:scale-125 sm:size-3.5"
             <Smile class={actionIcon} />
             <span class="hidden sm:inline">React</span>
           </summary>
-          <div class="absolute bottom-full left-0 z-20 mb-1 grid grid-cols-4 gap-0.5 rounded-xl border border-zinc-200 bg-white/95 p-1.5 shadow-2xl backdrop-blur-md sm:gap-1 sm:rounded-2xl sm:p-2 dark:border-zinc-800 dark:bg-zinc-900/95">
+          <!-- w-max: sized by its buttons, not squeezed to the width of "React" -->
+          <div class="absolute bottom-full left-0 z-20 mb-1.5 grid w-max grid-cols-4 gap-0.5 rounded-2xl border border-border bg-background p-1 shadow-lg sm:grid-cols-8 sm:rounded-full">
             {EMOJIS.map((emoji) => (
-              <button type="button" data-action="react" data-emoji={emoji} class="flex size-8 cursor-pointer items-center justify-center rounded-lg text-lg transition-all hover:scale-125 hover:bg-zinc-200 active:scale-90 sm:size-9 sm:rounded-xl sm:text-xl dark:hover:bg-zinc-800">{emoji}</button>
+              <button
+                type="button"
+                data-action="react"
+                data-emoji={emoji}
+                aria-label={`React ${emoji}`}
+                aria-pressed={String(emoji === entry.myReaction)}
+                class="flex size-8 cursor-pointer items-center justify-center rounded-full text-lg leading-none transition-[scale,background-color] hover:scale-110 hover:bg-foreground/5 active:scale-95 aria-pressed:bg-foreground/10"
+              >
+                {emoji}
+              </button>
             ))}
           </div>
         </details>
