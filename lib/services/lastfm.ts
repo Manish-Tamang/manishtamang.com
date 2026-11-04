@@ -143,6 +143,9 @@ export const getTopAlbums = async (limit = 5): Promise<TopItem[]> => {
 // Artwork rarely changes, so remember lookups for a day per server instance
 const artworkCache = new Map<string, { url?: string; expires: number }>()
 
+// Artwork is optional, so a slow lookup gives up rather than holding the page
+const ARTWORK_TIMEOUT = 1500
+
 // Last.fm lacks artwork for many smaller releases, so fall back to the iTunes catalog
 const getItunesArtwork = async (title: string, artist: string) => {
   const key = `${artist}\u0000${title}`
@@ -151,7 +154,7 @@ const getItunesArtwork = async (title: string, artist: string) => {
 
   try {
     const params = new URLSearchParams({ term: `${artist} ${title}`, entity: "song", limit: "5" })
-    const response = await fetch(`${ITUNES_SEARCH_ENDPOINT}?${params}`)
+    const response = await fetch(`${ITUNES_SEARCH_ENDPOINT}?${params}`, { signal: AbortSignal.timeout(ARTWORK_TIMEOUT) })
     if (!response.ok) return undefined
 
     const { results } = await response.json()
@@ -177,7 +180,9 @@ const getDeezerArtistImage = async (name: string) => {
   if (cached && cached.expires > Date.now()) return cached.url
 
   try {
-    const response = await fetch(`${DEEZER_ARTIST_ENDPOINT}?${new URLSearchParams({ q: name, limit: "10" })}`)
+    const response = await fetch(`${DEEZER_ARTIST_ENDPOINT}?${new URLSearchParams({ q: name, limit: "10" })}`, {
+      signal: AbortSignal.timeout(ARTWORK_TIMEOUT),
+    })
     if (!response.ok) return undefined
 
     const { data } = await response.json()
