@@ -1,5 +1,5 @@
 ---
-import { Image } from "astro:assets"
+import BlurImage from "@/components/ui/BlurImage.astro"
 import PageLayout from "@/layouts/PageLayout.astro"
 import Link from "@/components/ui/Link.astro"
 import Heading from "@/components/typography/Heading.astro"
@@ -23,7 +23,7 @@ const songs = [
   description="A tribute to Chris Cornell, and the songs of his I keep coming back to."
 >
   <figure class="relative mb-12 overflow-hidden rounded-xl bg-black">
-    <Image
+    <BlurImage
       src={hero}
       alt="Chris Cornell on stage, one arm stretched out toward the crowd"
       widths={[640, 1024, 1600, 2000]}
@@ -32,7 +32,8 @@ const songs = [
       format="webp"
       loading="eager"
       fetchpriority="high"
-      class="aspect-[5/2] w-full object-cover object-[50%_30%]"
+      position="50% 30%"
+      class="aspect-[5/2] w-full object-cover"
     />
     <figcaption class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-5 pt-12 pb-4 text-white">
       <p class="text-lg font-semibold">Chris Cornell</p>
