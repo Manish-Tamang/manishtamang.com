@@ -1,7 +1,8 @@
 ---
 /*
  * Draggable note. Place it with position classes on `class`; the dragged
- * offset is remembered per browser, relative to that spot.
+ * offset is remembered per browser, relative to that spot. Double-click puts
+ * it back.
  */
 export interface Props {
   id: string
@@ -29,6 +30,16 @@ const { id, rotation = 0, background, label, class: className } = Astro.props
   </div>
 </div>
 
+<!-- Before first paint, so a dragged note shows in its spot instead of jumping there
+     once the page's scripts have loaded -->
+<script is:inline define:vars={{ id }}>
+  try {
+    const offset = JSON.parse(localStorage.getItem(`sticky-note-${id}`) || "null")
+    const note = document.querySelector(`[data-sticky-note="${id}"]`)
+    if (offset && note) note.style.transform = `translate(${offset.x}px, ${offset.y}px)`
+  } catch {}
+</script>
+
 <script>
   for (const note of document.querySelectorAll<HTMLElement>("[data-sticky-note]")) {
     const key = `sticky-note-${note.dataset.stickyNote}`
@@ -37,10 +48,24 @@ const { id, rotation = 0, background, label, class: className } = Astro.props
 
     const place = () => (note.style.transform = `translate(${offset.x}px, ${offset.y}px)`)
 
+    const reset = () => {
+      offset = { x: 0, y: 0 }
+      place()
+      try {
+        localStorage.removeItem(key)
+      } catch {}
+    }
+
     try {
       offset = JSON.parse(localStorage.getItem(key) ?? "") ?? offset
-      place()
     } catch {}
+
+    // An offset saved on a wider window can leave the note mostly off-screen here
+    const rect = note.getBoundingClientRect()
+    const visible = Math.min(rect.right, innerWidth) - Math.max(rect.left, 0)
+    if (visible < rect.width / 2) reset()
+
+    note.addEventListener("dblclick", reset)
 
     note.addEventListener("pointerdown", (event) => {
       event.preventDefault()
