@@ -139,6 +139,10 @@
   --text-xs: 0.75rem;
   --text-xs--line-height: 1.125rem;
   --text-xs--letter-spacing: 0em;
+  /* Sidebar links: a step under body text, on body's 22px line so rows still line up */
+  --text-nav: 0.8125rem;
+  --text-nav--line-height: 1.375rem;
+  --text-nav--letter-spacing: -0.003em;
   --text-sm: 0.875rem;
   --text-sm--line-height: 1.375rem;
   --text-sm--letter-spacing: -0.006em;
