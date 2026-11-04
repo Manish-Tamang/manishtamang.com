@@ -41,6 +41,7 @@ migration/*
 scripts/migrations/
 scripts/fetch-blog-views.mjs
 scripts/import-blog-views.mjs
+scripts/import-blog-reactions.mjs
 
 # scratch screenshots
 tips.png
