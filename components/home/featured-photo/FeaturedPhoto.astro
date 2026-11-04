@@ -17,7 +17,9 @@ const caption = "Last day of college, Sushma Godawari college"
       data-zoom
       class="w-full rounded-md border border-border"
     />
-    <figcaption class="mt-2 text-center text-xs text-muted-foreground italic">{caption}</figcaption>
+    <!-- Upright like the story pages' captions; italic here was the only reason the home
+         page downloaded Inter's 78 KB italic font -->
+    <figcaption class="mt-2 text-center text-xs text-muted-foreground">{caption}</figcaption>
   </figure>
   <div class="mt-8 flex justify-end">
     <FlowerButton text="View photos" href="/photos" />
