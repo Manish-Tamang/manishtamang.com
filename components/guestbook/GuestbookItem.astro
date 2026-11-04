@@ -69,7 +69,8 @@ const badge = "flex items-center justify-center rounded-full border border-backg
       ) : (
         <span class="flex size-full items-center justify-center rounded-sm border-2 border-white bg-linear-to-br from-zinc-100 to-zinc-200 text-xs font-semibold shadow-sm sm:text-sm dark:border-zinc-800 dark:from-zinc-800 dark:to-zinc-900">{entry.name.charAt(0)}</span>
       )}
-      <Heart data-heart-pop class="pointer-events-none absolute top-0 left-1/2 z-50 hidden size-6 -translate-x-1/2 -translate-y-8 animate-bounce fill-current text-red-500 drop-shadow-lg sm:size-8" />
+      <!-- Only the admin can like, so only they need the pop animation -->
+      {isAdmin && <Heart data-heart-pop class="pointer-events-none absolute top-0 left-1/2 z-50 hidden size-6 -translate-x-1/2 -translate-y-8 animate-bounce fill-current text-red-500 drop-shadow-lg sm:size-8" />}
     </div>
     {hasReplies && <div class="mt-2 mb-2 w-px flex-1 bg-zinc-200 dark:bg-zinc-800"></div>}
   </div>
