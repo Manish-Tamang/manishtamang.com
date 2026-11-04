@@ -10,22 +10,23 @@ import GuestbookForm from "@/components/guestbook/GuestbookForm.astro"
 import GuestbookItem from "@/components/guestbook/GuestbookItem.astro"
 import SortMenu from "@/components/guestbook/SortMenu.astro"
 import { adminEmail, getUser } from "@/lib/auth"
-import { getGuestbookEntries, type GuestbookEntry } from "@/lib/guestbook"
+import { fetchGuestbookRows, shapeGuestbookEntries } from "@/lib/guestbook"
 import { guestbookSeo } from "@/lib/guestbook/seo"
 import { toJsonLd } from "@/lib/seo"
 
 // Rendered per request: the page depends on who's signed in
 export const prerender = false
 
-const user = await getUser(Astro.request)
+// The session and the messages load at the same time; only shaping needs both
+const [user, rows] = await Promise.all([
+  getUser(Astro.request),
+  fetchGuestbookRows().catch((error) => {
+    console.error(error)
+    return []
+  }),
+])
 const isAdmin = Boolean(adminEmail) && user?.email?.toLowerCase() === adminEmail
-
-let entries: GuestbookEntry[] = []
-try {
-  entries = await getGuestbookEntries(user?.email)
-} catch (error) {
-  console.error(error)
-}
+const entries = shapeGuestbookEntries(rows, user?.email)
 
 const { description, jsonLd } = guestbookSeo(entries)
 ---
