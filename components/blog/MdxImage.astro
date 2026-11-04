@@ -1,0 +1,32 @@
+---
+/*
+ * Markdown images in posts (![alt](./image.webp)), passed to <Content> as the
+ * `img` component. Local images arrive as ImageMetadata and get a blurred preview
+ * while loading; remote URLs stay a plain <img>.
+ */
+import type { ImageMetadata } from "astro"
+import BlurImage from "@/components/ui/BlurImage.astro"
+
+export interface Props {
+  src: ImageMetadata | string
+  alt?: string
+  title?: string
+}
+
+const { src, alt = "", title } = Astro.props
+---
+
+{
+  typeof src === "string" ? (
+    <img src={src} alt={alt} title={title} loading="lazy" decoding="async" />
+  ) : (
+    <BlurImage
+      src={src}
+      alt={alt}
+      title={title}
+      widths={[480, 720, 1080, 1440]}
+      sizes="(max-width: 768px) 100vw, 720px"
+      quality={78}
+    />
+  )
+}
