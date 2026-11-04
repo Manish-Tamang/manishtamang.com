@@ -1,6 +1,6 @@
 ---
 import type { ImageMetadata } from "astro"
-import { Image } from "astro:assets"
+import BlurImage from "@/components/ui/BlurImage.astro"
 import PageLayout from "@/layouts/PageLayout.astro"
 import Heading from "@/components/typography/Heading.astro"
 import Link from "@/components/ui/Link.astro"
@@ -64,10 +64,10 @@ const icons = {
               <span class:list={["min-w-0 flex-1 text-sm", done ? "text-muted-foreground line-through" : "text-heading"]}>{title}</span>
               {photo && (
                 <span class="preview group relative shrink-0">
-                  <Image src={photo} alt="" width={40} height={40} densities={[1, 2]} class="size-10 rounded-sm border border-border object-cover" />
+                  <BlurImage src={photo} alt="" width={40} height={40} densities={[1, 2]} class="size-10 rounded-sm border border-border object-cover" />
                   <!-- Larger preview on hover (pointer devices only, see <style>) -->
                   <span class="preview-large pointer-events-none absolute top-1/2 right-full z-20 mr-3 hidden -translate-y-1/2">
-                    <Image src={photo} alt="" width={200} densities={[1, 2]} class="w-50 rounded-lg border border-border bg-background object-cover shadow-lg" />
+                    <BlurImage src={photo} alt="" width={200} densities={[1, 2]} class="w-50 rounded-lg border border-border bg-background object-cover shadow-lg" />
                   </span>
                 </span>
               )}
