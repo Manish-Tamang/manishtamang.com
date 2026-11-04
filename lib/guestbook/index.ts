@@ -1,6 +1,7 @@
 /* Guestbook entries in Supabase (public.guestbook_entries), ported from the Next.js site. */
 import { adminEmail } from "@/lib/auth"
 import { supabase } from "@/lib/services/supabase"
+import type { MessageFormat } from "./rich-text"
 
 export const TABLE = "guestbook_entries"
 
@@ -11,6 +12,8 @@ export type GuestbookEntry = {
   name: string
   image_url: string | null
   message: string
+  /** "plain" for messages from before rich text; see lib/guestbook/rich-text.ts */
+  format: MessageFormat
   timestamp: string
   parent_id: string | null
   attachment_url: string | null
@@ -30,6 +33,7 @@ type RawGuestbookEntry = {
   email?: string | null
   image_url: string | null
   message: string | null
+  message_format?: string | null
   timestamp: string
   parent_id: string | null
   likes?: string[] | null
@@ -62,6 +66,7 @@ function toPublicEntry(entry: RawGuestbookEntry, viewerEmail?: string | null): G
     name: entry.name,
     image_url: entry.image_url,
     message: entry.message || "",
+    format: entry.message_format === "markdown" ? "markdown" : "plain",
     timestamp: entry.timestamp,
     parent_id: entry.parent_id,
     attachment_url: entry.attachment_url,
@@ -78,7 +83,7 @@ function toPublicEntry(entry: RawGuestbookEntry, viewerEmail?: string | null): G
 /** Top-level entries, newest first, each with its replies oldest first. */
 export async function getGuestbookEntries(viewerEmail?: string | null): Promise<GuestbookEntry[]> {
   const entries: RawGuestbookEntry[] = await supabase(
-    `${TABLE}?select=id,name,email,image_url,message,timestamp,parent_id,likes,reactions,attachment_url&order=timestamp.desc`,
+    `${TABLE}?select=id,name,email,image_url,message,message_format,timestamp,parent_id,likes,reactions,attachment_url&order=timestamp.desc`,
   )
   const replies = entries.filter((entry) => entry.parent_id)
 
@@ -110,6 +115,3 @@ export function timeAgo(timestamp: string) {
   }
   return "just now"
 }
-
-/** Splits text so odd indexes are URLs. */
-export const linkParts = (text: string) => text.split(/(https?:\/\/[^\s]+)/g)
