@@ -6,6 +6,10 @@ import Text from "@/components/typography/Text.astro"
 import { trustedLogos } from "@/data/home"
 
 const logos = import.meta.glob<{ default: ImageMetadata }>("/assets/logos/*", { eager: true })
+
+// Each logo fits a 112×44 box (sm and up; 96×40 below). Sizing by height alone made
+// wide logos up to 579px wide for that box.
+const fitWidth = ({ width, height }: ImageMetadata) => Math.round(Math.min(112, (44 * width) / height))
 ---
 
 <section>
@@ -22,8 +26,9 @@ const logos = import.meta.glob<{ default: ImageMetadata }>("/assets/logos/*", { 
         <Image
           src={logos[`/assets/logos/${file}`].default}
           alt={name}
-          height={44}
+          width={fitWidth(logos[`/assets/logos/${file}`].default)}
           densities={[1, 2]}
+          quality={70}
           draggable="false"
           class="h-full w-auto max-w-full object-contain"
         />
