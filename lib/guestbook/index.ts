@@ -87,11 +87,14 @@ function toPublicEntry(entry: RawGuestbookEntry, viewerEmail?: string | null): G
   }
 }
 
-/** Top-level entries, newest first, each with its replies oldest first. */
-export async function getGuestbookEntries(viewerEmail?: string | null): Promise<GuestbookEntry[]> {
-  const entries: RawGuestbookEntry[] = await supabase(
+/** Every row, newest first. It doesn't depend on who's viewing, so it can load alongside the session. */
+export const fetchGuestbookRows = (): Promise<RawGuestbookEntry[]> =>
+  supabase(
     `${TABLE}?select=id,name,email,image_url,message,message_format,timestamp,parent_id,likes,reactions,attachment_url&order=timestamp.desc`,
   )
+
+/** Top-level entries, newest first, each with its replies oldest first, shaped for the viewer. */
+export function shapeGuestbookEntries(entries: RawGuestbookEntry[], viewerEmail?: string | null): GuestbookEntry[] {
   const replies = entries.filter((entry) => entry.parent_id)
 
   return entries
@@ -103,6 +106,10 @@ export async function getGuestbookEntries(viewerEmail?: string | null): Promise<
         .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime())
         .map((reply) => toPublicEntry(reply, viewerEmail)),
     }))
+}
+
+export async function getGuestbookEntries(viewerEmail?: string | null): Promise<GuestbookEntry[]> {
+  return shapeGuestbookEntries(await fetchGuestbookRows(), viewerEmail)
 }
 
 const relativeTime = new Intl.RelativeTimeFormat("en", { numeric: "auto" })
