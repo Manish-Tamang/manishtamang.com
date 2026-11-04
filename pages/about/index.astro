@@ -6,6 +6,7 @@
  */
 import type { ImageMetadata } from "astro"
 import { Image } from "astro:assets"
+import BlurImage from "@/components/ui/BlurImage.astro"
 import StoryLayout from "@/layouts/StoryLayout.astro"
 import LiteYouTube from "@/components/ui/LiteYouTube.astro"
 import Firfirey from "@/components/about/Firfirey.astro"
@@ -145,7 +146,7 @@ const logo = "mt-0.5 size-10 shrink-0 rounded-full border border-border"
         <li>
           <a href={url} target="_blank" rel="noopener noreferrer" class="group block">
             <span class="block aspect-video overflow-hidden rounded-lg border border-border bg-muted">
-              <Image
+              <BlurImage
                 src={aboutImage(image)}
                 alt=""
                 width={360}
