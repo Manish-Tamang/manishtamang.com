@@ -1,6 +1,7 @@
 ---
 import type { ImageMetadata } from "astro";
-import { Image, getImage } from "astro:assets";
+import { getImage } from "astro:assets";
+import BlurImage from "@/components/ui/BlurImage.astro";
 import PageLayout from "@/layouts/PageLayout.astro";
 import VideoModal from "@/components/concerts/VideoModal.astro";
 import VideoThumbnail from "@/components/concerts/VideoThumbnail.astro";
@@ -100,7 +101,7 @@ for (const c of sorted) {
                           data-caption={caption}
                           data-date={format(date)}
                         >
-                          <Image
+                          <BlurImage
                             src={concertImage(image!)!}
                             alt={caption || `${artist} live`}
                             width={video ? 480 : 160}
