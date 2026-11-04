@@ -16,7 +16,7 @@ import { getDashboardData } from "@/lib/dashboard"
 export const prerender = false
 Astro.response.headers.set("cache-control", "public, s-maxage=60, stale-while-revalidate=86400")
 
-const { wakatime, totals, sessions, bookmarks, tracks, topArtists, topAlbums, contributions, reading, coding, views } = await getDashboardData(Astro.url)
+const { wakatime, totals, sessions, bookmarks, tracks, topArtists, topAlbums, contributions, reading, coding, views, reactions } = await getDashboardData(Astro.url)
 ---
 
 <PageLayout heading="Dashboard" description="Live coding activity, site traffic, blog statistics and what Manish Tamang is reading and listening to.">
@@ -60,7 +60,7 @@ const { wakatime, totals, sessions, bookmarks, tracks, topArtists, topAlbums, co
 
     <DashboardSection title="Blog Statistics">
       <Fragment slot="description">Views and reactions across all blog posts.</Fragment>
-      <BlogStats views={views} />
+      <BlogStats views={views} reactions={reactions} />
     </DashboardSection>
 
     <DashboardSection title="Reading List">
