@@ -1,33 +1,64 @@
 ---
-import PageLayout from "@/layouts/PageLayout.astro"
-import Heading from "@/components/typography/Heading.astro"
+/*
+ * In StoryLayout, with the same rhythm as /uses: the intro as a 24px lead, chips
+ * to jump to a category, and body-size section titles. Link rows pull their hover
+ * padding outside the column, so their text stays on its left edge.
+ */
+import StoryLayout from "@/layouts/StoryLayout.astro"
 import ArrowUpRight from "@/components/icons/ArrowUpRight.astro"
 import { bookmarks } from "@/data/bookmarks"
+
+const slug = (category: string) => category.toLowerCase().replace(/[^a-z0-9]+/g, "-")
+
+const section = "mt-8 scroll-mt-8"
+const sectionTitle = "mb-3 text-sm font-subsection text-heading"
 ---
 
-<PageLayout
+<StoryLayout
   heading="Bookmarks"
-  intro="A small collection of useful tools, resources, and places on the web that I keep coming back to."
   description="Useful tools and resources for design, development and AI that Manish Tamang keeps coming back to."
 >
-  <div class="space-y-12">
-    {bookmarks.map(({ category, items }) => (
-      <section>
-        <Heading>{category}</Heading>
-        <ul class="mt-4 grid gap-x-8 gap-y-5 sm:grid-cols-2">
-          {items.map(({ title, url, description }) => (
-            <li>
-              <a href={url} target="_blank" rel="noopener noreferrer" class="group block">
-                <span class="flex items-center gap-1 font-medium text-heading transition-colors group-hover:text-link-hover">
-                  {title}
-                  <ArrowUpRight class="size-3.5 shrink-0 opacity-0 transition-opacity group-hover:opacity-100" />
-                </span>
-                <span class="mt-0.5 block text-sm text-muted-foreground">{description}</span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
-    ))}
-  </div>
-</PageLayout>
+  <p class="font-lead text-lead text-heading">
+    A small collection of useful tools, resources, and places on the web that I keep coming back to.
+  </p>
+
+  <nav aria-label="Categories" class="mt-4">
+    <ul class="flex flex-wrap gap-1.5">
+      {bookmarks.map(({ category }) => (
+        <li>
+          <a
+            href={`#${slug(category)}`}
+            class="block rounded-full border border-border px-2.5 py-0.5 text-xs text-muted-foreground transition-colors hover:border-border-strong hover:text-heading"
+          >
+            {category}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+
+  {bookmarks.map(({ category, items }) => (
+    <section id={slug(category)} class={section}>
+      <h2 class={sectionTitle}>{category}</h2>
+      <!-- Rows pad 8px top and bottom; pulling the list up 8px keeps the 12px title gap -->
+      <ul class="-mt-2 grid gap-x-6 sm:grid-cols-2">
+        {items.map(({ title, url, description }) => (
+          <li>
+            <a
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group -mx-2 block rounded-lg px-2 py-2 transition-colors hover:bg-subtle"
+            >
+              <span class="flex items-center gap-1 text-sm font-medium text-heading transition-colors group-hover:text-link-hover">
+                {title}
+                <ArrowUpRight class="size-3 shrink-0 opacity-0 transition-opacity group-hover:opacity-100" />
+              </span>
+              <span class="block text-xs text-muted-foreground">{description}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  ))}
+</StoryLayout>
