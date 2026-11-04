@@ -4,7 +4,7 @@
  * without one, the browser fetches just enough to show an early frame.
  */
 import type { ImageMetadata } from "astro"
-import { Image } from "astro:assets"
+import BlurImage from "@/components/ui/BlurImage.astro"
 
 export interface Props {
   src: string
@@ -30,7 +30,7 @@ const { src, poster, label, caption, wide = false, tall = false } = Astro.props
   class:list={["group relative block w-full cursor-pointer overflow-hidden rounded-md bg-black", wide ? "aspect-video" : tall ? "aspect-[3/4]" : "aspect-square"]}
 >
   {poster ? (
-    <Image src={poster} alt="" width={480} height={480} quality={80} format="webp" class="size-full object-cover opacity-80 transition-all duration-300 group-hover:scale-105 group-hover:opacity-100" />
+    <BlurImage src={poster} alt="" width={480} height={480} quality={80} format="webp" class="size-full object-cover opacity-80 transition-all duration-300 group-hover:scale-105 group-hover:opacity-100" />
   ) : (
     <video src={`${src}#t=0.5`} muted playsinline preload="metadata" tabindex="-1" class="pointer-events-none size-full object-cover opacity-80 transition-all duration-300 group-hover:scale-105 group-hover:opacity-100"></video>
   )}
