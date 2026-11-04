@@ -1,5 +1,6 @@
 import { site } from "@/lib/site"
 import type { GuestbookEntry } from "@/lib/guestbook"
+import { messageText } from "./rich-text"
 
 const pageUrl = `${site.url}/guestbook`
 
@@ -9,7 +10,7 @@ export function guestbookSeo(entries: GuestbookEntry[]) {
 
   const preview = notes
     .slice(0, 6)
-    .map((entry) => `${entry.name}: ${entry.message.replace(/\s+/g, " ").trim()}`)
+    .map((entry) => `${entry.name}: ${messageText(entry.message, entry.format).replace(/\s+/g, " ").trim()}`)
     .join(" · ")
   const description = !preview
     ? "Sign Manish Tamang's guestbook. Leave a message, a note, or a bit of humor."
@@ -21,7 +22,7 @@ export function guestbookSeo(entries: GuestbookEntry[]) {
     "@type": "Comment",
     "@id": `${pageUrl}#${entry.id}`,
     url: `${pageUrl}#${entry.id}`,
-    text: entry.message,
+    text: messageText(entry.message, entry.format),
     dateCreated: entry.timestamp,
     author: { "@type": "Person", name: entry.name },
   }))
