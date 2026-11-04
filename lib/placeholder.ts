@@ -7,8 +7,12 @@ import { join } from "node:path"
 import type { ImageMetadata } from "astro"
 import sharp from "sharp"
 
-// Maps an imported image back to its file, without relying on Astro internals
-const files = import.meta.glob<{ default: ImageMetadata }>("/assets/**/*.{jpg,jpeg,png,webp}", { eager: true })
+// Maps an imported image back to its file, without relying on Astro internals.
+// Post and project images live next to their text in content/.
+const files = import.meta.glob<{ default: ImageMetadata }>(
+  ["/assets/**/*.{jpg,jpeg,png,webp}", "/content/**/*.{jpg,jpeg,png,webp}"],
+  { eager: true },
+)
 
 const cache = new Map<string, Promise<string>>()
 
