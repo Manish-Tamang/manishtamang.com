@@ -27,6 +27,7 @@ pnpm-debug.log*
 # Vercel build output
 .vercel/
 
+
 # local editor and AI assistant files
 .vscode/
 .claude/
@@ -45,3 +46,5 @@ scripts/import-blog-reactions.mjs
 
 # scratch screenshots
 tips.png
+scripts/backup-posts.json
+scripts/migrate-markdown-to-portable-text.mjs
