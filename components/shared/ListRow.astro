@@ -4,7 +4,7 @@
  * lib/client/searchable-list.ts reads to filter and sort.
  */
 import type { ImageMetadata } from "astro"
-import { Image } from "astro:assets"
+import BlurImage from "@/components/ui/BlurImage.astro"
 import ArrowUpRight from "@/components/icons/ArrowUpRight.astro"
 
 export interface Props {
@@ -27,7 +27,7 @@ const excerpt = words.length > 20 ? `${words.slice(0, 20).join(" ")}...` : descr
   <a href={href} class="group -mx-2 flex items-start gap-3 rounded-2xl p-2 transition-all hover:bg-foreground/5 sm:gap-5">
     <div class="h-[60px] w-24 shrink-0 overflow-hidden rounded-lg border border-border bg-muted sm:h-[88px] sm:w-[140px]">
       {image ? (
-        <Image
+        <BlurImage
           src={image}
           alt=""
           widths={[140, 280]}
