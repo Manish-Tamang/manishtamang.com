@@ -3,6 +3,7 @@ import { SUPABASE_URL } from "astro:env/server"
 import { adminEmail, getUser } from "@/lib/auth"
 import { getGuestbookEntries, TABLE } from "@/lib/guestbook"
 import { sendGuestbookEmails } from "@/lib/guestbook/email"
+import { MAX_MESSAGE } from "@/lib/guestbook/rich-text"
 import { supabase } from "@/lib/services/supabase"
 
 export const prerender = false
@@ -31,6 +32,9 @@ export const POST: APIRoute = async ({ request }) => {
   try {
     const { message, parent_id, attachment_url } = await request.json()
     if (!message && !attachment_url) return fail("Missing required fields", 400)
+    if (message && (typeof message !== "string" || message.length > MAX_MESSAGE)) {
+      return fail(`Messages can be up to ${MAX_MESSAGE} characters`, 400)
+    }
 
     // Only images from our own bucket, since the URL comes from the browser
     if (attachment_url && !String(attachment_url).startsWith(`${SUPABASE_URL}/storage/v1/object/public/primary/guestbook/`)) {
@@ -48,6 +52,8 @@ export const POST: APIRoute = async ({ request }) => {
         email: user.email,
         image_url: user.image || null,
         message: message || null,
+        // Rich text (lib/guestbook/rich-text.ts); older rows default to "plain"
+        message_format: "markdown",
         parent_id: parent_id || null,
         timestamp: new Date().toISOString(),
         attachment_url: attachment_url || null,
