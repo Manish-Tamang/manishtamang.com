@@ -13,7 +13,7 @@ import PenTool from "@/components/icons/PenTool.astro"
 import BentoCard from "./BentoCard.astro"
 import NowPlayingCard from "./NowPlayingCard.astro"
 import ToolsDock from "./ToolsDock.astro"
-import miniGole from "@/assets/images/mini-gole.jpg"
+import { miniGole, mobileArt, mobileMedia, mobileSizes, position as miniGolePosition } from "./mini-gole"
 import profile from "@/assets/images/profile.png"
 import hungerStrikeAlbum from "@/assets/images/hunger-strike-album.png"
 
@@ -48,19 +48,23 @@ const cardLink = "mt-3 inline-flex w-fit items-center gap-1 text-sm font-medium 
       </BentoCard>
 
       <BentoCard tone="image" class="order-3 col-span-2 min-h-50 flex-1 md:order-none md:col-span-1 md:min-h-80">
-        <!-- The largest thing on a phone's first screen: load it right away, and size it
-             for the card (a 200px-tall banner on phones, a tall column on desktop) -->
-        <BlurImage
-          src={miniGole}
-          alt="Manish as a kid, standing in front of a stone wall"
-          width={800}
-          widths={[320, 480, 640, 800]}
-          sizes="(max-width: 768px) 100vw, 480px"
-          quality={60}
-          loading="eager"
-          fetchpriority="high"
-          class="absolute inset-0 size-full object-cover"
-        />
+        <!-- The largest thing on a phone's first screen: phones get a 2:1 crop made for
+             the 200px banner (see mini-gole.ts); wider screens the 4:3 photo for the tall column -->
+        <picture>
+          <source media={mobileMedia} srcset={mobileArt.srcSet.attribute} sizes={mobileSizes} type="image/webp" />
+          <BlurImage
+            src={miniGole}
+            alt="Manish as a kid, standing in front of a stone wall"
+            width={800}
+            widths={[480, 800]}
+            sizes="480px"
+            quality={60}
+            loading="eager"
+            fetchpriority="high"
+            position={miniGolePosition}
+            class="absolute inset-0 size-full object-cover"
+          />
+        </picture>
         <div class="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/65 to-transparent px-4 pt-10 pb-3">
           <p class="text-sm font-medium text-white">Mini Gole</p>
         </div>
