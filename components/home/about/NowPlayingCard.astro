@@ -18,7 +18,9 @@ const { title, artist, albumImageUrl, songUrl, class: className } = Astro.props
 ---
 
 <BentoCard data-now-playing tone="white" class:list={["group", className]}>
-  <div class="relative z-10 flex h-full flex-col justify-between">
+  <!-- flex-1, not h-full: the card is a flex column without a set height, so only
+       growing fills it and lets justify-between put the link at the bottom -->
+  <div class="relative z-10 flex flex-1 flex-col justify-between gap-3">
     <div>
       <div class="mb-2 flex items-start justify-between">
         <p class="flex items-center gap-1.5 text-xs font-medium whitespace-nowrap text-[#1DB954]">
