@@ -3,6 +3,7 @@ import { Image } from "astro:assets"
 import { render } from "astro:content"
 import PageLayout from "@/layouts/PageLayout.astro"
 import Comments from "@/components/blog/Comments.astro"
+import Reactions from "@/components/blog/Reactions.astro"
 import Badge from "@/components/ui/Badge.astro"
 import Prose from "@/components/typography/Prose.astro"
 import Separator from "@/components/ui/Separator.astro"
@@ -80,6 +81,8 @@ const description = data.metaDescription ?? data.description
   <Prose class="max-w-none">
     <Content />
   </Prose>
+
+  <Reactions slug={post.id} />
 
   <Comments />
 
