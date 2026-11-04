@@ -61,7 +61,14 @@ export const POST: APIRoute = async ({ request }) => {
     })
 
     try {
-      await sendGuestbookEmails({ id, name, email: user.email, message: message || "", hasImage: Boolean(attachment_url) })
+      await sendGuestbookEmails({
+        id,
+        name,
+        email: user.email,
+        message: message || "",
+        hasImage: Boolean(attachment_url),
+        avatarUrl: user.image || null,
+      })
     } catch (error) {
       console.error("Email notification failed:", error)
     }
