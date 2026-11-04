@@ -128,6 +128,8 @@ form?.addEventListener("submit", async (event) => {
     );
     if (!response.ok) throw new Error();
     input.value = "";
+    // Lets the rich text preview hide itself
+    input.dispatchEvent(new Event("input"));
     setImage(null);
     toast("Message posted!");
     await refresh();
