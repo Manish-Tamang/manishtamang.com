@@ -1,5 +1,5 @@
 ---
-import { Image } from "astro:assets"
+import BlurImage from "@/components/ui/BlurImage.astro"
 import { getCollection, render, type CollectionEntry } from "astro:content"
 import PageLayout from "@/layouts/PageLayout.astro"
 import Badge from "@/components/ui/Badge.astro"
@@ -45,7 +45,7 @@ const { Content } = await render(project)
     )}
   </p>
 
-  <Image
+  <BlurImage
     src={data.cover}
     alt={data.coverAlt ?? data.title}
     widths={[480, 720, 1080, 1440]}
