@@ -4,6 +4,19 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Cross-document view transitions: page loads crossfade instead of flashing white
+   (Chrome, Edge, Safari 18.2+; others just load normally). The sidebar has its own
+   name, so it holds still while the content changes. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+
+  ::view-transition-group(root) {
+    animation-duration: 180ms;
+  }
+}
+
 @layer base {
   html {
     font-family: var(--font-sans);
