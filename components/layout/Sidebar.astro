@@ -7,7 +7,7 @@ import Webring from "./Webring.astro"
 const current = normalizePath(Astro.url.pathname)
 ---
 
-<aside class="sticky top-0 z-40 hidden max-h-dvh self-start overflow-y-auto pt-16 pb-4 [scrollbar-width:none] md:block">
+<aside class="sticky top-0 z-40 hidden max-h-dvh self-start overflow-y-auto pt-16 pb-4 [scrollbar-width:none] [view-transition-name:sidebar] md:block">
   <nav aria-label="Main" class="space-y-6">
     {navGroups.map(({ label, marker, links }) => (
       <div>
