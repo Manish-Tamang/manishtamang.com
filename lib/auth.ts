@@ -23,6 +23,9 @@ export const auth = betterAuth({
   secret: BETTER_AUTH_SECRET,
   baseURL: BETTER_AUTH_URL || "https://manishtamang.com",
   trustedOrigins: ["https://manishtamang.com", "http://localhost:4321"],
+  // The session rides along in a signed cookie for 5 minutes, so most requests
+  // (the guestbook page and its API) skip the database round trip to check it
+  session: { cookieCache: { enabled: true, maxAge: 5 * 60 } },
   socialProviders: {
     github: { clientId: GITHUB_CLIENT_ID ?? "", clientSecret: GITHUB_CLIENT_SECRET ?? "" },
     google: { clientId: GOOGLE_CLIENT_ID ?? "", clientSecret: GOOGLE_CLIENT_SECRET ?? "" },
