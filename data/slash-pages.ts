@@ -210,6 +210,7 @@ export const changelog: { date: string; changes: string[] }[] = [
       "Brought back the old blog post reactions, with every count from the old site.",
       "Photos across the site now load with a blurred preview, including the ones in blog posts.",
       "Gave /guestbook and /contact the same calmer layout as /about.",
+      "Guestbook messages can now use bold, italic, strikethrough, code and links, with a live preview.",
       "Rewrote /llms.txt with page descriptions, projects and dated posts.",
     ],
   },
