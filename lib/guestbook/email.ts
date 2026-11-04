@@ -23,7 +23,14 @@ async function send(email: Email) {
   if (!response.ok) throw new Error(`Resend ${response.status}: ${await response.text()}`)
 }
 
-export async function sendGuestbookEmails(post: { id: string; name: string; email: string; message: string; hasImage: boolean }) {
+export async function sendGuestbookEmails(post: {
+  id: string
+  name: string
+  email: string
+  message: string
+  hasImage: boolean
+  avatarUrl: string | null
+}) {
   // My own posts (replies) don't need a thank-you or a notification
   if (adminEmail && post.email.toLowerCase() === adminEmail) return
 
