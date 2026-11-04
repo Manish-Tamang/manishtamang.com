@@ -1,5 +1,5 @@
 ---
-import { Image } from "astro:assets"
+import BlurImage from "@/components/ui/BlurImage.astro"
 import FlowerButton from "./FlowerButton.astro"
 import photo from "@/assets/photos/08-last-day-of-college-sushma-godawari-coll.jpg"
 
@@ -8,7 +8,7 @@ const caption = "Last day of college, Sushma Godawari college"
 
 <section>
   <figure>
-    <Image
+    <BlurImage
       src={photo}
       alt={caption}
       widths={[640, 1024, 1600]}
