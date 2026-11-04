@@ -10,10 +10,22 @@ import Quote from "@/components/home/quote/Quote.astro"
 import StickyNote from "@/components/home/sticky-notes/StickyNote.astro"
 import TrustedBy from "@/components/home/trusted-by/TrustedBy.astro"
 import { toJsonLd, websiteJsonLd } from "@/lib/seo"
+import { mobileArt, mobileMedia, mobileSizes } from "@/components/home/about/mini-gole"
 ---
 
 <BaseLayout>
   <script slot="head" type="application/ld+json" set:html={toJsonLd(websiteJsonLd)} />
+  <!-- Phones: start the LCP photo with the page instead of when the parser reaches it -->
+  <link
+    slot="head"
+    rel="preload"
+    as="image"
+    type="image/webp"
+    media={mobileMedia}
+    imagesrcset={mobileArt.srcSet.attribute}
+    imagesizes={mobileSizes}
+    fetchpriority="high"
+  />
 
   <Container class="pt-10 md:pt-16">
     <Hero />
