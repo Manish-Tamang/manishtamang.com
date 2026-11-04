@@ -211,6 +211,7 @@ export const changelog: { date: string; changes: string[] }[] = [
       "Photos across the site now load with a blurred preview, including the ones in blog posts.",
       "Gave /guestbook and /contact the same calmer layout as /about.",
       "Guestbook messages can now use bold, italic, strikethrough, code and links, with a live preview.",
+      "Guestbook emails have a new look with the yeti, and come from hi@manishtamang.com so replies reach me.",
       "Rewrote /llms.txt with page descriptions, projects and dated posts.",
     ],
   },
