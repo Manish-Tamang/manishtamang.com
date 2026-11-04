@@ -1,172 +1,44 @@
 ---
-title: "Portfolio Website"
-description: "My personal portfolio website, a showcase of my professional journey, technical skills, and creative endeavors. Built with cutting-edge web technologies, this site offers an immersive experience into my world of development and design."
-metaDescription: "My personal portfolio website, showcasing my journey, technical skills and creative work in development and design."
+title: "manishtamang.com"
+tagline: "My personal site, rebuilt from Next.js to Astro"
+description: "My personal website: a blog, projects, photos, a guestbook and a set of IndieWeb slash pages. Rebuilt in late 2026 from Next.js to Astro, so pages ship almost no JavaScript and load fast even on slow phones."
+metaDescription: "manishtamang.com, my personal site, rebuilt from Next.js and Sanity to Astro with content in the repo: fast pages, a guestbook, slash pages and more."
 date: "2025-03-01T14:52:00.000Z"
-updated: "2025-04-12T06:17:49Z"
-projectUrl: "https://www.manishtamang.com/"
-githubUrl: "https://github.com/Manish-Tamang/portfolio"
-tech: ["Typescript","Nextjs","Sanity"]
+updated: "2026-11-04T00:00:00.000Z"
+projectUrl: "https://manishtamang.com/"
+githubUrl: "https://github.com/Manish-Tamang/manishtamang.com"
+tech: ["Astro", "TypeScript", "Tailwind CSS", "MDX", "Supabase", "Better Auth"]
 cover: ./cover.webp
-coverAlt: "Portfolio Website"
+coverAlt: "The manishtamang.com home page: sidebar navigation, the hero with my pixel character, and the About cards"
 ---
 
-## Manish Tamang - Personal Portfolio
+This is the site you're on. I first built it in 2025 with Next.js and Sanity, and in late 2026 I rebuilt it from scratch with Astro.
 
+## Why I rebuilt it
 
-## 🌐 Project Overview
+The old site shipped 400 to 800 KB of compressed JavaScript on every page, even ones that were mostly text. I wanted pages that are just HTML and CSS unless something on them actually needs a script.
 
-Welcome to my personal portfolio website, a showcase of my professional journey, technical skills, and creative endeavors. Built with cutting-edge web technologies, this site offers an immersive experience into my world of development and design.
+So the rebuild is mostly static: every page is built ahead of time, except the guestbook and the dashboard, which need live data. Content moved out of Sanity into the repo, as Markdown and MDX next to their images. Every URL from the old site still works.
 
-## 📋 Table of Contents
+![The previous version of the site, built with Next.js](./previous-version.webp)
 
-- [Features](#-features)
-- [Technologies](#-technologies)
-- [Getting Started](#-getting-started)
-- [Project Structure](#-project-structure)
-- [Integrations](#-integrations)
-- [Contributing](#-contributing)
-- [License](#-license)
+## What's on it
 
-## ✨ Features
+- **A blog and projects**, written in MDX, with blurred image previews while photos load and an image viewer for every photo.
+- **Story pages** like [/bio](/bio) and [/about](/about), laid out as one calm reading column.
+- **A guestbook** where you sign in with GitHub or Google and can write with bold, italic, links and code.
+- **Blog reactions and view counts** in Supabase, carried over from the old site's Firebase.
+- **A [dashboard](/dashboard)** of live stats: coding time, music, GitHub activity and site traffic.
+- **Slash pages** such as [/now](/now), [/uses](/uses), [/ai](/ai) and [/changelog](/changelog).
 
-- **Personal Blog:** In-depth technical insights and personal experiences
-- **Interactive Project Portfolio:** Showcasing development and design work
-- **Photography Gallery:** Visual storytelling through photography
-- **"Uses" Page:** Detailed breakdown of my daily tools and software
-- **Guestbook:** Interactive visitor messaging system
-- **Protected Dashboard:** Personalized stats and insights
-- **Spotify Integration:** Real-time music listening tracker
-- **WakaTime Coding Stats:** Transparent view of coding activities
-- **Responsive Dark/Light Themes**
-- **MDX-Powered Blog Posts:** Rich, interactive content
-- **SEO Optimized:** Enhanced search engine visibility
+![The /bio page: a photo banner, then a single reading column](./bio.webp)
 
-## 🚀 Technologies
+## Small details I care about
 
-- **Frontend Framework:** Next.js
-- **Language:** TypeScript
-- **Styling:** Tailwind CSS
-- **Content Management:** Sanity CMS
-- **Authentication:** NextAuth.js, Firebase
-- **Deployment:** Vercel
-- **Additional Libraries:**
-  - Framer Motion
-  - Recharts
-  - Shadcn/ui
-  - Lucide React
+- The type is Inter, tuned per size, with line heights on whole pixels so text lines up.
+- Selecting text draws a rounded marker highlight instead of the browser's default.
+- Photos are optimized at build time, with phone-sized crops where it matters.
 
-## 🔧 Getting Started
+## How fast it is
 
-### Prerequisites
-
-- Node.js (v18+)
-- npm or Yarn
-- Sanity CLI
-- Firebase Project
-- Spotify Developer Account
-- WakaTime Account
-
-### Installation
-
-1. Clone the repository:
-
-   ```bash
-   git clone https://github.com/Manish-Tamang/portfolio.git
-   cd portfolio
-   ```
-
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-### Environment Configuration
-
-Create a `.env.local` file with the following variables:
-
-```bash
-# Sanity Configuration
-NEXT_PUBLIC_SANITY_PROJECT_ID=
-NEXT_PUBLIC_SANITY_DATASET=production
-SANITY_API_READ_TOKEN=
-
-# Firebase Configuration
-NEXT_PUBLIC_FIREBASE_API_KEY=
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
-# ... (other Firebase configs)
-
-# Spotify Integration
-SPOTIFY_CLIENT_ID=
-SPOTIFY_CLIENT_SECRET=
-SPOTIFY_REFRESH_TOKEN=
-
-# WakaTime Integration
-WAKATIME_ACCESS_TOKEN=
-WAKATIME_CLIENT_ID=
-
-# Authentication
-NEXTAUTH_SECRET=
-NEXTAUTH_URL=http://localhost:3000
-
-# Analytics
-UMAMI_API_KEY=
-WEBSITE_ID=
-```
-
-### Running the Project
-
-```bash
-npm run dev
-```
-
-Visit `http://localhost:3000` in your browser.
-
-## 📂 Project Structure
-
-```
-portfolio/
-├── app/             # Next.js app directory
-├── components/      # Reusable React components
-├── lib/             # Utility functions
-├── public/          # Static assets
-├── sanity/          # Sanity CMS configuration
-├── styles/          # Global and module CSS
-└── types/           # TypeScript type definitions
-```
-
-## 🔗 Integrations
-
-### Sanity CMS
-
-Manage content through `/studio` route. Configure CORS settings in Sanity management.
-
-### Firebase
-
-Handles:
-
-- View counting
-- User authentication
-- Guestbook messages
-
-### Spotify & WakaTime
-
-Real-time tracking of music and coding activities.
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Commit changes
-4. Push and open a pull request
-
-## 📄 License
-
-Distributed under the MIT License. See `LICENSE` for more information.
-
-## 🙏 Acknowledgements
-
-- Next.js Community
-- Sanity.io
-- Vercel
-- Open-source contributors
+On PageSpeed Insights the home page scores 100 on desktop and 96 on a throttled mobile connection, and it weighs well under 1 MB.
