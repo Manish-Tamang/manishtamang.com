@@ -43,9 +43,8 @@ const cardLink = "mt-3 inline-flex w-fit items-center gap-1 text-sm font-medium 
 
   <div class="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-y-0">
     <div class="contents md:flex md:flex-col">
-      <!-- The sticky note lives inside the card at the old -9° tilt, and the "About me"
-           pill sits on top of its curled corner. Smaller on phones, where the card is
-           half as wide, so it clears the pill. -->
+      <!-- The sticky note lives inside the card at the old -9° tilt, layered over the
+           "About me" pill. Smaller on phones, where the card is half as wide. -->
       <BentoCard tone="blue" class="order-1 min-h-32 justify-between md:order-none">
         <div class="h-1 w-12 rounded-full bg-white/50"></div>
         <StickyNote
@@ -56,7 +55,7 @@ const cardLink = "mt-3 inline-flex w-fit items-center gap-1 text-sm font-medium 
         >
           Manish Gole Tamang
         </StickyNote>
-        <span class="relative z-20 mt-8 self-end rounded-full bg-[#FFD166] px-3 py-1 text-xs font-medium text-[#352600]">About me</span>
+        <span class="mt-8 self-end rounded-full bg-[#FFD166] px-3 py-1 text-xs font-medium text-[#352600]">About me</span>
       </BentoCard>
 
       <BentoCard tone="image" class="order-3 col-span-2 min-h-50 flex-1 md:order-none md:col-span-1 md:min-h-80">
