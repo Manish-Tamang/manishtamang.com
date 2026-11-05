@@ -22,7 +22,7 @@ export const pageUpdated: Record<string, string> = {
   "/manifest": "2025-11-08",
 
   // Slash pages (new in this rebuild)
-  "/now": "2026-10-31",
+  "/now": "2026-11-05",
   "/friends": "2026-10-31",
   "/nope": "2026-10-31",
   "/guy": "2026-10-31",
