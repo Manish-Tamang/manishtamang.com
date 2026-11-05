@@ -1,0 +1,97 @@
+---
+/*
+ * Live time and date in Kathmandu, with the Bikram Sambat date. Always Nepal's
+ * clock, whatever the visitor's time zone: Intl does the Asia/Kathmandu
+ * (UTC+5:45) conversion, lib/date/bikram-sambat.ts the BS calendar. The page is
+ * static, so the values are filled in by the script; the placeholders hold each
+ * row's height meanwhile, so nothing shifts when they appear.
+ */
+---
+
+<!-- A section like the others on /now: label/value rows, no card -->
+<section data-nepal-clock aria-labelledby="nepal-clock-title">
+  <h2 id="nepal-clock-title" class="mb-3 text-sm font-subsection text-heading">Kathmandu, Nepal</h2>
+  <dl class="grid grid-cols-[7.5rem_minmax(0,1fr)] gap-y-1.5 text-sm">
+    <dt class="text-muted-foreground">Time</dt>
+    <dd class="tabular-nums">
+      <time data-clock-time class="text-heading">--:--:-- --</time><span class="text-muted-foreground"> · UTC+5:45</span>
+    </dd>
+
+    <dt class="text-muted-foreground">Date</dt>
+    <dd><time data-clock-date class="text-heading">&nbsp;</time></dd>
+
+    <dt data-clock-bs-row class="text-muted-foreground">
+      <!-- Tooltip on hover, or on focus for keyboards and taps; screen readers get it as the description -->
+      <span class="group relative inline-block">
+        <span
+          tabindex="0"
+          aria-describedby="bikram-sambat-tip"
+          class="cursor-help rounded-xs underline decoration-current/40 decoration-dotted underline-offset-[0.2em] outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          Bikram Sambat
+        </span>
+        <span
+          id="bikram-sambat-tip"
+          role="tooltip"
+          class="pointer-events-none invisible absolute top-full left-0 z-20 mt-2 w-64 rounded-md bg-heading px-3 py-2 text-xs text-background opacity-0 shadow-lg transition-[opacity,visibility] duration-150 group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100"
+        >
+          Nepal's official calendar, about 56 years and 8 months ahead of the Gregorian one. Its year begins in mid-April,
+          and its months run 29 to 32 days.
+        </span>
+      </span>
+    </dt>
+    <dd data-clock-bs-row class="tabular-nums">
+      <span data-clock-bs-long class="text-heading">&nbsp;</span><span data-clock-bs class="text-muted-foreground"></span>
+    </dd>
+  </dl>
+</section>
+
+<script>
+  import { formatBs, toBikramSambat } from "@/lib/date/bikram-sambat"
+
+  const root = document.querySelector<HTMLElement>("[data-nepal-clock]")
+
+  if (root) {
+    const $ = (name: string) => root.querySelector<HTMLElement>(`[data-clock-${name}]`)!
+    const zone = "Asia/Kathmandu"
+
+    const time = new Intl.DateTimeFormat("en-US", { timeZone: zone, hour: "numeric", minute: "2-digit", second: "2-digit", hour12: true })
+    const date = new Intl.DateTimeFormat("en-GB", { timeZone: zone, weekday: "long", day: "numeric", month: "long", year: "numeric" })
+    // Nepal's calendar day, as numbers, for the BS conversion and the datetime attributes
+    const day = new Intl.DateTimeFormat("en-CA", { timeZone: zone, year: "numeric", month: "2-digit", day: "2-digit" })
+
+    let lastDay = ""
+
+    const render = () => {
+      const now = new Date()
+      const parts = Object.fromEntries(time.formatToParts(now).map(({ type, value }) => [type, value]))
+
+      $("time").textContent = `${parts.hour}:${parts.minute}:${parts.second} ${parts.dayPeriod}`
+      $("time").setAttribute("datetime", now.toISOString())
+
+      // The dates only change at Nepal's midnight
+      const today = day.format(now)
+      if (today === lastDay) return
+      lastDay = today
+
+      const [year, month, dayOfMonth] = today.split("-").map(Number)
+      $("date").textContent = date.format(now)
+      $("date").setAttribute("datetime", today)
+
+      // Outside the table's years the row hides rather than show a wrong date
+      const bs = toBikramSambat(year, month, dayOfMonth)
+      for (const cell of root.querySelectorAll<HTMLElement>("[data-clock-bs-row]")) cell.hidden = !bs
+      if (bs) {
+        $("bs-long").textContent = `${bs.monthName} ${bs.day}, ${bs.year}`
+        $("bs").textContent = ` · ${formatBs(bs)}`
+      }
+    }
+
+    // Tick on the second, so the clock never lags the real time by up to a second
+    const tick = () => {
+      render()
+      setTimeout(tick, 1000 - (Date.now() % 1000))
+    }
+    tick()
+  }
+</script>
