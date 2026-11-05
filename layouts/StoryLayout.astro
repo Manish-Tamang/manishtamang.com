@@ -3,7 +3,8 @@
  * Long-form personal pages (/about, /bio, /digitalpathshala), laid out like
  * abhisekmishra.com/about: breadcrumbs, an optional 240px photo banner, then the story in
  * a 592px column (wrap it in <Prose class="prose-story">, see prose.css), and
- * the last-updated date as a quiet line at the end. The heading is only for
+ * the last-updated date as a quiet line at the end. A closing line (a credit,
+ * "this is a now page") goes in slot="note" and sits right above that date. The heading is only for
  * screen readers and the tab title; the breadcrumb names the page on screen.
  * The banner's description shows only in the image viewer.
  */
@@ -70,10 +71,21 @@ const updatedLabel = updated
         <slot />
       </div>
 
-      {updatedLabel && (
-        <p class="mt-10 text-xs text-muted-foreground tabular-nums">
-          Last updated <time datetime={updated}>{updatedLabel}</time>
-        </p>
+      <!-- The closing note and the date read as one quiet block at the end. A div, not
+           <footer>: Sidebar.astro watches the first <footer> on the page (the site's). -->
+      {(Astro.slots.has("note") || updatedLabel) && (
+        <div class="mt-10 space-y-1 text-muted-foreground">
+          {Astro.slots.has("note") && (
+            <p class="text-sm">
+              <slot name="note" />
+            </p>
+          )}
+          {updatedLabel && (
+            <p class="text-xs tabular-nums">
+              Last updated <time datetime={updated}>{updatedLabel}</time>
+            </p>
+          )}
+        </div>
       )}
     </article>
   </Container>
