@@ -4,32 +4,33 @@
  * first answer, then playing, last played, or empty if there's nothing to show.
  */
 import ArrowUpRight from "@/components/icons/ArrowUpRight.astro"
-import Heading from "@/components/typography/Heading.astro"
 ---
 
 <section data-player data-state="loading">
-  <Heading level={3} class="flex items-center gap-2">
+  <!-- Same title style as the other sections on /now -->
+  <h2 class="mb-3 flex items-center gap-2 text-sm font-subsection text-heading">
     <span data-player-heading>Listening to</span>
     <span data-player-dot hidden class="relative flex size-1.5">
       <span class="absolute inline-flex size-full animate-ping rounded-full bg-[#1DB954] opacity-75"></span>
       <span class="relative inline-flex size-1.5 rounded-full bg-[#1DB954]"></span>
     </span>
-  </Heading>
+  </h2>
 
-  <div class="mt-3 rounded-2xl bg-zinc-50/70 p-3 dark:bg-zinc-900/60">
+  <!-- A plain row like the rest of the page, no frame -->
+  <div>
     <div data-player-loading class="flex animate-pulse items-center gap-3" aria-label="Loading">
-      <div class="size-14 shrink-0 rounded-lg bg-zinc-200 dark:bg-zinc-800"></div>
+      <div class="size-12 shrink-0 rounded-lg bg-muted"></div>
       <div class="flex-1 space-y-2">
-        <div class="h-3 w-1/3 rounded bg-zinc-200 dark:bg-zinc-800"></div>
-        <div class="h-3 w-1/2 rounded bg-zinc-200 dark:bg-zinc-800"></div>
+        <div class="h-3 w-1/3 rounded bg-muted"></div>
+        <div class="h-3 w-1/2 rounded bg-muted"></div>
       </div>
     </div>
 
     <a data-player-song hidden target="_blank" rel="noopener noreferrer" class="group flex items-center gap-3">
-      <img data-player-art hidden alt="" width="56" height="56" class="size-14 shrink-0 rounded-lg bg-zinc-200 object-cover dark:bg-zinc-800" />
+      <img data-player-art hidden alt="" width="48" height="48" class="size-12 shrink-0 rounded-lg bg-muted object-cover" />
       <span class="min-w-0 flex-1">
-        <span data-player-title class="block truncate font-medium text-heading transition-colors group-hover:text-link-hover"></span>
-        <span data-player-artist class="block truncate text-sm text-muted-foreground"></span>
+        <span data-player-title class="block truncate text-sm font-medium text-heading transition-colors group-hover:text-link-hover"></span>
+        <span data-player-artist class="block truncate text-xs text-muted-foreground"></span>
       </span>
       <ArrowUpRight class="size-4 shrink-0 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
     </a>
