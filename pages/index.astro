@@ -7,7 +7,6 @@ import FeaturedProjects from "@/components/home/featured-projects/FeaturedProjec
 import Hero from "@/components/home/hero/Hero.astro"
 import LatestPosts from "@/components/home/latest-posts/LatestPosts.astro"
 import Quote from "@/components/home/quote/Quote.astro"
-import StickyNote from "@/components/home/sticky-notes/StickyNote.astro"
 import TrustedBy from "@/components/home/trusted-by/TrustedBy.astro"
 import { toJsonLd, websiteJsonLd } from "@/lib/seo"
 import { mobileArt, mobileMedia, mobileSizes } from "@/components/home/about/mini-gole"
@@ -32,9 +31,6 @@ import { mobileArt, mobileMedia, mobileSizes } from "@/components/home/about/min
   </Container>
 
   <Container class="relative mt-24">
-    <StickyNote id="note-1" background="/svg/sticky-green.svg" rotation={-9} class="-top-20 right-5 size-[110px] text-sm sm:right-6 md:text-lg">
-      Manish Gole Tamang
-    </StickyNote>
     <AboutSection />
   </Container>
 
