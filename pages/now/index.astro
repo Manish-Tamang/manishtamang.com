@@ -1,26 +1,36 @@
 ---
-import PageLayout from "@/layouts/PageLayout.astro"
-import Heading from "@/components/typography/Heading.astro"
+/*
+ * In StoryLayout, with the same rhythm as /about and /uses: a 24px lead, then
+ * body-size section titles with 32px above and 12px below, the Kathmandu time first.
+ */
+import StoryLayout from "@/layouts/StoryLayout.astro"
 import Link from "@/components/ui/Link.astro"
+import NepalClock from "@/components/now/NepalClock.astro"
 import NowPlayingPlayer from "@/components/now/NowPlayingPlayer.astro"
 import { now } from "@/data/slash-pages"
 ---
 
-<PageLayout heading="Now" intro="What I'm focused on at the moment." description="What Manish Tamang is focused on at the moment.">
-  <div class="space-y-10">
-    {now.map(({ heading, items }) => (
-      <section>
-        <Heading level={3}>{heading}</Heading>
-        <ul class="mt-2 list-disc space-y-1.5 pl-5 marker:text-muted-foreground">
-          {items.map((item) => <li>{item}</li>)}
-        </ul>
-      </section>
-    ))}
+<StoryLayout heading="Now" description="What Manish Tamang is focused on at the moment.">
+  <p class="font-lead text-lead text-heading">What I'm focused on at the moment.</p>
 
+  <div class="mt-8">
+    <NepalClock />
+  </div>
+
+  {now.map(({ heading, items }) => (
+    <section class="mt-8">
+      <h2 class="mb-3 text-sm font-subsection text-heading">{heading}</h2>
+      <ul class="list-disc space-y-1.5 pl-5 text-sm marker:text-muted-foreground">
+        {items.map((item) => <li>{item}</li>)}
+      </ul>
+    </section>
+  ))}
+
+  <div class="mt-8">
     <NowPlayingPlayer />
   </div>
 
-  <p class="mt-12 text-sm text-muted-foreground">
+  <Fragment slot="note">
     This is a <Link href="https://nownownow.com/about">now page</Link>, an idea from Derek Sivers.
-  </p>
-</PageLayout>
+  </Fragment>
+</StoryLayout>
