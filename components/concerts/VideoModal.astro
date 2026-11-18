@@ -1,31 +1,37 @@
 ---
-/* One shared player for the page, opened by any VideoThumbnail. */
+/*
+ * One shared player for the page, opened by any VideoThumbnail. The clip
+ * plays in the site's Video.js player (components/ui/VideoPlayer.astro).
+ */
+import VideoPlayer from "@/components/ui/VideoPlayer.astro"
 import LoaderCircle from "@/components/icons/LoaderCircle.astro"
 import X from "@/components/icons/X.astro"
 ---
 
-<dialog data-video-modal class="m-auto max-h-none max-w-none bg-transparent p-0 backdrop:bg-black/90">
-  <div class="relative flex items-center justify-center">
-    <video data-video-player playsinline preload="auto" class="max-h-[85dvh] max-w-[92vw] cursor-pointer rounded-lg bg-black"></video>
+<dialog data-video-modal class="m-auto max-h-none max-w-none overflow-visible bg-transparent p-0 backdrop:bg-black/90">
+  <button type="button" data-video-close aria-label="Close video" class="fixed top-4 right-4 flex size-9 cursor-pointer items-center justify-center rounded-full bg-white/15 text-white backdrop-blur-sm transition-colors hover:bg-white/25">
+    <X class="size-4" />
+  </button>
 
-    <span data-video-spinner hidden class="pointer-events-none absolute inset-0 flex items-center justify-center text-white">
-      <LoaderCircle class="size-8 animate-spin" />
-    </span>
+  <!-- Hidden (data-pending) until the clip's size is known, so it opens once at the right shape -->
+  <VideoPlayer class="video-modal__player" deferred />
+  <span data-video-spinner hidden class="pointer-events-none fixed inset-0 flex items-center justify-center text-white">
+    <LoaderCircle class="size-8 animate-spin" />
+  </span>
 
-    <button type="button" data-video-toggle aria-label="Play" hidden class="absolute top-1/2 left-1/2 flex size-16 -translate-x-1/2 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-sm">
-      <svg viewBox="0 0 24 24" fill="currentColor" class="ml-1 size-7" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l11-6.5a1 1 0 0 0 0-1.72l-11-6.5A1 1 0 0 0 8 5.5Z"></path></svg>
-    </button>
-
-    <button type="button" data-video-close aria-label="Close video" class="absolute top-3 right-3 flex size-9 cursor-pointer items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-sm">
-      <X class="size-4" />
-    </button>
-
-    <span data-video-time class="pointer-events-none absolute bottom-6 left-4 rounded bg-black/60 px-1.5 py-0.5 text-xs text-white tabular-nums backdrop-blur-sm">0:00</span>
-
-    <input data-video-seek type="range" min="0" max="1000" value="0" aria-label="Seek" class="absolute inset-x-3 bottom-3 h-1 cursor-pointer accent-white" />
-  </div>
   <p data-video-caption hidden class="mx-auto mt-3 max-w-[92vw] px-2 text-center text-sm text-white"></p>
 </dialog>
+
+<style is:global>
+  /* As large as fits: 92% of the width or 85% of the height, whichever runs out first */
+  .video-modal__player {
+    width: min(92vw, 1100px, calc(85dvh * var(--ratio)));
+  }
+
+  .video-modal__player[data-pending] {
+    visibility: hidden;
+  }
+</style>
 
 <script>
   import "@/lib/client/video-modal"
