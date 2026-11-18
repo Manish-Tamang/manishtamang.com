@@ -509,7 +509,7 @@ export const concerts: {
     city: "Jhamsikhel, Lalitpur",
     image: "chumbak-moksh-2026.webp",
     video:
-      "https://2iw0lwaklqgp6qdp.public.blob.vercel-storage.com/chumbak/video_20260927_194548-QrXTBvUZjV0L347EcJRRXkBrAYpjBu.mp4",
+      "https://shhe8ako63pfhxto.public.blob.vercel-storage.com/concerts/video_20260927_194548-web-yavlzmukND1zTcK2N13gVQqpZxz0TX.mp4",
     caption:
       "Chumbak lead singer Gongba Spikes posing while singing Ahile Bhana",
   },
