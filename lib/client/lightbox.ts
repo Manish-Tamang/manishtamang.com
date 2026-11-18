@@ -8,7 +8,13 @@
  * - [data-photo] tiles, which carry the full-size image in data-* attributes
  *   (/photos grid, about-page polaroids)
  * - images in posts (.prose) or marked [data-zoom], shown from their own srcset
+ *
+ * A [data-photo] tile with data-video is a clip: it plays in a Video.js
+ * player (neutral skin), with the tile's full image as its poster. Video.js
+ * is only downloaded the first time a clip opens.
  */
+import { loadVideoJs } from "@/lib/client/video-player"
+
 type Slide = {
   src: string
   srcset: string
@@ -18,6 +24,7 @@ type Slide = {
   caption: string
   date: string
   thumb: string
+  video: string
 }
 
 const ZOOMABLE = ".prose img, img[data-zoom]"
@@ -38,6 +45,7 @@ const fromTile = (tile: HTMLElement): Slide => {
     caption: dataset.caption ?? "",
     date: dataset.date ?? "",
     thumb: tile.querySelector("img")?.currentSrc || dataset.src || "",
+    video: dataset.video ?? "",
   }
 }
 
@@ -51,7 +59,9 @@ const fromImage = (image: HTMLImageElement): Slide => ({
   caption: image.dataset.caption ?? image.closest("figure")?.querySelector("figcaption")?.textContent?.trim() ?? "",
   date: "",
   thumb: image.currentSrc || image.src,
+  video: "",
 })
+
 
 if (dialog) {
   const img = dialog.querySelector<HTMLImageElement>("[data-lb-image]")!
@@ -59,6 +69,9 @@ if (dialog) {
   const caption = dialog.querySelector<HTMLElement>("[data-lb-caption]")!
   const date = dialog.querySelector<HTMLElement>("[data-lb-date]")!
   const rail = dialog.querySelector<HTMLElement>("[data-lb-rail]")!
+  const videoBox = dialog.querySelector<HTMLElement>("[data-lb-video]")!
+  const player = videoBox.querySelector<HTMLElement>("video-player")!
+  const video = videoBox.querySelector<HTMLVideoElement>("video")!
 
   let slides: Slide[] = []
   let thumbs: HTMLButtonElement[] = []
@@ -67,6 +80,28 @@ if (dialog) {
 
   img.style.backgroundSize = "cover"
   img.addEventListener("load", () => (img.style.backgroundImage = ""))
+
+  // Stop playback and drop the stream, so a clip doesn't keep playing or downloading
+  const stopVideo = () => {
+    if (!video.getAttribute("src")) return
+    video.pause()
+    video.removeAttribute("src")
+    video.load()
+  }
+
+  const showVideo = (slide: Slide) => {
+    img.hidden = true
+    img.removeAttribute("src")
+    img.removeAttribute("srcset")
+    videoBox.hidden = false
+    if (slide.width && slide.height) videoBox.style.setProperty("--ratio", String(slide.width / slide.height))
+    player.setAttribute("poster", slide.src)
+    video.setAttribute("aria-label", slide.alt)
+    video.src = slide.video
+    loadVideoJs().then(() => {
+      if (dialog.open && video.getAttribute("src") === slide.video) video.play().catch(() => {})
+    })
+  }
 
   const preload = (i: number) => {
     const slide = slides[(i + slides.length) % slides.length]
@@ -80,21 +115,29 @@ if (dialog) {
     index = (i + slides.length) % slides.length
     const slide = slides[index]
 
-    // Clear first, so the previous image doesn't linger while the next one loads.
-    // Its box is sized from width/height straight away and shows the small version
-    // already on the page until the full one arrives, so it never flashes empty.
-    img.removeAttribute("src")
-    img.style.backgroundImage = slide.thumb ? `url(${JSON.stringify(slide.thumb)})` : ""
-    img.srcset = slide.srcset
-    if (slide.width && slide.height) {
-      img.width = slide.width
-      img.height = slide.height
+    stopVideo()
+    if (slide.video) {
+      showVideo(slide)
     } else {
-      img.removeAttribute("width")
-      img.removeAttribute("height")
+      videoBox.hidden = true
+      img.hidden = false
+
+      // Clear first, so the previous image doesn't linger while the next one loads.
+      // Its box is sized from width/height straight away and shows the small version
+      // already on the page until the full one arrives, so it never flashes empty.
+      img.removeAttribute("src")
+      img.style.backgroundImage = slide.thumb ? `url(${JSON.stringify(slide.thumb)})` : ""
+      img.srcset = slide.srcset
+      if (slide.width && slide.height) {
+        img.width = slide.width
+        img.height = slide.height
+      } else {
+        img.removeAttribute("width")
+        img.removeAttribute("height")
+      }
+      img.src = slide.src
+      img.alt = slide.alt
     }
-    img.src = slide.src
-    img.alt = slide.alt
 
     caption.textContent = slide.caption
     caption.hidden = !slide.caption
@@ -121,7 +164,8 @@ if (dialog) {
       const thumb = document.createElement("button")
       thumb.type = "button"
       thumb.className = "lightbox__thumb"
-      thumb.setAttribute("aria-label", `Show image ${n + 1} of ${slides.length}`)
+      thumb.toggleAttribute("data-video", Boolean(slide.video))
+      thumb.setAttribute("aria-label", `Show ${slide.video ? "video" : "image"} ${n + 1} of ${slides.length}`)
       const image = document.createElement("img")
       image.src = slide.thumb
       image.alt = ""
@@ -177,6 +221,7 @@ if (dialog) {
   }
 
   dialog.addEventListener("close", () => {
+    stopVideo()
     document.documentElement.style.overflow = ""
     opener?.focus({ preventScroll: true })
     opener = null
@@ -186,11 +231,12 @@ if (dialog) {
 
   // Clicking anywhere but the image, its caption or the rail closes the viewer
   dialog.querySelector("[data-lb-surface]")!.addEventListener("click", (event) => {
-    if (!(event.target as Element).closest("img, p, button")) dialog.close()
+    if (!(event.target as Element).closest("img, p, button, [data-lb-video]")) dialog.close()
   })
 
   dialog.addEventListener("keydown", (event) => {
-    if (slides.length < 2) return
+    // Keys pressed inside the player (its sliders, its buttons) are the player's
+    if (slides.length < 2 || (event.target as Element).closest("[data-lb-video]")) return
     if (event.key === "ArrowRight") show(index + 1)
     if (event.key === "ArrowLeft") show(index - 1)
   })
@@ -208,7 +254,8 @@ if (dialog) {
   stage.addEventListener(
     "touchstart",
     (event) => {
-      tracking = event.touches.length === 1 && slides.length > 1
+      // Leave drags on the player's controls to the player
+      tracking = event.touches.length === 1 && slides.length > 1 && !(event.target as Element).closest("[data-lb-video]")
       if (tracking) {
         touchX = event.touches[0].clientX
         touchY = event.touches[0].clientY
