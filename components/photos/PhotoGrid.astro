@@ -3,6 +3,9 @@
  * Photo wall: tile spans come from each photo's `format`. Everything is
  * generated at build time — responsive tile images, a large srcset for the
  * lightbox, and a 16px blur placeholder.
+ *
+ * An entry with a `video` URL is a clip: `file` is its poster, and the
+ * lightbox plays the video in place of the full-size image.
  */
 import { join } from "node:path"
 import type { ImageMetadata } from "astro"
@@ -52,7 +55,7 @@ const tiles = await Promise.all(
     <p class="py-12 text-center text-muted-foreground">No photos yet.</p>
   ) : (
     <ul class="grid auto-rows-[8.5rem] grid-flow-dense grid-cols-2 gap-1 sm:grid-cols-3 md:grid-cols-4">
-      {tiles.map(({ image, layout, full, placeholder, alt, caption, dateLabel }, index) => (
+      {tiles.map(({ image, layout, full, placeholder, alt, caption, dateLabel, video }, index) => (
         <li class:list={["relative overflow-hidden rounded-sm bg-muted", layout.span]}>
           <!-- Blurred 16px preview shows until the real image paints over it -->
           <span
@@ -62,9 +65,10 @@ const tiles = await Promise.all(
           />
           <button
             type="button"
-            class="group absolute inset-0 cursor-zoom-in"
-            aria-label={`Open photo: ${caption || alt}`}
+            class:list={["group absolute inset-0", video ? "cursor-pointer" : "cursor-zoom-in"]}
+            aria-label={`${video ? "Play video" : "Open photo"}: ${caption || alt}`}
             data-photo
+            data-video={video}
             data-src={full.src}
             data-srcset={full.srcSet.attribute}
             data-width={image.width}
@@ -84,6 +88,17 @@ const tiles = await Promise.all(
               fetchpriority={index < 2 ? "high" : "auto"}
               class="relative size-full object-cover transition-[transform,opacity] duration-300 group-hover:scale-[1.03] group-hover:opacity-90"
             />
+            {video && (
+              <span
+                class="absolute top-1/2 left-1/2 grid size-11 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-black/55 text-white backdrop-blur-sm transition-[transform,background-color] duration-200 group-hover:scale-110 group-hover:bg-black/70"
+                aria-hidden="true"
+              >
+                <!-- The triangle's centre of mass sits at the middle of its box, so no nudge -->
+                <svg viewBox="0 0 24 24" class="size-5 fill-current">
+                  <path d="M8 5.14v13.72a1 1 0 0 0 1.52.85l10.8-6.86a1 1 0 0 0 0-1.7L9.52 4.29A1 1 0 0 0 8 5.14Z" />
+                </svg>
+              </span>
+            )}
           </button>
         </li>
       ))}
