@@ -1,66 +1,66 @@
-/* The shared video player: opens from a thumbnail, click or space to pause, drag or arrow keys to seek. */
+/*
+ * The shared video modal (components/concerts/VideoModal.astro): opens from a
+ * VideoThumbnail and plays its clip in the site's Video.js player.
+ *
+ * A thumbnail's shape (often square) isn't the clip's, so the player stays
+ * hidden behind a spinner until the video reports its size, then appears once
+ * at the right shape instead of jumping from one to the other.
+ */
+import { loadVideoJs } from "@/lib/client/video-player"
+
+const REVEAL_FALLBACK = 4000
+
 const modal = document.querySelector<HTMLDialogElement>("[data-video-modal]")
 
 if (modal) {
-  const video = modal.querySelector<HTMLVideoElement>("[data-video-player]")!
-  const toggle = modal.querySelector<HTMLElement>("[data-video-toggle]")!
-  const spinner = modal.querySelector<HTMLElement>("[data-video-spinner]")!
-  const seek = modal.querySelector<HTMLInputElement>("[data-video-seek]")!
-  const time = modal.querySelector<HTMLElement>("[data-video-time]")!
+  const box = modal.querySelector<HTMLElement>("[data-video-box]")!
+  const player = box.querySelector("video-player")!
+  const video = box.querySelector("video")!
   const caption = modal.querySelector<HTMLElement>("p[data-video-caption]")!
+  const spinner = modal.querySelector<HTMLElement>("[data-video-spinner]")!
 
-  // Give the buffer a head start so playback doesn't stall straight away, but never
-  // wait long: on a slow connection a big video may not reach canplaythrough at all
-  const BUFFER_WAIT = 3000
-  let bufferTimer: ReturnType<typeof setTimeout> | undefined
-  const start = () => {
-    clearTimeout(bufferTimer)
-    video.removeEventListener("canplaythrough", start)
-    video.play().catch(() => (toggle.hidden = false))
+  let captionText = ""
+  let revealTimer: ReturnType<typeof setTimeout> | undefined
+
+  const reveal = () => {
+    clearTimeout(revealTimer)
+    if (!box.hasAttribute("data-pending")) return
+    box.removeAttribute("data-pending")
+    spinner.hidden = true
+    caption.hidden = !captionText
   }
-
-  const clock = (seconds: number) => `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2, "0")}`
-
-  const togglePlay = () => (video.paused ? video.play() : video.pause())
 
   for (const button of document.querySelectorAll<HTMLElement>("[data-video-open]")) {
     button.addEventListener("click", () => {
-      video.src = button.dataset.videoOpen!
-      video.setAttribute("aria-label", button.dataset.videoLabel!)
-      caption.textContent = button.dataset.videoCaption ?? ""
-      caption.hidden = !button.dataset.videoCaption
-      seek.value = "0"
+      const { videoOpen = "", videoLabel = "", videoCaption = "", videoPoster, videoRatio } = button.dataset
+
+      box.setAttribute("data-pending", "")
       spinner.hidden = false
+      captionText = videoCaption
+      caption.textContent = videoCaption
+      caption.hidden = true
+
+      box.style.setProperty("--ratio", videoRatio || "1")
+      if (videoPoster) player.setAttribute("poster", videoPoster)
+      else player.removeAttribute("poster")
+      video.setAttribute("aria-label", videoLabel)
+      video.preload = "metadata"
+      video.src = videoOpen
+
       modal.showModal()
-      video.addEventListener("canplaythrough", start)
-      bufferTimer = setTimeout(start, BUFFER_WAIT)
+      // Show it anyway if the size is slow to arrive or the video fails
+      revealTimer = setTimeout(reveal, REVEAL_FALLBACK)
+      loadVideoJs().then(() => {
+        if (modal.open && video.getAttribute("src") === videoOpen) video.play().catch(() => {})
+      })
     })
   }
 
-  video.addEventListener("click", togglePlay)
-  toggle.addEventListener("click", togglePlay)
-  video.addEventListener("play", () => (toggle.hidden = true))
-  video.addEventListener("pause", () => (toggle.hidden = false))
-  video.addEventListener("waiting", () => (spinner.hidden = false))
-  video.addEventListener("playing", () => (spinner.hidden = true))
-  video.addEventListener("canplay", () => (spinner.hidden = true))
-  video.addEventListener("timeupdate", () => {
-    if (video.duration) seek.value = String((video.currentTime / video.duration) * 1000)
-    time.textContent = `${clock(video.currentTime)} / ${clock(video.duration || 0)}`
+  video.addEventListener("loadedmetadata", () => {
+    if (video.videoWidth && video.videoHeight) box.style.setProperty("--ratio", String(video.videoWidth / video.videoHeight))
+    reveal()
   })
-
-  // Space pauses, arrows skip 5s (Escape closes via the dialog itself)
-  modal.addEventListener("keydown", (event) => {
-    if (event.target === seek) return
-    if (event.key === " ") {
-      event.preventDefault()
-      togglePlay()
-    } else if (event.key === "ArrowRight") video.currentTime += 5
-    else if (event.key === "ArrowLeft") video.currentTime -= 5
-  })
-  seek.addEventListener("input", () => {
-    if (video.duration) video.currentTime = (Number(seek.value) / 1000) * video.duration
-  })
+  video.addEventListener("error", reveal)
 
   modal.querySelector("[data-video-close]")!.addEventListener("click", () => modal.close())
 
@@ -71,12 +71,10 @@ if (modal) {
 
   // Dropping the source stops playback and any download still running
   modal.addEventListener("close", () => {
-    clearTimeout(bufferTimer)
-    video.removeEventListener("canplaythrough", start)
+    clearTimeout(revealTimer)
     video.pause()
     video.removeAttribute("src")
     video.load()
-    toggle.hidden = true
     spinner.hidden = true
   })
 }
