@@ -47,6 +47,7 @@ export const navGroups = [
     links: [
       { href: "/guestbook", label: "Guestbook" },
       { href: "/dashboard", label: "Dashboard" },
+      { href: "https://analytics.manishtamang.com/share/jFK5VpX2c6h2JgRg", label: "Analytics" },
       { href: "/colophon", label: "Colophon" },
       { href: "/contact", label: "Contact" },
     ],
@@ -54,8 +55,8 @@ export const navGroups = [
   {
     label: "Slash pages",
     marker: "bg-pink",
-    // /chris-cornell stays reachable through /slashes
-    links: slashPages.filter(({ href }) => href !== "/chris-cornell").map(({ href, label }) => ({ href, label })),
+    // /chris-cornell and /blank stay reachable through /slashes
+    links: slashPages.filter(({ href }) => href !== "/chris-cornell" && href !== "/blank").map(({ href, label }) => ({ href, label })),
   },
 ] as const
 
