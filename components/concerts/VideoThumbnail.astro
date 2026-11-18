@@ -4,6 +4,7 @@
  * without one, the browser fetches just enough to show an early frame.
  */
 import type { ImageMetadata } from "astro"
+import { getImage } from "astro:assets"
 import BlurImage from "@/components/ui/BlurImage.astro"
 
 export interface Props {
@@ -19,6 +20,10 @@ export interface Props {
 }
 
 const { src, poster, label, caption, wide = false, tall = false } = Astro.props
+
+// Handed to the modal's player: its poster, and its shape until the video's own size loads
+const posterUrl = poster ? (await getImage({ src: poster, width: 1280, format: "webp", quality: 80 })).src : undefined
+const ratio = wide ? 16 / 9 : tall ? 3 / 4 : 1
 ---
 
 <button
@@ -26,6 +31,8 @@ const { src, poster, label, caption, wide = false, tall = false } = Astro.props
   data-video-open={src}
   data-video-label={label}
   data-video-caption={caption}
+  data-video-poster={posterUrl}
+  data-video-ratio={ratio}
   aria-label={`Play video: ${label}`}
   class:list={["group relative block w-full cursor-pointer overflow-hidden rounded-md bg-black", wide ? "aspect-video" : tall ? "aspect-[3/4]" : "aspect-square"]}
 >
