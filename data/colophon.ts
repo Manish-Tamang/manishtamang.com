@@ -24,6 +24,12 @@ export const stack: Tool[] = [
     url: "https://tailwindcss.com/",
   },
   {
+    name: "Video.js",
+    note: "Every video's player, from Mux's guide for Astro",
+    url: "https://www.mux.com/video-for/astro",
+    iconDomain: "videojs.org",
+  },
+  {
     name: "Vercel",
     note: "Hosting and the API routes",
     url: "https://vercel.com/",
