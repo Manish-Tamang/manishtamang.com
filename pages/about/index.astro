@@ -8,7 +8,7 @@ import type { ImageMetadata } from "astro"
 import { Image } from "astro:assets"
 import BlurImage from "@/components/ui/BlurImage.astro"
 import StoryLayout from "@/layouts/StoryLayout.astro"
-import LiteYouTube from "@/components/ui/LiteYouTube.astro"
+import VideoPlayer from "@/components/ui/VideoPlayer.astro"
 import Firfirey from "@/components/about/Firfirey.astro"
 import PolaroidGallery from "@/components/photos/PolaroidGallery.astro"
 import { aboutPolaroids, education, featured, intro, randomFacts, socials, work } from "@/data/about"
@@ -174,7 +174,7 @@ const logo = "mt-0.5 size-10 shrink-0 rounded-full border border-border"
       {randomFacts.map(({ text, youtubeId, youtubeTitle }) => (
         <div class="space-y-3">
           <p>{text}</p>
-          {youtubeId && <LiteYouTube id={youtubeId} title={youtubeTitle} thumbnail={aboutImage(`youtube-${youtubeId}.jpg`)} />}
+          {youtubeId && <VideoPlayer youtube src={youtubeId} title={youtubeTitle} poster={aboutImage(`youtube-${youtubeId}.jpg`)} class="w-full" />}
         </div>
       ))}
     </div>
