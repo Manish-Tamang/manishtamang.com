@@ -6,6 +6,7 @@
  * images in posts or marked [data-zoom]. Native <dialog> gives focus trapping
  * and Escape-to-close.
  */
+import VideoPlayer from "@/components/ui/VideoPlayer.astro"
 ---
 
 <dialog data-lightbox aria-label="Image viewer" class="lightbox">
@@ -18,6 +19,9 @@
 
     <div class="lightbox__stage" data-lb-stage>
       <img data-lb-image alt="" sizes="min(92vw, 920px)" decoding="async" draggable="false" class="lightbox__img" />
+
+      <!-- Video slides ([data-video] tiles); lib/client/lightbox.ts sets the clip on open -->
+      <VideoPlayer class="lightbox__video" deferred data-lb-video hidden />
     </div>
 
     <div class="lightbox__foot">
@@ -117,6 +121,36 @@
 
   .lightbox__img[data-pageable] {
     cursor: pointer;
+  }
+
+  .lightbox__img[hidden],
+  .lightbox__video[hidden] {
+    display: none;
+  }
+
+  /*
+   * Sized from the clip's aspect ratio (--ratio, set by the script) and the
+   * room left around it, so the box is right before the video loads.
+   */
+  .lightbox__video {
+    width: min(88%, 920px, calc((100svh - 300px) * var(--ratio)));
+    margin-inline: auto;
+  }
+
+  /* Video slides get a small play mark on their thumbnail */
+  .lightbox__thumb[data-video] {
+    position: relative;
+  }
+
+  .lightbox__thumb[data-video]::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 0.75rem;
+    height: 0.75rem;
+    background: #fff;
+    clip-path: polygon(20% 8%, 92% 50%, 20% 92%);
   }
 
   .lightbox__close {
@@ -260,6 +294,10 @@
     .lightbox[data-single] .lightbox__img {
       max-width: 100%;
       max-height: 60svh;
+    }
+
+    .lightbox__video {
+      width: min(100%, calc(60svh * var(--ratio)));
     }
 
     .lightbox__foot {
