@@ -1,9 +1,23 @@
 ---
 import PageLayout from "@/layouts/PageLayout.astro"
+import Link from "@/components/ui/Link.astro"
 import { changelog } from "@/data/slash-pages"
 
 const format = (date: string) =>
   new Date(`${date}T00:00:00`).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })
+
+// Every page on the site, from the files in pages/ (no dynamic routes, API or 404).
+// Only these become links, so a page that has since gone (like /wall) stays plain text.
+const routes = new Set(
+  Object.keys(import.meta.glob("/pages/**/*.{astro,ts}"))
+    .filter((file) => !file.includes("[") && !file.startsWith("/pages/api/") && !file.endsWith("/404.astro"))
+    .map((file) => file.replace(/^\/pages/, "").replace(/\/?index\.astro$/, "").replace(/\.(astro|ts)$/, "") || "/"),
+)
+
+// A path like /uses or /llms.txt, not part of a URL or a word like "and/or".
+// split() with a capture group puts the matches at the odd indexes.
+const PATH = /(?<![\w./:])(\/[a-z0-9][a-z0-9./-]*[a-z0-9])/g
+const pieces = (change: string) => change.split(PATH).map((text, index) => ({ text, href: index % 2 && routes.has(text) ? text : undefined }))
 ---
 
 <PageLayout heading="Changelog" intro="Changes to this website." description="Every notable change to manishtamang.com, from the first Next.js version to the Astro rebuild.">
@@ -12,7 +26,9 @@ const format = (date: string) =>
       <li class="grid gap-2 sm:grid-cols-[7rem_1fr] sm:gap-6">
         <time datetime={date} class="text-sm text-muted-foreground tabular-nums sm:pt-0.5">{format(date)}</time>
         <ul class="list-disc space-y-1.5 pl-5 marker:text-muted-foreground">
-          {changes.map((change) => <li>{change}</li>)}
+          {changes.map((change) => (
+            <li>{pieces(change).map(({ text, href }) => (href ? <Link href={href}>{text}</Link> : text))}</li>
+          ))}
         </ul>
       </li>
     ))}
