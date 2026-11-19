@@ -8,16 +8,21 @@ import MdxImage from "@/components/blog/MdxImage.astro"
 import Badge from "@/components/ui/Badge.astro"
 import Prose from "@/components/typography/Prose.astro"
 import Separator from "@/components/ui/Separator.astro"
-import { formatDate, getPosts, readingTime, viewCount, type Post } from "@/lib/blog"
+import { formatDate, getDevDrafts, getPosts, readingTime, viewCount, type Post } from "@/lib/blog"
 import { blogPostingJsonLd, toJsonLd } from "@/lib/seo"
 import { site } from "@/lib/site"
 
 export async function getStaticPaths() {
   const posts = await getPosts()
-  return posts.map((post, index) => ({
-    params: { slug: post.id },
-    props: { post, newer: posts[index - 1], older: posts[index + 1] },
-  }))
+  const drafts = await getDevDrafts()
+  return [
+    ...posts.map((post, index) => ({
+      params: { slug: post.id },
+      props: { post, newer: posts[index - 1], older: posts[index + 1] },
+    })),
+    // Preview pages in dev only, without newer/older links
+    ...drafts.map((post) => ({ params: { slug: post.id }, props: { post } })),
+  ]
 }
 
 interface Props {
@@ -63,6 +68,7 @@ const description = data.metaDescription ?? data.description
     <span aria-hidden="true">·</span>
     <span class="tabular-nums"><span data-views={post.id}>{viewCount(post).toLocaleString("en-GB")}</span> views</span>
     {data.ai && <a href="/ai" title="Written with AI help"><Badge variant="accent">AI</Badge></a>}
+    {data.draft && <Badge variant="outline" title="Only visible in local dev">Draft</Badge>}
   </p>
 
   {
