@@ -71,7 +71,7 @@ export const now: { heading: string; items: string[] }[] = [
     heading: "Working on",
     items: [
       "Rebuilding this site in Astro, with every old URL kept and almost no JavaScript.",
-      "Freelance websites for clients in Nepal and Finland.",
+      "Freelance websites for clients in Nepal, Finland and Australia.",
     ],
   },
   {
