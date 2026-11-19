@@ -3,7 +3,7 @@
  * In StoryLayout, with the same rhythm as /about: the Nepal time as a 24px lead
  * running into the intro, then the form, with every control 40px tall.
  */
-import { PUBLIC_CALENDLY_URL, PUBLIC_WEB3FORMS_ACCESS_KEY } from "astro:env/client"
+import { PUBLIC_CALENDLY_URL, PUBLIC_TURNSTILE_SITE_KEY, PUBLIC_WEB3FORMS_ACCESS_KEY } from "astro:env/client"
 import StoryLayout from "@/layouts/StoryLayout.astro"
 import Button from "@/components/ui/Button.astro"
 import Input from "@/components/ui/Input.astro"
@@ -108,6 +108,21 @@ const choice =
       </ul>
     </aside>
 
+    {
+      PUBLIC_TURNSTILE_SITE_KEY && (
+        <>
+          <!--
+            Cloudflare Turnstile, as on the old site. It adds a hidden
+            cf-turnstile-response field to the form, which goes to Web3Forms
+            with the message. Tokens are single use: the script resets it after
+            every attempt.
+          -->
+          <div class="cf-turnstile h-[65px] w-[300px]" data-sitekey={PUBLIC_TURNSTILE_SITE_KEY} data-theme="auto" data-size="normal" />
+          <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+        </>
+      )
+    }
+
     <div>
       <Button type="submit" class="h-10 w-full text-sm" data-submit>Send message</Button>
       <p data-form-status role="status" aria-live="polite" class="mt-2 min-h-5.5 text-center text-sm"></p>
@@ -167,9 +182,14 @@ const choice =
   updateTime()
   setInterval(updateTime, 30_000)
 
+  type Turnstile = { reset: (widget?: string | HTMLElement) => void }
+  const turnstile = () => (window as unknown as { turnstile?: Turnstile }).turnstile
+
   // Send the form with fetch so the visitor stays on the page
   const form = document.querySelector<HTMLFormElement>("[data-contact-form]")
   if (form) {
+    const challenge = form.querySelector<HTMLElement>(".cf-turnstile")
+
     const status = form.querySelector<HTMLElement>("[data-form-status]")!
     const submit = form.querySelector<HTMLButtonElement>("[data-submit]")!
 
@@ -184,6 +204,7 @@ const choice =
         const fields = Object.fromEntries(new FormData(form))
         // Without the key Web3Forms answers 400; say so instead of a vague failure
         if (!fields.access_key) throw new Error("missing access key")
+        if (challenge && !fields["cf-turnstile-response"]) throw new Error("please complete the verification above")
 
         const response = await fetch(form.action, {
           method: "POST",
@@ -203,6 +224,8 @@ const choice =
       } finally {
         submit.disabled = false
         submit.textContent = "Send message"
+        // A token works once; get a fresh one for the next attempt
+        if (challenge) turnstile()?.reset(challenge)
       }
     })
   }
