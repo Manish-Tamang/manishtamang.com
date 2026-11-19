@@ -79,6 +79,8 @@ export default defineConfig({
       PUBLIC_SUPABASE_URL: envField.string({ context: "client", access: "public", optional: true }),
       PUBLIC_SUPABASE_ANON_KEY: envField.string({ context: "client", access: "public", optional: true }),
       PUBLIC_CALENDLY_URL: envField.string({ context: "client", access: "public", optional: true }),
+      // Cloudflare Turnstile on the contact form; without it the form has no challenge
+      PUBLIC_TURNSTILE_SITE_KEY: envField.string({ context: "client", access: "public", optional: true }),
     },
   },
 
