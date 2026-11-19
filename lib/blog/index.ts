@@ -9,6 +9,14 @@ export async function getPosts() {
   return posts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
 }
 
+/**
+ * Drafts, in `astro dev` only: each gets a page at /blog/<slug> to preview, but
+ * stays off the blog list, feed and sitemap. Production builds never see them.
+ */
+export async function getDevDrafts() {
+  return import.meta.env.DEV ? getCollection("blog", ({ data }) => data.draft) : []
+}
+
 /** View count at build time; the post page swaps in the live one from /api/blog-views. */
 export const viewCount = (post: Post) => (blogViews as Record<string, number>)[post.id] ?? 0
 
