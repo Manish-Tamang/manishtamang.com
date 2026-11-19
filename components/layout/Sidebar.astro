@@ -8,17 +8,18 @@ const current = normalizePath(Astro.url.pathname)
 ---
 
 <aside class="sticky top-0 z-40 hidden max-h-dvh self-start overflow-y-auto pt-16 pb-4 [scrollbar-width:none] [view-transition-name:sidebar] md:block">
-  <nav aria-label="Main" class="space-y-6">
+  <nav aria-label="Main" class="space-y-5">
     {navGroups.map(({ label, marker, links }) => (
       <div>
-        {label && <p class="mb-1.5 text-xs text-muted-foreground">{label}</p>}
-        <ul class="flex flex-col gap-y-1.5">
+        {label && <p class="mb-1 text-xs text-muted-foreground">{label}</p>}
+        <!-- 20px rows, 4px apart: compact enough that the links rarely need to scroll -->
+        <ul class="flex flex-col gap-y-1">
           {links.map(({ href, label: text }) => (
             <li>
               <a
                 href={href}
                 aria-current={isActivePath(current, href) ? "page" : undefined}
-                class="group flex items-center gap-2.5 text-nav text-muted-foreground transition-colors hover:text-heading aria-[current=page]:text-link"
+                class="group flex items-center gap-2.5 text-nav leading-5 text-muted-foreground transition-colors hover:text-heading aria-[current=page]:text-link"
               >
                 <span
                   class:list={[
