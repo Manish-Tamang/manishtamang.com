@@ -3,7 +3,7 @@
     "file": "01-some-snaps-of-godawari-hacks-2026.jpg",
     "alt": "Some Snaps of Godawari Hacks 2026",
     "caption": "Some Snaps of Godawari Hacks 2026",
-    "format": "2x1",
+    "format": "2x2",
     "date": "2026-01-19"
   },
   {
@@ -136,7 +136,7 @@
     "file": "20-shailung-dolakha.jpg",
     "alt": "Shailung, Dolakha",
     "caption": "Shailung, Dolakha",
-    "format": "1x1",
+    "format": "1x2",
     "date": "2026-08-08"
   },
   {
@@ -174,5 +174,13 @@
     "caption": "The energy right before Gold section's dance performance at the welcome program for juniors",
     "format": "2x2",
     "date": "2025-09-05"
+  },
+  {
+    "file": "26-snowfall-at-muktinath-temple-mustang.jpg",
+    "video": "https://2iw0lwaklqgp6qdp.public.blob.vercel-storage.com/video_20251028_130819-web-XyGfBUH4OxUEux4JXdDdAtPXbbWvp9.mp4",
+    "alt": "Suman and Lajeyhang in falling snow at Muktinath Temple",
+    "caption": "Snowfall at Muktinath Temple, Mustang, with Suman and Lajeyhang",
+    "format": "1x2",
+    "date": "2025-10-28"
   }
 ]
