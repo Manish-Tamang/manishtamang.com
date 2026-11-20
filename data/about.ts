@@ -77,11 +77,42 @@ export const featured = [
   },
 ]
 
-export const randomFacts = [
+/*
+ * Laid out like the Work entries: title (linked when `url` is set), one-line
+ * summary, date pill, optional bullet points, then a photo (a file in
+ * assets/about/, opening in the image viewer) or a YouTube video.
+ */
+export const randomFacts: {
+  title: string
+  url?: string
+  summary: string
+  date: string
+  points?: string[]
+  image?: { file: string; alt: string }
+  youtubeId?: string
+}[] = [
   {
-    text: "Back in late 2023, I uploaded a video about Raspberry Pi 4 builds.",
+    title: "Raspberry Pi 4 builds",
+    url: "https://www.youtube.com/watch?v=6ljvu9RBBXo",
+    summary: "A video I uploaded to YouTube",
+    date: "Late 2023",
     youtubeId: "6ljvu9RBBXo",
-    youtubeTitle: "Raspberry Pi 4 builds",
+  },
+  {
+    title: "Godawari Hacks",
+    url: "https://hack.godawari.edu.np",
+    summary: "A high school hackathon my friends and I organised",
+    date: "Jan 2026",
+    points: [
+      "I was the coordinator, with my classmates by my side",
+      "Convinced our college to host it",
+      "Raised NPR 150K from sponsors",
+      "24 hours of hacking across three days, ceremonies included",
+    ],
+    image: {
+      file: "godawari-hacks-2026.webp",
+      alt: "Participants, organisers and winners of Godawari Hacks 2026 with their certificates, trophies and medals",
+    },
   },
 ]
 
