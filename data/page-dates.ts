@@ -7,7 +7,7 @@
 
 export const pageUpdated: Record<string, string> = {
   // Pages (last commit touching the page on manishtamang.com)
-  "/about": "2026-11-03",
+  "/about": "2026-11-20",
   "/bio": "2026-11-03",
   "/blog": "2026-10-13",
   "/projects": "2026-10-13",
