@@ -170,13 +170,40 @@ const logo = "mt-0.5 size-10 shrink-0 rounded-full border border-border"
   <section class={section}>
     <h2 class={sectionTitle}>Random facts</h2>
     <p class={sectionIntro}>A few stray notes from along the way.</p>
-    <div class="space-y-6 text-sm">
-      {randomFacts.map(({ text, youtubeId, youtubeTitle }) => (
-        <div class="space-y-3">
-          <p>{text}</p>
-          {youtubeId && <VideoPlayer youtube src={youtubeId} title={youtubeTitle} poster={aboutImage(`youtube-${youtubeId}.jpg`)} class="w-full" />}
-        </div>
+    <ul class="space-y-8 text-sm">
+      {randomFacts.map(({ title, url, summary, date, points, image, youtubeId }) => (
+        <li>
+          <div class="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+            <div class="min-w-0">
+              {url ? (
+                <a href={url} class="font-subsection text-heading transition-colors hover:text-link">{title}</a>
+              ) : (
+                <p class="font-subsection text-heading">{title}</p>
+              )}
+              <p class="text-muted-foreground">{summary}</p>
+            </div>
+            <span class={datePill}>{date}</span>
+          </div>
+          {points && (
+            <ul class="mt-2 list-disc space-y-1 pl-4 marker:text-muted-foreground">
+              {points.map((point) => <li>{point}</li>)}
+            </ul>
+          )}
+          {image && (
+            <BlurImage
+              src={aboutImage(image.file)}
+              alt={image.alt}
+              widths={[480, 768, 1152]}
+              sizes="(max-width: 768px) 100vw, 576px"
+              class="mt-3 w-full rounded-lg border border-border"
+              data-zoom
+            />
+          )}
+          {youtubeId && (
+            <VideoPlayer youtube src={youtubeId} title={title} poster={aboutImage(`youtube-${youtubeId}.jpg`)} class="mt-3 w-full" />
+          )}
+        </li>
       ))}
-    </div>
+    </ul>
   </section>
 </StoryLayout>
