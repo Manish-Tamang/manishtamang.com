@@ -1,0 +1,59 @@
+---
+/* Scrobbles by hour of day (Kathmandu time) on a 24-hour dial, midnight at the top. */
+import { hourLabel } from "./format"
+
+export interface Props {
+  hours: number[]
+}
+
+const { hours } = Astro.props
+const size = 280
+const c = size / 2
+const inner = 46
+const length = 80
+const max = Math.max(1, ...hours)
+const busiest = hours.indexOf(Math.max(...hours))
+const at = (hour: number, radius: number) => {
+  const a = -Math.PI / 2 + ((hour + 0.5) / 24) * 2 * Math.PI
+  return [c + Math.cos(a) * radius, c + Math.sin(a) * radius] as const
+}
+const labelAt = (hour: number) => {
+  const a = -Math.PI / 2 + (hour / 24) * 2 * Math.PI
+  return [c + Math.cos(a) * (inner + length + 18), c + Math.sin(a) * (inner + length + 18) + 4] as const
+}
+---
+
+<div class="grid items-center gap-6 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+  <svg viewBox={`0 0 ${size} ${size}`} class="mx-auto w-full max-w-xs overflow-visible" role="img" aria-label="Scrobbles by hour of day">
+    <circle cx={c} cy={c} r={inner + length} fill="none" class="stroke-border" stroke-dasharray="2 3" />
+    <circle cx={c} cy={c} r={inner + length / 2} fill="none" class="stroke-border" stroke-dasharray="2 3" />
+    <circle cx={c} cy={c} r={inner - 6} fill="none" class="stroke-border" />
+    {[0, 6, 12, 18].map((hour) => {
+      const [x, y] = labelAt(hour)
+      return <text x={x} y={y} text-anchor="middle" class="fill-muted-foreground text-[11px] tabular-nums">{String(hour).padStart(2, "0")}</text>
+    })}
+    {hours.map((n, hour) => {
+      const [x1, y1] = at(hour, inner)
+      const [x2, y2] = at(hour, inner + Math.max(2, (n / max) * length))
+      const [hx, hy] = at(hour, inner + length)
+      return (
+        <g data-tip={`${hourLabel(hour)}–${hourLabel((hour + 1) % 24)}: ${n}`}>
+          <line x1={x1} y1={y1} x2={hx} y2={hy} stroke="transparent" stroke-width="14" />
+          <line x1={x1} y1={y1} x2={x2} y2={y2} stroke-width="8" stroke-linecap="round" class:list={[n ? "stroke-(--viz-now)" : "stroke-border"]} />
+        </g>
+      )
+    })}
+    <text x={c} y={c - 2} text-anchor="middle" class="fill-heading text-[15px] font-semibold">{hourLabel(busiest)}</text>
+    <text x={c} y={c + 14} text-anchor="middle" class="fill-muted-foreground text-[10px]">busiest</text>
+  </svg>
+  <dl class="grid grid-cols-2 gap-4 sm:grid-cols-1">
+    <div>
+      <dt class="text-xs text-muted-foreground">Busiest hour</dt>
+      <dd class="text-2xl font-semibold tracking-tight text-heading">{hourLabel(busiest)}</dd>
+    </div>
+    <div>
+      <dt class="text-xs text-muted-foreground">Scrobbles in busiest hour</dt>
+      <dd class="text-2xl font-semibold tracking-tight text-heading tabular-nums">{hours[busiest]}</dd>
+    </div>
+  </dl>
+</div>

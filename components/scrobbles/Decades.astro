@@ -1,0 +1,45 @@
+---
+/* Scrobbles by the decade each album came out, with the top album of the leading decade. */
+import { plural } from "./format"
+import type { Decade } from "@/lib/services/scrobbles"
+
+export interface Props {
+  decades: Decade[]
+  dated: number
+  total: number
+}
+
+const { decades, dated, total } = Astro.props
+const max = Math.max(1, ...decades.map((d) => d.plays))
+const lead = decades.reduce<Decade | undefined>((best, d) => (d.plays > (best?.plays ?? 0) ? d : best), undefined)
+---
+
+<div class="grid gap-6 sm:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
+  <div class="space-y-1.5">
+    {decades.map((d) => (
+      <div class="grid grid-cols-[4.5rem_minmax(0,1fr)_2rem] items-center gap-3" data-tip={d.top ? `${d.label}: ${d.plays} · top: ${d.top.name} by ${d.top.artist}` : `${d.label}: ${d.plays}`}>
+        <span class="text-xs text-muted-foreground">{d.label}</span>
+        <div class="h-4">
+          {d.plays > 0 && <div class:list={["h-full rounded-r-[4px]", d === lead ? "bg-(--viz-now)" : "bg-(--viz-prev)"]} style={{ width: `${(d.plays / max) * 100}%` }}></div>}
+        </div>
+        <span class="text-right text-xs text-heading tabular-nums">{d.plays}</span>
+      </div>
+    ))}
+    <p class="pt-1 text-xs text-muted-foreground">
+      Release years found for {plural(dated, "scrobble")} of {total}, from Deezer.
+    </p>
+  </div>
+
+  {lead?.top && (
+    <a href={lead.top.url} target="_blank" rel="noopener noreferrer" class="group flex items-center gap-3 self-start rounded-xl bg-subtle p-3 sm:flex-col sm:items-start">
+      <span class="size-16 shrink-0 overflow-hidden rounded-md bg-muted sm:size-28">
+        {lead.top.imageUrl && <img src={lead.top.imageUrl} alt="" loading="lazy" class="size-full object-cover" />}
+      </span>
+      <span class="min-w-0 text-sm">
+        <span class="block text-xs text-muted-foreground">Top album · {lead.label}</span>
+        <span class="block truncate font-medium text-heading group-hover:underline">{lead.top.name}</span>
+        <span class="block truncate text-muted-foreground">by {lead.top.artist}</span>
+      </span>
+    </a>
+  )}
+</div>

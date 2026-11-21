@@ -32,6 +32,11 @@ export const slashPages = [
     description: "Changes to this website.",
   },
   {
+    href: "/scrobbles",
+    label: "Scrobbles",
+    description: "My weekly listening report from Last.fm.",
+  },
+  {
     href: "/concerts",
     label: "Concerts",
     description: "Concerts and live shows I've been to.",
@@ -204,6 +209,10 @@ export const ai: { title: string; body: string }[] = [
 ];
 
 export const changelog: { date: string; changes: string[] }[] = [
+  {
+    date: "2026-11-21",
+    changes: ["Added /scrobbles, a weekly listening report from Last.fm with charts for days, tags, decades and hours."],
+  },
   {
     date: "2026-11-04",
     changes: [

@@ -36,7 +36,7 @@ export interface TopItem {
   url: string
 }
 
-interface LastfmImage {
+export interface LastfmImage {
   size: string
   "#text": string
 }
@@ -78,7 +78,7 @@ const fetchRecentTracks = async (limit: number): Promise<LastfmTrack[]> => {
   return (data.recenttracks?.track ?? []).slice(0, limit)
 }
 
-const largeImage = (images: LastfmImage[]) => {
+export const largeImage = (images: LastfmImage[]) => {
   const image = images.find((img) => img.size === "extralarge")?.["#text"]
   return image && !image.includes(PLACEHOLDER_IMAGE_ID) ? image : undefined
 }
@@ -147,7 +147,7 @@ const artworkCache = new Map<string, { url?: string; expires: number }>()
 const ARTWORK_TIMEOUT = 1500
 
 // Last.fm lacks artwork for many smaller releases, so fall back to the iTunes catalog
-const getItunesArtwork = async (title: string, artist: string) => {
+export const getItunesArtwork = async (title: string, artist: string) => {
   const key = `${artist}\u0000${title}`
   const cached = artworkCache.get(key)
   if (cached && cached.expires > Date.now()) return cached.url
@@ -174,7 +174,7 @@ const getItunesArtwork = async (title: string, artist: string) => {
 }
 
 // Last.fm's API stopped returning artist photos, so look them up on Deezer (no key needed)
-const getDeezerArtistImage = async (name: string) => {
+export const getDeezerArtistImage = async (name: string) => {
   const key = `artist\u0000${name}`
   const cached = artworkCache.get(key)
   if (cached && cached.expires > Date.now()) return cached.url

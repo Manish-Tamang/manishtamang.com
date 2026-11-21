@@ -1,0 +1,60 @@
+---
+/* Scrobbles per day, this week beside the same weekday last week. */
+import { barPath, fmtDate, ticks } from "./format"
+
+export interface Props {
+  days: { date: number; plays: number; previous: number }[]
+}
+
+const { days } = Astro.props
+
+const W = 640
+const H = 220
+const left = 32
+const bottom = 26
+const top = 8
+const plotW = W - left - 4
+const plotH = H - top - bottom
+const grid = ticks(Math.max(...days.flatMap((d) => [d.plays, d.previous])))
+const max = grid.at(-1)!
+const y = (n: number) => top + plotH - (n / max) * plotH
+const group = plotW / days.length
+const bar = Math.min(20, group * 0.3)
+---
+
+<figure class="space-y-3">
+  <div class="flex items-center gap-4 text-xs text-muted-foreground">
+    <span class="inline-flex items-center gap-1.5"><span class="size-2.5 rounded-sm bg-(--viz-now)"></span>This week</span>
+    <span class="inline-flex items-center gap-1.5"><span class="size-2.5 rounded-sm bg-(--viz-prev)"></span>Last week</span>
+  </div>
+  <svg viewBox={`0 0 ${W} ${H}`} class="w-full overflow-visible" role="img" aria-label="Scrobbles per day, this week and last week">
+    {grid.map((value) => (
+      <g>
+        <line x1={left} x2={W} y1={y(value)} y2={y(value)} class="stroke-border" stroke-width="1" stroke-dasharray={value ? "2 3" : undefined} />
+        <text x={left - 8} y={y(value) + 4} text-anchor="end" class="fill-muted-foreground text-[11px] tabular-nums">{value}</text>
+      </g>
+    ))}
+    {days.map((day, i) => {
+      const cx = left + group * i + group / 2
+      return (
+        <g data-tip={`${fmtDate(day.date, { weekday: "short", day: "numeric", month: "short" })}: ${day.plays} · last week ${day.previous}`}>
+          <rect x={cx - group / 2} y={top} width={group} height={plotH} fill="transparent" />
+          <path d={barPath(cx - bar - 1, y(day.plays), bar, top + plotH - y(day.plays))} class="fill-(--viz-now)" />
+          <path d={barPath(cx + 1, y(day.previous), bar, top + plotH - y(day.previous))} class="fill-(--viz-prev)" />
+          <text x={cx} y={H - 6} text-anchor="middle" class="fill-muted-foreground text-[11px]">{fmtDate(day.date, { weekday: "short" })}</text>
+        </g>
+      )
+    })}
+  </svg>
+  <details class="text-xs text-muted-foreground">
+    <summary class="cursor-pointer">Show as table</summary>
+    <table class="mt-2 w-full max-w-sm tabular-nums">
+      <thead><tr class="text-left"><th class="font-medium">Day</th><th class="font-medium">This week</th><th class="font-medium">Last week</th></tr></thead>
+      <tbody>
+        {days.map((day) => (
+          <tr><td>{fmtDate(day.date, { weekday: "short", day: "numeric", month: "short" })}</td><td>{day.plays}</td><td>{day.previous}</td></tr>
+        ))}
+      </tbody>
+    </table>
+  </details>
+</figure>

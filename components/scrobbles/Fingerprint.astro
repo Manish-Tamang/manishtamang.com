@@ -1,0 +1,55 @@
+---
+/* Five 0–100 scores on a radar, this week over last week, with the numbers listed beside it. */
+import type { Fingerprint } from "@/lib/services/scrobbles"
+
+export interface Props {
+  items: Fingerprint[]
+}
+
+const { items } = Astro.props
+const size = 300
+const c = size / 2
+const r = 100
+const angle = (i: number) => -Math.PI / 2 + (i * 2 * Math.PI) / items.length
+const point = (i: number, v: number) => [c + Math.cos(angle(i)) * (r * v) / 100, c + Math.sin(angle(i)) * (r * v) / 100] as const
+const polygon = (key: "value" | "previous") => items.map((item, i) => point(i, item[key]).join(",")).join(" ")
+---
+
+<div class="grid items-center gap-6 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+  <div>
+    <svg viewBox={`0 0 ${size} ${size}`} class="mx-auto w-full max-w-xs overflow-visible" role="img" aria-label="Listening fingerprint radar">
+      {[25, 50, 75, 100].map((ring) => (
+        <polygon points={items.map((_, i) => point(i, ring).join(",")).join(" ")} fill="none" class="stroke-border" stroke-width="1" />
+      ))}
+      {items.map((_, i) => <line x1={c} y1={c} x2={point(i, 100)[0]} y2={point(i, 100)[1]} class="stroke-border" stroke-width="1" />)}
+      <polygon points={polygon("previous")} fill="none" class="stroke-(--viz-prev)" stroke-width="2" stroke-dasharray="4 3" />
+      <polygon points={polygon("value")} class="fill-(--viz-now) stroke-(--viz-now)" fill-opacity="0.15" stroke-width="2" stroke-linejoin="round" />
+      {items.map((item, i) => {
+        const [x, y] = point(i, item.value)
+        const [lx, ly] = point(i, 122)
+        return (
+          <g data-tip={`${item.label}: ${item.value}% · last week ${item.previous}%`}>
+            <circle cx={x} cy={y} r="12" fill="transparent" />
+            <circle cx={x} cy={y} r="4" class="fill-(--viz-now) stroke-background" stroke-width="2" />
+            <text x={lx} y={ly + 4} text-anchor={Math.abs(lx - c) < 5 ? "middle" : lx > c ? "start" : "end"} class="fill-muted-foreground text-[11px]">{item.label}</text>
+          </g>
+        )
+      })}
+    </svg>
+    <div class="mt-2 flex justify-center gap-4 text-xs text-muted-foreground">
+      <span class="inline-flex items-center gap-1.5"><span class="h-0.5 w-4 bg-(--viz-now)"></span>This week</span>
+      <span class="inline-flex items-center gap-1.5"><span class="h-0.5 w-4 border-t-2 border-dashed border-(--viz-prev)"></span>Last week</span>
+    </div>
+  </div>
+  <dl class="space-y-3">
+    {items.map((item) => (
+      <div>
+        <dt class="flex items-baseline justify-between gap-3 text-sm">
+          <span class="text-heading">{item.label}</span>
+          <span class="font-semibold text-heading tabular-nums">{item.value}%<span class="ml-1.5 text-xs font-normal text-muted-foreground">vs. {item.previous}%</span></span>
+        </dt>
+        <dd class="text-xs text-muted-foreground">{item.description}</dd>
+      </div>
+    ))}
+  </dl>
+</div>

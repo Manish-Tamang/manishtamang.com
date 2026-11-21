@@ -1,0 +1,85 @@
+---
+/* One of the Artists / Albums / Tracks blocks: count, #1 with artwork, #2–5, and what's new. */
+import Change from "./Change.astro"
+import { plural } from "./format"
+import type { Comparison, RankedItem } from "@/lib/services/scrobbles"
+
+export interface Props {
+  /** "artist", "album" or "track" — used in labels. */
+  noun: string
+  count: Comparison
+  items: RankedItem[]
+  fresh: { share: Comparison; top?: RankedItem }
+}
+
+const { noun, count, items, fresh } = Astro.props
+const [first, ...rest] = items
+const title = `${noun[0].toUpperCase()}${noun.slice(1)}s`
+---
+
+<section class="space-y-4">
+  <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+    <h3 class="text-lg font-subsection text-heading">{title}</h3>
+    <span class="text-2xl font-semibold tracking-tight text-heading tabular-nums">{count.value}</span>
+    <Change value={count.value} previous={count.previous} />
+  </div>
+
+  {first ? (
+    <div class="grid gap-4 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+      <a href={first.url} target="_blank" rel="noopener noreferrer" class="group relative block aspect-square overflow-hidden rounded-xl bg-black">
+        {first.imageUrl && <img src={first.imageUrl} alt="" loading="lazy" class="size-full object-cover transition-transform duration-500 group-hover:scale-105" />}
+        <div class="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/85 to-transparent px-4 pt-16 pb-3 text-white">
+          <p class="text-xs text-white/80">Top {noun} · #1</p>
+          <p class="truncate text-lg font-semibold">{first.name}</p>
+          {first.artist && <p class="truncate text-sm text-white/85">{first.artist}</p>}
+          <p class="mt-0.5 text-xs text-white/80 tabular-nums">{plural(first.plays, "scrobble")}</p>
+        </div>
+      </a>
+
+      <div class="flex flex-col justify-between gap-4">
+        <ol class="space-y-2.5">
+          {rest.map((item, i) => (
+            <li>
+              <a href={item.url} target="_blank" rel="noopener noreferrer" class="group flex items-center gap-3">
+                <span class="w-5 text-xs text-muted-foreground tabular-nums">#{i + 2}</span>
+                <span class:list={["size-10 shrink-0 overflow-hidden bg-muted", noun === "artist" ? "rounded-full" : "rounded-md"]}>
+                  {item.imageUrl && <img src={item.imageUrl} alt="" loading="lazy" class="size-full object-cover" />}
+                </span>
+                <span class="min-w-0 flex-1">
+                  <span class="block truncate text-sm font-medium text-heading group-hover:underline">{item.name}</span>
+                  {item.artist && <span class="block truncate text-xs text-muted-foreground">{item.artist}</span>}
+                </span>
+                <span class="text-sm text-muted-foreground tabular-nums">{item.plays}</span>
+              </a>
+            </li>
+          ))}
+        </ol>
+
+        <div class="rounded-xl bg-subtle p-3">
+          <div class="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+            <span class="text-sm text-heading">New {noun}s</span>
+            <span class="text-lg font-semibold text-heading tabular-nums">{fresh.share.value}%</span>
+            <Change value={fresh.share.value} previous={fresh.share.previous} points suffix="" />
+          </div>
+          {fresh.top ? (
+            <a href={fresh.top.url} target="_blank" rel="noopener noreferrer" class="mt-2 flex items-center gap-2.5 group">
+              <span class:list={["size-8 shrink-0 overflow-hidden bg-muted", noun === "artist" ? "rounded-full" : "rounded-md"]}>
+                {fresh.top.imageUrl && <img src={fresh.top.imageUrl} alt="" loading="lazy" class="size-full object-cover" />}
+              </span>
+              <span class="min-w-0 text-xs">
+                <span class="block truncate font-medium text-heading group-hover:underline">#1 {fresh.top.name}</span>
+                <span class="block truncate text-muted-foreground">
+                  {fresh.top.artist ? `${fresh.top.artist} · ` : ""}{plural(fresh.top.plays, "scrobble")}
+                </span>
+              </span>
+            </a>
+          ) : (
+            <p class="mt-1 text-xs text-muted-foreground">Nothing new this week.</p>
+          )}
+        </div>
+      </div>
+    </div>
+  ) : (
+    <p class="text-sm text-muted-foreground">No {noun}s this week.</p>
+  )}
+</section>

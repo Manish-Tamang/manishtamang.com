@@ -1,0 +1,33 @@
+---
+/* Unique tracks, albums and artists, this week against last. */
+import type { Comparison } from "@/lib/services/scrobbles"
+
+export interface Props {
+  rows: { label: string; count: Comparison }[]
+}
+
+const { rows } = Astro.props
+const max = Math.max(1, ...rows.flatMap(({ count }) => [count.value, count.previous]))
+const pct = (n: number) => `${(n / max) * 100}%`
+---
+
+<div class="space-y-4">
+  {rows.map(({ label, count }) => (
+    <div class="grid grid-cols-[4.5rem_minmax(0,1fr)] items-center gap-3">
+      <div>
+        <p class="text-sm text-heading">{label}</p>
+        <p class="text-xs text-muted-foreground tabular-nums">vs. {count.previous}</p>
+      </div>
+      <div class="space-y-0.5">
+        <div class="flex items-center gap-2" data-tip={`${label}: ${count.value} this week`}>
+          <div class="h-3 rounded-r-[4px] bg-(--viz-now)" style={{ width: pct(count.value) }}></div>
+          <span class="text-sm font-medium text-heading tabular-nums">{count.value}</span>
+        </div>
+        <div class="flex items-center gap-2" data-tip={`${label}: ${count.previous} last week`}>
+          <div class="h-3 rounded-r-[4px] bg-(--viz-prev)" style={{ width: pct(count.previous) }}></div>
+          <span class="text-xs text-muted-foreground tabular-nums">{count.previous}</span>
+        </div>
+      </div>
+    </div>
+  ))}
+</div>

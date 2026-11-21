@@ -1,0 +1,32 @@
+---
+/* "↑ 15% vs. last week". The arrow and the word carry the direction, not colour alone. */
+import { change } from "./format"
+
+export interface Props {
+  value: number
+  previous: number
+  /** Show the difference in points (for percentages) instead of a relative change. */
+  points?: boolean
+  suffix?: string
+}
+
+const { value, previous, points = false, suffix = "vs. last week" } = Astro.props
+const delta = points ? value - previous : change(value, previous)
+const up = (delta ?? 0) > 0
+---
+
+{delta !== null && (
+  <span class="inline-flex items-center gap-1 text-xs text-muted-foreground">
+    <span
+      class:list={[
+        "inline-flex items-center gap-0.5 rounded-full px-1.5 py-0.5 font-medium tabular-nums",
+        delta === 0 ? "bg-muted" : up ? "bg-[rgb(61_192_108/0.14)] text-[#1d7a3f] dark:text-[#7ee0a0]" : "bg-[rgb(217_90_136/0.14)] text-[#b23a67] dark:text-[#f3a0bf]",
+      ]}
+    >
+      <span aria-hidden="true">{delta === 0 ? "→" : up ? "↑" : "↓"}</span>
+      <span class="sr-only">{delta === 0 ? "no change" : up ? "up" : "down"}</span>
+      {Math.abs(delta)}{points ? " pts" : "%"}
+    </span>
+    {suffix}
+  </span>
+)}

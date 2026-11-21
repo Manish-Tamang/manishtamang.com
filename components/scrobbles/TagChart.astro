@@ -1,0 +1,73 @@
+---
+/* Top five tags over the last five weeks, one line each. */
+import { fmtDate, ticks } from "./format"
+import type { TagSeries } from "@/lib/services/scrobbles"
+
+export interface Props {
+  weekStarts: number[]
+  series: TagSeries[]
+}
+
+const { weekStarts, series } = Astro.props
+const W = 640
+const H = 230
+const left = 32
+const right = 16
+const top = 10
+const bottom = 26
+const plotW = W - left - right
+const plotH = H - top - bottom
+const grid = ticks(Math.max(0, ...series.flatMap((s) => s.weeks)))
+const max = grid.at(-1)!
+const x = (i: number) => left + (weekStarts.length > 1 ? (i / (weekStarts.length - 1)) * plotW : plotW / 2)
+const y = (n: number) => top + plotH - (n / max) * plotH
+// Week label is its last day, like Last.fm's chart
+const label = (start: number) => fmtDate(start + 6 * 24 * 60 * 60 * 1000, { day: "numeric", month: "short" })
+---
+
+{series.length > 0 ? (
+  <figure class="space-y-3">
+    <div class="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
+      {series.map((s, i) => (
+        <span class="inline-flex items-center gap-1.5"><span class="h-0.5 w-4 rounded-full" style={{ background: `var(--viz-${i + 1})` }}></span>{s.name}</span>
+      ))}
+    </div>
+    <svg viewBox={`0 0 ${W} ${H}`} class="w-full overflow-visible" role="img" aria-label="Top tags per week">
+      {grid.map((value) => (
+        <g>
+          <line x1={left} x2={W - right} y1={y(value)} y2={y(value)} class="stroke-border" stroke-width="1" stroke-dasharray={value ? "2 3" : undefined} />
+          <text x={left - 8} y={y(value) + 4} text-anchor="end" class="fill-muted-foreground text-[11px] tabular-nums">{value}</text>
+        </g>
+      ))}
+      {weekStarts.map((start, i) => (
+        <text x={x(i)} y={H - 6} text-anchor="middle" class="fill-muted-foreground text-[11px]">{label(start)}</text>
+      ))}
+      {series.map((s, si) => (
+        <polyline points={s.weeks.map((n, i) => `${x(i)},${y(n)}`).join(" ")} fill="none" stroke={`var(--viz-${si + 1})`} stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+      ))}
+      {series.map((s, si) =>
+        s.weeks.map((n, i) => (
+          <g data-tip={`${s.name} · week to ${label(weekStarts[i])}: ${n}`}>
+            <circle cx={x(i)} cy={y(n)} r="10" fill="transparent" />
+            <circle cx={x(i)} cy={y(n)} r="4" fill={`var(--viz-${si + 1})`} class="stroke-background" stroke-width="2" />
+          </g>
+        )),
+      )}
+    </svg>
+    <details class="text-xs text-muted-foreground">
+      <summary class="cursor-pointer">Show as table</summary>
+      <div class="mt-2 overflow-x-auto">
+        <table class="w-full tabular-nums">
+          <thead>
+            <tr class="text-left"><th class="font-medium">Tag</th>{weekStarts.map((start) => <th class="font-medium">{label(start)}</th>)}</tr>
+          </thead>
+          <tbody>
+            {series.map((s) => <tr><td>{s.name}</td>{s.weeks.map((n) => <td>{n}</td>)}</tr>)}
+          </tbody>
+        </table>
+      </div>
+    </details>
+  </figure>
+) : (
+  <p class="text-sm text-muted-foreground">No tags yet.</p>
+)}
