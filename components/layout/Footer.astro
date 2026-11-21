@@ -7,13 +7,21 @@ import Separator from "@/components/ui/Separator.astro"
 
 const year = new Date().getFullYear()
 
-const badges = [
-  { href: "/ai", src: "/images/badges/not-vibe-coded.gif", alt: "Not vibe coded: how I use AI" },
-  { href: "/colophon", src: "/images/badges/coded-by-hand.gif", alt: "Coded by hand: how this site was made" },
-  { href: "/colophon", src: "/images/badges/rounded-4px.gif", alt: "Rounded 4px" },
-  { href: "https://astro.build", src: "/images/badges/made-with-astro.gif", alt: "Made with Astro" },
-  { href: "https://indieweb.org", src: "/images/badges/indieweb.png", alt: "IndieWeb Camp" },
-  { href: "/slashes", src: "/images/badges/slash.gif", alt: "/slash: all my slash pages" },
+// 88×31 buttons, one row per list
+const badgeRows = [
+  [
+    { href: "/ai", src: "/images/badges/not-vibe-coded.gif", alt: "Not vibe coded: how I use AI" },
+    { href: "/colophon", src: "/images/badges/coded-by-hand.gif", alt: "Coded by hand: how this site was made" },
+    { href: "/colophon", src: "/images/badges/rounded-4px.gif", alt: "Rounded 4px" },
+    { href: "https://astro.build", src: "/images/badges/made-with-astro.gif", alt: "Made with Astro" },
+    { href: "https://indieweb.org", src: "/images/badges/indieweb.png", alt: "IndieWeb Camp" },
+    { href: "/slashes", src: "/images/badges/slash.gif", alt: "/slash: all my slash pages" },
+  ],
+  [
+    { href: "/uses", src: "/images/badges/i-like-computer.png", alt: "I like computer: what I use" },
+    { href: "https://web3isgoinggreat.com", src: "/images/badges/say-no-to-web3.gif", alt: "Say no to web3" },
+    { href: site.social.github, src: "/images/badges/github.png", alt: "Check out my GitHub!" },
+  ],
 ]
 ---
 
@@ -30,11 +38,15 @@ const badges = [
         </p>
         <!-- Desktop shows this under the sidebar instead -->
         <Webring class="mt-3 md:hidden" />
-        <div class="mt-3 mb-1 flex flex-wrap gap-2.5">
-          {badges.map(({ href, src, alt }) => (
-            <a href={href} class="block">
-              <img src={src} alt={alt} width="88" height="31" loading="lazy" class="block [image-rendering:pixelated]" />
-            </a>
+        <div class="mt-3 mb-1 space-y-2.5">
+          {badgeRows.map((row) => (
+            <div class="flex flex-wrap gap-2.5">
+              {row.map(({ href, src, alt }) => (
+                <a href={href} class="block">
+                  <img src={src} alt={alt} width="88" height="31" loading="lazy" class="block [image-rendering:pixelated]" />
+                </a>
+              ))}
+            </div>
           ))}
         </div>
       </div>
