@@ -13,6 +13,7 @@ const badges = [
   { href: "/colophon", src: "/images/badges/rounded-4px.gif", alt: "Rounded 4px" },
   { href: "https://astro.build", src: "/images/badges/made-with-astro.gif", alt: "Made with Astro" },
   { href: "https://indieweb.org", src: "/images/badges/indieweb.png", alt: "IndieWeb Camp" },
+  { href: "/slashes", src: "/images/badges/slash.gif", alt: "/slash: all my slash pages" },
 ]
 ---
 
@@ -31,10 +32,7 @@ const badges = [
         <Webring class="mt-3 md:hidden" />
         <div class="mt-3 mb-1 flex flex-wrap gap-2.5">
           {badges.map(({ href, src, alt }) => (
-            <a
-              href={href}
-              class="block shadow-[0_3px_0_0_var(--border-strong)] transition-[translate,box-shadow] duration-75 hover:-translate-y-px hover:shadow-[0_4px_0_0_var(--border-strong)] active:translate-y-[3px] active:shadow-none"
-            >
+            <a href={href} class="block">
               <img src={src} alt={alt} width="88" height="31" loading="lazy" class="block [image-rendering:pixelated]" />
             </a>
           ))}
