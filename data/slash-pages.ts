@@ -211,7 +211,11 @@ export const ai: { title: string; body: string }[] = [
 export const changelog: { date: string; changes: string[] }[] = [
   {
     date: "2026-11-21",
-    changes: ["Added /scrobbles, a weekly listening report from Last.fm with charts for days, tags, decades and hours."],
+    changes: [
+      "Added /scrobbles, a weekly listening report from Last.fm with charts for days, tags, decades and hours.",
+      "Brought back the old site's custom arrow and hand cursors.",
+      "Footer buttons are now plain, without the 3D press effect. Added a /slash button and a second row: I like computer, say no to web3 and GitHub.",
+    ],
   },
   {
     date: "2026-11-04",
