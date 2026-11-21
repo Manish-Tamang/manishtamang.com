@@ -6,7 +6,7 @@
     justify-content: center;
     background: transparent;
     border: 0px solid black;
-    cursor: pointer;
+    cursor: var(--cursor-hand);
 }
 
 .wrapper {

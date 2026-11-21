@@ -65,14 +65,29 @@
     border-radius: var(--radius-sm);
   }
 
-  /* Tailwind v4 resets buttons to the default cursor; anything clickable gets a pointer */
+  /* Custom cursors from the old Next.js site: an arrow everywhere, a hand on anything clickable.
+     The hotspot (10 10) sits on the tip; the keywords are fallbacks if the image can't load. */
+  :root {
+    --cursor-arrow: url("/cursor/tab-cursor.png") 10 10, auto;
+    --cursor-hand: url("/cursor/mac-cursor.png") 10 10, pointer;
+  }
+
+  html {
+    cursor: var(--cursor-arrow);
+  }
+
+  /* Tailwind v4 resets buttons to the default cursor, so clickables get the hand explicitly */
+  a[href],
   button:not(:disabled),
   [role="button"]:not([aria-disabled="true"]),
   [role="radio"],
   label:has(> input[type="radio"], > input[type="checkbox"]),
   summary,
-  select {
-    cursor: pointer;
+  select,
+  img,
+  .cursor-pointer,
+  .cursor-pointer img {
+    cursor: var(--cursor-hand);
   }
 
   h1,
@@ -122,6 +137,11 @@
       scroll-behavior: auto !important;
     }
   }
+}
+
+/* Tailwind's cursor-pointer class gets the custom hand too */
+@utility cursor-pointer {
+  cursor: var(--cursor-hand);
 }
 
 @utility mask-marquee {
