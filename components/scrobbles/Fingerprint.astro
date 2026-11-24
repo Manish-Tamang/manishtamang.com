@@ -17,7 +17,7 @@ const polygon = (key: "value" | "previous") => items.map((item, i) => point(i, i
 
 <div class="grid items-center gap-6 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
   <div>
-    <svg viewBox={`0 0 ${size} ${size}`} class="mx-auto w-full max-w-xs overflow-visible" role="img" aria-label="Listening fingerprint radar">
+    <svg viewBox="-40 14 380 252" class="mx-auto w-full max-w-sm" role="img" aria-label="Listening fingerprint radar">
       {[25, 50, 75, 100].map((ring) => (
         <polygon points={items.map((_, i) => point(i, ring).join(",")).join(" ")} fill="none" class="stroke-border" stroke-width="1" />
       ))}
