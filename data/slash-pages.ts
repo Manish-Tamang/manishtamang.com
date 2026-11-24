@@ -12,7 +12,7 @@ export const slashPages = [
   {
     href: "/friends",
     label: "Friends",
-    description: "People on the internet I like and admire.",
+    description: "My friends, on and off the internet.",
   },
   {
     href: "/nope",
@@ -71,6 +71,50 @@ export const otherSlashPages = [
   { href: "/uses", description: "The hardware, software and tools I use." },
 ];
 
+export const friends: { name: string; url?: string; note: string; photo?: string; position?: string }[] = [
+  {
+    name: "Samyak Raj Subedi",
+    url: "https://www.samyaklabs.com/",
+    note: "A great AI and backend developer from Biratnagar. We met in a Facebook group and have been connected since 2024, when our interests matched.",
+    photo: "samyak.webp",
+    position: "center 72%",
+  },
+  {
+    name: "Pushkar Chaudhary",
+    url: "https://pushkarchaudhary.com.np/",
+    note: "A full-stack developer from Itahari, my +2 college classmate, and a great learner.",
+    photo: "pushkar.webp",
+    position: "center 40%",
+  },
+  {
+    name: "Nux Gajurel",
+    url: "https://www.nuxgajurel.com/",
+    note: "A young developer and independent freelancer from Biratchowk. He's my friend's brother, and it's been great to watch such a young talent grow.",
+    photo: "nux.webp",
+    position: "center 62%",
+  },
+  {
+    name: "Rupesh Chaudhary",
+    url: "https://rupeshe.me/",
+    note: "From Morang. My senior at the company we both worked at, and my teammate at a hackathon. Loves Solana, blockchain and web3.",
+    photo: "rupesh.webp",
+    position: "30% 30%",
+  },
+  {
+    name: "Sudip Tamang",
+    url: "https://www.sudip-tamang.com.np/",
+    note: "Another friend from my +2 college, who loves web development.",
+    photo: "sudip.webp",
+  },
+  {
+    name: "Sajak Dhital",
+    url: "https://github.com/Sajak-sketch",
+    note: "My best friend from school, now studying BIT. Loves Linux and exploring tech.",
+    photo: "sajak.webp",
+    position: "center 40%",
+  },
+];
+
 export const now: { heading: string; items: string[] }[] = [
   {
     heading: "Working on",
@@ -107,15 +151,16 @@ export const guy: {
   /** Small tooltip on the highlighted word. */
   tooltip?: string;
 }[] = [
-  { thing: " typography" },
-  { thing: " rounded 4px" },
-  { thing: " Barahsinghe", tooltip: "It's a Nepali beer" },
-  { thing: " slashpages", ending: "guy now!" },
-  { thing: " IndieWeb" },
-  { thing: " lazy" },
-  { thing: " anti-Microslop" },
-  { thing: " Figma" },
-  { thing: " terminal" },
+  { thing: "typography" },
+  { thing: "rounded 4px" },
+  { thing: "Barahsinghe", tooltip: "It's a Nepali beer" },
+  { thing: "slashpages", ending: "guy now!" },
+  { thing: "IndieWeb" },
+  { thing: "lazy" },
+  { thing: "anti-Microslop" },
+  { thing: "Figma" },
+  { thing: "terminal" },
+  { thing: "Android" },
 ];
 
 /* Links here get rel="me", which IndieWeb tools use to confirm identity. */
@@ -189,10 +234,11 @@ export const verify: {
   },
 ];
 
+// {name} in a body puts assets/uses/icons/<name>.png inline before the next word
 export const ai: { title: string; body: string }[] = [
   {
     title: "How this site was built",
-    body: "This site was originally made with human effort back in 2024, in Next.js, after I finished my 10th (SEE). It started as a fork of leerob's 2021 portfolio, when I was new to Next.js and AI was barely used for coding. In mid 2025 I used some AI while testing the Cursor IDE, though I've forgotten the model names. This Astro port was migrated using Claude Opus 5.5 in Claude Code, because I wanted to test its potential.",
+    body: "This site was originally made with human effort back in 2024, in Next.js, after I finished my 10th (SEE). It started as a fork of leerob's 2021 portfolio, when I was new to Next.js and AI was barely used for coding. In mid 2025 I used some AI while testing the {cursor}Cursor IDE, though I've forgotten the model names. This Astro port was migrated using {claude-code}Claude Opus 5.5 in Claude Code, because I wanted to test its potential.",
   },
   {
     title: "Blog posts",
@@ -507,6 +553,8 @@ export const changelog: { date: string; changes: string[] }[] = [
 export const concerts: {
   date: string;
   artist: string;
+  /** In assets/concerts/logos/; a pair when the logo needs a different colour per theme. */
+  logo?: string | { light: string; dark: string };
   /** Only the month is remembered: shows "Dec 2024" rather than a day. */
   approximate?: true;
   venue?: string;
@@ -518,6 +566,7 @@ export const concerts: {
   {
     date: "2026-09-27",
     artist: "Chumbak",
+    logo: "chumbak.png",
     venue: "Moksh, Highlander Ghar Ma Session",
     city: "Jhamsikhel, Lalitpur",
     image: "chumbak-moksh-2026.webp",
@@ -529,6 +578,7 @@ export const concerts: {
   {
     date: "2026-02-20",
     artist: "SWAR",
+    logo: { light: "swar-dark.png", dark: "swar-light.png" },
     venue: "Itahari International College, Spring Carnival 2026",
     city: "Itahari",
     image: "swar-spring-carnival-2026.webp",
@@ -537,6 +587,7 @@ export const concerts: {
   {
     date: "2025-09-06",
     artist: "Neetesh Jung Kunwar",
+    logo: "njk.png",
     venue: "Peace Zone School",
     city: "Itahari",
     video:
