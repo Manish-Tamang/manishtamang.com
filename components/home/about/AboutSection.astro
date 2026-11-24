@@ -6,8 +6,7 @@
  */
 import { Image, getImage } from "astro:assets"
 import BlurImage from "@/components/ui/BlurImage.astro"
-import Heading from "@/components/typography/Heading.astro"
-import Text from "@/components/typography/Text.astro"
+import SectionHeader from "@/components/home/SectionHeader.astro"
 import ArrowUpRight from "@/components/icons/ArrowUpRight.astro"
 import PenTool from "@/components/icons/PenTool.astro"
 import BentoCard from "./BentoCard.astro"
@@ -36,10 +35,9 @@ const cardLink = "mt-3 inline-flex w-fit items-center gap-1 text-sm font-medium 
 ---
 
 <section>
-  <Heading>About</Heading>
-  <Text class="mt-2 mb-6">
+  <SectionHeader title="About">
     I craft thoughtful digital experiences that feel clear, fast, and genuinely useful in everyday use.
-  </Text>
+  </SectionHeader>
 
   <div class="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-y-0">
     <div class="contents md:flex md:flex-col">
