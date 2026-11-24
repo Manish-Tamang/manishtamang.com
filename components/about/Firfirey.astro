@@ -3,15 +3,36 @@
  * Firfirey (a Nepali paper pinwheel). Spins while hovered; clicking keeps it
  * spinning until clicked again. CSS animation, no framework.
  */
-import { Image } from "astro:assets"
-import wings from "@/assets/about/firfirey-wings.png"
-import stick from "@/assets/about/firfirey-stick.png"
+import { Image } from "astro:assets";
+import wings from "@/assets/about/firfirey-wings.png";
+import stick from "@/assets/about/firfirey-stick.png";
 ---
 
-<button type="button" class="firfirey relative flex w-fit flex-col items-center" aria-pressed="false" aria-label="Spin the firfirey" data-firfirey>
-  <Image src={wings} alt="" width={80} height={80} densities={[1, 2]} draggable="false" class="wings relative z-10 select-none" />
+<button
+  type="button"
+  class="firfirey relative flex w-fit flex-col items-center"
+  aria-pressed="false"
+  aria-label="Spin the firfirey"
+  data-firfirey
+>
+  <Image
+    src={wings}
+    alt=""
+    width={80}
+    height={80}
+    densities={[1, 2]}
+    draggable="false"
+    class="wings relative z-10 select-none"
+  />
   <!-- Only the width is fixed; the tall stick keeps its proportions, and the wings overlap its top -->
-  <Image src={stick} alt="" width={30} densities={[1, 2]} draggable="false" class="relative z-0 -mt-14 w-[30px] select-none" />
+  <Image
+    src={stick}
+    alt=""
+    width={30}
+    densities={[1, 2]}
+    draggable="false"
+    class="relative z-0 -mt-14 w-[30px] select-none"
+  />
 </button>
 
 <style>
@@ -34,9 +55,14 @@ import stick from "@/assets/about/firfirey-stick.png"
 </style>
 
 <script>
-  for (const button of document.querySelectorAll<HTMLElement>("[data-firfirey]")) {
+  for (const button of document.querySelectorAll<HTMLElement>(
+    "[data-firfirey]",
+  )) {
     button.addEventListener("click", () => {
-      button.setAttribute("aria-pressed", String(button.getAttribute("aria-pressed") !== "true"))
-    })
+      button.setAttribute(
+        "aria-pressed",
+        String(button.getAttribute("aria-pressed") !== "true"),
+      );
+    });
   }
 </script>
