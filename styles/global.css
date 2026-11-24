@@ -101,7 +101,7 @@
     text-wrap: pretty;
   }
 
-  /* Highlighter marker, as on recurse.com pull quotes */
+  /* Highlighter marker behind pull quotes */
   mark {
     color: inherit;
     background: linear-gradient(
