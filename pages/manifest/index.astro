@@ -1,5 +1,6 @@
 ---
 import type { ImageMetadata } from "astro"
+import { getImage } from "astro:assets"
 import BlurImage from "@/components/ui/BlurImage.astro"
 import StoryLayout from "@/layouts/StoryLayout.astro"
 import Link from "@/components/ui/Link.astro"
@@ -9,6 +10,13 @@ const images = import.meta.glob<{ default: ImageMetadata }>("/assets/manifest/*"
 const imageFor = (file?: string) => (file ? images[`/assets/manifest/${file}`]?.default : undefined)
 
 const doneCount = bucketList.filter(({ done }) => done).length
+const items = await Promise.all(
+  bucketList.map(async (item) => {
+    const photo = imageFor(item.image)
+    const large = photo ? await getImage({ src: photo, width: 400, format: "webp", quality: 80 }) : undefined
+    return { ...item, photo, large: large?.src }
+  }),
+)
 
 const sectionTitle = "text-sm font-subsection text-heading"
 
@@ -45,66 +53,55 @@ const icons = {
       </div>
 
       <ul class="mt-3 divide-y divide-border border-y border-border">
-        {bucketList.map(({ title, done, image }) => {
-          const photo = imageFor(image)
-          return (
-            <li class="flex items-center gap-3 py-2.5">
-              <button
-                type="button"
-                role="checkbox"
-                aria-checked={done ? "true" : "false"}
-                aria-label={title}
-                data-bucket-check={done ? undefined : ""}
-                class:list={[
-                  "flex size-5 shrink-0 items-center justify-center rounded-sm border transition-colors",
-                  done ? "border-accent bg-accent text-white" : "border-border-strong hover:border-accent",
-                ]}
-              >
-                {done && (
-                  <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M20 6 9 17l-5-5" />
-                  </svg>
-                )}
-              </button>
-              <span class:list={["min-w-0 flex-1 text-sm", done ? "text-muted-foreground line-through" : "text-heading"]}>{title}</span>
-              {photo && (
-                <span class="preview group relative shrink-0">
-                  <BlurImage src={photo} alt="" width={40} height={40} densities={[1, 2]} class="size-10 rounded-sm border border-border object-cover" />
-                  <!-- Larger preview on hover (pointer devices only, see <style>) -->
-                  <span class="preview-large pointer-events-none absolute top-1/2 right-full z-20 mr-3 hidden -translate-y-1/2">
-                    <BlurImage src={photo} alt="" width={200} densities={[1, 2]} class="w-50 rounded-lg border border-border bg-background object-cover shadow-lg" />
-                  </span>
-                </span>
+        {items.map(({ title, done, date, photo, large }) => (
+          <li class="flex min-h-14 items-center gap-3 py-2">
+            <button
+              type="button"
+              role="checkbox"
+              aria-checked={done ? "true" : "false"}
+              aria-label={title}
+              data-bucket-check={done ? undefined : ""}
+              class:list={[
+                "flex size-4.5 shrink-0 items-center justify-center rounded-sm border transition-colors",
+                done ? "border-accent bg-accent text-white" : "border-border-strong hover:border-accent",
+              ]}
+            >
+              {done && (
+                <svg class="size-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M20 6 9 17l-5-5" />
+                </svg>
               )}
-            </li>
-          )
-        })}
+            </button>
+            <span class="min-w-0 flex-1">
+              <span class:list={["block text-sm", done ? "text-muted-foreground line-through" : "text-heading"]}>{title}</span>
+              {date && <span class="block text-xs text-muted-foreground">Done {date}</span>}
+            </span>
+            {photo && (
+              <span data-bucket-thumb={large} class="shrink-0">
+                <BlurImage src={photo} alt="" width={40} height={40} densities={[1, 2]} class="size-10 rounded-[4px] object-cover transition-transform duration-300 hover:scale-110" />
+              </span>
+            )}
+          </li>
+        ))}
       </ul>
+      <img data-bucket-preview alt="" width="200" height="200" hidden class="pointer-events-none fixed z-50 w-50 rounded-[4px] bg-background object-cover shadow-lg" />
       <p data-bucket-message role="status" aria-live="polite" class="mt-2 min-h-5.5 text-sm text-danger"></p>
     </section>
 
     <!-- The bucket list's message line (8 + 22px) already sits above, so 8px more gives the usual gap -->
     <section class="mt-2">
       <h2 class:list={[sectionTitle, "mb-3"]}>Learning goals</h2>
-      <ul class="grid gap-3 sm:grid-cols-3">
-        {learningGoals.map(({ title, description, icon, color }, index) => (
-          <li class="group flex flex-col rounded-lg border border-border bg-background p-4 transition-colors hover:border-border-strong">
-            <span
-              class="flex size-9 items-center justify-center rounded-lg text-white transition-transform group-hover:-rotate-6"
-              style={`background: ${color}`}
-              aria-hidden="true"
-            >
-              <svg class="size-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" set:html={icons[icon]} />
+      <ul class="divide-y divide-border border-y border-border">
+        {learningGoals.map(({ title, description, icon, color }) => (
+          <li class="group flex items-center gap-3 py-3">
+            <span class="flex size-10 shrink-0 items-center justify-center rounded-[4px] bg-muted transition-transform duration-300 group-hover:scale-110" style={`color: ${color}`} aria-hidden="true">
+              <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" set:html={icons[icon]} />
             </span>
-            <p class="mt-3 text-sm font-subsection text-heading">{title}</p>
-            <p class="flex-1 text-xs text-muted-foreground">{description}</p>
-            <p class="mt-4 flex items-center justify-between border-t border-dashed border-border pt-3 text-xs text-muted-foreground">
-              <span class="tabular-nums">Goal {String(index + 1).padStart(2, "0")}</span>
-              <span class="flex items-center gap-1.5">
-                <span class="size-1.5 rounded-full" style={`background: ${color}`}></span>
-                Planned
-              </span>
-            </p>
+            <span class="min-w-0 flex-1">
+              <span class="block text-sm text-heading">{title}</span>
+              <span class="block text-xs text-muted-foreground">{description}</span>
+            </span>
+            <span class="w-fit shrink-0 rounded-full bg-muted px-2 py-0.5 text-[11px] text-foreground">Planned</span>
           </li>
         ))}
       </ul>
@@ -117,12 +114,6 @@ const icons = {
 </StoryLayout>
 
 <style>
-  @media (hover: hover) {
-    .preview:hover .preview-large {
-      display: block;
-    }
-  }
-
   .shake {
     animation: shake 0.3s ease-in-out;
   }
@@ -138,6 +129,24 @@ const icons = {
 </style>
 
 <script>
+  const preview = document.querySelector<HTMLImageElement>("[data-bucket-preview]")
+  if (preview && matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    const place = (x: number, top: number) => {
+      preview.style.left = `${x + 220 > innerWidth ? x - 220 : x + 20}px`
+      preview.style.top = `${Math.min(top, innerHeight - 216)}px`
+    }
+    for (const thumb of document.querySelectorAll<HTMLElement>("[data-bucket-thumb]")) {
+      thumb.addEventListener("mouseenter", (event) => {
+        preview.src = thumb.dataset.bucketThumb!
+        place(event.clientX, thumb.getBoundingClientRect().top)
+        preview.hidden = false
+      })
+      thumb.addEventListener("mousemove", (event) => place(event.clientX, thumb.getBoundingClientRect().top))
+      thumb.addEventListener("mouseleave", () => (preview.hidden = true))
+    }
+    addEventListener("scroll", () => (preview.hidden = true), { passive: true })
+  }
+
   // Ticking an unfinished item yourself doesn't count
   const message = document.querySelector<HTMLElement>("[data-bucket-message]")
   for (const box of document.querySelectorAll<HTMLElement>("[data-bucket-check]")) {
