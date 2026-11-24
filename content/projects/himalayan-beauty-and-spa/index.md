@@ -9,6 +9,17 @@ projectUrl: "https://himalayanbeauty.fi/en/"
 tech: ["Nextjs","Timma"]
 cover: ./cover.webp
 coverAlt: "Himalayan Beauty & Spa"
+featured: 3
+summary: "Website for a Helsinki spa bringing together Himalayan warmth and Nordic clarity."
+shots:
+  - src: ./shot-1.webp
+    alt: "Homepage"
+  - src: ./shot-2.webp
+    alt: "Treatments and prices"
+  - src: ./shot-3.webp
+    alt: "Shirodhara ritual"
+  - src: ./shot-4.webp
+    alt: "Spa gift cards"
 ---
 
 A spa, we believe, is not a place you visit but a state you return to. At Himalayan Beauty & Spa we keep two ideas of stillness in the same room — the warm, herbal grounding of the Himalayas, where Shila learned at her mother’s side, and the bright, restorative clarity of the Nordic winter that became her home. Every ritual we offer lives at that warm threshold between the two.
