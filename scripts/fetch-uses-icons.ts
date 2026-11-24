@@ -1,13 +1,15 @@
-// Downloads a 64px favicon for every /uses tool into assets/uses/icons/.
+// Downloads a 64px favicon for every /uses tool, and the /colophon stack and
+// APIs, into assets/uses/icons/.
 // Run after adding tools:  node scripts/fetch-uses-icons.ts
 // Existing icons are kept; delete a file to fetch it again.
 import { existsSync } from "node:fs"
 import { writeFile } from "node:fs/promises"
 import { sections, slugify } from "../data/uses.ts"
+import { services, stack } from "../data/colophon.ts"
 
 const OUT_DIR = new URL("../assets/uses/icons/", import.meta.url)
 
-for (const tool of sections.flatMap((section) => section.tools)) {
+for (const tool of [...sections.flatMap((section) => section.tools), ...stack, ...services]) {
   const domain = tool.iconDomain ?? (tool.url ? new URL(tool.url).host : null)
   if (!domain) continue
 
