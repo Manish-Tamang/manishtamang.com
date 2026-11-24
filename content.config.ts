@@ -45,6 +45,9 @@ const projects = defineCollection({
       tech: z.array(z.string()).default([]),
       cover: image(),
       coverAlt: z.string().optional(),
+      featured: z.number().int().positive().optional(),
+      summary: z.string().optional(),
+      shots: z.array(z.object({ src: image(), alt: z.string() })).default([]),
     }),
 })
 
