@@ -7,6 +7,8 @@
 import StoryLayout from "@/layouts/StoryLayout.astro";
 import Prose from "@/components/typography/Prose.astro";
 import BlurImage from "@/components/ui/BlurImage.astro";
+import PolaroidGallery from "@/components/photos/PolaroidGallery.astro";
+import { aboutPolaroids } from "@/data/about";
 import hillRoad from "@/assets/bio/hill-road-dusk.jpg";
 import lingeyPing from "@/assets/bio/dashain-lingey-ping.jpg";
 import birthdayParty from "@/assets/bio/first-birthday-party.jpg";
@@ -65,19 +67,13 @@ const closingPhotos = [
       +2. Now I'm in Kathmandu again, working on small client projects,
       freelancing, and trying to figure out the next few years.
     </p>
+  </Prose>
 
-    <figure>
-      <BlurImage
-        src={lingeyPing}
-        alt="Young Manish smiling while swinging on a tall bamboo and rope swing in a hillside field"
-        widths={[592, 1184, 1500]}
-        sizes="(max-width: 640px) 100vw, 592px"
-        quality={78}
-        data-zoom
-      />
-      <figcaption>Mini me enjoying lingey ping (swing) on Dashain. Pic: my mama, Bijay Moktan</figcaption>
-    </figure>
+  <div class="my-10">
+    <PolaroidGallery items={aboutPolaroids} />
+  </div>
 
+  <Prose class="prose-story">
     <p>
       In the 6th grade I saw QBasic on a projector for the first time, and
       that was it. I knew I wanted to go toward computers. In 7th and 8th
@@ -160,5 +156,17 @@ const closingPhotos = [
         />
       ))}
     </div>
+
+    <figure>
+      <BlurImage
+        src={lingeyPing}
+        alt="Young Manish smiling while swinging on a tall bamboo and rope swing in a hillside field"
+        widths={[592, 1184, 1500]}
+        sizes="(max-width: 640px) 100vw, 592px"
+        quality={78}
+        data-zoom
+      />
+      <figcaption>Mini me enjoying lingey ping (swing) on Dashain. Pic: my mama, Bijay Moktan</figcaption>
+    </figure>
   </Prose>
 </StoryLayout>
