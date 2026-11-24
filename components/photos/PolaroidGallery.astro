@@ -1,39 +1,50 @@
 ---
-/*
- * Tilted polaroids with handwritten captions. Clicking one opens the shared
- * photo lightbox in BaseLayout (same [data-photo] contract as the /photos grid).
- */
-import type { ImageMetadata } from "astro"
-import { getImage } from "astro:assets"
-import BlurImage from "@/components/ui/BlurImage.astro"
-import type { Polaroid } from "@/data/about"
+import type { ImageMetadata } from "astro";
+import { getImage } from "astro:assets";
+import BlurImage from "@/components/ui/BlurImage.astro";
+import type { Polaroid } from "@/data/about";
 
 export interface Props {
-  items: Polaroid[]
+  items: Polaroid[];
 }
 
-const { items } = Astro.props
+const { items } = Astro.props;
 
-const files = import.meta.glob<{ default: ImageMetadata }>("/assets/{bio,images}/*.{jpg,png}", { eager: true })
+const files = import.meta.glob<{ default: ImageMetadata }>(
+  "/assets/{bio,images}/*.{jpg,png}",
+  { eager: true },
+);
 const find = (file: string) =>
-  files[`/assets/bio/${file}`]?.default ?? files[`/assets/images/${file}`]?.default
+  files[`/assets/bio/${file}`]?.default ??
+  files[`/assets/images/${file}`]?.default;
 
 const polaroids = await Promise.all(
   items.map(async (item) => {
-    const image = find(item.file)
-    if (!image) throw new Error(`Missing polaroid image: ${item.file}`)
-    const full = await getImage({ src: image, widths: [800, 1280, 1920], format: "webp", quality: 82 })
-    return { ...item, image, full }
+    const image = find(item.file);
+    if (!image) throw new Error(`Missing polaroid image: ${item.file}`);
+    const full = await getImage({
+      src: image,
+      widths: [800, 1280, 1920],
+      format: "webp",
+      quality: 82,
+    });
+    return { ...item, image, full };
   }),
-)
+);
 ---
 
-<ul class="grid grid-cols-2 justify-items-center gap-4 sm:grid-cols-4" aria-label="Polaroid memories">
-  {polaroids.map(({ image, full, caption, alt, rotate }) => (
-    <li class="w-full max-w-40" style={`transform: rotate(${rotate}deg)`}>
+<ul
+  class="mx-auto flex w-fit items-center gap-2 -space-x-4 px-4 sm:gap-4 sm:-space-x-8 sm:px-0"
+  aria-label="Polaroid memories"
+>
+  {polaroids.map(({ image, full, caption, alt, rotate }, i) => (
+    <li
+      class:list={["polaroid shrink-0", i >= 3 && "max-sm:hidden"]}
+      style={`--rotate: ${rotate}deg`}
+    >
       <button
         type="button"
-        class="polaroid block w-full cursor-zoom-in bg-white px-2.5 pt-2.5 pb-3 text-left text-zinc-700"
+        class="block w-[28vw] cursor-zoom-in rounded-[1px] bg-white p-1.5 pb-0 sm:w-32 dark:bg-muted"
         aria-label={`Open photo: ${caption}`}
         data-photo
         data-src={full.src}
@@ -47,14 +58,16 @@ const polaroids = await Promise.all(
         <BlurImage
           src={image}
           alt={alt}
-          width={320}
-          widths={[160, 240, 320]}
-          sizes="(max-width: 640px) 40vw, 160px"
+          width={256}
+          widths={[128, 192, 256]}
+          sizes="(max-width: 640px) 28vw, 128px"
           quality={70}
           draggable="false"
           class="aspect-square w-full bg-zinc-100 object-cover select-none"
         />
-        <span class="block pt-2 text-center font-display text-xs leading-tight">{caption}</span>
+        <span class="block font-display truncate py-1.5 text-center text-[12px] text-foreground">
+          {caption}
+        </span>
       </button>
     </li>
   ))}
@@ -62,18 +75,42 @@ const polaroids = await Promise.all(
 
 <style>
   .polaroid {
-    box-shadow:
-      0 6px 20px rgb(0 0 0 / 0.12),
-      0 2px 6px rgb(0 0 0 / 0.08);
-    transition:
-      transform 0.3s ease-out,
-      box-shadow 0.3s ease-out;
+    position: relative;
+    transform: rotate(var(--rotate));
+
+    transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
-  .polaroid:hover {
-    transform: translateY(-4px) scale(1.02) rotate(1deg);
+  .polaroid button {
     box-shadow:
-      0 14px 36px rgb(0 0 0 / 0.16),
-      0 4px 10px rgb(0 0 0 / 0.1);
+      rgb(14 63 126 / 0.06) 0 0 0 1px,
+      rgb(42 51 70 / 0.03) 0 1px 1px -0.5px,
+      rgb(42 51 70 / 0.04) 0 2px 2px -1px,
+      rgb(42 51 70 / 0.04) 0 3px 3px -1.5px,
+      rgb(42 51 70 / 0.03) 0 5px 5px -2.5px,
+      rgb(42 51 70 / 0.03) 0 10px 10px -5px,
+      rgb(42 51 70 / 0.03) 0 24px 24px -8px;
+  }
+
+  :global(.dark) .polaroid button {
+    box-shadow:
+      rgb(0 0 0 / 0.5) 0 0 0 1px,
+      rgb(0 0 0 / 0.4) 0 1px 1px -0.5px,
+      rgb(0 0 0 / 0.3) 0 2px 2px -1px,
+      rgb(0 0 0 / 0.3) 0 3px 3px -1.5px,
+      rgb(0 0 0 / 0.25) 0 5px 5px -2.5px,
+      rgb(0 0 0 / 0.2) 0 10px 10px -5px,
+      rgb(0 0 0 / 0.15) 0 24px 24px -8px;
+  }
+
+  .polaroid:hover,
+  .polaroid:focus-within {
+    transform: rotate(0deg) scale(1.05);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .polaroid {
+      transition: none;
+    }
   }
 </style>
