@@ -1,10 +1,11 @@
+
 /*
  * Design tokens — the only place raw values live.
  * Components use the semantic names (bg-background, text-muted-foreground, …),
  * so changing taste means editing this file, not components.
  *
- * Current direction: modelled on recurse.com — Inter, warm green-tinted greys,
- * light section headings and strong display headings — with a purple accent
+ * Current direction: Inter, warm green-tinted greys,
+ * body-size semibold section headings and strong display headings — with a purple accent
  * (#966bc3) and yellow text selection. Type metrics and the rounded selection  
  */
 
