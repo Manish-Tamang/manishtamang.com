@@ -1,0 +1,131 @@
+---
+import Link from "@/components/ui/Link.astro"
+import DashboardSection from "@/components/dashboard/DashboardSection.astro"
+import Change from "@/components/scrobbles/Change.astro"
+import DailyChart from "@/components/scrobbles/DailyChart.astro"
+import Decades from "@/components/scrobbles/Decades.astro"
+import Fingerprint from "@/components/scrobbles/Fingerprint.astro"
+import ListeningClock from "@/components/scrobbles/ListeningClock.astro"
+import MusicRatio from "@/components/scrobbles/MusicRatio.astro"
+import TagChart from "@/components/scrobbles/TagChart.astro"
+import TopList from "@/components/scrobbles/TopList.astro"
+import { fmtDate } from "@/components/scrobbles/format"
+import { getScrobbleReport, type ScrobbleReport } from "@/lib/services/scrobbles"
+
+Astro.response.headers.set("cache-control", "public, s-maxage=900, stale-while-revalidate=86400")
+
+let report: ScrobbleReport | null = null
+try {
+  report = await getScrobbleReport()
+} catch (error) {
+  console.error("Failed to build the scrobbles report:", error)
+  Astro.response.headers.set("cache-control", "public, s-maxage=60")
+}
+
+const range = report
+  ? `${fmtDate(report.start, { day: "numeric", month: "short", year: "numeric" })} – ${fmtDate(report.end - 1, { day: "numeric", month: "short", year: "numeric" })}`
+  : ""
+const lastfmLink = report?.profileUrl ?? "https://www.last.fm/user/golecodes"
+
+const facts = report && [
+  {
+    label: "Listening time",
+    value: report.listeningMinutes ? `${Math.round(report.listeningMinutes.value / 60)}` : "—",
+    unit: "hours",
+    compare: report.listeningMinutes,
+    note: report.listeningMinutes ? `vs. ${Math.round(report.listeningMinutes.previous / 60)} hours (last week)` : "Track lengths unavailable",
+  },
+  {
+    label: "Average scrobbles",
+    value: `${Math.round(report.scrobbles.value / 7)}`,
+    unit: "/day",
+    compare: { value: Math.round(report.scrobbles.value / 7), previous: Math.round(report.scrobbles.previous / 7) },
+    note: `vs. ${Math.round(report.scrobbles.previous / 7)} (last week)`,
+  },
+  {
+    label: "Scrobbles in most active day",
+    value: `${report.busiestDay.plays}`,
+    unit: fmtDate(report.busiestDay.date, { day: "numeric", month: "short" }),
+    compare: { value: report.busiestDay.plays, previous: report.busiestDay.previous },
+    note: `vs. ${report.busiestDay.previous} (last week)`,
+  },
+]
+---
+
+{report ? (
+  <div class="scrobbles space-y-12" data-scrobbles>
+    <section class="space-y-4">
+      <div>
+        <p class="text-sm text-muted-foreground">{range}</p>
+        <div class="mt-1 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+          <span class="text-4xl font-semibold tracking-tight text-heading tabular-nums">{report.scrobbles.value}</span>
+          <span class="text-lg text-heading">scrobbles</span>
+          <Change value={report.scrobbles.value} previous={report.scrobbles.previous} />
+        </div>
+      </div>
+      <DailyChart days={report.days} />
+    </section>
+
+    <TopList noun="artist" count={report.artists} items={report.topArtists} fresh={report.newArtists} />
+    <TopList noun="album" count={report.albums} items={report.topAlbums} fresh={report.newAlbums} />
+    <TopList noun="track" count={report.tracks} items={report.topTracks} fresh={report.newTracks} />
+
+    <DashboardSection title="Music ratio">
+      <Fragment slot="description">Different tracks, albums and artists I played, against last week.</Fragment>
+      <MusicRatio
+        rows={[
+          { label: "Tracks", count: report.tracks },
+          { label: "Albums", count: report.albums },
+          { label: "Artists", count: report.artists },
+        ]}
+      />
+    </DashboardSection>
+
+    <DashboardSection title="Listening fingerprint">
+      <Fragment slot="description">Five scores for how I listened this week, over last week's.</Fragment>
+      <Fingerprint items={report.fingerprint} />
+    </DashboardSection>
+
+    <DashboardSection title="Top tags">
+      <Fragment slot="description">Last.fm tags of the artists I played, weighted by plays, over five weeks.</Fragment>
+      <TagChart weekStarts={report.tags.weekStarts} series={report.tags.series} />
+    </DashboardSection>
+
+    <DashboardSection title="Music by decade">
+      <Fragment slot="description">When the albums I played came out.</Fragment>
+      <Decades decades={report.decades.list} dated={report.decades.dated} total={report.scrobbles.value} />
+    </DashboardSection>
+
+    <DashboardSection title="Listening clock">
+      <Fragment slot="description">When in the day I scrobbled, Nepal time.</Fragment>
+      <ListeningClock hours={report.hours} />
+    </DashboardSection>
+
+    <DashboardSection title="Quick facts">
+      <div class="grid gap-4 sm:grid-cols-3">
+        {facts!.map((fact) => (
+          <div class="rounded-xl bg-subtle p-4">
+            <p class="text-xs text-muted-foreground">{fact.label}</p>
+            <p class="mt-2 text-heading">
+              <span class="text-3xl font-semibold tracking-tight tabular-nums">{fact.value}</span>
+              <span class="ml-1 text-sm">{fact.unit}</span>
+            </p>
+            {fact.compare && <div class="mt-1"><Change value={fact.compare.value} previous={fact.compare.previous} suffix="" /></div>}
+            <p class="mt-1 text-xs text-muted-foreground">{fact.note}</p>
+          </div>
+        ))}
+      </div>
+    </DashboardSection>
+
+    <p class="text-xs text-muted-foreground">
+      From my <Link href={lastfmLink}>Last.fm</Link> scrobbles, refreshed every few minutes. Weeks run midnight to midnight in
+      Nepal. Artist photos and missing covers come from Deezer and iTunes.
+    </p>
+
+    <div data-scrobble-tip hidden class="pointer-events-none fixed z-50 -translate-x-1/2 -translate-y-full rounded-sm bg-black px-2 py-1 text-xs whitespace-nowrap text-white"></div>
+  </div>
+) : (
+  <p class="text-sm text-muted-foreground">
+    Last.fm isn't answering right now. My listening lives on <Link href={lastfmLink}>Last.fm</Link> in the meantime.
+  </p>
+)}
