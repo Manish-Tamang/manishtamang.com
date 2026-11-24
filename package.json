@@ -17,6 +17,7 @@
     "@astrojs/mdx": "^8.1.2",
     "@astrojs/vercel": "^11.0.16",
     "@tailwindcss/vite": "^4.3.3",
+    "@vercel/functions": "3.10.6",
     "@videojs/html": "10.5.0",
     "@videojs/youtube-video": "10.5.0",
     "astro": "^7.4.4",
