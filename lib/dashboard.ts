@@ -117,6 +117,22 @@ function within<T>(promise: Promise<T>, fallback: T, name: string): Promise<T> {
   return Promise.race([promise, timeout]).finally(() => clearTimeout(timer))
 }
 
+export const dashboardSections = {
+  coding: () => within(getWakaTime(), null, "WakaTime"),
+  contributions: () => within(getGraph(), [], "GitHub contributions"),
+  reading: () => within(getReading(), { days: [], streak: null }, "daily.dev reading"),
+  codingDays: () => within(getCoding(), [], "WakaTime days"),
+  traffic: () =>
+    Promise.all([within(getUmamiTotals(), null, "Umami totals"), within(getUmamiRecentSessions(3), [], "Umami sessions")]),
+  blog: () => Promise.all([within(getViews(), {}, "blog views"), within(getReactionTotals(), {}, "blog reactions")]),
+  bookmarks: (origin: URL) => within(getBookmarks(origin), [], "daily.dev bookmarks"),
+  tracks: () => within(getTracks(), [], "Last.fm tracks"),
+  artists: () => within(getArtists(), [], "Last.fm artists"),
+  albums: () => within(getAlbums(), [], "Last.fm albums"),
+}
+
+export type DashboardSectionName = keyof typeof dashboardSections
+
 // All at once, so the page waits for the slowest source rather than the sum of them
 export async function getDashboardData(origin: URL) {
   const [wakatime, totals, sessions, bookmarks, tracks, topArtists, topAlbums, contributions, reading, coding, views, reactions] = await Promise.all([
