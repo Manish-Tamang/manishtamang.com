@@ -49,13 +49,67 @@ export const stack: Tool[] = [
 export const services: Tool[] = [
   {
     name: "Last.fm API",
-    note: "What I'm listening to, in the footer",
+    note: "Now playing, /scrobbles and music stats",
     url: "https://www.last.fm/api",
   },
   {
     name: "iTunes Search API",
     note: "Album covers Last.fm is missing",
     url: "https://performance-partners.apple.com/search-api",
+  },
+  {
+    name: "Deezer API",
+    note: "Artist photos and release years",
+    url: "https://developers.deezer.com/api",
+  },
+  {
+    name: "WakaTime API",
+    note: "Coding time and the coding graph",
+    url: "https://wakatime.com/developers",
+  },
+  {
+    name: "GitHub Contributions API",
+    note: "The contribution graph on /dashboard",
+    url: "https://github-contributions-api.jogruber.de",
+    iconDomain: "github.com",
+  },
+  {
+    name: "GitHub REST API",
+    note: "The star count on this page",
+    url: "https://docs.github.com/en/rest",
+    iconDomain: "github.com",
+  },
+  {
+    name: "daily.dev API",
+    note: "Reading list and reading graph",
+    url: "https://api.daily.dev/public/v1/docs",
+    iconDomain: "daily.dev",
+  },
+  {
+    name: "Umami API",
+    note: "Visitors and recent sessions",
+    url: "https://umami.is/docs/api",
+  },
+  {
+    name: "Supabase",
+    note: "Guestbook, blog views and reactions",
+    url: "https://supabase.com/",
+  },
+  {
+    name: "Resend API",
+    note: "Guestbook email notifications",
+    url: "https://resend.com/docs/api-reference",
+  },
+  {
+    name: "GitHub and Google sign-in",
+    note: "Signing in to the guestbook",
+    url: "https://www.better-auth.com/",
+  },
+  {
+    name: "Flagpedia",
+    note: "Country flags for recent visits",
+    url: "https://flagpedia.net/",
+    iconDomain: "flagcdn.com",
   },
 ];
 
@@ -64,48 +118,63 @@ export const fonts = [
     name: "Inter",
     role: "Body text and headings, with the cv05 and ss03 alternates",
     url: "https://rsms.me/inter/",
-    sample: "Namaste from Nepal",
     class: "font-sans",
   },
   {
-    name: "Custom font",
+    name: "Custom Font",
     role: "My name and other personal touches",
-    sample: "Manish Tamang",
     class: "font-display",
   },
   {
-    name: "System mono",
+    name: "System Mono",
     role: "Code snippets",
-    sample: "const greeting = 'namaste'",
     class: "font-mono",
   },
 ];
 
 // Hex values mirror styles/tokens.css (light theme)
-export const palette = [
-  { name: "Purple", hex: "#966bc3", use: "Accent and links" },
-  { name: "Yellow", hex: "#fff480", use: "Highlights and selection" },
-  { name: "Ink", hex: "#2a2d2d", use: "Text" },
-  { name: "Slate", hex: "#626a6a", use: "Muted text" },
-  { name: "Mist", hex: "#d7dada", use: "Borders" },
-  { name: "Paper", hex: "#f7f8f8", use: "Surfaces" },
-];
+export const palette = {
+  accents: [
+    { name: "Purple", hex: "#966bc3", use: "accent, links and buttons" },
+    { name: "Blue", hex: "#4d9bd8", use: "badges and sidebar dots" },
+    { name: "Chart blue", hex: "#2a78d6", use: "charts on /scrobbles" },
+    { name: "Green", hex: "#3dc06c", use: "success and live dots" },
+    { name: "Pink", hex: "#d95a88", use: "errors and deletes" },
+    { name: "Orange", hex: "#e6a56e", use: "warm highlights" },
+    { name: "Yellow", hex: "#fff480", use: "text selection" },
+  ],
+  neutrals: [
+    { name: "Night", hex: "#161616", use: "dark-theme background" },
+    { name: "Ink", hex: "#2a2d2d", use: "headings and text" },
+    { name: "Slate", hex: "#626a6a", use: "muted text" },
+    { name: "Stone", hex: "#b5bfbf", use: "strong borders" },
+    { name: "Mist", hex: "#d7dada", use: "borders" },
+    { name: "Fog", hex: "#eef0f0", use: "muted fills and badges" },
+    { name: "Paper", hex: "#f7f8f8", use: "surfaces" },
+    { name: "White", hex: "#ffffff", use: "background" },
+  ],
+};
 
 export const designCredits = [
   {
-    name: "Recurse Center",
-    url: "https://www.recurse.com/",
-    note: "Typography and colour",
-  },
-  {
     name: "Banjo Magpi",
     url: "https://banjomagpi.com/",
-    note: "Sidebar navigation and page dates",
+    thanks: "the sidebar navigation and page dates",
   },
   {
     name: "Saira",
     url: "https://www.instagram.com/uiuxsesh/",
-    note: "Footer flowers (100 Day Design Challenge)",
+    thanks: "the footer flowers, from the 100 Day Design Challenge",
+  },
+  {
+    name: "Robb Knight",
+    url: "https://rknight.me/",
+    thanks: "introducing me to slash pages and slashpages.net",
+  },
+  {
+    name: "Uiverse.io",
+    url: "https://uiverse.io/",
+    thanks: "free UI components, like the colour strip above",
   },
 ];
 
