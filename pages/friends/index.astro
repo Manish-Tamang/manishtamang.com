@@ -1,23 +1,57 @@
 ---
-import PageLayout from "@/layouts/PageLayout.astro"
+import StoryLayout from "@/layouts/StoryLayout.astro"
 import Link from "@/components/ui/Link.astro"
-import { inspirations } from "@/data/colophon"
+import { friends } from "@/data/slash-pages"
+import type { ImageMetadata } from "astro"
+import BlurImage from "@/components/ui/BlurImage.astro"
+import banner from "@/assets/friends/banner.jpg"
+
+const photos = import.meta.glob<{ default: ImageMetadata }>("/assets/friends/*.webp", { eager: true })
 ---
 
-<PageLayout
+<StoryLayout
   heading="Friends"
-  intro="People on the internet I like, admire or learn from."
-  description="People on the internet Manish Tamang likes, admires and learns from, with links so you can find them too."
+  description="Manish Tamang's friends, on and off the internet: people he met, studied with and got to know online, with links to their sites."
+  banner={banner}
+  bannerAlt="A group of classmates in signed, colour-splashed school shirts and ties outside Sushma Godawari College"
+  bannerPosition="center 78%"
 >
-  <ul class="grid gap-x-8 gap-y-2 sm:grid-cols-2">
-    {inspirations.map(({ name, url }) => (
-      <li>
-        <Link href={url}>{name}</Link>
-      </li>
-    ))}
+  <p class="text-sm">
+    <span class="mb-3 block font-lead text-lead text-heading">This page is for my friends, on the internet and off it.</span>
+    The people I've met, the ones I studied with, and the friends I made online. If they have a site, you'll find it
+    linked here.
+  </p>
+
+  <ul class="mt-8 space-y-3">
+    {friends.map(({ name, url, note, photo, position }) => {
+      const image = photo ? photos[`/assets/friends/${photo}`]?.default : undefined
+      return (
+        <li class="flex gap-4 rounded-lg bg-background p-3 text-sm transition-colors hover:border-border-strong">
+          {image && (
+            <BlurImage
+              src={image}
+              alt={name}
+              widths={[200, 400, 600]}
+              sizes="(max-width: 640px) 96px, 128px"
+              quality={78}
+              position={position}
+              data-zoom
+              class="aspect-square w-24 shrink-0 self-start rounded-md object-cover sm:w-32"
+            />
+          )}
+          <div class="min-w-0">
+          <p class="font-subsection text-heading">{name}</p>
+          {url && (
+            <Link href={url} class="text-xs">{url.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "")}</Link>
+          )}
+          <p class="mt-2 text-muted-foreground">{note}</p>
+          </div>
+        </li>
+      )
+    })}
   </ul>
 
   <p class="mt-12 text-sm text-muted-foreground">
     <Link href="https://slashfriends.org/">/friends</Link> pages were started by <Link href="https://nickgray.net/">Nick Gray</Link>.
   </p>
-</PageLayout>
+</StoryLayout>
