@@ -42,21 +42,22 @@ const tiles = [...padding, ...recent]
 </div>
 
 <script>
-  document.querySelectorAll<HTMLElement>("[data-heatmap]").forEach((root) => {
-    const graph = root.querySelector<HTMLElement>("[data-heatmap-grid]")
-    const tip = root.querySelector<HTMLElement>("[data-heatmap-tip]")
-    if (!graph || !tip) return
+  // Delegated: on /dashboard the graphs arrive in server islands, after the script runs
+  let shown: HTMLElement | null = null
 
-    graph.addEventListener("pointerover", (event) => {
-      const tile = (event.target as HTMLElement).closest<HTMLElement>("[data-tip]")
-      tip.hidden = !tile
-      if (!tile) return
+  document.addEventListener("pointerover", (event) => {
+    const target = event.target as HTMLElement
+    const tile = target.closest<HTMLElement>("[data-heatmap-grid] [data-tip]")
+    const tip = tile?.closest("[data-heatmap]")?.querySelector<HTMLElement>("[data-heatmap-tip]") ?? null
 
-      const { left, top, width } = tile.getBoundingClientRect()
-      tip.textContent = tile.dataset.tip!
-      tip.style.left = `${left + width / 2}px`
-      tip.style.top = `${top - 4}px`
-    })
-    graph.addEventListener("pointerleave", () => (tip.hidden = true))
+    if (shown && shown !== tip) shown.hidden = true
+    shown = tip
+    if (!tile || !tip) return
+
+    const { left, top, width } = tile.getBoundingClientRect()
+    tip.textContent = tile.dataset.tip!
+    tip.style.left = `${left + width / 2}px`
+    tip.style.top = `${top - 4}px`
+    tip.hidden = false
   })
 </script>
