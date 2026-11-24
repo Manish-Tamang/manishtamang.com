@@ -1,8 +1,7 @@
 ---
 import type { ImageMetadata } from "astro"
 import { Image } from "astro:assets"
-import Heading from "@/components/typography/Heading.astro"
-import Text from "@/components/typography/Text.astro"
+import SectionHeader from "@/components/home/SectionHeader.astro"
 import { trustedLogos } from "@/data/home"
 
 const logos = import.meta.glob<{ default: ImageMetadata }>("/assets/logos/*", { eager: true })
@@ -13,12 +12,11 @@ const fitWidth = ({ width, height }: ImageMetadata) => Math.round(Math.min(112, 
 ---
 
 <section>
-  <Heading>Trusted by</Heading>
-  <Text class="mt-2 mb-6">
+  <SectionHeader title="Trusted by">
     I've worked with clients across travel, finance, and product teams for <strong class="font-semibold">3+ years</strong>,
     shipping sites and tools that hold up in real use. I focus on clear UI, steady delivery, and partnerships built on
-    trust - not just a one-off handoff.
-  </Text>
+    trust, not just a one-off handoff.
+  </SectionHeader>
 
   <ul class="flex flex-wrap items-center justify-center gap-x-8 gap-y-6 sm:gap-x-10 sm:gap-y-8">
     {trustedLogos.map(({ name, file }) => (
