@@ -1,11 +1,12 @@
 ---
 import type { ImageMetadata } from "astro";
-import { getImage } from "astro:assets";
+import { Image, getImage } from "astro:assets";
 import BlurImage from "@/components/ui/BlurImage.astro";
 import PageLayout from "@/layouts/PageLayout.astro";
 import VideoModal from "@/components/concerts/VideoModal.astro";
 import VideoThumbnail from "@/components/concerts/VideoThumbnail.astro";
 import Heading from "@/components/typography/Heading.astro";
+import Separator from "@/components/ui/Separator.astro";
 import Text from "@/components/typography/Text.astro";
 import { concerts } from "@/data/slash-pages";
 
@@ -29,6 +30,12 @@ const allImages = import.meta.glob<{ default: ImageMetadata }>(
   "/assets/concerts/*",
   { eager: true },
 );
+const logos = import.meta.glob<{ default: ImageMetadata }>(
+  "/assets/concerts/logos/*.png",
+  { eager: true },
+);
+const logo = (file: string) => logos[`/assets/concerts/logos/${file}`]!.default;
+
 const concertImage = (file: string) =>
   allImages[`/assets/concerts/${file}`]?.default;
 
@@ -57,23 +64,33 @@ for (const c of sorted) {
 ---
 
 <PageLayout heading="Concerts" intro="Concerts and live shows I've been to." description="Concerts and live shows Manish Tamang has been to, with photos and clips from each night.">
-  <div class="space-y-12">
+  <div>
     {
-      years.map((year) => (
+      years.map((year, i) => (
         <section>
+          {i > 0 && <Separator class="my-10" />}
           <Heading>{year}</Heading>
           <div class="mt-4 space-y-6">
             {sorted
               .filter(({ date }) => date.startsWith(year))
-              .map(({ date, approximate, artist, venue, city, image, video, caption }) => {
+              .map(({ date, approximate, artist, logo: artistLogo, venue, city, image, video, caption }) => {
                 const opt = image ? optimised.get(image) : undefined;
                 return (
                   <article>
                     <div class="flex items-start justify-between gap-4">
                       <div class="min-w-0 space-y-0.5">
-                        <p class="flex items-center gap-2 font-medium text-heading">
-                          {artist}
-                        </p>
+                        {typeof artistLogo === "string" ? (
+                          <Image src={logo(artistLogo)} alt={artist} height={32} densities={[1, 2]} class="mb-1 h-8 w-auto" />
+                        ) : artistLogo ? (
+                          <>
+                            <Image src={logo(artistLogo.light)} alt={artist} height={32} densities={[1, 2]} class="mb-1 h-8 w-auto dark:hidden" />
+                            <Image src={logo(artistLogo.dark)} alt={artist} height={32} densities={[1, 2]} class="mb-1 hidden h-8 w-auto dark:block" />
+                          </>
+                        ) : (
+                          <p class="flex items-center gap-2 font-medium text-heading">
+                            {artist}
+                          </p>
+                        )}
                         {(venue || city) && (
                           <Text size="sm">
                             {[venue, city].filter(Boolean).join(", ")}
@@ -88,10 +105,11 @@ for (const c of sorted) {
                       </time>
                     </div>
                     {opt && (
-                      <figure class:list={["mt-3", video ? "grid grid-cols-2 gap-3" : "max-w-[10rem]"]}>
+                      <figure class="mt-3">
+                        <div class="flex gap-2">
                         <button
                           type="button"
-                          class="block w-full cursor-pointer overflow-hidden rounded-md"
+                          class="block size-28 shrink-0 cursor-pointer overflow-hidden rounded-md"
                           data-photo
                           data-src={opt.src}
                           data-srcset={opt.srcset}
@@ -104,22 +122,25 @@ for (const c of sorted) {
                           <BlurImage
                             src={concertImage(image!)!}
                             alt={caption || `${artist} live`}
-                            width={video ? 480 : 160}
-                            height={video ? 480 : 160}
+                            width={224}
+                            height={224}
                             quality={80}
                             format="webp"
                             class="aspect-square w-full grayscale-100 object-cover transition-transform duration-200 hover:scale-105"
                           />
                         </button>
                       {video && (
-                        <VideoThumbnail
-                          src={video}
-                          poster={concertImage(image!)!}
-                          label={`${artist} live at ${venue}`}
-                        />
+                        <div class="w-28 shrink-0">
+                          <VideoThumbnail
+                            src={video}
+                            poster={concertImage(image!)!}
+                            label={`${artist} live at ${venue}`}
+                          />
+                        </div>
                       )}
+                        </div>
                         {caption && (
-                          <figcaption class:list={[video ? "col-span-2 -mt-1.5" : "mt-1.5"]}>
+                          <figcaption class="mt-1.5">
                             <Text
                               as="span"
                               size="xs"
@@ -132,12 +153,14 @@ for (const c of sorted) {
                       </figure>
                     )}
                     {!opt && video && (
-                      <figure class="mt-3 w-1/2">
-                        <VideoThumbnail
-                          src={video}
-                          label={`${artist} live at ${venue}`}
-                          wide
-                        />
+                      <figure class="mt-3">
+                        <div class="w-48">
+                          <VideoThumbnail
+                            src={video}
+                            label={`${artist} live at ${venue}`}
+                            wide
+                          />
+                        </div>
                         {caption && (
                           <figcaption class="mt-1.5">
                             <Text as="span" size="xs" class="block italic">
