@@ -15,7 +15,7 @@ const article = (word: string) => (/^[aeiou]/i.test(word) ? "an" : "a")
     {guy.map(({ thing, ending = "guy.", tooltip }) => (
       <li>
         <p class="font-section text-2xl text-heading">
-          I'm {article(thing)}
+          I'm {article(thing)}{" "}
           {tooltip ? (
             <span class="group relative inline-block cursor-help" tabindex="0">
               <mark>{thing}</mark>
@@ -23,7 +23,7 @@ const article = (word: string) => (/^[aeiou]/i.test(word) ? "an" : "a")
             </span>
           ) : (
             <mark>{thing}</mark>
-          )} {ending}
+          )}{" "}{ending}
         </p>
       </li>
     ))}
