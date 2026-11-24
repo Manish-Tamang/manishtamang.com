@@ -1,5 +1,6 @@
 /* Guestbook entries in Supabase (public.guestbook_entries), ported from the Next.js site. */
 import { adminEmail } from "@/lib/auth"
+import { getCache } from "@vercel/functions"
 import { supabase } from "@/lib/services/supabase"
 import type { MessageFormat } from "./rich-text"
 
@@ -88,10 +89,38 @@ function toPublicEntry(entry: RawGuestbookEntry, viewerEmail?: string | null): G
 }
 
 /** Every row, newest first. It doesn't depend on who's viewing, so it can load alongside the session. */
-export const fetchGuestbookRows = (): Promise<RawGuestbookEntry[]> =>
+const ROWS_KEY = "guestbook-rows"
+const ROWS_TTL = 10 * 60
+
+const queryRows = (): Promise<RawGuestbookEntry[]> =>
   supabase(
     `${TABLE}?select=id,name,email,image_url,message,message_format,timestamp,parent_id,likes,reactions,attachment_url&order=timestamp.desc`,
   )
+
+export async function fetchGuestbookRows(): Promise<RawGuestbookEntry[]> {
+  const cache = getCache()
+  try {
+    const cached = await cache.get(ROWS_KEY)
+    if (Array.isArray(cached)) return cached as RawGuestbookEntry[]
+  } catch (error) {
+    console.error("Guestbook cache read failed:", error)
+  }
+
+  const rows = await queryRows()
+  cache.set(ROWS_KEY, rows, { ttl: ROWS_TTL, name: "Guestbook rows" }).catch((error) => {
+    console.error("Guestbook cache write failed:", error)
+  })
+  return rows
+}
+
+// Rows are cached in Vercel's Runtime Cache; call this after every write to the table
+export async function forgetGuestbookRows() {
+  try {
+    await getCache().delete(ROWS_KEY)
+  } catch (error) {
+    console.error("Guestbook cache clear failed:", error)
+  }
+}
 
 /** Top-level entries, newest first, each with its replies oldest first, shaped for the viewer. */
 export function shapeGuestbookEntries(entries: RawGuestbookEntry[], viewerEmail?: string | null): GuestbookEntry[] {
