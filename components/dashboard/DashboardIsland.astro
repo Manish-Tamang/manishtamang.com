@@ -1,0 +1,52 @@
+---
+import BlogStats from "./BlogStats.astro"
+import CodingStats from "./CodingStats.astro"
+import ContributionGraph from "./ContributionGraph.astro"
+import DailyBookmarks from "./DailyBookmarks.astro"
+import RecentlyListened from "./RecentlyListened.astro"
+import SiteTraffic from "./SiteTraffic.astro"
+import TopMusic from "./TopMusic.astro"
+import { dashboardSections, type DashboardSectionName } from "@/lib/dashboard"
+
+export interface Props {
+  section: DashboardSectionName
+}
+
+const { section } = Astro.props
+
+Astro.response.headers.set("cache-control", "public, s-maxage=300, stale-while-revalidate=86400")
+
+const load = {
+  coding: () => dashboardSections.coding(),
+  contributions: () => dashboardSections.contributions(),
+  reading: () => dashboardSections.reading(),
+  codingDays: () => dashboardSections.codingDays(),
+  traffic: () => dashboardSections.traffic(),
+  blog: () => dashboardSections.blog(),
+  bookmarks: () => dashboardSections.bookmarks(Astro.url),
+  tracks: () => dashboardSections.tracks(),
+  artists: () => dashboardSections.artists(),
+  albums: () => dashboardSections.albums(),
+} satisfies Record<DashboardSectionName, () => Promise<unknown>>
+const data: any = await load[section]()
+---
+
+{section === "coding" && <CodingStats wakatime={data} />}
+{section === "contributions" && <ContributionGraph contributions={data} />}
+{section === "reading" && (
+  <>
+    <ContributionGraph contributions={data.days} color="206, 61, 243" noun="read" empty="Reading graph is unavailable right now." />
+    {data.streak && (
+      <p class="mt-3 text-xs text-muted-foreground tabular-nums">
+        Current streak {data.streak.current} days · longest {data.streak.longest} · total {data.streak.total}
+      </p>
+    )}
+  </>
+)}
+{section === "codingDays" && <ContributionGraph contributions={data} color="59, 130, 246" noun="hour" empty="Coding graph is unavailable right now." />}
+{section === "traffic" && <SiteTraffic totals={data[0]} sessions={data[1]} />}
+{section === "blog" && <BlogStats views={data[0]} reactions={data[1]} />}
+{section === "bookmarks" && <DailyBookmarks bookmarks={data} />}
+{section === "tracks" && <RecentlyListened tracks={data} />}
+{section === "artists" && <TopMusic items={data} empty="No top artists available right now." />}
+{section === "albums" && <TopMusic items={data} empty="No top albums available right now." />}
