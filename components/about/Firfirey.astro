@@ -37,13 +37,13 @@ import stick from "@/assets/about/firfirey-stick.png";
 
 <style>
   .wings {
-    transition: transform 0.5s ease-out;
+    animation: spin 0.8s linear infinite paused;
   }
 
   .firfirey:hover .wings,
   .firfirey[aria-pressed="true"] .wings {
     animation:
-      spin 0.8s linear infinite,
+      spin 0.8s linear infinite running,
       wind-blur 0.2s linear infinite;
   }
 
