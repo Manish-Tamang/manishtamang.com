@@ -1,22 +1,10 @@
 ---
 import PageLayout from "@/layouts/PageLayout.astro"
 import Link from "@/components/ui/Link.astro"
-import BlogStats from "@/components/dashboard/BlogStats.astro"
-import CodingStats from "@/components/dashboard/CodingStats.astro"
-import ContributionGraph from "@/components/dashboard/ContributionGraph.astro"
-import DailyBookmarks from "@/components/dashboard/DailyBookmarks.astro"
+import DashboardIsland from "@/components/dashboard/DashboardIsland.astro"
 import DashboardSection from "@/components/dashboard/DashboardSection.astro"
-import RecentlyListened from "@/components/dashboard/RecentlyListened.astro"
-import SiteTraffic from "@/components/dashboard/SiteTraffic.astro"
-import TopMusic from "@/components/dashboard/TopMusic.astro"
-import { getDashboardData } from "@/lib/dashboard"
 
-// Rendered on request. The CDN refreshes it in the background, so visitors get a stored copy
-// straight away instead of waiting on six APIs, even if nobody has visited for hours.
-export const prerender = false
-Astro.response.headers.set("cache-control", "public, s-maxage=60, stale-while-revalidate=86400")
-
-const { wakatime, totals, sessions, bookmarks, tracks, topArtists, topAlbums, contributions, reading, coding, views, reactions } = await getDashboardData(Astro.url)
+const skeleton = "animate-pulse rounded-lg bg-muted"
 ---
 
 <PageLayout heading="Dashboard" description="Live coding activity, site traffic, blog statistics and what Manish Tamang is reading and listening to.">
@@ -26,27 +14,35 @@ const { wakatime, totals, sessions, bookmarks, tracks, topArtists, topAlbums, co
         Real-time coding statistics from <Link href="https://wakatime.com/@manishtamang">WakaTime</Link>. Tracking my
         development journey across all projects and languages.
       </Fragment>
-      <CodingStats wakatime={wakatime} />
+      <DashboardIsland server:defer section="coding">
+        <div slot="fallback" class:list={[skeleton, "h-28"]} />
+      </DashboardIsland>
     </DashboardSection>
 
     <DashboardSection title="Contribution Graph">
       <Fragment slot="description">
         A quick view of my activity and open-source contribution streak on <Link href="https://github.com/Manish-Tamang">GitHub</Link>.
       </Fragment>
-      <ContributionGraph contributions={contributions} />
+      <DashboardIsland server:defer section="contributions">
+        <div slot="fallback" class:list={[skeleton, "h-36"]} />
+      </DashboardIsland>
     </DashboardSection>
 
     <DashboardSection title="Reading Overview">
       <Fragment slot="description">
-        Articles I read each day on <Link href="https://app.daily.dev/manishtamang">daily.dev</Link>.
-        {reading.streak && `Current streak ${reading.streak.current} days, longest ${reading.streak.longest}, total ${reading.streak.total}.`}
+        Articles I read each day on <Link href="https://app.daily.dev/manishtamang">daily.dev</Link>, with my streak under
+        the graph.
       </Fragment>
-      <ContributionGraph contributions={reading.days} color="206, 61, 243" noun="read" empty="Reading graph is unavailable right now." />
+      <DashboardIsland server:defer section="reading">
+        <div slot="fallback" class:list={[skeleton, "h-36"]} />
+      </DashboardIsland>
     </DashboardSection>
 
     <DashboardSection title="Coding Overview">
       <Fragment slot="description">Hours I coded each day, from <Link href="https://wakatime.com/@manishtamang">WakaTime</Link>.</Fragment>
-      <ContributionGraph contributions={coding} color="59, 130, 246" noun="hour" empty="Coding graph is unavailable right now." />
+      <DashboardIsland server:defer section="codingDays">
+        <div slot="fallback" class:list={[skeleton, "h-36"]} />
+      </DashboardIsland>
     </DashboardSection>
 
     <DashboardSection title="Site Traffic">
@@ -55,32 +51,44 @@ const { wakatime, totals, sessions, bookmarks, tracks, topArtists, topAlbums, co
         <Link href="https://analytics.manishtamang.com/share/jFK5VpX2c6h2JgRg/manishtamang.com">Umami</Link> since Oct 18,
         2024. Recent sessions show the latest 3 visits.
       </Fragment>
-      <SiteTraffic totals={totals} sessions={sessions} />
+      <DashboardIsland server:defer section="traffic">
+        <div slot="fallback" class:list={[skeleton, "h-[266px] sm:h-[200px]"]} />
+      </DashboardIsland>
     </DashboardSection>
 
     <DashboardSection title="Blog Statistics">
       <Fragment slot="description">Views and reactions across all blog posts.</Fragment>
-      <BlogStats views={views} reactions={reactions} />
+      <DashboardIsland server:defer section="blog">
+        <div slot="fallback" class:list={[skeleton, "h-[1000px]"]} />
+      </DashboardIsland>
     </DashboardSection>
 
     <DashboardSection title="Reading List">
       <Fragment slot="description">Latest articles I saved on <Link href="https://app.daily.dev/bookmarks">daily.dev</Link>.</Fragment>
-      <DailyBookmarks bookmarks={bookmarks} />
+      <DashboardIsland server:defer section="bookmarks">
+        <div slot="fallback" class:list={[skeleton, "h-[1310px] sm:h-[1000px]"]} />
+      </DashboardIsland>
     </DashboardSection>
 
     <DashboardSection title="Recently Listened">
       <Fragment slot="description">The last few songs I played on Spotify, via <Link href="https://www.last.fm/user/golecodes">Last.fm</Link>.</Fragment>
-      <RecentlyListened tracks={tracks} />
+      <DashboardIsland server:defer section="tracks">
+        <div slot="fallback" class:list={[skeleton, "h-[568px]"]} />
+      </DashboardIsland>
     </DashboardSection>
 
     <DashboardSection title="Top Artists">
       <Fragment slot="description">Who I've played the most of all time, via <Link href="https://www.last.fm/user/golecodes">Last.fm</Link>.</Fragment>
-      <TopMusic items={topArtists} empty="No top artists available right now." />
+      <DashboardIsland server:defer section="artists">
+        <div slot="fallback" class:list={[skeleton, "h-[670px] sm:h-[356px]"]} />
+      </DashboardIsland>
     </DashboardSection>
 
     <DashboardSection title="Top Albums">
       <Fragment slot="description">The albums I've played the most of all time.</Fragment>
-      <TopMusic items={topAlbums} empty="No top albums available right now." />
+      <DashboardIsland server:defer section="albums">
+        <div slot="fallback" class:list={[skeleton, "h-[670px] sm:h-[356px]"]} />
+      </DashboardIsland>
     </DashboardSection>
 
     <p class="text-xs text-muted-foreground">
