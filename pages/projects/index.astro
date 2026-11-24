@@ -1,12 +1,19 @@
 ---
 import { getCollection } from "astro:content"
 import PageLayout from "@/layouts/PageLayout.astro"
+import FeaturedWork from "@/components/projects/FeaturedWork.astro"
 import ProjectListItem from "@/components/projects/ProjectListItem.astro"
 import SearchableList from "@/components/shared/SearchableList.astro"
 import YearGroup from "@/components/shared/YearGroup.astro"
+import Separator from "@/components/ui/Separator.astro"
 
-const projects = (await getCollection("projects")).sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+const all = (await getCollection("projects")).sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+
+const featured = all.filter(({ data }) => data.featured).sort((a, b) => a.data.featured! - b.data.featured!)
+const projects = all.filter(({ data }) => !data.featured)
 const years = [...new Set(projects.map(({ data }) => data.date.getUTCFullYear()))]
+
+const sectionTitle = "mb-6 text-base font-subsection text-heading"
 ---
 
 <PageLayout
@@ -14,13 +21,23 @@ const years = [...new Set(projects.map(({ data }) => data.date.getUTCFullYear())
   intro="Here are some of the projects I've worked on. Each project represents a unique challenge and learning experience."
   description="Projects by Manish Tamang (golecodes) — web applications, experiments, and creative builds."
 >
-  <SearchableList noun="projects">
-    {years.map((year) => (
-      <YearGroup year={year}>
-        {projects
-          .filter(({ data }) => data.date.getUTCFullYear() === year)
-          .map((project) => <ProjectListItem project={project} />)}
-      </YearGroup>
-    ))}
-  </SearchableList>
+  <section>
+    <h2 class={sectionTitle}>Featured work</h2>
+    <FeaturedWork projects={featured} />
+  </section>
+
+  <Separator class="my-12" />
+
+  <section>
+    <h2 class={sectionTitle}>More projects</h2>
+    <SearchableList noun="projects">
+      {years.map((year) => (
+        <YearGroup year={year}>
+          {projects
+            .filter(({ data }) => data.date.getUTCFullYear() === year)
+            .map((project) => <ProjectListItem project={project} />)}
+        </YearGroup>
+      ))}
+    </SearchableList>
+  </section>
 </PageLayout>
