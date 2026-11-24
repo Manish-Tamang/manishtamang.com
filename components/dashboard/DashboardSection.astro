@@ -12,7 +12,7 @@ const { title } = Astro.props
 <section class="space-y-4">
   <div>
     <Heading>{title}</Heading>
-    <Text class="mt-2"><slot name="description" /></Text>
+    {Astro.slots.has("description") && <Text size="sm" tone="muted" class="mt-1"><slot name="description" /></Text>}
   </div>
   <slot />
 </section>
