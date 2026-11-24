@@ -1,9 +1,14 @@
 ---
+import type { ImageMetadata } from "astro"
+import { Image } from "astro:assets"
 import PageLayout from "@/layouts/PageLayout.astro"
 import Heading from "@/components/typography/Heading.astro"
 import Link from "@/components/ui/Link.astro"
 import Text from "@/components/typography/Text.astro"
 import { ai } from "@/data/slash-pages"
+
+const icons = import.meta.glob<{ default: ImageMetadata }>("/assets/uses/icons/*.png", { eager: true })
+const icon = (name: string) => icons[`/assets/uses/icons/${name}.png`]?.default
 ---
 
 <PageLayout heading="AI" intro="How I use, and don't use, AI." description="How Manish Tamang uses, and doesn't use, AI in his work and on this website.">
@@ -11,7 +16,15 @@ import { ai } from "@/data/slash-pages"
     {ai.map(({ title, body }) => (
       <section>
         <Heading>{title}</Heading>
-        <Text class="mt-2">{body}</Text>
+        <Text class="mt-2">
+          {body.split(/\{([\w-]+)\}/).map((part, i) =>
+            i % 2 && icon(part) ? (
+              <Image src={icon(part)!} alt="" width={16} height={16} densities={[1, 2]} class="mr-1 inline-block size-[1em] -translate-y-[0.1em] rounded-[3px] align-middle" />
+            ) : (
+              part
+            ),
+          )}
+        </Text>
       </section>
     ))}
   </div>
