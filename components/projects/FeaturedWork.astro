@@ -1,0 +1,109 @@
+---
+import type { CollectionEntry } from "astro:content"
+import { getImage } from "astro:assets"
+import BlurImage from "@/components/ui/BlurImage.astro"
+import ArrowUpRight from "@/components/icons/ArrowUpRight.astro"
+
+export interface Props {
+  projects: CollectionEntry<"projects">[]
+}
+
+const { projects } = Astro.props
+
+const rows = await Promise.all(
+  projects.map(async ({ id, data }) => {
+    const sources = data.shots.length > 0 ? data.shots : [{ src: data.cover, alt: data.coverAlt ?? data.title }]
+    const shots = await Promise.all(
+      sources.map(async ({ src, alt }) => ({
+        src,
+        alt,
+        full: await getImage({ src, widths: [800, 1280, 1920], format: "webp", quality: 82 }),
+      })),
+    )
+    return { id, data, shots }
+  }),
+)
+---
+
+<div class="grid gap-14">
+  {rows.map(({ id, data, shots }) => (
+    <article class="min-w-0 text-sm">
+      <div class="flex items-baseline gap-2">
+        <span class="shrink-0 text-muted-foreground tabular-nums">{data.date.getUTCFullYear()}</span>
+        <span class="text-muted-foreground" aria-hidden="true">·</span>
+        <h3 class="min-w-0 font-subsection text-heading">
+          <a href={`/projects/${id}`} class="transition-colors hover:text-link">{data.title}</a>
+        </h3>
+      </div>
+      <p class="mt-1">{data.summary ?? data.tagline ?? data.description}</p>
+      {data.projectUrl && (
+        <a
+          href={data.projectUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-1 inline-flex items-center gap-1 text-xs text-muted-foreground transition-colors hover:text-heading"
+        >
+          {data.projectUrl.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "")}
+          <ArrowUpRight class="size-3" />
+          <span class="sr-only">(opens in a new tab)</span>
+        </a>
+      )}
+
+      <ul class="strip mt-4 flex gap-3 overflow-x-auto py-1" aria-label={`${data.title}, ${shots.length} ${shots.length === 1 ? "image" : "images"}`}>
+        {shots.map(({ src, alt, full }) => (
+          <li class="w-[200px] shrink-0 snap-start sm:w-[232px]">
+            <button
+              type="button"
+              class="shot block aspect-[4/3] w-full cursor-zoom-in overflow-hidden rounded-xl bg-muted"
+              aria-label={`${alt} (view larger)`}
+              data-photo
+              data-src={full.src}
+              data-srcset={full.srcSet.attribute}
+              data-width={src.width}
+              data-height={src.height}
+              data-alt={alt}
+              data-caption={`${data.title}: ${alt}`}
+              data-date=""
+            >
+              <BlurImage
+                src={src}
+                alt=""
+                widths={[200, 232, 400, 464]}
+                sizes="(max-width: 640px) 200px, 232px"
+                quality={75}
+                position="top"
+                draggable="false"
+                class="size-full object-cover select-none"
+              />
+            </button>
+          </li>
+        ))}
+      </ul>
+    </article>
+  ))}
+</div>
+
+<style>
+  .strip {
+    scroll-snap-type: x proximity;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+  }
+  .strip::-webkit-scrollbar {
+    display: none;
+  }
+
+  .shot:focus-visible {
+    outline: 2px solid var(--color-heading);
+    outline-offset: 3px;
+  }
+
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .shot :global(img) {
+      transition: transform 0.4s cubic-bezier(0.2, 0, 0.2, 1);
+    }
+    .shot:hover :global(img) {
+      transform: scale(1.04);
+    }
+  }
+</style>
