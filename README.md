@@ -54,7 +54,7 @@ migration/
 ## Conventions
 
 - Components use semantic tokens only (`bg-background`, `text-muted-foreground`, `border-border`), never raw colors.
-- Style direction: modelled on recurse.com — Inter (cv05, ss03), purple accent (#966bc3), yellow selection, bold h1 / ultralight h2, pill buttons, highlighted pull quotes.
+- Style direction: Inter (cv05, ss03), purple accent (#966bc3), yellow selection, bold h1 with body-size semibold section headings, pill buttons, highlighted pull quotes.
 - Fonts via Astro's Fonts API: Inter (self-hosted, only upright Latin preloaded) and MyFont (`font-display`, the handwritten name face).
 - Dark mode: `.dark` on `<html>`, same `theme` localStorage key as the old site.
 - URLs: `trailingSlash: "never"` + `build.format: "file"`, so `/about` stays `/about`.
