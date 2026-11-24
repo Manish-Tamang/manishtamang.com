@@ -24,19 +24,19 @@
   }
 
   .prose h2 {
-    font-size: var(--text-2xl);
-    line-height: var(--text-2xl--line-height);
-    letter-spacing: var(--text-2xl--letter-spacing);
-    font-weight: var(--font-weight-section);
-    margin-top: 2em;
-  }
-
-  .prose h3 {
     font-size: var(--text-lg);
     line-height: var(--text-lg--line-height);
     letter-spacing: var(--text-lg--letter-spacing);
     font-weight: var(--font-weight-subsection);
-    margin-top: 2em;
+    margin-top: 2.5rem;
+  }
+
+  .prose h3 {
+    font-size: var(--text-base);
+    line-height: var(--text-base--line-height);
+    letter-spacing: var(--text-base--letter-spacing);
+    font-weight: var(--font-weight-subsection);
+    margin-top: 2rem;
   }
 
   .prose :is(h2, h3, h4) + * {
