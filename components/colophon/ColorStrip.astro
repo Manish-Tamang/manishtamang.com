@@ -1,0 +1,142 @@
+---
+/*
+ * From Uiverse.io by Cobp - https://uiverse.io/Cobp/horrible-quail-18
+ * MIT License, Copyright (c) Cobp (Fabio Cobb)
+ */
+export interface Props {
+  label: string
+  swatches: { name: string; hex: string; use: string }[]
+}
+
+const { label, swatches } = Astro.props
+---
+
+<div class="swatch-row" role="group" aria-label={label}>
+  {swatches.map(({ name, hex, use }) => (
+    <button
+      type="button"
+      class="swatch-item"
+      style={`--color: ${hex}`}
+      data-hex={hex}
+      aria-label={`${name}, ${hex}: ${use}. Copy`}
+      title={`${name} · ${use}`}
+    ></button>
+  ))}
+</div>
+
+<style>
+  .swatch-row {
+    display: flex;
+    transform-style: preserve-3d;
+    transform: perspective(1000px);
+    padding-top: 2.75rem;
+    padding-left: 4px;
+  }
+
+  .swatch-item {
+    position: relative;
+    flex-shrink: 0;
+    width: 32px;
+    height: 40px;
+    border: none;
+    outline: none;
+    background: none;
+    padding: 0;
+    transition: 500ms cubic-bezier(0.175, 0.885, 0.32, 1.1);
+    cursor: pointer;
+  }
+
+  .swatch-item::after {
+    position: absolute;
+    content: "";
+    inset: 0;
+    width: 40px;
+    height: 40px;
+    background-color: var(--color);
+    border-radius: 6px;
+    box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.08);
+    transform: scale(1.2);
+    pointer-events: none;
+    transition: 500ms cubic-bezier(0.175, 0.885, 0.32, 1.1);
+  }
+
+  .swatch-item::before {
+    position: absolute;
+    content: attr(data-hex);
+    left: 65%;
+    bottom: 52px;
+    font-size: 8px;
+    line-height: 12px;
+    color: #2a2d2d;
+    white-space: nowrap;
+    transform: translateX(-50%);
+    padding: 2px 0.25rem;
+    background-color: #ffffff;
+    border-radius: 6px;
+    box-shadow: 0 0 0 1px rgb(0 0 0 / 0.08);
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: 500ms cubic-bezier(0.175, 0.885, 0.32, 1.1);
+  }
+
+  .swatch-item:hover,
+  .swatch-item:focus-visible {
+    transform: scale(1.5);
+    z-index: 99999;
+  }
+
+  .swatch-item:hover::before,
+  .swatch-item:focus-visible::before,
+  .swatch-item[data-copied]::before {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .swatch-item:active::after {
+    transform: scale(1.1);
+  }
+
+  .swatch-item[data-copied]::before {
+    content: "✅Copied";
+  }
+
+  .swatch-item:focus-visible::after {
+    box-shadow:
+      inset 0 0 0 1px rgb(0 0 0 / 0.08),
+      0 0 0 2px var(--color-background),
+      0 0 0 4px var(--color-ring);
+  }
+
+  .swatch-item:hover + *,
+  .swatch-item:has(+ *:hover) {
+    transform: scale(1.3);
+    z-index: 9999;
+  }
+
+  .swatch-item:hover + * + *,
+  .swatch-item:has(+ * + *:hover) {
+    transform: scale(1.15);
+    z-index: 999;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .swatch-item,
+    .swatch-item::after,
+    .swatch-item::before {
+      transition-duration: 0ms;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener("click", async (event) => {
+    const tile = (event.target as HTMLElement).closest<HTMLElement>(".swatch-item")
+    if (!tile) return
+    try {
+      await navigator.clipboard.writeText(tile.dataset.hex!)
+      tile.dataset.copied = ""
+      setTimeout(() => delete tile.dataset.copied, 1200)
+    } catch {}
+  })
+</script>
