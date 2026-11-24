@@ -1,6 +1,6 @@
 ---
 title: "Godawari Hacks"
-tagline: "Landing/Registartion Page"
+tagline: "Landing and registration page"
 description: "A minimalist hackathon management and registration portal designed for efficiency and modern aesthetics."
 date: "2025-11-24T16:26:00.000Z"
 updated: "2026-10-22T09:20:58Z"
@@ -9,6 +9,17 @@ githubUrl: "https://github.com/Manish-Tamang/godawarihacks"
 tech: ["nextjs","hackathon","tailwind"]
 cover: ./cover.webp
 coverAlt: "Godawari Hacks"
+featured: 4
+summary: "A minimal landing and registration portal for a high school hackathon."
+shots:
+  - src: ./shot-1.webp
+    alt: "Homepage"
+  - src: ./shot-2.webp
+    alt: "About"
+  - src: ./shot-3.webp
+    alt: "Team registration"
+  - src: ./shot-4.webp
+    alt: "Rules"
 ---
 
 ![Godawari Hacks Preview](https://github.com/Manish-Tamang/godawarihacks/blob/main/public/image.png?raw=true)
