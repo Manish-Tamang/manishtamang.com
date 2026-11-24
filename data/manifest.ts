@@ -3,11 +3,11 @@
  * assets/manifest/ and are referenced by file name.
  */
 
-export const bucketList: { title: string; done: boolean; image?: string }[] = [
+export const bucketList: { title: string; done: boolean; date?: string; image?: string }[] = [
   { title: "Buy a Gaming PC", done: false },
   { title: "Buy an Insta360 GO 3", done: false, image: "insta-360-go-3.jpg" },
   { title: "Buy a DJI Osmo Pocket 3", done: false, image: "dji.png" },
-  { title: "Earn NPR 100k", done: true },
+  { title: "Earn NPR 100k", done: true, date: "Feb 2025" },
   { title: "Buy a MacBook Air M4", done: false, image: "macbook.jpg" },
   { title: "Buy a Sony A6700", done: false, image: "A6700.jpg" },
   {
