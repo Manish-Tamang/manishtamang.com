@@ -1,59 +1,8 @@
 ---
 import PageLayout from "@/layouts/PageLayout.astro"
-import Link from "@/components/ui/Link.astro"
-import DashboardSection from "@/components/dashboard/DashboardSection.astro"
-import Change from "@/components/scrobbles/Change.astro"
-import DailyChart from "@/components/scrobbles/DailyChart.astro"
-import Decades from "@/components/scrobbles/Decades.astro"
-import Fingerprint from "@/components/scrobbles/Fingerprint.astro"
-import ListeningClock from "@/components/scrobbles/ListeningClock.astro"
-import MusicRatio from "@/components/scrobbles/MusicRatio.astro"
-import TagChart from "@/components/scrobbles/TagChart.astro"
-import TopList from "@/components/scrobbles/TopList.astro"
-import { fmtDate, plural } from "@/components/scrobbles/format"
-import { getScrobbleReport, type ScrobbleReport } from "@/lib/services/scrobbles"
+import ScrobbleReport from "@/components/scrobbles/ScrobbleReport.astro"
 
-// Rendered on request; the CDN keeps a copy and refreshes it in the background, so
-// visitors never wait on the few hundred lookups a cold report can take.
-export const prerender = false
-Astro.response.headers.set("cache-control", "public, s-maxage=900, stale-while-revalidate=86400")
-
-let report: ScrobbleReport | null = null
-try {
-  report = await getScrobbleReport()
-} catch (error) {
-  console.error("Failed to build the scrobbles report:", error)
-  Astro.response.headers.set("cache-control", "public, s-maxage=60")
-}
-
-const range = report
-  ? `${fmtDate(report.start, { day: "numeric", month: "short", year: "numeric" })} – ${fmtDate(report.end - 1, { day: "numeric", month: "short", year: "numeric" })}`
-  : ""
-const lastfmLink = report?.profileUrl ?? "https://www.last.fm/user/golecodes"
-
-const facts = report && [
-  {
-    label: "Listening time",
-    value: report.listeningMinutes ? `${Math.round(report.listeningMinutes.value / 60)}` : "—",
-    unit: "hours",
-    compare: report.listeningMinutes,
-    note: report.listeningMinutes ? `vs. ${Math.round(report.listeningMinutes.previous / 60)} hours (last week)` : "Track lengths unavailable",
-  },
-  {
-    label: "Average scrobbles",
-    value: `${Math.round(report.scrobbles.value / 7)}`,
-    unit: "/day",
-    compare: { value: Math.round(report.scrobbles.value / 7), previous: Math.round(report.scrobbles.previous / 7) },
-    note: `vs. ${Math.round(report.scrobbles.previous / 7)} (last week)`,
-  },
-  {
-    label: "Scrobbles in most active day",
-    value: `${report.busiestDay.plays}`,
-    unit: fmtDate(report.busiestDay.date, { day: "numeric", month: "short" }),
-    compare: { value: report.busiestDay.plays, previous: report.busiestDay.previous },
-    note: `vs. ${report.busiestDay.previous} (last week)`,
-  },
-]
+const skeleton = "animate-pulse rounded-lg bg-muted"
 ---
 
 <PageLayout
@@ -61,90 +10,24 @@ const facts = report && [
   intro="What I listened to last week, scrobbled to Last.fm."
   description="Manish Tamang's weekly listening report from Last.fm: scrobbles, top artists, albums, tracks, tags, decades and listening clock."
 >
-  {report ? (
-    <div class="scrobbles space-y-14" data-scrobbles>
-      <section class="space-y-5">
-        <div>
-          <p class="text-sm text-muted-foreground">{range}</p>
-          <div class="mt-1 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-            <span class="text-4xl font-semibold tracking-tight text-heading tabular-nums">{report.scrobbles.value}</span>
-            <span class="text-lg text-heading">scrobbles</span>
-            <Change value={report.scrobbles.value} previous={report.scrobbles.previous} />
-          </div>
-        </div>
-        <DailyChart days={report.days} />
-      </section>
-
-      <TopList noun="artist" count={report.artists} items={report.topArtists} fresh={report.newArtists} />
-      <TopList noun="album" count={report.albums} items={report.topAlbums} fresh={report.newAlbums} />
-      <TopList noun="track" count={report.tracks} items={report.topTracks} fresh={report.newTracks} />
-
-      <DashboardSection title="Music ratio">
-        <Fragment slot="description">Different tracks, albums and artists I played, against last week.</Fragment>
-        <MusicRatio
-          rows={[
-            { label: "Tracks", count: report.tracks },
-            { label: "Albums", count: report.albums },
-            { label: "Artists", count: report.artists },
-          ]}
-        />
-      </DashboardSection>
-
-      <DashboardSection title="Listening fingerprint">
-        <Fragment slot="description">Five scores for how I listened this week, over last week's.</Fragment>
-        <Fingerprint items={report.fingerprint} />
-      </DashboardSection>
-
-      <DashboardSection title="Top tags">
-        <Fragment slot="description">Last.fm tags of the artists I played, weighted by plays, over five weeks.</Fragment>
-        <TagChart weekStarts={report.tags.weekStarts} series={report.tags.series} />
-      </DashboardSection>
-
-      <DashboardSection title="Music by decade">
-        <Fragment slot="description">When the albums I played came out.</Fragment>
-        <Decades decades={report.decades.list} dated={report.decades.dated} total={report.scrobbles.value} />
-      </DashboardSection>
-
-      <DashboardSection title="Listening clock">
-        <Fragment slot="description">When in the day I scrobbled, Nepal time.</Fragment>
-        <ListeningClock hours={report.hours} />
-      </DashboardSection>
-
-      <DashboardSection title="Quick facts">
-        <div class="grid gap-4 sm:grid-cols-3">
-          {facts!.map((fact) => (
-            <div class="rounded-xl bg-subtle p-4">
-              <p class="text-xs text-muted-foreground">{fact.label}</p>
-              <p class="mt-2 text-heading">
-                <span class="text-3xl font-semibold tracking-tight tabular-nums">{fact.value}</span>
-                <span class="ml-1 text-sm">{fact.unit}</span>
-              </p>
-              {fact.compare && <div class="mt-1"><Change value={fact.compare.value} previous={fact.compare.previous} suffix="" /></div>}
-              <p class="mt-1 text-xs text-muted-foreground">{fact.note}</p>
-            </div>
-          ))}
-        </div>
-      </DashboardSection>
-
-      <p class="text-xs text-muted-foreground">
-        From my <Link href={lastfmLink}>Last.fm</Link> scrobbles, refreshed every few minutes. Weeks run midnight to midnight in
-        Nepal. Artist photos and missing covers come from Deezer and iTunes.
-      </p>
-
-      <div data-scrobble-tip hidden class="pointer-events-none fixed z-50 -translate-x-1/2 -translate-y-full rounded-sm bg-black px-2 py-1 text-xs whitespace-nowrap text-white"></div>
+  <ScrobbleReport server:defer>
+    <div slot="fallback" class="space-y-14" aria-busy="true">
+      <div class="space-y-5">
+        <div class:list={[skeleton, "h-14 w-64"]} />
+        <div class:list={[skeleton, "h-40"]} />
+      </div>
+      <div class:list={[skeleton, "h-72"]} />
+      <div class:list={[skeleton, "h-72"]} />
+      <div class:list={[skeleton, "h-72"]} />
     </div>
-  ) : (
-    <p class="text-sm text-muted-foreground">
-      Last.fm isn't answering right now. My listening lives on <Link href={lastfmLink}>Last.fm</Link> in the meantime.
-    </p>
-  )}
+  </ScrobbleReport>
 </PageLayout>
 
 <style is:global>
-  /* Chart colours: this week in the brand purple, last week in a recessive grey, and five
+  /* Chart colours: this week in blue, last week in a recessive grey, and five
      categorical hues (validated for colour-blind separation) for the tag lines. */
   .scrobbles {
-    --viz-now: #966bc3;
+    --viz-now: #2a78d6;
     --viz-prev: #c9cfcf;
     --viz-1: #2a78d6;
     --viz-2: #eb6834;
@@ -153,7 +36,7 @@ const facts = report && [
     --viz-5: #e87ba4;
   }
   .dark .scrobbles {
-    --viz-now: #b896e0;
+    --viz-now: #3987e5;
     --viz-prev: #555555;
     --viz-1: #3987e5;
     --viz-2: #d95926;
@@ -164,22 +47,20 @@ const facts = report && [
 </style>
 
 <script>
-  // One shared tooltip for every chart mark with a data-tip
-  document.querySelectorAll<HTMLElement>("[data-scrobbles]").forEach((root) => {
-    const tip = root.querySelector<HTMLElement>("[data-scrobble-tip]")
-    if (!tip) return
+  // Delegated: the report arrives in a server island, after the script runs
+  const tip = () => document.querySelector<HTMLElement>("[data-scrobble-tip]")
 
-    root.addEventListener("pointerover", (event) => {
-      const mark = (event.target as Element).closest<Element>("[data-tip]")
-      tip.hidden = !mark
-      if (!mark) return
+  document.addEventListener("pointerover", (event) => {
+    const el = tip()
+    if (!el) return
+    const mark = (event.target as Element).closest<Element>("[data-scrobbles] [data-tip]")
+    el.hidden = !mark
+    if (!mark) return
 
-      const { left, top, width } = mark.getBoundingClientRect()
-      tip.textContent = mark.getAttribute("data-tip")
-      tip.style.left = `${left + width / 2}px`
-      tip.style.top = `${top - 6}px`
-    })
-    root.addEventListener("pointerleave", () => (tip.hidden = true))
-    window.addEventListener("scroll", () => (tip.hidden = true), { passive: true })
+    const { left, top, width } = mark.getBoundingClientRect()
+    el.textContent = mark.getAttribute("data-tip")
+    el.style.left = `${left + width / 2}px`
+    el.style.top = `${top - 6}px`
   })
+  window.addEventListener("scroll", () => tip()?.setAttribute("hidden", ""), { passive: true })
 </script>
