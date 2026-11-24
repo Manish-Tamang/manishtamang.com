@@ -62,10 +62,13 @@ const cell = "px-2 py-2 tabular-nums font-medium text-zinc-700 dark:text-zinc-30
 </div>
 
 <script>
-  const body = document.querySelector<HTMLElement>("[data-stats-rows]")
+  // Delegated: on /dashboard this arrives in a server island, after the script runs
   let byViews = true
 
-  document.querySelector("[data-stats-sort]")?.addEventListener("click", () => {
+  document.addEventListener("click", (event) => {
+    if (!(event.target as HTMLElement).closest("[data-stats-sort]")) return
+    const body = document.querySelector<HTMLElement>("[data-stats-rows]")
+    if (!body) return
     byViews = !byViews
     const [first, second] = byViews ? (["views", "reactions"] as const) : (["reactions", "views"] as const)
     const rows = [...body!.querySelectorAll<HTMLElement>("tr")].sort(
