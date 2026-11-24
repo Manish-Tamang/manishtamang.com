@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro"
 import { SUPABASE_URL } from "astro:env/server"
 import { adminEmail, getUser } from "@/lib/auth"
-import { fetchGuestbookRows, shapeGuestbookEntries, TABLE } from "@/lib/guestbook"
+import { fetchGuestbookRows, forgetGuestbookRows, shapeGuestbookEntries, TABLE } from "@/lib/guestbook"
 import { sendGuestbookEmails } from "@/lib/guestbook/email"
 import { MAX_MESSAGE } from "@/lib/guestbook/rich-text"
 import { supabase } from "@/lib/services/supabase"
@@ -59,6 +59,7 @@ export const POST: APIRoute = async ({ request }) => {
         attachment_url: attachment_url || null,
       }),
     })
+    await forgetGuestbookRows()
 
     try {
       await sendGuestbookEmails({
@@ -114,6 +115,7 @@ export const PATCH: APIRoute = async ({ request }) => {
     }
 
     await supabase(`${TABLE}?id=eq.${encodeURIComponent(id)}`, { method: "PATCH", body: JSON.stringify(update) })
+    await forgetGuestbookRows()
     return Response.json({ ok: true })
   } catch (error) {
     console.error(error)
@@ -137,6 +139,7 @@ export const DELETE: APIRoute = async ({ request, url }) => {
     if (requester !== adminEmail && !isAuthor) return fail("Forbidden", 403)
 
     await supabase(`${TABLE}?id=eq.${encodeURIComponent(id)}`, { method: "DELETE" })
+    await forgetGuestbookRows()
     return Response.json({ ok: true })
   } catch (error) {
     console.error(error)
