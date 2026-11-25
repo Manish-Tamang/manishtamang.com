@@ -24,10 +24,11 @@ const words = entry.message.split(/\s+/)
 const isLong = words.length > 60
 const hasReplies = Boolean(entry.replies?.length)
 
-const reveal = "opacity-100 transition-opacity sm:opacity-0 sm:group-hover:opacity-100 sm:focus-visible:opacity-100"
-const iconButton = "cursor-pointer p-0.5 text-zinc-400 transition-colors sm:p-1"
-const action = "flex cursor-pointer items-center gap-1 text-xs transition-colors sm:gap-1.5"
-const actionIcon = "size-3 transition-transform active:scale-125 sm:size-3.5"
+const reveal = "transition-opacity sm:opacity-0 sm:group-hover:opacity-100 sm:focus-visible:opacity-100"
+const iconButton = "flex size-6 cursor-pointer items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-subtle"
+const action = "flex cursor-pointer items-center gap-1.5 text-xs text-muted-foreground transition-colors"
+const actionIcon = "size-3.5 transition-transform active:scale-125"
+const avatar = "shrink-0 rounded-md border border-border bg-muted object-cover"
 
 // The admin's like and emoji show the same way: small round badges on their avatar
 const adminTitle = [entry.likedByAdmin && "Liked", entry.adminReaction && `reacted ${entry.adminReaction}`]
@@ -42,18 +43,18 @@ const badge = "flex items-center justify-center rounded-full border border-backg
   id={entry.id}
   data-entry={entry.id}
   data-name={entry.name}
-  class="group relative -mx-2 flex scroll-mt-24 gap-2 rounded-xl p-2 transition-all duration-700 target:bg-blue-500/5 target:ring-1 target:ring-blue-500/20 sm:gap-4 dark:target:bg-blue-500/10"
+  class="group relative -mx-2 flex scroll-mt-24 gap-3 rounded-lg p-2 transition-colors duration-700 target:bg-subtle target:ring-1 target:ring-border"
 >
   {(entry.likedByAdmin || entry.adminReaction) && (
-    <span class="absolute -right-1 bottom-2 z-10" title={`${adminTitle.charAt(0).toUpperCase()}${adminTitle.slice(1)} by Manish`}>
+    <span class="absolute right-0 bottom-2 z-10" title={`${adminTitle.charAt(0).toUpperCase()}${adminTitle.slice(1)} by Manish`}>
       <span class="relative block">
-        <img src="https://github.com/Manish-Tamang.png" alt="" width="20" height="20" loading="lazy" class="size-4 rounded-full border border-background object-cover shadow-sm sm:size-5" />
+        <img src="https://github.com/Manish-Tamang.png" alt="" width="20" height="20" loading="lazy" class="size-5 rounded-full border border-background object-cover" />
         <span class="absolute -right-2 -bottom-2 flex items-end -space-x-1">
           {entry.adminReaction && (
-            <span class:list={[badge, "size-4.5 bg-background text-xs leading-none shadow-sm"]}>{entry.adminReaction}</span>
+            <span class:list={[badge, "size-4.5 bg-background text-xs leading-none"]}>{entry.adminReaction}</span>
           )}
           {entry.likedByAdmin && (
-            <span class:list={[badge, "size-3.5 bg-red-500"]}>
+            <span class:list={[badge, "size-3.5 bg-danger"]}>
               <Heart class="size-2 fill-current text-white" />
             </span>
           )}
@@ -63,33 +64,32 @@ const badge = "flex items-center justify-center rounded-full border border-backg
   )}
 
   <div class="flex flex-col items-center">
-    <div class="relative size-8 shrink-0 sm:size-10">
+    <div class="relative size-8 shrink-0">
       {entry.image_url ? (
-        <img src={entry.image_url} alt="" width="40" height="40" loading="lazy" referrerpolicy="no-referrer" class="size-full rounded-sm border-2 border-white object-cover shadow-sm dark:border-zinc-800" />
+        <img src={entry.image_url} alt="" width="32" height="32" loading="lazy" referrerpolicy="no-referrer" class:list={[avatar, "size-full"]} />
       ) : (
-        <span class="flex size-full items-center justify-center rounded-sm border-2 border-white bg-linear-to-br from-zinc-100 to-zinc-200 text-xs font-semibold shadow-sm sm:text-sm dark:border-zinc-800 dark:from-zinc-800 dark:to-zinc-900">{entry.name.charAt(0)}</span>
+        <span class:list={[avatar, "flex size-full items-center justify-center text-xs font-subsection text-heading"]}>{entry.name.charAt(0)}</span>
       )}
       <!-- Only the admin can like, so only they need the pop animation -->
-      {isAdmin && <Heart data-heart-pop class="pointer-events-none absolute top-0 left-1/2 z-50 hidden size-6 -translate-x-1/2 -translate-y-8 animate-bounce fill-current text-red-500 drop-shadow-lg sm:size-8" />}
+      {isAdmin && <Heart data-heart-pop class="pointer-events-none absolute top-0 left-1/2 z-50 hidden size-6 -translate-x-1/2 -translate-y-8 animate-bounce fill-current text-danger" />}
     </div>
-    {hasReplies && <div class="mt-2 mb-2 w-px flex-1 bg-zinc-200 dark:bg-zinc-800"></div>}
+    {hasReplies && <div class="mt-2 w-px flex-1 bg-border"></div>}
   </div>
 
-  <div class="min-w-0 flex-1 space-y-1.5 sm:space-y-2">
-    <div class="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between sm:gap-0">
-      <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
+  <div class="min-w-0 flex-1">
+    <div class="flex items-center justify-between gap-3">
+      <div class="flex min-w-0 flex-wrap items-center gap-x-2">
         <p class="text-sm font-subsection text-heading">{entry.name}</p>
         {entry.isAdminAuthor && <Badge variant="accent">Admin</Badge>}
-        <span class="hidden text-sm text-muted-foreground sm:inline">signed the guestbook</span>
+        <time datetime={entry.timestamp} title={new Date(entry.timestamp).toUTCString()} class="text-xs text-muted-foreground tabular-nums">{timeAgo(entry.timestamp)}</time>
       </div>
-      <div class="flex items-center gap-1.5 sm:gap-2">
-        <time datetime={entry.timestamp} title={new Date(entry.timestamp).toUTCString()} class="font-mono text-xs text-zinc-400">{timeAgo(entry.timestamp)}</time>
-        <button type="button" data-action="copy" title="Copy link to this message" aria-label="Copy link" class:list={[iconButton, reveal, "hover:text-[#9AC372]"]}>
-          <Link2 class="size-3 sm:size-3.5" />
+      <div class:list={["-my-1 flex shrink-0 items-center", reveal]}>
+        <button type="button" data-action="copy" title="Copy link to this message" aria-label="Copy link" class:list={[iconButton, "hover:text-heading"]}>
+          <Link2 class="size-3.5" />
         </button>
         {(isAdmin || entry.isMine) && (
-          <button type="button" data-action="delete" aria-label="Delete message" class:list={[iconButton, reveal, "hover:text-red-500"]}>
-            <Trash2 class="size-3 sm:size-3.5" />
+          <button type="button" data-action="delete" aria-label="Delete message" class:list={[iconButton, "hover:text-danger"]}>
+            <Trash2 class="size-3.5" />
           </button>
         )}
       </div>
@@ -100,7 +100,7 @@ const badge = "flex items-center justify-center rounded-full border border-backg
         <>
           <span data-short><GuestbookMessage text={`${words.slice(0, 60).join(" ")}...`} format={entry.format} /></span>
           <span data-full hidden><GuestbookMessage text={entry.message} format={entry.format} /></span>
-          <button type="button" data-action="more" class="ml-1 cursor-pointer text-xs font-medium text-blue-500 transition-colors hover:text-blue-600 sm:text-sm">See more</button>
+          <button type="button" data-action="more" class="ml-1 cursor-pointer text-link transition-colors hover:text-link-hover">See more</button>
         </>
       ) : (
         <GuestbookMessage text={entry.message} format={entry.format} />
@@ -108,36 +108,36 @@ const badge = "flex items-center justify-center rounded-full border border-backg
     </div>
 
     {entry.attachment_url && (
-      <div class="group/img relative mt-2 aspect-16/10 max-w-full overflow-hidden rounded-lg border border-zinc-200 bg-black/5 shadow-sm transition-all duration-500 hover:border-zinc-300 sm:mt-3 sm:max-w-100 sm:rounded-xl dark:border-zinc-800 dark:bg-white/5 dark:hover:border-zinc-700">
-        <img src={entry.attachment_url} alt="Attachment" loading="lazy" draggable="false" class="size-full object-cover transition-transform duration-700 select-none group-hover/img:scale-[1.03]" />
+      <div class="mt-3 aspect-16/10 max-w-full overflow-hidden rounded-lg border border-border bg-muted sm:max-w-100">
+        <img src={entry.attachment_url} alt="Attachment" loading="lazy" draggable="false" class="size-full object-cover select-none" />
       </div>
     )}
 
     {entry.reactions.length > 0 && (
-      <div class="mt-1 flex justify-end">
+      <div class="mt-2 flex flex-wrap gap-1">
         {entry.reactions.map(({ emoji, count }) => (
-          <div class="ml-1 flex items-center gap-1 rounded-full border border-zinc-200 bg-zinc-100 px-1.5 py-0.5 text-xs text-zinc-500 dark:border-zinc-700 dark:bg-zinc-800">
+          <span class="flex h-6 items-center gap-1 rounded-full border border-border bg-subtle px-2 text-xs text-muted-foreground tabular-nums">
             <span>{emoji}</span>
             <span>{count}</span>
-          </div>
+          </span>
         ))}
       </div>
     )}
 
     {isAdmin && (
-      <div class:list={["flex items-center gap-2 pt-1 sm:gap-4", reveal, "has-[details[open]]:opacity-100"]}>
-        <button type="button" data-action="like" data-liked={entry.likedByMe ? "true" : undefined} class:list={[action, entry.likedByMe ? "text-red-500" : "text-zinc-400 hover:text-red-500"]}>
+      <div class:list={["mt-2 flex items-center gap-4", reveal, "has-[details[open]]:opacity-100"]}>
+        <button type="button" data-action="like" data-liked={entry.likedByMe ? "true" : undefined} class:list={[action, entry.likedByMe ? "text-danger" : "hover:text-danger"]}>
           <Heart class:list={[actionIcon, entry.likedByMe && "fill-current"]} />
-          <span class="hidden sm:inline">{entry.likedByMe ? "Liked" : "Like"}</span>
+          <span>{entry.likedByMe ? "Liked" : "Like"}</span>
         </button>
 
         <details class="relative">
-          <summary class:list={[action, "list-none", entry.myReaction ? "text-blue-500" : "text-zinc-400 hover:text-blue-500"]}>
+          <summary class:list={[action, "list-none", entry.myReaction ? "text-heading" : "hover:text-heading"]}>
             <Smile class={actionIcon} />
-            <span class="hidden sm:inline">React</span>
+            <span>React</span>
           </summary>
           <!-- w-max: sized by its buttons, not squeezed to the width of "React" -->
-          <div class="absolute bottom-full left-0 z-20 mb-1.5 grid w-max grid-cols-4 gap-0.5 rounded-2xl border border-border bg-background p-1 shadow-lg sm:grid-cols-8 sm:rounded-full">
+          <div class="absolute bottom-full left-0 z-20 mb-1.5 grid w-max grid-cols-4 gap-0.5 rounded-xl border border-border bg-background p-1 shadow-lg sm:grid-cols-8">
             {EMOJIS.map((emoji) => (
               <button
                 type="button"
@@ -145,7 +145,7 @@ const badge = "flex items-center justify-center rounded-full border border-backg
                 data-emoji={emoji}
                 aria-label={`React ${emoji}`}
                 aria-pressed={String(emoji === entry.myReaction)}
-                class="flex size-8 cursor-pointer items-center justify-center rounded-full text-lg leading-none transition-[scale,background-color] hover:scale-110 hover:bg-foreground/5 active:scale-95 aria-pressed:bg-foreground/10"
+                class="flex size-8 cursor-pointer items-center justify-center rounded-lg text-lg leading-none transition-[scale,background-color] hover:scale-110 hover:bg-subtle active:scale-95 aria-pressed:bg-muted"
               >
                 {emoji}
               </button>
@@ -153,53 +153,51 @@ const badge = "flex items-center justify-center rounded-full border border-backg
           </div>
         </details>
 
-        <button type="button" data-action="reply" class:list={[action, "text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200"]}>
-          <Reply class="size-3 sm:size-3.5" />
-          <span class="hidden sm:inline">Reply</span>
+        <button type="button" data-action="reply" class:list={[action, "hover:text-heading"]}>
+          <Reply class={actionIcon} />
+          <span>Reply</span>
         </button>
       </div>
     )}
 
     {isAdmin && (
-      <form data-reply-form hidden class="mt-2 flex gap-1.5 sm:mt-3 sm:gap-2">
+      <form data-reply-form hidden class="mt-3 flex gap-2">
         <div class="relative flex-1">
-          <Input name="message" placeholder="Write a reply..." aria-label="Reply" required maxlength={MAX_MESSAGE} data-rich-text class="min-h-[34px] rounded-lg pr-8 text-xs sm:min-h-[38px] sm:rounded-xl sm:pr-10 sm:text-sm" />
-          <button type="button" data-action="cancel-reply" aria-label="Cancel reply" class="absolute top-1/2 right-2 -translate-y-1/2 cursor-pointer text-zinc-400 hover:text-zinc-600 sm:right-3">
-            <X class="size-3 sm:size-3.5" />
+          <Input name="message" placeholder="Write a reply..." aria-label="Reply" required maxlength={MAX_MESSAGE} data-rich-text class="pr-9" />
+          <button type="button" data-action="cancel-reply" aria-label="Cancel reply" class="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer text-muted-foreground transition-colors hover:text-heading">
+            <X class="size-3.5" />
           </button>
         </div>
-        <button type="submit" class="glossy inline-flex h-[34px] cursor-pointer items-center rounded-lg px-3 text-xs sm:h-[38px] sm:rounded-xl sm:px-4 sm:text-sm">
-          <Send class="size-3 sm:mr-2 sm:size-3.5" />
+        <button type="submit" class="glossy inline-flex h-10 cursor-pointer items-center gap-2 rounded-md px-4 text-sm">
+          <Send class="size-3.5" />
           <span class="hidden sm:inline">Post</span>
         </button>
       </form>
     )}
 
     {hasReplies && (
-      <div class="mt-2 space-y-1.5 border-l-2 border-zinc-100 pl-2 sm:space-y-2 sm:pl-4 dark:border-zinc-800/50">
+      <div class="mt-4 space-y-4">
         {entry.replies!.map((reply) => (
-          <div data-entry={reply.id} class="group/reply relative flex gap-2 sm:gap-3">
+          <div data-entry={reply.id} class="group/reply relative flex gap-3">
             {reply.image_url ? (
-              <img src={reply.image_url} alt="" width="32" height="32" loading="lazy" referrerpolicy="no-referrer" class="size-6 shrink-0 rounded-full border border-white object-cover shadow-sm sm:size-8 dark:border-zinc-800" />
+              <img src={reply.image_url} alt="" width="24" height="24" loading="lazy" referrerpolicy="no-referrer" class:list={[avatar, "size-6"]} />
             ) : (
-              <span class="flex size-6 shrink-0 items-center justify-center rounded-full border border-white bg-muted text-xs shadow-sm sm:size-8 dark:border-zinc-800">{reply.name.charAt(0)}</span>
+              <span class:list={[avatar, "flex size-6 items-center justify-center text-xs font-subsection text-heading"]}>{reply.name.charAt(0)}</span>
             )}
-            <div class="min-w-0 flex-1 space-y-0.5 sm:space-y-1">
-              <div class="flex flex-col gap-0.5 sm:flex-row sm:items-center sm:justify-between sm:gap-0">
-                <div class="flex items-center gap-1.5 sm:gap-2">
-                  <p class="text-xs font-medium text-zinc-900 dark:text-zinc-100">{reply.name}</p>
+            <div class="min-w-0 flex-1">
+              <div class="flex items-center justify-between gap-3">
+                <div class="flex min-w-0 flex-wrap items-center gap-x-2">
+                  <p class="text-sm font-subsection text-heading">{reply.name}</p>
                   {reply.isAdminAuthor && <Badge variant="accent">Admin</Badge>}
+                  <time datetime={reply.timestamp} title={new Date(reply.timestamp).toUTCString()} class="text-xs text-muted-foreground tabular-nums">{timeAgo(reply.timestamp)}</time>
                 </div>
-                <div class="flex items-center gap-1 sm:gap-2">
-                  <time datetime={reply.timestamp} class="font-mono text-xs text-zinc-400">{timeAgo(reply.timestamp)}</time>
-                  {(isAdmin || reply.isMine) && (
-                    <button type="button" data-action="delete" aria-label="Delete reply" class="cursor-pointer p-0.5 text-zinc-400 transition-colors hover:text-red-500 sm:p-1 sm:opacity-0 sm:group-hover/reply:opacity-100">
-                      <Trash2 class="size-2.5 sm:size-3" />
-                    </button>
-                  )}
-                </div>
+                {(isAdmin || reply.isMine) && (
+                  <button type="button" data-action="delete" aria-label="Delete reply" class:list={[iconButton, "-my-1 shrink-0 hover:text-danger sm:opacity-0 sm:group-hover/reply:opacity-100 sm:focus-visible:opacity-100"]}>
+                    <Trash2 class="size-3.5" />
+                  </button>
+                )}
               </div>
-              <div class="text-xs break-words text-zinc-600 sm:text-sm dark:text-zinc-400"><GuestbookMessage text={reply.message} format={reply.format} /></div>
+              <div class="text-sm break-words text-foreground"><GuestbookMessage text={reply.message} format={reply.format} /></div>
             </div>
           </div>
         ))}

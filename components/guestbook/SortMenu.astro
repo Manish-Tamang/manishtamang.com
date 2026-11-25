@@ -4,12 +4,12 @@ import ListFilter from "@/components/icons/ListFilter.astro"
 
 <div class="flex">
   <details data-sort-menu class="relative">
-    <summary aria-label="Sort messages" class="-mr-1.5 flex size-8 cursor-pointer list-none items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-foreground/5 hover:text-heading">
+    <summary aria-label="Sort messages" class="-mr-1.5 flex size-8 cursor-pointer list-none items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-subtle hover:text-heading">
       <ListFilter class="size-4" />
     </summary>
-    <div class="absolute top-full right-0 z-20 mt-1 w-36 rounded-xl border border-zinc-200 bg-background p-1 shadow-lg dark:border-zinc-800">
-      <button type="button" data-sort="newest" class="w-full cursor-pointer rounded-lg bg-zinc-100 px-2 py-1.5 text-left text-sm dark:bg-zinc-800">Newest first</button>
-      <button type="button" data-sort="oldest" class="w-full cursor-pointer rounded-lg px-2 py-1.5 text-left text-sm">Oldest first</button>
+    <div class="absolute top-full right-0 z-20 mt-1 w-36 rounded-lg border border-border bg-background p-1 shadow-lg">
+      <button type="button" data-sort="newest" class="w-full cursor-pointer rounded-md bg-subtle px-2 py-1.5 text-left text-sm text-heading transition-colors hover:bg-subtle">Newest first</button>
+      <button type="button" data-sort="oldest" class="w-full cursor-pointer rounded-md px-2 py-1.5 text-left text-sm text-heading transition-colors hover:bg-subtle">Oldest first</button>
     </div>
   </details>
 </div>

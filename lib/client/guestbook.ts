@@ -228,9 +228,7 @@ for (const button of sortButtons) {
   button.addEventListener("click", () => {
     list.classList.toggle("flex-col-reverse", button.dataset.sort === "oldest");
     for (const other of sortButtons)
-      other.classList.toggle("bg-zinc-100", other === button);
-    for (const other of sortButtons)
-      other.classList.toggle("dark:bg-zinc-800", other === button);
+      other.classList.toggle("bg-subtle", other === button);
     document.querySelector<HTMLDetailsElement>("[data-sort-menu]")!.open =
       false;
   });

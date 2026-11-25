@@ -24,27 +24,28 @@ const formats = [
   { format: "strike", label: "Strikethrough", shortcut: "Shift+X", glyph: "S", class: "line-through" },
   { format: "code", label: "Code", shortcut: "E", glyph: "</>", class: "font-mono text-[0.7rem]" },
 ]
+const iconButton = "flex size-8 cursor-pointer items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-subtle hover:text-heading"
 const toolButton = "flex size-7 cursor-pointer items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-foreground/5 hover:text-heading"
 ---
 
 {user ? (
-  <form data-guestbook-form data-user={user.id} class="rounded-lg border border-foreground/5 bg-foreground/5 p-4 dark:border-zinc-800">
+  <form data-guestbook-form data-user={user.id} class="rounded-lg border border-border bg-subtle p-4">
     <div class="flex gap-3">
       {user.image ? (
-        <img src={user.image} alt="" width="40" height="40" referrerpolicy="no-referrer" class="size-10 shrink-0 rounded-sm border border-zinc-100 object-cover dark:border-zinc-800" />
+        <img src={user.image} alt="" width="40" height="40" referrerpolicy="no-referrer" class="size-8 shrink-0 rounded-md border border-border object-cover" />
       ) : (
-        <span class="flex size-10 shrink-0 items-center justify-center rounded-sm bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">{user.name?.charAt(0)}</span>
+        <span class="flex size-8 shrink-0 items-center justify-center rounded-md border border-border bg-muted text-xs font-subsection text-heading">{user.name?.charAt(0)}</span>
       )}
       <div class="min-w-0 flex-1 space-y-3">
-        <div class="flex items-center justify-between">
-          <p class="text-sm text-muted-foreground">
+        <div class="flex h-8 items-center justify-between gap-3">
+          <p class="truncate text-sm text-muted-foreground">
             Signed in as <span class="font-subsection text-heading">{user.name}</span>
           </p>
-          <button type="button" data-sign-out class="cursor-pointer text-xs text-zinc-400 transition-colors hover:text-zinc-600 dark:hover:text-zinc-200">Sign out</button>
+          <button type="button" data-sign-out class="shrink-0 cursor-pointer text-xs text-muted-foreground transition-colors hover:text-heading">Sign out</button>
         </div>
         <div data-preview hidden class="group relative w-fit">
-          <img alt="Preview" class="max-h-48 rounded-xl border border-zinc-200 object-cover dark:border-zinc-800" />
-          <button type="button" data-remove-image aria-label="Remove image" class="absolute -top-2 -right-2 cursor-pointer rounded-full bg-red-500 p-1 text-white shadow-lg transition-opacity group-hover:opacity-100 sm:opacity-0">
+          <img alt="Preview" class="max-h-48 rounded-lg border border-border object-cover" />
+          <button type="button" data-remove-image aria-label="Remove image" class="absolute -top-2 -right-2 cursor-pointer rounded-full bg-heading p-1 text-background shadow-sm transition-opacity group-hover:opacity-100 sm:opacity-0">
             <X class="size-3" />
           </button>
         </div>
@@ -56,15 +57,15 @@ const toolButton = "flex size-7 cursor-pointer items-center justify-center round
             autocomplete="off"
             maxlength={MAX_MESSAGE}
             data-rich-text
-            class="min-h-11 pr-20"
+            class="pr-18"
           />
-          <div class="absolute right-1 flex items-center gap-1">
-            <label class="cursor-pointer rounded-lg p-2 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-200">
+          <div class="absolute right-1 flex items-center">
+            <label class={iconButton}>
               <input type="file" name="image" accept="image/*" class="sr-only" />
               <ImagePlus class="size-4" />
               <span class="sr-only">Add image</span>
             </label>
-            <button type="submit" aria-label="Post message" class="cursor-pointer rounded-lg p-2 text-zinc-400 transition-colors hover:text-blue-500 disabled:opacity-50">
+            <button type="submit" aria-label="Post message" class:list={[iconButton, "disabled:opacity-50"]}>
               <SendSolid data-send-icon class="size-4" />
               <LoaderCircle data-send-spinner class="hidden size-4 animate-spin" />
             </button>
@@ -72,7 +73,7 @@ const toolButton = "flex size-7 cursor-pointer items-center justify-center round
         </div>
 
         <!-- Formatting: wraps the selection in Markdown markers (lib/client/rich-text-editor.ts) -->
-        <div class="-mt-1.5 -ml-1.5 flex items-center gap-0.5" role="toolbar" aria-label="Formatting">
+        <div class="-my-1.5 -ml-1.5 flex items-center gap-0.5" role="toolbar" aria-label="Formatting">
           {formats.map(({ format, label, shortcut, glyph, class: glyphClass }) => (
             <button type="button" data-format={format} title={`${label} (Ctrl+${shortcut})`} aria-label={label} class={toolButton}>
               <span class:list={["text-sm leading-none", glyphClass]} aria-hidden="true">{glyph}</span>
@@ -91,14 +92,14 @@ const toolButton = "flex size-7 cursor-pointer items-center justify-center round
     </div>
   </form>
 ) : (
-  <div class="flex flex-col items-start gap-4 rounded-lg border border-foreground/5 bg-foreground/5 p-4 text-start">
+  <div class="rounded-lg border border-border bg-subtle p-4">
     <div>
       <h2 class="text-sm font-subsection text-heading">Sign the guestbook</h2>
       <p class="text-sm text-muted-foreground">Log in to leave a message and join the building of this space.</p>
     </div>
-    <div class="grid w-full grid-cols-2 gap-3">
-      <Button variant="outline" data-sign-in="github" class="h-10 gap-2 rounded-lg"><GitHub class="size-4" /> GitHub</Button>
-      <Button variant="outline" data-sign-in="google" class="h-10 gap-2 rounded-lg"><Google class="size-4" /> Google</Button>
+    <div class="mt-4 grid grid-cols-2 gap-3">
+      <Button variant="outline" data-sign-in="github" class="h-10 gap-2 rounded-md bg-background text-sm"><GitHub class="size-4" /> GitHub</Button>
+      <Button variant="outline" data-sign-in="google" class="h-10 gap-2 rounded-md bg-background text-sm"><Google class="size-4" /> Google</Button>
     </div>
   </div>
 )}
