@@ -3,12 +3,13 @@
  * In StoryLayout, with the same rhythm as /about: the Nepal time as a 24px lead
  * running into the intro, then the form, with every control 40px tall.
  */
-import { PUBLIC_CALENDLY_URL, PUBLIC_TURNSTILE_SITE_KEY, PUBLIC_WEB3FORMS_ACCESS_KEY } from "astro:env/client"
+import { PUBLIC_CALENDLY_URL, PUBLIC_WEB3FORMS_ACCESS_KEY } from "astro:env/client"
 import StoryLayout from "@/layouts/StoryLayout.astro"
 import Button from "@/components/ui/Button.astro"
 import Input from "@/components/ui/Input.astro"
 import Link from "@/components/ui/Link.astro"
 import Textarea from "@/components/ui/Textarea.astro"
+import ArrowRight from "@/components/icons/ArrowRight.astro"
 import ArrowUpRight from "@/components/icons/ArrowUpRight.astro"
 
 const email = "hi@manishtamang.com"
@@ -64,7 +65,7 @@ const choice =
 
     <div class="grid gap-5 sm:grid-cols-2">
       <fieldset>
-        <legend class={fieldLabel}>Emotion</legend>
+        <legend class={fieldLabel}>Emotion <span class="opacity-70">(optional)</span></legend>
         <div class="flex gap-2">
           {emotions.map(({ value, emoji, label }) => (
             <label class="relative">
@@ -98,7 +99,7 @@ const choice =
       <ul class="mt-3 space-y-2 text-sm">
         {helpTips.map(({ title, url, tip }) => (
           <li class="flex gap-2">
-            <span class="text-muted-foreground" aria-hidden="true">→</span>
+            <ArrowRight class="mt-[3px] size-3.5 shrink-0 text-muted-foreground" />
             <span>
               <Link href={url}>{title}</Link>
               <span class="block text-muted-foreground">{tip}</span>
@@ -107,21 +108,6 @@ const choice =
         ))}
       </ul>
     </aside>
-
-    {
-      PUBLIC_TURNSTILE_SITE_KEY && (
-        <>
-          <!--
-            Cloudflare Turnstile, as on the old site. It adds a hidden
-            cf-turnstile-response field to the form, which goes to Web3Forms
-            with the message. Tokens are single use: the script resets it after
-            every attempt.
-          -->
-          <div class="cf-turnstile h-[65px] w-[300px]" data-sitekey={PUBLIC_TURNSTILE_SITE_KEY} data-theme="auto" data-size="normal" />
-          <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-        </>
-      )
-    }
 
     <div>
       <Button type="submit" class="h-10 w-full text-sm" data-submit>Send message</Button>
@@ -149,8 +135,9 @@ const choice =
   </p>
 
   <Fragment slot="note">
-    This page is inspired by <Link href="https://www.totaltypescript.com/contact">Total TypeScript</Link> and{" "}
-    <Link href="https://www.romanabashin.com/contact">Roman Abashin</Link>.
+    This page is inspired by <Link href="https://www.totaltypescript.com/contact">Total TypeScript</Link>,{" "}
+    <Link href="https://www.romanabashin.com/contact">Roman Abashin</Link> and{" "}
+    <Link href="https://jahir.dev/contact">Jahir Fiquitiva</Link>.
   </Fragment>
 </StoryLayout>
 
@@ -161,10 +148,10 @@ const choice =
 
   const availability = (hour: number, minute: number, weekday: string) => {
     const time = hour + minute / 60
-    if (weekday === "Sat") return "It's Saturday! I'm likely chilling 🍹"
+    if (weekday === "Sat") return "since it's Saturday, I'm likely chilling 🍹"
     if (time >= 23 || time < 7) return "I'm likely sleeping 😴"
-    if (time >= 10 && time < 17.5) return "I'm likely at college 🎓"
-    return "I'm likely working 👨‍💻 or studying"
+    if (time >= 10 && time < 17.5) return "I might be spamming Claude Code 🤖 or sleeping 😴"
+    return "I'm likely working 👨‍💻 or doing something else"
   }
 
   const updateTime = () => {
@@ -182,14 +169,22 @@ const choice =
   updateTime()
   setInterval(updateTime, 30_000)
 
-  type Turnstile = { reset: (widget?: string | HTMLElement) => void }
-  const turnstile = () => (window as unknown as { turnstile?: Turnstile }).turnstile
+  // Clicking the picked emotion again clears it, since it's optional
+  let pickedEmotion: HTMLInputElement | null = null
+  document.querySelectorAll<HTMLInputElement>('input[name="emotion"]').forEach((radio) => {
+    radio.addEventListener("click", () => {
+      if (pickedEmotion === radio) {
+        radio.checked = false
+        pickedEmotion = null
+      } else {
+        pickedEmotion = radio
+      }
+    })
+  })
 
   // Send the form with fetch so the visitor stays on the page
   const form = document.querySelector<HTMLFormElement>("[data-contact-form]")
   if (form) {
-    const challenge = form.querySelector<HTMLElement>(".cf-turnstile")
-
     const status = form.querySelector<HTMLElement>("[data-form-status]")!
     const submit = form.querySelector<HTMLButtonElement>("[data-submit]")!
 
@@ -204,7 +199,6 @@ const choice =
         const fields = Object.fromEntries(new FormData(form))
         // Without the key Web3Forms answers 400; say so instead of a vague failure
         if (!fields.access_key) throw new Error("missing access key")
-        if (challenge && !fields["cf-turnstile-response"]) throw new Error("please complete the verification above")
 
         const response = await fetch(form.action, {
           method: "POST",
@@ -215,6 +209,7 @@ const choice =
         if (!response.ok || !data.success) throw new Error(data.message)
 
         form.reset()
+        pickedEmotion = null
         status.textContent = "Message sent. Thank you!"
         status.className = "mt-2 min-h-5.5 text-center text-sm text-success"
       } catch (error) {
@@ -224,8 +219,6 @@ const choice =
       } finally {
         submit.disabled = false
         submit.textContent = "Send message"
-        // A token works once; get a fresh one for the next attempt
-        if (challenge) turnstile()?.reset(challenge)
       }
     })
   }
