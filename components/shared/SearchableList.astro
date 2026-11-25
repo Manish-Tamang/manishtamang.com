@@ -10,9 +10,22 @@ import Search from "@/components/icons/Search.astro"
 export interface Props {
   /** Plural noun for the placeholder and the empty state, e.g. "posts". */
   noun: string
+  /** Offer most/fewest views sorts; rows then need a views prop. */
+  views?: boolean
 }
 
-const { noun } = Astro.props
+const { noun, views = false } = Astro.props
+
+const sorts = [
+  { value: "newest", label: "Newest" },
+  { value: "oldest", label: "Oldest" },
+  ...(views
+    ? [
+        { value: "most-views", label: "Most views" },
+        { value: "fewest-views", label: "Fewest views" },
+      ]
+    : []),
+]
 ---
 
 <div class="mb-10 flex items-center gap-3">
@@ -20,15 +33,23 @@ const { noun } = Astro.props
     <Search class="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
     <Input data-list-search type="search" placeholder={`Search ${noun}...`} aria-label={`Search ${noun}`} class="pl-9" />
   </div>
-  <button type="button" data-list-sort class="flex h-10 shrink-0 cursor-pointer items-center gap-2 rounded-md border border-border px-3 text-sm text-muted-foreground transition-colors hover:border-border-strong hover:text-heading">
-    <ListFilter class="size-4" />
-    <span data-list-sort-label>Newest</span>
-  </button>
+  <label class="relative shrink-0">
+    <span class="sr-only">Sort {noun}</span>
+    <ListFilter class="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+    <select
+      data-list-sort
+      class="h-10 cursor-pointer appearance-none rounded-md border border-border bg-background pr-3 pl-9 text-sm text-muted-foreground transition-colors hover:border-border-strong hover:text-heading focus-visible:border-accent focus-visible:outline-none"
+    >
+      {sorts.map(({ value, label }) => <option value={value}>{label}</option>)}
+    </select>
+  </label>
 </div>
 
 <div data-list class="space-y-10">
   <slot />
 </div>
+
+<ul data-list-flat hidden class="space-y-3"></ul>
 
 <div data-list-empty hidden class="py-20 text-center">
   <p class="font-medium text-heading">No {noun} found</p>

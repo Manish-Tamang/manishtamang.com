@@ -38,6 +38,7 @@ const description = data.metaDescription ?? data.description
 ---
 
 <PageLayout
+  column
   heading={data.title}
   title={data.title}
   description={description}
@@ -77,7 +78,7 @@ const description = data.metaDescription ?? data.description
         src={data.cover}
         alt={data.coverAlt ?? ""}
         widths={[480, 720, 1080, 1440]}
-        sizes="(max-width: 768px) 100vw, 720px"
+        sizes="(max-width: 640px) 100vw, 592px"
         loading="eager"
         fetchpriority="high"
         class="mb-10 w-full rounded-lg border border-border"

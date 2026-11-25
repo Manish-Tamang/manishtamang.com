@@ -3,6 +3,8 @@ import PageLayout from "@/layouts/PageLayout.astro"
 import BlogListItem from "@/components/blog/BlogListItem.astro"
 import SearchableList from "@/components/shared/SearchableList.astro"
 import YearGroup from "@/components/shared/YearGroup.astro"
+import Rss from "@/components/icons/Rss.astro"
+import Link from "@/components/ui/Link.astro"
 import { getPosts } from "@/lib/blog"
 
 const posts = await getPosts()
@@ -10,11 +12,18 @@ const years = [...new Set(posts.map(({ data }) => data.date.getUTCFullYear()))]
 ---
 
 <PageLayout
+  column
   heading="Blog"
-  intro="I've been writing online since 2023, mostly about web development, blogging and tech. Use the search below to filter by title."
   description="Articles and notes by Manish Tamang (golecodes) on web development and design."
 >
-  <SearchableList noun="posts">
+  <Fragment slot="intro">
+    I've been writing online since 2023, mostly about web development, blogging and tech. Use the search below to filter
+    by title, or follow along with the <Link href="/feed.xml"
+      ><Rss class="mr-1 inline-block size-3.5 align-[-2px]" />RSS feed</Link
+    >.
+  </Fragment>
+
+  <SearchableList noun="posts" views>
     {years.map((year) => (
       <YearGroup year={year}>
         {posts

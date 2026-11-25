@@ -8,12 +8,13 @@ export interface Props {
 
 const { post } = Astro.props
 const { id, data } = post
+const views = viewCount(post)
 ---
 
-<ListRow href={`/blog/${id}`} title={data.title} description={data.description} date={data.date} image={data.cover}>
+<ListRow href={`/blog/${id}`} title={data.title} description={data.description} date={data.date} image={data.cover} views={views}>
   <time datetime={data.date.toISOString()}>{formatDate(data.date, { month: "short", day: "numeric" })}</time>
   <span aria-hidden="true">•</span>
-  <span>{viewCount(post).toLocaleString("en-GB")} views</span>
+  <span>{views.toLocaleString("en-GB")} views</span>
   {data.ai && <span aria-hidden="true">•</span>}
   {data.ai && <span title="Written with AI help">AI</span>}
 </ListRow>

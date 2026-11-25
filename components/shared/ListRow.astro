@@ -15,23 +15,24 @@ export interface Props {
   image?: ImageMetadata
   /** Extra text to match when searching, on top of the title and description. */
   keywords?: string[]
+  views?: number
 }
 
-const { href, title, description, date, image, keywords = [] } = Astro.props
+const { href, title, description, date, image, keywords = [], views } = Astro.props
 
 const words = description.split(" ")
 const excerpt = words.length > 20 ? `${words.slice(0, 20).join(" ")}...` : description
 ---
 
-<li data-item data-date={date.getTime()} data-search={[title, description, ...keywords].join(" ").toLowerCase()}>
+<li data-item data-date={date.getTime()} data-views={views} data-search={[title, description, ...keywords].join(" ").toLowerCase()}>
   <a href={href} class="group -mx-2 flex items-start gap-3 rounded-2xl p-2 transition-all hover:bg-foreground/5 sm:gap-5">
-    <div class="h-[60px] w-24 shrink-0 overflow-hidden rounded-lg border border-border bg-muted sm:h-[88px] sm:w-[140px]">
+    <div class="h-[60px] w-24 shrink-0 overflow-hidden rounded-lg border border-border bg-muted sm:h-[84px] sm:w-[134px]">
       {image ? (
         <BlurImage
           src={image}
           alt=""
-          widths={[140, 280]}
-          sizes="(min-width: 640px) 140px, 96px"
+          widths={[134, 268]}
+          sizes="(min-width: 640px) 134px, 96px"
           quality={70}
           class="size-full scale-105 object-cover grayscale transition-all duration-500 group-hover:scale-100 group-hover:grayscale-0"
         />
@@ -40,10 +41,10 @@ const excerpt = words.length > 20 ? `${words.slice(0, 20).join(" ")}...` : descr
       )}
     </div>
 
-    <!-- Title 25 + excerpt 2×22 + meta 18 = 87px, flush with the 88px thumbnail -->
+    <!-- Title 22 + excerpt 2×22 + meta 18 = 84px, flush with the 84px thumbnail; same 14/12 scale as /uses and /colophon rows -->
     <div class="min-w-0 flex-1">
       <div class="flex items-center justify-between gap-4">
-        <h3 class="line-clamp-1 font-subsection text-heading transition-colors group-hover:text-link-hover">{title}</h3>
+        <h3 class="line-clamp-1 text-sm font-subsection text-heading transition-colors group-hover:text-link-hover">{title}</h3>
         <ArrowUpRight class="size-3.5 shrink-0 -translate-x-1 text-muted-foreground opacity-0 transition-[translate,opacity] group-hover:translate-x-0 group-hover:opacity-100" />
       </div>
       <p class="line-clamp-2 text-sm text-muted-foreground">{excerpt}</p>
