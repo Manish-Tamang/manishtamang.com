@@ -3,6 +3,7 @@ import type { CollectionEntry } from "astro:content"
 import { getImage } from "astro:assets"
 import BlurImage from "@/components/ui/BlurImage.astro"
 import ArrowUpRight from "@/components/icons/ArrowUpRight.astro"
+import { faviconDataUri } from "@/lib/favicon"
 
 export interface Props {
   projects: CollectionEntry<"projects">[]
@@ -20,13 +21,14 @@ const rows = await Promise.all(
         full: await getImage({ src, widths: [800, 1280, 1920], format: "webp", quality: 82 }),
       })),
     )
-    return { id, data, shots }
+    const favicon = data.projectUrl ? await faviconDataUri(data.projectUrl) : null
+    return { id, data, shots, favicon }
   }),
 )
 ---
 
 <div class="grid gap-14">
-  {rows.map(({ id, data, shots }) => (
+  {rows.map(({ id, data, shots, favicon }) => (
     <article class="min-w-0 text-sm">
       <div class="flex items-baseline gap-2">
         <span class="shrink-0 text-muted-foreground tabular-nums">{data.date.getUTCFullYear()}</span>
@@ -43,6 +45,7 @@ const rows = await Promise.all(
           rel="noopener noreferrer"
           class="mt-1 inline-flex items-center gap-1 text-xs text-muted-foreground transition-colors hover:text-heading"
         >
+          {favicon && <img src={favicon} alt="" width="14" height="14" class="mr-0.5 size-3.5 rounded-xs" />}
           {data.projectUrl.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "")}
           <ArrowUpRight class="size-3" />
           <span class="sr-only">(opens in a new tab)</span>
