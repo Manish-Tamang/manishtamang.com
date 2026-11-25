@@ -5,8 +5,8 @@
 import { betterAuth } from "better-auth"
 import { admin } from "better-auth/plugins"
 import { Pool } from "pg"
+import { adminEmail } from "@/lib/admin"
 import {
-  ADMIN_EMAIL,
   BETTER_AUTH_SECRET,
   BETTER_AUTH_URL,
   DATABASE_URL,
@@ -16,7 +16,7 @@ import {
   GOOGLE_CLIENT_SECRET,
 } from "astro:env/server"
 
-export const adminEmail = (ADMIN_EMAIL ?? "").toLowerCase()
+export { adminEmail }
 
 export const auth = betterAuth({
   database: new Pool({ connectionString: DATABASE_URL, ssl: { rejectUnauthorized: false } }),

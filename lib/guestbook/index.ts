@@ -1,5 +1,5 @@
 /* Guestbook entries in Supabase (public.guestbook_entries), ported from the Next.js site. */
-import { adminEmail } from "@/lib/auth"
+import { adminEmail } from "@/lib/admin"
 import { getCache } from "@vercel/functions"
 import { supabase } from "@/lib/services/supabase"
 import type { MessageFormat } from "./rich-text"
@@ -90,7 +90,8 @@ function toPublicEntry(entry: RawGuestbookEntry, viewerEmail?: string | null): G
 
 /** Every row, newest first. It doesn't depend on who's viewing, so it can load alongside the session. */
 const ROWS_KEY = "guestbook-rows"
-const ROWS_TTL = 10 * 60
+// Every write through the API clears it, so the TTL only bounds edits made straight in Supabase
+const ROWS_TTL = 24 * 60 * 60
 
 const queryRows = (): Promise<RawGuestbookEntry[]> =>
   supabase(

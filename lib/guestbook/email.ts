@@ -5,7 +5,7 @@
  * replies go to the visitor instead). Templates are in ./email-template.ts.
  */
 import { RESEND_API_KEY } from "astro:env/server"
-import { adminEmail } from "@/lib/auth"
+import { adminEmail } from "@/lib/admin"
 import { notificationEmail, thankYouEmail } from "./email-template"
 import { richTextHtml } from "./rich-text"
 

@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro"
 import { SUPABASE_URL } from "astro:env/server"
-import { adminEmail, getUser } from "@/lib/auth"
+import { adminEmail } from "@/lib/admin"
+import { getUser } from "@/lib/session"
 import { fetchGuestbookRows, forgetGuestbookRows, shapeGuestbookEntries, TABLE } from "@/lib/guestbook"
 import { sendGuestbookEmails } from "@/lib/guestbook/email"
 import { MAX_MESSAGE } from "@/lib/guestbook/rich-text"
