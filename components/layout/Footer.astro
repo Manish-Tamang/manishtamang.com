@@ -4,6 +4,7 @@ import Container from "./Container.astro"
 import ThemeSwitcher from "./ThemeSwitcher.astro"
 import Webring from "./Webring.astro"
 import Separator from "@/components/ui/Separator.astro"
+import { BLANK_IMAGE } from "@/lib/defer"
 
 const year = new Date().getFullYear()
 
@@ -12,15 +13,15 @@ const badgeRows = [
   [
     { href: "/ai", src: "/images/badges/not-vibe-coded.gif", alt: "Not vibe coded: how I use AI" },
     { href: "/", src: "/images/badges/golecodes.gif", alt: "golecodes" },
-    { href: "/about", src: "/images/badges/made-in-nepal.gif", alt: "Made in Nepal" },
-    { href: "https://astro.build", src: "/images/badges/made-with-astro.gif", alt: "Built with Astro" },
+    { href: "/about", src: "/images/badges/made-in-nepal.webp", alt: "Made in Nepal" },
+    { href: "https://astro.build", src: "/images/badges/made-with-astro.webp", alt: "Built with Astro" },
     { href: "https://indieweb.org", src: "/images/badges/indieweb.png", alt: "IndieWeb Camp" },
-    { href: "/slashes", src: "/images/badges/slash.gif", alt: "/slash: all my slash pages" },
+    { href: "/slashes", src: "/images/badges/slash.webp", alt: "/slash: all my slash pages" },
   ],
   [
     { href: "/uses", src: "/images/badges/i-like-computer.png", alt: "I like computer: what I use" },
-    { href: "/uses", src: "/images/badges/wsl2-ubuntu.gif", alt: "Ubuntu on WSL 2: what I use" },
-    { href: "/chris-cornell", src: "/images/badges/pearl-jam-soundgarden.gif", alt: "Pearl Jam and Soundgarden" },
+    { href: "/uses", src: "/images/badges/wsl2-ubuntu.webp", alt: "Ubuntu on WSL 2: what I use" },
+    { href: "/chris-cornell", src: "/images/badges/pearl-jam-soundgarden.webp", alt: "Pearl Jam and Soundgarden" },
     { href: "https://web3isgoinggreat.com", src: "/images/badges/say-no-to-web3.gif", alt: "Say no to web3" },
     { href: "https://www.unodc.org", src: "/images/badges/say-no-to-drugs.gif", alt: "Say no to drugs" },
     { href: site.social.github, src: "/images/badges/github.png", alt: "Check out my GitHub!" },
@@ -46,7 +47,7 @@ const badgeRows = [
             <div class="flex flex-wrap gap-2.5">
               {row.map(({ href, src, alt }) => (
                 <a href={href} class="block">
-                  <img src={src} alt={alt} width="88" height="31" loading="lazy" class="block [image-rendering:pixelated]" />
+                  <img src={BLANK_IMAGE} data-defer-src={src} alt={alt} width="88" height="31" class="block [image-rendering:pixelated]" />
                 </a>
               ))}
             </div>
@@ -61,16 +62,16 @@ const badgeRows = [
     <!-- Decorative flowers, sitting flush on the bottom edge of the page. A plain <img>:
          this also renders on request-time pages, where there is no image service. -->
     <img
-      src="/images/flowers-1200.webp"
-      srcset="/images/flowers-480.webp 480w, /images/flowers-768.webp 768w, /images/flowers-1200.webp 1200w"
+      src={BLANK_IMAGE}
+      data-defer-src="/images/flowers-1200.webp"
+      data-defer-srcset="/images/flowers-480.webp 480w, /images/flowers-768.webp 768w, /images/flowers-1200.webp 1200w"
       sizes="(max-width: 768px) 100vw, 720px"
       alt=""
       width="1200"
       height="165"
-      loading="lazy"
       decoding="async"
       draggable="false"
-      class="pointer-events-none mt-10 h-auto w-full rounded-t-xl select-none"
+      class="pointer-events-none mt-10 aspect-[1200/165] h-auto w-full rounded-t-xl select-none"
     />
   </Container>
 </footer>
