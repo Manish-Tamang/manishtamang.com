@@ -112,15 +112,18 @@ form?.addEventListener("submit", async (event) => {
       "/api/guestbook",
       json("POST", { message, attachment_url }),
     );
-    if (!response.ok) throw new Error();
+    if (!response.ok) {
+      const result = await response.json().catch(() => ({}));
+      throw new Error(result.error);
+    }
     input.value = "";
     // Lets the rich text preview hide itself
     input.dispatchEvent(new Event("input"));
     setImage(null);
     toast("Message posted!");
     await refresh();
-  } catch {
-    toast("Failed to post message");
+  } catch (error) {
+    toast((error as Error).message || "Failed to post message");
   } finally {
     setBusy(false);
   }
