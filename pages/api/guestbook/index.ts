@@ -2,7 +2,8 @@ import type { APIRoute } from "astro"
 import { SUPABASE_URL } from "astro:env/server"
 import { adminEmail } from "@/lib/admin"
 import { getUser } from "@/lib/session"
-import { fetchGuestbookRows, forgetGuestbookRows, shapeGuestbookEntries, TABLE } from "@/lib/guestbook"
+import { EMOJIS, fetchGuestbookRows, forgetGuestbookRows, shapeGuestbookEntries, TABLE } from "@/lib/guestbook"
+import { allow } from "@/lib/guestbook/rate-limit"
 import { sendGuestbookEmails } from "@/lib/guestbook/email"
 import { MAX_MESSAGE } from "@/lib/guestbook/rich-text"
 import { supabase } from "@/lib/services/supabase"
@@ -10,6 +11,8 @@ import { supabase } from "@/lib/services/supabase"
 export const prerender = false
 
 const fail = (error: string, status: number) => Response.json({ error }, { status })
+const tooMany = () => fail("Slow down a little and try again soon", 429)
+const isId = (value: unknown): value is string => typeof value === "string" && /^[\w-]{1,64}$/.test(value)
 
 const findEntry = async (id: string, columns: string) => {
   const rows = await supabase(`${TABLE}?id=eq.${encodeURIComponent(id)}&select=${columns}`)
@@ -32,6 +35,12 @@ export const POST: APIRoute = async ({ request }) => {
 
   try {
     const { message, parent_id, attachment_url } = await request.json()
+    if (parent_id != null && parent_id !== "") {
+      if (!isId(parent_id)) return fail("Invalid reply", 400)
+      // Replies go one level deep, under an entry that exists
+      const parent = await findEntry(parent_id, "parent_id")
+      if (!parent || parent.parent_id) return fail("Invalid reply", 400)
+    }
     if (!message && !attachment_url) return fail("Missing required fields", 400)
     if (message && (typeof message !== "string" || message.length > MAX_MESSAGE)) {
       return fail(`Messages can be up to ${MAX_MESSAGE} characters`, 400)
@@ -41,6 +50,7 @@ export const POST: APIRoute = async ({ request }) => {
     if (attachment_url && !String(attachment_url).startsWith(`${SUPABASE_URL}/storage/v1/object/public/primary/guestbook/`)) {
       return fail("Invalid attachment", 400)
     }
+    if (!(await allow("post", user.id))) return tooMany()
 
     const id = crypto.randomUUID()
     const name = user.name || "Anonymous"
@@ -88,7 +98,9 @@ export const PATCH: APIRoute = async ({ request }) => {
 
   try {
     const { id, type, emoji } = await request.json()
-    if (!id || (type !== "like" && type !== "react")) return fail("Missing required fields", 400)
+    if (!isId(id) || (type !== "like" && type !== "react")) return fail("Missing required fields", 400)
+    if (type === "react" && !EMOJIS.includes(emoji)) return fail("Unknown reaction", 400)
+    if (!(await allow("react", user.id))) return tooMany()
 
     const entry = await findEntry(id, "likes,reactions")
     if (!entry) return fail("Not found", 404)
@@ -106,7 +118,7 @@ export const PATCH: APIRoute = async ({ request }) => {
       }
     } else {
       const reactions: string[] = entry.reactions || []
-      const key = emoji ? `${emoji}:${email}` : email
+      const key = `${emoji}:${email}`
       const mine = (value: string) => value.toLowerCase().endsWith(`:${lower}`) || value.toLowerCase() === lower
       update = {
         reactions: reactions.some((value) => value.toLowerCase() === key.toLowerCase())
@@ -130,7 +142,7 @@ export const DELETE: APIRoute = async ({ request, url }) => {
 
   try {
     const id = url.searchParams.get("id")
-    if (!id) return fail("Missing id", 400)
+    if (!isId(id)) return fail("Missing id", 400)
 
     const entry = await findEntry(id, "email")
     if (!entry) return fail("Not found", 404)
