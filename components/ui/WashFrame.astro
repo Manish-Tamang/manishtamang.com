@@ -1,0 +1,21 @@
+---
+/* Sangeetpedia's empty-lyrics panel: a soft wash shows as a thick frame round a frosted inner card. */
+import type { HTMLAttributes } from "astro/types"
+
+export interface Props extends HTMLAttributes<"div"> {
+  /** meadow: green, iris: blue-violet-pink, dawn: peach and teal, sun: yellow. */
+  tone?: "meadow" | "iris" | "dawn" | "sun"
+  /** Classes for the inner card (padding, layout). */
+  inner?: string
+}
+
+const { tone = "meadow", class: className, inner = "p-5", ...rest } = Astro.props
+
+const tones = { meadow: "wash-meadow", iris: "wash-iris", dawn: "wash-dawn", sun: "wash-sun" }
+---
+
+<div class:list={[tones[tone], "overflow-hidden rounded-xl p-1.5", className]} {...rest}>
+  <div class:list={["rounded-[0.5rem] bg-background/85 backdrop-blur-sm", inner]}>
+    <slot />
+  </div>
+</div>
