@@ -8,6 +8,8 @@ Welcome to my personal portfolio website, a showcase of my professional journey,
 
 Live site: [manishtamang.com](https://manishtamang.com)
 
+<a href="https://www.dmca.com/Protection/Status.aspx?ID=c4b71fdb-965c-43a1-bdfc-734439b4056b" title="DMCA.com Protection Status"><img src="https://images.dmca.com/Badges/dmca-badge-w150-5x1-02.png?ID=c4b71fdb-965c-43a1-bdfc-734439b4056b" alt="DMCA.com Protection Status" width="150"></a>
+
 </div>
 
 <p align="center">
