@@ -117,8 +117,8 @@ form?.addEventListener("submit", async (event) => {
       throw new Error(result.error);
     }
     input.value = "";
-    // Lets the rich text preview hide itself
-    input.dispatchEvent(new Event("input"));
+    // Clears the rich editor too (lib/client/rich-editor.ts)
+    form.dispatchEvent(new Event("guestbook:reset"));
     setImage(null);
     toast("Message posted!");
     await refresh();
