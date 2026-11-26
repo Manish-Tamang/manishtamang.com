@@ -10,6 +10,7 @@ import X from "@/components/icons/X.astro"
 import Link2 from "@/components/icons/Link2.astro"
 import { MAX_MESSAGE, richTextClass } from "@/lib/guestbook/rich-text"
 import type { User } from "better-auth"
+import WashFrame from "@/components/ui/WashFrame.astro"
 
 export interface Props {
   user: User | null
@@ -92,14 +93,14 @@ const toolButton = "flex size-7 cursor-pointer items-center justify-center round
     </div>
   </form>
 ) : (
-  <div class="rounded-lg border border-border bg-subtle p-4">
+  <WashFrame tone="sun" inner="p-4">
     <div>
       <h2 class="text-sm font-subsection text-heading">Sign the guestbook</h2>
       <p class="text-sm text-muted-foreground">Log in to leave a message and join the building of this space.</p>
     </div>
     <div class="mt-4 grid grid-cols-2 gap-3">
-      <Button variant="outline" data-sign-in="github" class="h-10 gap-2 rounded-md bg-background text-sm"><GitHub class="size-4" /> GitHub</Button>
-      <Button variant="outline" data-sign-in="google" class="h-10 gap-2 rounded-md bg-background text-sm"><Google class="size-4" /> Google</Button>
+      <Button variant="outline" data-sign-in="github" class="h-10 gap-2 rounded-md border-transparent bg-background text-sm hover:border-transparent"><GitHub class="size-4" /> GitHub</Button>
+      <Button variant="outline" data-sign-in="google" class="h-10 gap-2 rounded-md border-transparent bg-background text-sm hover:border-transparent"><Google class="size-4" /> Google</Button>
     </div>
-  </div>
+  </WashFrame>
 )}
