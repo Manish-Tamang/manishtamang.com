@@ -14,6 +14,7 @@ import ToolItem from "@/components/uses/ToolItem.astro"
 import { gear, laptop, sections } from "@/data/uses"
 import laptopImage from "@/assets/uses/acer-aspire-14.png"
 import terminalImage from "@/assets/uses/terminal.webp"
+import WashFrame from "@/components/ui/WashFrame.astro"
 
 const gearImages = import.meta.glob<{ default: ImageMetadata }>("/assets/uses/{keyboard,mouse,mic}.png", { eager: true })
 
@@ -49,11 +50,12 @@ const sectionTitle = "mb-3 text-sm font-subsection text-heading"
   <section id="hardware" class={section}>
     <h2 class={sectionTitle}>Hardware</h2>
 
+    <WashFrame tone="iris" inner="p-0">
     <a
       href={laptop.url}
       target="_blank"
       rel="noopener noreferrer"
-      class="group -mx-3 -mt-3 flex flex-col items-center gap-5 rounded-xl p-3 transition-colors hover:bg-subtle sm:flex-row"
+      class="group flex flex-col items-center gap-5 p-3 sm:flex-row"
     >
       <Image src={laptopImage} alt="" width={160} densities={[1, 2]} class="w-36 shrink-0 sm:w-40" />
       <div class="min-w-0 text-center sm:text-left">
@@ -64,9 +66,9 @@ const sectionTitle = "mb-3 text-sm font-subsection text-heading"
         </ul>
       </div>
     </a>
+    </WashFrame>
 
-    <!-- The card above ends in 12px of padding, so 4px more makes the usual 16px -->
-    <ul class="mt-1 grid grid-cols-3 gap-3">
+    <ul class="mt-4 grid grid-cols-3 gap-3">
       {gear.map(({ name, model, detail, image }) => (
         <li class="text-center">
           <Image
