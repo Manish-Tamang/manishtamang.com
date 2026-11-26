@@ -14,6 +14,7 @@ import { designCredits, fonts, inspirations, launchDate, palette, services, stac
 import { slashPages } from "@/data/slash-pages"
 import { staticPages } from "@/lib/routes"
 import { getPosts } from "@/lib/blog"
+import WashFrame from "@/components/ui/WashFrame.astro"
 
 const daysLive = (since: string, now = new Date()) =>
   Math.floor((now.getTime() - new Date(`${since}T00:00:00Z`).getTime()) / 86_400_000)
@@ -62,7 +63,7 @@ const toolGrid = "-mt-2 grid gap-x-6 sm:grid-cols-2"
       </p>
     </Prose>
 
-    <div class="mt-6 flex flex-wrap items-end gap-x-8 gap-y-6">
+    <WashFrame class="mt-6" inner="flex flex-wrap items-end gap-x-8 gap-y-6 p-5">
       <dl class="flex items-end divide-x divide-border">
         <div class="pr-8">
           <dt class="text-xs text-muted-foreground">Live since Apr 12, 2023</dt>
@@ -102,7 +103,7 @@ const toolGrid = "-mt-2 grid gap-x-6 sm:grid-cols-2"
           </span>
         )}
       </a>
-    </div>
+    </WashFrame>
   </section>
 
   <section class={section}>
