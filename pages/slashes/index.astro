@@ -1,5 +1,5 @@
 ---
-import PageLayout from "@/layouts/PageLayout.astro"
+import StoryLayout from "@/layouts/StoryLayout.astro"
 import Prose from "@/components/typography/Prose.astro"
 import Link from "@/components/ui/Link.astro"
 import { otherSlashPages, slashPages } from "@/data/slash-pages"
@@ -9,12 +9,11 @@ const pages = [...slashPages.filter(({ href }) => href !== "/slashes"), ...other
 )
 ---
 
-<PageLayout
-  heading="Slashes"
-  intro="An index of all my slash pages."
-  description="An index of all of Manish Tamang's slash pages, from /now and /uses to /nope and /verify."
->
-  <Prose class="max-w-none">
+<!-- In StoryLayout, with the same rhythm as /colophon and /now: a 24px lead, then 14/22 text -->
+<StoryLayout heading="Slashes" description="An index of all of Manish Tamang's slash pages, from /now and /uses to /nope and /verify.">
+  <p class="font-lead text-lead text-heading">An index of all my slash pages.</p>
+
+  <Prose class="prose-story mt-4">
     <p>
       This is a /slashes page. A /slashes page is an index of all my slash pages.{" "}
       <a href="https://slashpages.net" target="_blank" rel="noopener noreferrer">Slash pages</a> are common pages you can
@@ -23,12 +22,12 @@ const pages = [...slashPages.filter(({ href }) => href !== "/slashes"), ...other
     </p>
   </Prose>
 
-  <ul class="mt-8 space-y-3">
+  <ul class="mt-8 space-y-2">
     {pages.map(({ href, description }) => (
-      <li class="flex flex-col sm:flex-row sm:gap-4">
+      <li class="flex flex-col text-sm sm:flex-row sm:gap-4">
         <Link href={href} class="shrink-0 sm:w-32">{href}</Link>
         <p class="text-muted-foreground">{description}</p>
       </li>
     ))}
   </ul>
-</PageLayout>
+</StoryLayout>
