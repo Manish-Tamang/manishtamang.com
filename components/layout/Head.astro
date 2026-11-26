@@ -45,10 +45,9 @@ const ogImage = new URL(image, site.url).href
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
 <meta name="theme-color" content="#161616" media="(prefers-color-scheme: dark)" />
 
-<!-- Inter isn't preloaded: at 73 KB it took bandwidth from the first images on slow
-     phones. Text shows in the metric-matched fallback for a moment, with no layout shift.
-     The display face is small (~7 KB) and sets the hero name, so it stays preloaded. -->
-<Font cssVariable="--font-inter" />
+<!-- Only upright Latin Inter is preloaded (the file nearly every page needs), so it lands
+     before first paint and the fallback-to-Inter swap isn't seen. Italic and latin-ext load on use. -->
+<Font cssVariable="--font-inter" preload={[{ style: "normal", subset: "latin" }]} />
 <Font cssVariable="--font-myfont" preload />
 <ThemeScript />
 
