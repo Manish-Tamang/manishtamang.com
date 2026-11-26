@@ -1,10 +1,5 @@
 /* Everything interactive on /guestbook. The list is server-rendered; see refresh(). */
-import {
-  PUBLIC_SUPABASE_ANON_KEY,
-  PUBLIC_SUPABASE_URL,
-} from "astro:env/client";
-
-const MAX_IMAGE = 5 * 1024 * 1024;
+const MAX_IMAGE = 4 * 1024 * 1024;
 
 const list = document.querySelector<HTMLElement>("[data-guestbook-list]")!;
 const dialog = document.querySelector<HTMLDialogElement>(
@@ -37,23 +32,14 @@ const refresh = async () => {
   if (next) list.replaceChildren(...next.childNodes);
 };
 
+// The server checks the session, type and size, then stores it with its own key
 const uploadImage = async (file: File) => {
-  const extension = file.name.split(".").pop();
-  const path = `guestbook/${form!.dataset.user}/${crypto.randomUUID()}.${extension}`;
-  const response = await fetch(
-    `${PUBLIC_SUPABASE_URL}/storage/v1/object/primary/${path}`,
-    {
-      method: "POST",
-      headers: {
-        apikey: PUBLIC_SUPABASE_ANON_KEY!,
-        authorization: `Bearer ${PUBLIC_SUPABASE_ANON_KEY}`,
-        "content-type": file.type,
-      },
-      body: file,
-    },
-  );
-  if (!response.ok) throw new Error("Upload failed");
-  return `${PUBLIC_SUPABASE_URL}/storage/v1/object/public/primary/${path}`;
+  const body = new FormData();
+  body.append("image", file);
+  const response = await fetch("/api/guestbook/upload", { method: "POST", body });
+  const result = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(result.error || "Upload failed");
+  return result.url as string;
 };
 
 const setImage = (file: File | null) => {
@@ -100,7 +86,7 @@ form
     const file = (event.target as HTMLInputElement).files?.[0];
     if (!file) return;
     if (file.size > MAX_IMAGE)
-      return toast("Image size should be less than 5MB");
+      return toast("Images can be up to 4 MB");
     setImage(file);
   });
 
