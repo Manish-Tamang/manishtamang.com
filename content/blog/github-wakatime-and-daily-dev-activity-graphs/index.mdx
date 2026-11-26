@@ -1,0 +1,187 @@
+---
+title: "GitHub, WakaTime and daily.dev Activity Graphs on My Dashboard"
+description: "How I built the three heatmaps on my dashboard: GitHub contributions, hours coded from WakaTime and articles read on daily.dev. One small component and no API keys."
+date: 2026-11-19T12:00:00.000Z
+ai: true
+draft: true
+---
+
+My [dashboard](/dashboard) has three of those green-square graphs you know from GitHub. One shows my GitHub contributions, one shows how many hours I coded each day (from WakaTime), and one shows how many articles I read each day on daily.dev.
+
+They look the same because they are the same component. Only the data changes. And none of them need an API key.
+
+{/* SCREENSHOT 0 (optional cover): the three graphs on /dashboard, one under the other. */}
+
+## One shape for every graph
+
+The trick is to turn every source into the same simple list: one item per day.
+
+```ts
+type Day = {
+  date: string // "2026-11-19"
+  count: number // contributions, hours or articles
+  level: number // 0 to 4, how dark the square is
+}
+```
+
+`count` is shown in the tooltip. `level` picks the colour, from empty (0) to full (4). Once a source gives me this list, the graph doesn't care where it came from.
+
+## GitHub
+
+GitHub's own API needs a token for this, so I use [github-contributions-api](https://github.com/grubersjoe/github-contributions-api) by Jonathan Gruber. It reads your public profile and gives back exactly the shape above, levels included.
+
+```ts
+export async function getContributions(): Promise<Day[]> {
+  const res = await fetch("https://github-contributions-api.jogruber.de/v4/YOUR_USERNAME?y=last")
+  if (!res.ok) throw new Error(`Contributions API ${res.status}`)
+  return (await res.json()).contributions ?? []
+}
+```
+
+`?y=last` means the last 365 days. That's it for GitHub.
+
+## WakaTime
+
+WakaTime has a proper API, but it needs a login. Your public WakaTime profile also has a heatmap, though, and that heatmap loads its data from a public endpoint. I found it in the browser's dev tools.
+
+Open your WakaTime profile, open dev tools (F12), go to the **Network** tab and reload. Look for a request ending in `insights/days/public`. The long ID in its URL is your user ID.
+
+{/* SCREENSHOT 1: WakaTime profile page with the Network tab open. Arrow to the
+    insights/days/public request, and to the user ID inside its URL. */}
+
+This only works if your profile is public in your WakaTime settings.
+
+The endpoint gives the seconds coded per day. I turn them into hours, and every 3 hours is one more level.
+
+```ts
+const DAYS_URL = "https://wakatime.com/api/v1/users/YOUR_USER_ID/insights/days/public"
+
+export async function getCodingActivity(): Promise<Day[]> {
+  const res = await fetch(DAYS_URL)
+  if (!res.ok) throw new Error(`WakaTime days ${res.status}`)
+
+  const days: { date: string; total: number }[] = (await res.json())?.data?.days ?? []
+  return days.map(({ date, total }) => {
+    const hours = total / 3600
+    return {
+      date,
+      count: Math.round(hours * 10) / 10, // 2.4 hours
+      level: Math.min(Math.ceil(hours / 3), 4),
+    }
+  })
+}
+```
+
+## daily.dev
+
+daily.dev shows a reading heatmap on your profile too, and it does the same thing: the page asks daily.dev's GraphQL API for your read history. Same dev tools trick, but this time filter the Network tab by `graphql` and click the requests until you find one with `userReadHistory` in its **Payload**. Your user ID is in the variables.
+
+{/* SCREENSHOT 2: daily.dev profile page with the Network tab open, filtered by
+    "graphql". Arrow to the request's Payload, at userReadHistory and the id. */}
+
+Now ask for the last year of reads. I ask for the streak in the same request, because it's free.
+
+```ts
+const DAY = 24 * 60 * 60 * 1000
+
+export async function getReadingActivity(): Promise<Day[]> {
+  const now = Date.now()
+  const res = await fetch("https://api.daily.dev/graphql", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      query: `query($id: ID!, $after: String!, $before: String!) {
+        userReadHistory(id: $id, after: $after, before: $before) { date reads }
+        userStreakProfile(id: $id) { current max total }
+      }`,
+      variables: {
+        id: "YOUR_USER_ID",
+        after: new Date(now - 371 * DAY).toISOString(),
+        before: new Date(now + DAY).toISOString(),
+      },
+    }),
+  })
+  const { data } = await res.json()
+  // ...
+}
+```
+
+One catch: daily.dev only returns the days you actually read something. A graph needs every day, or the columns won't line up. So I fill in the empty days myself:
+
+```ts
+const reads = new Map(data.userReadHistory.map(({ date, reads }) => [date.slice(0, 10), reads]))
+
+const days = Array.from({ length: 371 }, (_, i) => {
+  const date = new Date(now - (370 - i) * DAY).toISOString().slice(0, 10)
+  const count = reads.get(date) ?? 0
+  return { date, count, level: Math.min(Math.ceil(count / 2), 4) }
+})
+```
+
+Every 2 articles is one more level.
+
+## The graph
+
+Now the fun part. The graph is a CSS grid with 7 rows, one for each day of the week. `grid-auto-flow: column` fills it top to bottom, then moves to the next column, so each column is one week.
+
+```astro
+---
+const { days, color = "34, 197, 94" } = Astro.props
+
+// Five shades of one colour, from empty to full
+const LEVELS = [
+  "rgba(107, 114, 128, 0.125)",
+  `rgba(${color}, 0.25)`,
+  `rgba(${color}, 0.5)`,
+  `rgba(${color}, 0.75)`,
+  `rgb(${color})`,
+]
+
+// 51 full weeks, then this week up to today
+const expected = 51 * 7 + new Date().getDay() + 1
+const tiles = days.slice(-expected)
+---
+
+<div class="grid w-max grid-flow-col grid-rows-7 gap-0.5">
+  {tiles.map(({ date, count, level }) => (
+    <div
+      class="size-[9px] rounded-[2px]"
+      style={{ backgroundColor: LEVELS[level] }}
+      title={`${count} on ${date}`}
+    />
+  ))}
+</div>
+```
+
+The `expected` line is the one I got wrong first. If you just take the last 365 days, the last column doesn't end on today and the weekdays shift. Taking 51 full weeks plus the days of this week so far keeps today in the bottom-right corner, like on GitHub.
+
+Each graph only passes its own colour:
+
+```astro
+<Heatmap days={contributions} />
+<Heatmap days={reading} color="206, 61, 243" />
+<Heatmap days={coding} color="59, 130, 246" />
+```
+
+On my site I swapped `title` for one small tooltip that follows the mouse, but `title` works fine to start.
+
+{/* SCREENSHOT 3: one graph up close with the tooltip showing on a square. */}
+
+## Keep it from breaking
+
+The WakaTime and daily.dev endpoints aren't documented. They're what their own websites use, so they can change any day without warning. So every source gets its own `try/catch`, and returns an empty list when it fails:
+
+```ts
+const getCoding = async () => {
+  try {
+    return await getCodingActivity()
+  } catch (error) {
+    console.error("WakaTime failed:", error)
+    return []
+  }
+}
+```
+
+When the list is empty, the graph shows "Coding graph is unavailable right now." instead. If one API goes down, the other two graphs and the rest of the dashboard keep working.
+
+That's all. Three sources, one shape, one component. You can see them live on my [dashboard](/dashboard).
