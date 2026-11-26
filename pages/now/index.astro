@@ -5,6 +5,7 @@
  */
 import StoryLayout from "@/layouts/StoryLayout.astro"
 import Link from "@/components/ui/Link.astro"
+import WashFrame from "@/components/ui/WashFrame.astro"
 import NepalClock from "@/components/now/NepalClock.astro"
 import NowPlayingPlayer from "@/components/now/NowPlayingPlayer.astro"
 import { now } from "@/data/slash-pages"
@@ -13,9 +14,9 @@ import { now } from "@/data/slash-pages"
 <StoryLayout heading="Now" description="What Manish Tamang is focused on at the moment.">
   <p class="font-lead text-lead text-heading">What I'm focused on at the moment.</p>
 
-  <div class="mt-8">
+  <WashFrame tone="dawn" class="mt-8">
     <NepalClock />
-  </div>
+  </WashFrame>
 
   {now.map(({ heading, items }) => (
     <section class="mt-8">
