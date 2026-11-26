@@ -10,7 +10,7 @@ import Trash2 from "@/components/icons/Trash2.astro"
 import X from "@/components/icons/X.astro"
 import GuestbookMessage from "./GuestbookMessage.astro"
 import { MAX_MESSAGE } from "@/lib/guestbook/rich-text"
-import { timeAgo, type GuestbookEntry } from "@/lib/guestbook"
+import { EMOJIS, timeAgo, type GuestbookEntry } from "@/lib/guestbook"
 
 export interface Props {
   entry: GuestbookEntry
@@ -19,7 +19,6 @@ export interface Props {
 
 const { entry, isAdmin } = Astro.props
 
-const EMOJIS = ["❤️", "✨", "🔥", "🙌", "💯", "🚀", "😂", "😮"]
 const words = entry.message.split(/\s+/)
 const isLong = words.length > 60
 const hasReplies = Boolean(entry.replies?.length)
