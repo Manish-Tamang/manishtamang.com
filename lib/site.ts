@@ -8,7 +8,7 @@ export const site = {
   description:
     "Hi, I'm Manish Gole Tamang (golecodes), a developer and designer from Kathmandu, Nepal. I build minimal, functional web experiences with modern technologies.",
   url: "https://manishtamang.com",
-  ogImage: "/cover-card.jpg",
+  ogImage: "/og.jpg",
   locale: "en_US",
   social: {
     github: "https://github.com/Manish-Tamang",
