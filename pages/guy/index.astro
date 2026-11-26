@@ -1,20 +1,19 @@
 ---
-import PageLayout from "@/layouts/PageLayout.astro"
+import StoryLayout from "@/layouts/StoryLayout.astro"
 import Link from "@/components/ui/Link.astro"
 import { guy } from "@/data/slash-pages"
 
 const article = (word: string) => (/^[aeiou]/i.test(word) ? "an" : "a")
 ---
 
-<PageLayout
-  heading="Guy"
-  intro="The things I'm a guy for, in no particular order."
-  description="The things Manish Tamang is a guy for, in no particular order."
->
-  <ul class="space-y-6">
+<!-- In StoryLayout, with the same rhythm as /colophon and /now: a 24px lead, then 14/22 text -->
+<StoryLayout heading="Guy" description="The things Manish Tamang is a guy for, in no particular order.">
+  <p class="font-lead text-lead text-heading">The things I'm a guy for, in no particular order.</p>
+
+  <ul class="mt-8 space-y-2">
     {guy.map(({ thing, ending = "guy.", tooltip }) => (
       <li>
-        <p class="font-section text-2xl text-heading">
+        <p class="text-sm text-heading">
           I'm {article(thing)}{" "}
           {tooltip ? (
             <span class="group relative inline-block cursor-help" tabindex="0">
@@ -29,7 +28,7 @@ const article = (word: string) => (/^[aeiou]/i.test(word) ? "an" : "a")
     ))}
   </ul>
 
-  <p class="mt-12 text-sm text-muted-foreground">
+  <Fragment slot="note">
     <Link href="https://canion.blog/guy/">Andrew Canion</Link> coined /guy in the IndieWeb.
-  </p>
-</PageLayout>
+  </Fragment>
+</StoryLayout>
