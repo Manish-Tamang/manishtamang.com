@@ -50,6 +50,30 @@
   --success: var(--green);
 
   --selection: rgb(255 244 128 / 0.7);
+
+  /* Sangeetpedia's soft washes: meadow (green), iris (blue-violet-pink), dawn (peach-teal), sun (yellow) */
+  --wash-meadow:
+    radial-gradient(55% 75% at 72% 105%, rgb(170 232 150 / 0.85), transparent 70%),
+    radial-gradient(45% 65% at 18% 100%, rgb(95 200 144 / 0.45), transparent 70%),
+    radial-gradient(35% 55% at 95% 55%, rgb(205 241 196 / 0.8), transparent 70%),
+    radial-gradient(30% 45% at 5% 60%, rgb(220 244 228 / 0.9), transparent 70%),
+    #f8fbf8;
+  --wash-iris:
+    radial-gradient(60% 70% at 15% 95%, rgb(150 196 255 / 0.55), transparent 70%),
+    radial-gradient(55% 65% at 75% 100%, rgb(221 201 255 / 0.72), transparent 70%),
+    radial-gradient(45% 55% at 90% 20%, rgb(246 204 218 / 0.45), transparent 70%),
+    #f5f6fb;
+  --wash-dawn:
+    radial-gradient(60% 70% at 85% 100%, rgb(255 216 183 / 0.6), transparent 70%),
+    radial-gradient(50% 60% at 10% 90%, rgb(123 211 206 / 0.35), transparent 70%),
+    #fbf8f5;
+  --wash-sun:
+    radial-gradient(55% 75% at 75% 105%, rgb(255 230 120 / 0.75), transparent 70%),
+    radial-gradient(45% 65% at 15% 100%, rgb(255 205 140 / 0.5), transparent 70%),
+    radial-gradient(35% 55% at 95% 40%, rgb(255 244 128 / 0.6), transparent 70%),
+    radial-gradient(50% 60% at 25% -5%, rgb(255 236 140 / 0.7), transparent 70%),
+    radial-gradient(40% 55% at 85% 0%, rgb(255 214 150 / 0.5), transparent 70%),
+    #fdf8e4;
 }
 
 :root.dark {
@@ -76,6 +100,26 @@
   --ring: rgb(185 150 224 / 0.5);
 
   --selection: #666666;
+
+  --wash-meadow:
+    radial-gradient(55% 75% at 72% 105%, rgb(95 200 144 / 0.16), transparent 70%),
+    radial-gradient(45% 65% at 18% 100%, rgb(61 192 108 / 0.1), transparent 70%),
+    radial-gradient(35% 55% at 95% 55%, rgb(170 232 150 / 0.08), transparent 70%),
+    var(--background);
+  --wash-iris:
+    radial-gradient(60% 70% at 15% 95%, rgb(150 196 255 / 0.14), transparent 70%),
+    radial-gradient(55% 65% at 75% 100%, rgb(185 150 224 / 0.18), transparent 70%),
+    radial-gradient(45% 55% at 90% 20%, rgb(217 90 136 / 0.08), transparent 70%),
+    var(--background);
+  --wash-dawn:
+    radial-gradient(60% 70% at 85% 100%, rgb(230 165 110 / 0.16), transparent 70%),
+    radial-gradient(50% 60% at 10% 90%, rgb(123 211 206 / 0.1), transparent 70%),
+    var(--background);
+  --wash-sun:
+    radial-gradient(55% 75% at 75% 105%, rgb(231 221 111 / 0.16), transparent 70%),
+    radial-gradient(45% 65% at 15% 100%, rgb(230 165 110 / 0.1), transparent 70%),
+    radial-gradient(50% 60% at 25% -5%, rgb(231 221 111 / 0.12), transparent 70%),
+    var(--background);
 
   /* Components hardcoded to zinc (guestbook, dashboard) brighten with everything else */
   --color-zinc-300: #f1f1f1;
@@ -129,6 +173,15 @@
   }
 
   --animate-marquee: marquee 10s linear infinite;
+
+  /* Album art on /now turning like a record */
+  @keyframes record {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  --animate-record: record 8s linear infinite;
 
   /*
    * Type scale — [size, line-height, tracking], after abhisekmishra.com:
