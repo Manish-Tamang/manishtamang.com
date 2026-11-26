@@ -15,6 +15,7 @@ import { slashPages } from "@/data/slash-pages"
 import { staticPages } from "@/lib/routes"
 import { getPosts } from "@/lib/blog"
 import WashFrame from "@/components/ui/WashFrame.astro"
+import { BLANK_IMAGE } from "@/lib/defer"
 
 const daysLive = (since: string, now = new Date()) =>
   Math.floor((now.getTime() - new Date(`${since}T00:00:00Z`).getTime()) / 86_400_000)
@@ -38,6 +39,7 @@ const sectionTitle = "mb-3 text-sm font-subsection text-heading"
 const sectionIntro = "-mt-1 mb-4 text-sm text-muted-foreground"
 // ToolItem rows pad 8px top and bottom; pulling the list up 8px keeps the 12px title gap
 const toolGrid = "-mt-2 grid gap-x-6 sm:grid-cols-2"
+const dmcaId = "c4b71fdb-965c-43a1-bdfc-734439b4056b"
 ---
 
 <StoryLayout heading="Colophon" description="How manishtamang.com is made: the stack, typography, colours and the people whose work shaped it.">
@@ -199,6 +201,20 @@ const toolGrid = "-mt-2 grid gap-x-6 sm:grid-cols-2"
       And to many more talented developers and designers whose work has unknowingly shaped my approach. Thank you all.
     </p>
   </section>
+
+  <a
+    href="https://www.dmca.com/r/l1e158e"
+    title="DMCA.com Protection Status"
+    class="mt-10 block w-fit"
+  >
+    <img
+      src={BLANK_IMAGE}
+      data-defer-src={`https://images.dmca.com/Badges/dmca_protected_24_120.png?ID=${dmcaId}`}
+      alt="DMCA.com Protection Status"
+      width="120"
+      height="24"
+    />
+  </a>
 </StoryLayout>
 
 <script>
