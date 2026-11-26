@@ -14,7 +14,7 @@ const { tone = "meadow", class: className, inner = "p-5", ...rest } = Astro.prop
 const tones = { meadow: "wash-meadow", iris: "wash-iris", dawn: "wash-dawn", sun: "wash-sun" }
 ---
 
-<div class:list={[tones[tone], "overflow-hidden rounded-xl p-1.5", className]} {...rest}>
+<div class:list={[tones[tone], "rounded-xl p-1.5", className]} {...rest}>
   <div class:list={["rounded-[0.5rem] bg-background/85 backdrop-blur-sm", inner]}>
     <slot />
   </div>
