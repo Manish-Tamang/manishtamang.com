@@ -75,9 +75,6 @@ export default defineConfig({
       SUPABASE_SERVICE_ROLE_KEY: envField.string({ context: "server", access: "secret", optional: true }),
       // Web3Forms access keys are designed to be public; the form posts straight to their API
       PUBLIC_WEB3FORMS_ACCESS_KEY: envField.string({ context: "client", access: "public", optional: true }),
-      // Anon key only: the guestbook uploads images straight to Supabase Storage from the browser
-      PUBLIC_SUPABASE_URL: envField.string({ context: "client", access: "public", optional: true }),
-      PUBLIC_SUPABASE_ANON_KEY: envField.string({ context: "client", access: "public", optional: true }),
       PUBLIC_CALENDLY_URL: envField.string({ context: "client", access: "public", optional: true }),
       // Cloudflare Turnstile on the contact form; without it the form has no challenge
       PUBLIC_TURNSTILE_SITE_KEY: envField.string({ context: "client", access: "public", optional: true }),
