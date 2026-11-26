@@ -10,12 +10,12 @@ export type Props = HTMLAttributes<"div">;
 const { class: className, ...rest } = Astro.props;
 
 const link =
-  "flex size-7 items-center justify-center rounded-md transition-colors text-muted-foreground hover:bg-foreground/5 hover:text-heading";
+  "flex size-7 items-center justify-center rounded-md transition-colors text-muted-foreground hover:text-heading";
 ---
 
 <div
   class:list={[
-    "inline-flex items-center gap-1 rounded-lg bg-background p-1",
+    "inline-flex items-center gap-1 p-1",
     className,
   ]}
   {...rest}
