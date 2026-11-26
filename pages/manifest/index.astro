@@ -4,6 +4,7 @@ import { getImage } from "astro:assets"
 import BlurImage from "@/components/ui/BlurImage.astro"
 import StoryLayout from "@/layouts/StoryLayout.astro"
 import Link from "@/components/ui/Link.astro"
+import WashFrame from "@/components/ui/WashFrame.astro"
 import { bucketList, learningGoals } from "@/data/manifest"
 
 const images = import.meta.glob<{ default: ImageMetadata }>("/assets/manifest/*", { eager: true })
@@ -44,15 +45,16 @@ const icons = {
 
   <div>
     <section class="mt-8">
-      <div class="flex items-baseline justify-between gap-4">
-        <h2 class={sectionTitle}>Bucket list</h2>
-        <p class="text-xs text-muted-foreground tabular-nums">{doneCount} of {bucketList.length} done</p>
-      </div>
-      <div class="mt-3 h-1 overflow-hidden rounded-full bg-muted" aria-hidden="true">
-        <div class="h-full rounded-full bg-accent" style={`width: ${(doneCount / bucketList.length) * 100}%`}></div>
-      </div>
+      <WashFrame tone="iris" inner="p-4">
+        <div class="flex items-baseline justify-between gap-4">
+          <h2 class={sectionTitle}>Bucket list</h2>
+          <p class="text-xs text-muted-foreground tabular-nums">{doneCount} of {bucketList.length} done</p>
+        </div>
+        <div class="mt-3 h-1 overflow-hidden rounded-full bg-muted" aria-hidden="true">
+          <div class="h-full rounded-full bg-accent" style={`width: ${(doneCount / bucketList.length) * 100}%`}></div>
+        </div>
 
-      <ul class="mt-3 divide-y divide-border border-y border-border">
+        <ul class="mt-3 -mb-2 divide-y divide-border">
         {items.map(({ title, done, date, photo, large }) => (
           <li class="flex min-h-14 items-center gap-3 py-2">
             <button
@@ -84,6 +86,7 @@ const icons = {
           </li>
         ))}
       </ul>
+      </WashFrame>
       <img data-bucket-preview alt="" width="200" height="200" hidden class="pointer-events-none fixed z-50 w-50 rounded-[4px] bg-background object-cover shadow-lg" />
       <p data-bucket-message role="status" aria-live="polite" class="mt-2 min-h-5.5 text-sm text-danger"></p>
     </section>
