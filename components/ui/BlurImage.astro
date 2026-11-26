@@ -11,17 +11,22 @@
  *
  * The preview is cleared once the photo loads, so it can't show through an
  * image with transparent parts.
+ *
+ * `defer` holds the photo back until it's near the screen (lib/client/defer-images.ts),
+ * for big images far down a page; the blurred preview fills the box until then.
  */
 import type { ImageMetadata } from "astro"
-import { Image, type LocalImageProps } from "astro:assets"
+import { getImage, Image, type LocalImageProps } from "astro:assets"
 import { blurPlaceholder } from "@/lib/placeholder"
+import { BLANK_IMAGE } from "@/lib/defer"
 
 export type Props = LocalImageProps & {
   /** CSS position for cropped (object-cover) images, e.g. "center 30%". */
   position?: string
+  defer?: boolean
 }
 
-const { src, position, style, ...rest } = Astro.props
+const { src, position, style, defer, ...rest } = Astro.props
 
 const image: ImageMetadata = "then" in src ? (await src).default : src
 const preview = await blurPlaceholder(image)
@@ -32,9 +37,26 @@ const previewStyle = [
   `background-position: ${position ?? "center"}`,
   position && `object-position: ${position}`,
   typeof style === "string" && style,
+  // The blank stand-in is 1×1, so the box keeps the photo's shape itself
+  defer && `aspect-ratio: ${image.width} / ${image.height}`,
 ]
   .filter(Boolean)
   .join("; ")
+
+const deferred = defer ? await getImage({ src: image, ...rest }) : undefined
+const { class: deferredClass, ...deferredAttributes } = deferred?.attributes ?? {}
 ---
 
-<Image src={image} style={previewStyle} onload="this.style.backgroundImage = 'none'" {...rest} />
+{deferred ? (
+  <img
+    src={BLANK_IMAGE}
+    data-defer-src={deferred.src}
+    data-defer-srcset={deferred.srcSet.attribute || undefined}
+    {...deferredAttributes}
+    class={deferredClass}
+    style={previewStyle}
+    onload="if (!this.currentSrc.startsWith('data:')) this.style.backgroundImage = 'none'"
+  />
+) : (
+  <Image src={image} style={previewStyle} onload="this.style.backgroundImage = 'none'" {...rest} />
+)}
