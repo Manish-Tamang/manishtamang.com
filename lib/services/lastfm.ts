@@ -3,6 +3,7 @@
  * Spotify's Web API needs Premium, so plays are read from Last.fm scrobbles.
  */
 import { LASTFM_API_KEY, LASTFM_USERNAME } from "astro:env/server"
+import { supabase } from "@/lib/services/supabase"
 
 const RECENT_TRACKS_ENDPOINT = "https://ws.audioscrobbler.com/2.0/"
 const ITUNES_SEARCH_ENDPOINT = "https://itunes.apple.com/search"
@@ -105,6 +106,20 @@ export const getNowPlaying = async (): Promise<NowPlaying> => {
 
   const { playedAt, ...song } = await toRecentTrack(track)
   return song
+}
+
+// Kept in Supabase so a Last.fm outage still has a song to show after a cold start
+export const saveLastSong = async (song: NowPlaying) => {
+  await supabase("now_playing?on_conflict=id", {
+    method: "POST",
+    headers: { prefer: "resolution=merge-duplicates" },
+    body: JSON.stringify({ id: 1, song, updated_at: new Date().toISOString() }),
+  })
+}
+
+export const loadLastSong = async (): Promise<NowPlaying | undefined> => {
+  const rows: { song: NowPlaying }[] | null = await supabase("now_playing?id=eq.1&select=song")
+  return rows?.[0]?.song
 }
 
 export const getRecentTracks = async (limit = 10): Promise<RecentTrack[]> => {
