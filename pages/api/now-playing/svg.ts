@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro"
-import { getNowPlaying, type NowPlaying } from "@/lib/services/lastfm"
+import { getNowPlaying, loadLastSong, saveLastSong, type NowPlaying } from "@/lib/services/lastfm"
 
 // Renders the current (or last played) song as an SVG so it can be embedded
 // where JS can't run, like the GitHub profile README.
@@ -106,9 +106,18 @@ export const GET: APIRoute = async ({ url }) => {
 
   try {
     const song = await getNowPlaying()
-    if (song.title && song.artist) lastSong = song
+    if (song.title && song.artist) {
+      const changed =
+        song.title !== lastSong?.title || song.artist !== lastSong?.artist || song.isPlaying !== lastSong?.isPlaying
+      lastSong = song
+      if (changed) await saveLastSong(song).catch(console.error)
+    }
   } catch (error) {
     console.error(error)
+    lastSong ??= await loadLastSong().catch((loadError) => {
+      console.error(loadError)
+      return undefined
+    })
     // Can't tell if the remembered song is still playing, so stop the spin
     if (lastSong) lastSong = { ...lastSong, isPlaying: false }
   }
