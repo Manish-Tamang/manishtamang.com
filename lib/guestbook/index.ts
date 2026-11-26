@@ -6,6 +6,9 @@ import type { MessageFormat } from "./rich-text"
 
 export const TABLE = "guestbook_entries"
 
+/** The reaction picker; the API accepts only these. */
+export const EMOJIS = ["❤️", "✨", "🔥", "🙌", "💯", "🚀", "😂", "😮"]
+
 export type GuestbookReaction = { emoji: string; count: number }
 
 export type GuestbookEntry = {
