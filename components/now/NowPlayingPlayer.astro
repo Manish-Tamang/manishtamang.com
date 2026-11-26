@@ -19,7 +19,7 @@ import ArrowUpRight from "@/components/icons/ArrowUpRight.astro"
   <!-- A plain row like the rest of the page, no frame -->
   <div>
     <div data-player-loading class="flex animate-pulse items-center gap-3" aria-label="Loading">
-      <div class="size-12 shrink-0 rounded-lg bg-muted"></div>
+      <div class="size-12 shrink-0 rounded-full bg-muted"></div>
       <div class="flex-1 space-y-2">
         <div class="h-3 w-1/3 rounded bg-muted"></div>
         <div class="h-3 w-1/2 rounded bg-muted"></div>
@@ -27,7 +27,8 @@ import ArrowUpRight from "@/components/icons/ArrowUpRight.astro"
     </div>
 
     <a data-player-song hidden target="_blank" rel="noopener noreferrer" class="group flex items-center gap-3">
-      <img data-player-art hidden alt="" width="48" height="48" class="size-12 shrink-0 rounded-lg bg-muted object-cover" />
+      <!-- Spins like a record while playing; stops on "Last played" -->
+      <img data-player-art hidden alt="" width="48" height="48" class="size-12 shrink-0 rounded-full bg-muted object-cover motion-safe:animate-record data-[paused]:[animation-play-state:paused]" />
       <span class="min-w-0 flex-1">
         <span data-player-title class="block truncate text-sm font-medium text-heading transition-colors group-hover:text-link-hover"></span>
         <span data-player-artist class="block truncate text-xs text-muted-foreground"></span>
@@ -70,6 +71,7 @@ import ArrowUpRight from "@/components/icons/ArrowUpRight.astro"
         $<HTMLElement>("dot").hidden = !isPlaying
         song.href = songUrl ?? "https://open.spotify.com"
         art.hidden = !albumImageUrl
+        art.toggleAttribute("data-paused", !isPlaying)
         if (albumImageUrl) art.src = albumImageUrl
         show("song")
       },
