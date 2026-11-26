@@ -19,7 +19,9 @@ const props = Astro.props
     <Head {...props} />
     <slot name="head" />
   </head>
-  <body>
+  <body class="relative isolate">
+    <!-- Green wash under the footer, edge to edge -->
+    <div aria-hidden="true" class="wash-meadow mask-fade-top pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-[26rem]"></div>
     <a
       href="#content"
       class="sr-only rounded-md bg-primary px-3 py-2 text-sm text-primary-foreground focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50"
