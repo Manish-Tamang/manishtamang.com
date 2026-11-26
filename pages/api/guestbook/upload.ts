@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro"
 import { SUPABASE_SERVICE_ROLE_KEY, SUPABASE_URL } from "astro:env/server"
 import { getUser } from "@/lib/session"
+import { allow } from "@/lib/guestbook/rate-limit"
 
 export const prerender = false
 
@@ -38,6 +39,7 @@ export const POST: APIRoute = async ({ request }) => {
     const bytes = new Uint8Array(await file.arrayBuffer())
     const kind = TYPES.find(({ matches }) => matches(bytes))
     if (!kind) return fail("Only PNG, JPEG, GIF and WebP images", 415)
+    if (!(await allow("upload", user.id))) return fail("Slow down a little and try again soon", 429)
 
     const path = `guestbook/${user.id}/${crypto.randomUUID()}.${kind.extension}`
     const response = await fetch(`${SUPABASE_URL}/storage/v1/object/primary/${path}`, {
