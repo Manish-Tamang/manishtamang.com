@@ -1,10 +1,9 @@
 /*
- * Formatting for guestbook message inputs ([data-rich-text]): toolbar buttons
- * ([data-format]) and shortcuts wrap the selection in Markdown markers, or unwrap
- * it when it's already wrapped, and [data-rich-preview] shows the result. Listeners
- * are on the document, so reply inputs added by a list refresh work too.
+ * Formatting for the guestbook's one-line reply inputs ([data-rich-text]): shortcuts
+ * wrap the selection in Markdown markers, or unwrap it when it's already wrapped.
+ * Listeners are on the document, so reply inputs added by a list refresh work too.
+ * The main message box is a rich editor instead (lib/client/rich-editor.ts).
  */
-import { hasRichText, richTextHtml } from "@/lib/guestbook/rich-text"
 
 type Format = "bold" | "italic" | "strike" | "code" | "link"
 
@@ -80,18 +79,4 @@ if (/Mac|iPhone|iPad/.test(navigator.platform)) {
   for (const button of document.querySelectorAll<HTMLElement>("[data-format][title]")) {
     button.title = button.title.replace("Ctrl+", "⌘").replace("Shift+", "⇧")
   }
-}
-
-for (const preview of document.querySelectorAll<HTMLElement>("[data-rich-preview]")) {
-  const input = preview.closest("form")?.querySelector<HTMLInputElement>("[data-rich-text]")
-  const body = preview.querySelector<HTMLElement>("[data-rich-preview-body]")
-  if (!input || !body) continue
-
-  // Only once there's formatting to see; plain text already reads as it will post
-  input.addEventListener("input", () => {
-    const show = hasRichText(input.value)
-    preview.hidden = !show
-    // Safe: richTextHtml escapes everything except its own tags
-    if (show) body.innerHTML = richTextHtml(input.value)
-  })
 }
