@@ -94,6 +94,8 @@ export default defineConfig({
       styles: ["normal", "italic"],
       subsets: ["latin", "latin-ext"],
       fallbacks: ["ui-sans-serif", "system-ui", "sans-serif"],
+      // Hide text for up to 100ms instead of flashing the fallback; after 3s it stays on the fallback
+      display: "fallback",
     },
     {
       // Custom display face for the name, carried over from the Next.js site.
