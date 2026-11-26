@@ -1,6 +1,5 @@
 ---
 import Button from "@/components/ui/Button.astro"
-import Input from "@/components/ui/Input.astro"
 import GitHub from "@/components/icons/GitHub.astro"
 import Google from "@/components/icons/Google.astro"
 import ImagePlus from "@/components/icons/ImagePlus.astro"
@@ -26,7 +25,7 @@ const formats = [
   { format: "code", label: "Code", shortcut: "E", glyph: "</>", class: "font-mono text-[0.7rem]" },
 ]
 const iconButton = "flex size-8 cursor-pointer items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-subtle hover:text-heading"
-const toolButton = "flex size-7 cursor-pointer items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-foreground/5 hover:text-heading"
+const toolButton = "flex size-7 cursor-pointer items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-foreground/5 hover:text-heading aria-pressed:bg-foreground/5 aria-pressed:text-heading"
 ---
 
 {user ? (
@@ -50,44 +49,44 @@ const toolButton = "flex size-7 cursor-pointer items-center justify-center round
             <X class="size-3" />
           </button>
         </div>
-        <div class="relative flex items-center gap-2">
-          <Input
-            name="message"
-            placeholder="Leave a message or some kudos!"
+        <div class="relative">
+          <div
+            contenteditable="true"
+            role="textbox"
+            aria-multiline="true"
             aria-label="Message"
-            autocomplete="off"
-            maxlength={MAX_MESSAGE}
-            data-rich-text
-            class="pr-18"
-          />
-          <div class="absolute right-1 flex items-center">
+            data-rich-editor
+            data-placeholder="Leave a message or some kudos!"
+            class:list={[
+              "block max-h-72 min-h-28 w-full overflow-y-auto rounded-md border border-border bg-background px-3 pt-2 pb-10 text-sm break-words whitespace-pre-wrap text-foreground",
+              "transition-colors hover:border-border-strong focus-visible:border-accent focus-visible:outline-none",
+              "empty:before:pointer-events-none empty:before:text-muted-foreground empty:before:content-[attr(data-placeholder)]",
+              richTextClass,
+            ]}
+          ></div>
+          <input type="hidden" name="message" maxlength={MAX_MESSAGE} />
+          <!-- Formatting for the editor above (lib/client/rich-editor.ts) -->
+          <div class="absolute bottom-1.5 left-1.5 flex items-center gap-0.5" role="toolbar" aria-label="Formatting">
+            {formats.map(({ format, label, shortcut, glyph, class: glyphClass }) => (
+              <button type="button" data-format={format} title={`${label} (Ctrl+${shortcut})`} aria-label={label} class={toolButton}>
+                <span class:list={["text-sm leading-none", glyphClass]} aria-hidden="true">{glyph}</span>
+              </button>
+            ))}
+            <button type="button" data-format="link" title="Link (Ctrl+K)" aria-label="Link" class={toolButton}>
+              <Link2 class="size-3.5" />
+            </button>
+          </div>
+          <div class="absolute right-1 bottom-1.5 flex items-center">
             <label class={iconButton}>
               <input type="file" name="image" accept="image/png,image/jpeg,image/gif,image/webp" class="sr-only" />
               <ImagePlus class="size-4" />
               <span class="sr-only">Add image</span>
             </label>
-            <button type="submit" aria-label="Post message" class:list={[iconButton, "disabled:opacity-50"]}>
+            <button type="submit" aria-label="Post message" title="Post (Ctrl+Enter)" class:list={[iconButton, "disabled:opacity-50"]}>
               <SendSolid data-send-icon class="size-4" />
               <LoaderCircle data-send-spinner class="hidden size-4 animate-spin" />
             </button>
           </div>
-        </div>
-
-        <!-- Formatting: wraps the selection in Markdown markers (lib/client/rich-text-editor.ts) -->
-        <div class="-my-1.5 -ml-1.5 flex items-center gap-0.5" role="toolbar" aria-label="Formatting">
-          {formats.map(({ format, label, shortcut, glyph, class: glyphClass }) => (
-            <button type="button" data-format={format} title={`${label} (Ctrl+${shortcut})`} aria-label={label} class={toolButton}>
-              <span class:list={["text-sm leading-none", glyphClass]} aria-hidden="true">{glyph}</span>
-            </button>
-          ))}
-          <button type="button" data-format="link" title="Link (Ctrl+K)" aria-label="Link" class={toolButton}>
-            <Link2 class="size-3.5" />
-          </button>
-        </div>
-
-        <div data-rich-preview hidden class="rounded-md border border-dashed border-border px-3 py-2 text-sm break-words whitespace-pre-wrap">
-          <p class="mb-0.5 text-xs text-muted-foreground">Preview</p>
-          <span data-rich-preview-body class={richTextClass}></span>
         </div>
       </div>
     </div>
