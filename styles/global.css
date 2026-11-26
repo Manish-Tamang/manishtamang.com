@@ -147,3 +147,24 @@
 @utility mask-marquee {
   mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
 }
+
+/* Sangeetpedia's soft washes */
+@utility wash-meadow {
+  background: var(--wash-meadow);
+}
+
+@utility wash-iris {
+  background: var(--wash-iris);
+}
+
+@utility wash-dawn {
+  background: var(--wash-dawn);
+}
+
+@utility wash-sun {
+  background: var(--wash-sun);
+}
+
+@utility mask-fade-top {
+  mask-image: linear-gradient(to bottom, transparent, black 65%);
+}
