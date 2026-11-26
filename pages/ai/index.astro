@@ -1,35 +1,37 @@
 ---
 import type { ImageMetadata } from "astro"
 import { Image } from "astro:assets"
-import PageLayout from "@/layouts/PageLayout.astro"
-import Heading from "@/components/typography/Heading.astro"
+import StoryLayout from "@/layouts/StoryLayout.astro"
 import Link from "@/components/ui/Link.astro"
-import Text from "@/components/typography/Text.astro"
 import { ai } from "@/data/slash-pages"
 
 const icons = import.meta.glob<{ default: ImageMetadata }>("/assets/uses/icons/*.png", { eager: true })
 const icon = (name: string) => icons[`/assets/uses/icons/${name}.png`]?.default
+
+const sectionTitle = "mb-3 text-sm font-subsection text-heading"
 ---
 
-<PageLayout heading="AI" intro="How I use, and don't use, AI." description="How Manish Tamang uses, and doesn't use, AI in his work and on this website.">
-  <div class="space-y-10">
-    {ai.map(({ title, body }) => (
-      <section>
-        <Heading>{title}</Heading>
-        <Text class="mt-2">
-          {body.split(/\{([\w-]+)\}/).map((part, i) =>
-            i % 2 && icon(part) ? (
-              <Image src={icon(part)!} alt="" width={16} height={16} densities={[1, 2]} class="mr-1 inline-block size-[1em] -translate-y-[0.1em] rounded-[3px] align-middle" />
-            ) : (
-              part
-            ),
-          )}
-        </Text>
-      </section>
-    ))}
-  </div>
+<!-- In StoryLayout, with the same rhythm as /colophon and /now: a 24px lead, then
+     body-size section titles with 32px above and 12px below, 14/22 text -->
+<StoryLayout heading="AI" description="How Manish Tamang uses, and doesn't use, AI in his work and on this website.">
+  <p class="font-lead text-lead text-heading">How I use, and don't use, AI.</p>
 
-  <p class="mt-12 text-sm text-muted-foreground">
+  {ai.map(({ title, body }) => (
+    <section class="mt-8">
+      <h2 class={sectionTitle}>{title}</h2>
+      <p class="text-sm">
+        {body.split(/\{([\w-]+)\}/).map((part, i) =>
+          i % 2 && icon(part) ? (
+            <Image src={icon(part)!} alt="" width={16} height={16} densities={[1, 2]} class="mr-1 inline-block size-[1em] -translate-y-[0.1em] rounded-[3px] align-middle" />
+          ) : (
+            part
+          ),
+        )}
+      </p>
+    </section>
+  ))}
+
+  <Fragment slot="note">
     This page is inspired by <Link href="https://www.bydamo.la/p/ai-manifesto">Damola Morenikeji's /ai manifesto</Link>.
-  </p>
-</PageLayout>
+  </Fragment>
+</StoryLayout>
