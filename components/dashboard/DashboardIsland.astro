@@ -21,6 +21,7 @@ const load = {
   contributions: () => dashboardSections.contributions(),
   reading: () => dashboardSections.reading(),
   codingDays: () => dashboardSections.codingDays(),
+  listeningDays: () => dashboardSections.listeningDays(),
   traffic: () => dashboardSections.traffic(),
   blog: () => dashboardSections.blog(),
   bookmarks: () => dashboardSections.bookmarks(Astro.url),
@@ -44,6 +45,7 @@ const data: any = await load[section]()
   </>
 )}
 {section === "codingDays" && <ContributionGraph contributions={data} color="59, 130, 246" noun="hour" empty="Coding graph is unavailable right now." />}
+{section === "listeningDays" && <ContributionGraph contributions={data} color="213, 16, 7" noun="scrobble" empty="Listening graph is unavailable right now." />}
 {section === "traffic" && <SiteTraffic totals={data[0]} sessions={data[1]} />}
 {section === "blog" && <BlogStats views={data[0]} reactions={data[1]} />}
 {section === "bookmarks" && <DailyBookmarks bookmarks={data} />}

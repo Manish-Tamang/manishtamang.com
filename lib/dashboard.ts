@@ -6,6 +6,7 @@ import { getAllViews } from "@/lib/blog/views"
 import { getAllReactions } from "@/lib/blog/reactions"
 import { getReadingActivity, type DailyBookmark, type ReadingActivity } from "@/lib/services/daily"
 import { getContributions, type Contribution } from "@/lib/services/github"
+import { getListeningActivity } from "@/lib/services/listening"
 import { getRecentTracks, getTopAlbums, getTopArtists, type RecentTrack, type TopItem } from "@/lib/services/lastfm"
 import { getUmamiRecentSessions, getUmamiTotals } from "@/lib/services/umami"
 import { getCodingActivity, getWakaTimeStats, type WakaTimeApiResponse } from "@/lib/services/wakatime"
@@ -84,6 +85,15 @@ const getCoding = async (): Promise<Contribution[]> => {
   }
 }
 
+const getListening = async (): Promise<Contribution[]> => {
+  try {
+    return await getListeningActivity()
+  } catch (error) {
+    console.error("Failed to fetch Last.fm listening days:", error)
+    return []
+  }
+}
+
 const getViews = async (): Promise<Record<string, number>> => {
   try {
     return await getAllViews()
@@ -122,6 +132,7 @@ export const dashboardSections = {
   contributions: () => within(getGraph(), [], "GitHub contributions"),
   reading: () => within(getReading(), { days: [], streak: null }, "daily.dev reading"),
   codingDays: () => within(getCoding(), [], "WakaTime days"),
+  listeningDays: () => within(getListening(), [], "Last.fm listening days"),
   traffic: () =>
     Promise.all([within(getUmamiTotals(), null, "Umami totals"), within(getUmamiRecentSessions(3), [], "Umami sessions")]),
   blog: () => Promise.all([within(getViews(), {}, "blog views"), within(getReactionTotals(), {}, "blog reactions")]),

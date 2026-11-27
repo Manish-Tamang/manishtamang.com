@@ -88,7 +88,7 @@ const key = (...parts: string[]) => parts.map((part) => part.toLowerCase()).join
 const share = (part: number, whole: number) => (whole ? Math.round((part / whole) * 100) : 0)
 
 /** Runs `fn` over `items`, `limit` at a time, so a cold start doesn't flood the APIs. */
-async function mapLimit<T, R>(items: T[], limit: number, fn: (item: T) => Promise<R>): Promise<R[]> {
+export async function mapLimit<T, R>(items: T[], limit: number, fn: (item: T) => Promise<R>): Promise<R[]> {
   const results = new Array<R>(items.length)
   let next = 0
   const workers = Array.from({ length: Math.min(limit, items.length) }, async () => {
@@ -111,7 +111,7 @@ async function remember<T>(id: string, ttl: number, load: () => Promise<T>): Pro
   return value
 }
 
-const lastfm = async (method: string, params: Record<string, string>, attempt = 0): Promise<any> => {
+export const lastfm = async (method: string, params: Record<string, string>, attempt = 0): Promise<any> => {
   if (!LASTFM_API_KEY || !LASTFM_USERNAME) throw new Error("Missing LASTFM_API_KEY or LASTFM_USERNAME")
 
   const query = new URLSearchParams({ method, api_key: LASTFM_API_KEY, format: "json", ...params })

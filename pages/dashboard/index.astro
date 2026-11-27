@@ -45,6 +45,13 @@ const skeleton = "animate-pulse rounded-lg bg-muted"
       </DashboardIsland>
     </DashboardSection>
 
+    <DashboardSection title="Listening Overview">
+      <Fragment slot="description">Songs I played each day, from <Link href="https://www.last.fm/user/golecodes">Last.fm</Link>.</Fragment>
+      <DashboardIsland server:defer section="listeningDays">
+        <div slot="fallback" class:list={[skeleton, "h-36"]} />
+      </DashboardIsland>
+    </DashboardSection>
+
     <DashboardSection title="Site Traffic">
       <Fragment slot="description">
         Visitors, visits, and page views from
