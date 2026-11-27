@@ -7,13 +7,14 @@ import { getAllReactions } from "@/lib/blog/reactions"
 import { getReadingActivity, type DailyBookmark, type ReadingActivity } from "@/lib/services/daily"
 import { getContributions, type Contribution } from "@/lib/services/github"
 import { getListeningActivity } from "@/lib/services/listening"
+import { withFallback } from "@/lib/services/source-cache"
 import { getRecentTracks, getTopAlbums, getTopArtists, type RecentTrack, type TopItem } from "@/lib/services/lastfm"
 import { getUmamiRecentSessions, getUmamiTotals } from "@/lib/services/umami"
 import { getCodingActivity, getWakaTimeStats, type WakaTimeApiResponse } from "@/lib/services/wakatime"
 
 const getWakaTime = async (): Promise<WakaTimeApiResponse | null> => {
   try {
-    return await getWakaTimeStats()
+    return await withFallback("wakatime-stats", getWakaTimeStats)
   } catch (error) {
     console.error("Error fetching WakaTime data:", error)
     return null
@@ -78,7 +79,7 @@ const getReading = async (): Promise<ReadingActivity> => {
 
 const getCoding = async (): Promise<Contribution[]> => {
   try {
-    return await getCodingActivity()
+    return await withFallback("wakatime-days", getCodingActivity)
   } catch (error) {
     console.error("Failed to fetch WakaTime daily activity:", error)
     return []
