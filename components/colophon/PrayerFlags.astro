@@ -1,0 +1,68 @@
+---
+export interface Props {
+  class?: string
+}
+
+const { class: className } = Astro.props
+
+const colours = ["#3b6fd8", "#f7f5ef", "#d6453d", "#3f9a5b", "#e8b832"]
+const swags = 3
+const perSwag = 7
+const swagWidth = 592 / swags
+const top = 2
+const sag = 28
+const flagW = 16
+const flagH = 20
+const width = swags * swagWidth
+const height = top + sag / 2 + flagH + 4
+
+const curve = (x0: number) => `M${x0} ${top} Q${x0 + swagWidth / 2} ${top + sag} ${x0 + swagWidth} ${top}`
+const flags = Array.from({ length: swags * perSwag }, (_, i) => {
+  const swag = Math.floor(i / perSwag)
+  const t = ((i % perSwag) + 0.5) / perSwag
+  const x = swag * swagWidth + swagWidth * t
+  const y = top + sag * t * (1 - t)
+  const lines = [4.5, 7.5, 10.5, 13.5, 16.5].map((dy, j) => {
+    const inset = 2.5 + ((i * 3 + j * 5) % 4) * 0.6
+    return { x1: inset, x2: flagW - 2.5 - ((i + j * 2) % 3) * 1.2, y: dy }
+  })
+  return { x: x - flagW / 2, y, fill: colours[i % colours.length], delay: (i % 4) * -0.7, lines }
+})
+---
+
+<svg
+  viewBox={`0 0 ${width} ${height}`}
+  class:list={["prayer-flags block h-auto w-full text-border-strong", className]}
+  aria-hidden="true"
+>
+  {Array.from({ length: swags }, (_, s) => (
+    <path d={curve(s * swagWidth)} fill="none" stroke="currentColor" stroke-width="1" />
+  ))}
+  {flags.map(({ x, y, fill, delay, lines }) => (
+    <g transform={`translate(${x} ${y})`}>
+      <g class="flag" style={`animation-delay: ${delay}s`}>
+        <rect width={flagW} height={flagH} rx="0.75" fill={fill} stroke="rgb(0 0 0 / 0.12)" stroke-width="0.5" />
+        {lines.map(({ x1, x2, y: ly }) => (
+          <line x1={x1} x2={x2} y1={ly} y2={ly} stroke="rgb(0 0 0 / 0.3)" stroke-width="0.9" stroke-linecap="round" stroke-dasharray="2.2 0.9 1.4 0.8" />
+        ))}
+      </g>
+    </g>
+  ))}
+</svg>
+
+<style>
+  .flag {
+    transform-box: fill-box;
+    transform-origin: top center;
+    animation: flutter 3.2s ease-in-out infinite;
+  }
+
+  @keyframes flutter {
+    0%, 100% { transform: rotate(-4deg) skewY(1deg); }
+    50% { transform: rotate(4deg) skewY(-1deg); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .flag { animation: none; }
+  }
+</style>
