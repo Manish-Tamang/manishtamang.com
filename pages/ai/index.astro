@@ -3,12 +3,13 @@ import type { ImageMetadata } from "astro"
 import { Image } from "astro:assets"
 import StoryLayout from "@/layouts/StoryLayout.astro"
 import Link from "@/components/ui/Link.astro"
-import { ai } from "@/data/slash-pages"
+import { ai, aiSpend } from "@/data/slash-pages"
 
 const icons = import.meta.glob<{ default: ImageMetadata }>("/assets/uses/icons/*.png", { eager: true })
 const icon = (name: string) => icons[`/assets/uses/icons/${name}.png`]?.default
 
 const sectionTitle = "mb-3 text-sm font-subsection text-heading"
+const th = "px-2 py-2 text-left font-subsection text-heading"
 ---
 
 <!-- In StoryLayout, with the same rhythm as /colophon and /now: a 24px lead, then
@@ -16,7 +17,7 @@ const sectionTitle = "mb-3 text-sm font-subsection text-heading"
 <StoryLayout heading="AI" description="How Manish Tamang uses, and doesn't use, AI in his work and on this website.">
   <p class="font-lead text-lead text-heading">How I use, and don't use, AI.</p>
 
-  {ai.map(({ title, body }) => (
+  {ai.map(({ title, body, spend }) => (
     <section class="mt-8">
       <h2 class={sectionTitle}>{title}</h2>
       <p class="text-sm">
@@ -28,6 +29,47 @@ const sectionTitle = "mb-3 text-sm font-subsection text-heading"
           ),
         )}
       </p>
+      {spend && (
+        <div class="mt-3 overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-border">
+                <th class={th}>Tool</th>
+                <th class={th}>Period</th>
+                <th class:list={[th, "text-right"]}>Monthly</th>
+                <th class:list={[th, "text-right"]}>Months</th>
+                <th class:list={[th, "text-right"]}>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {aiSpend.rows.map((row) => (
+                <tr class="border-b border-border">
+                  <td class="px-2 py-2 whitespace-nowrap">
+                    {icon(row.icon) && (
+                      <Image src={icon(row.icon)!} alt="" width={16} height={16} densities={[1, 2]} class="mr-1 inline-block size-[1em] -translate-y-[0.1em] rounded-[3px] align-middle" />
+                    )}
+                    {row.name}
+                  </td>
+                  <td class="px-2 py-2 whitespace-nowrap">{row.period}</td>
+                  <td class="px-2 py-2 text-right tabular-nums">{row.monthly}</td>
+                  <td class="px-2 py-2 text-right tabular-nums">{row.months}</td>
+                  <td class="px-2 py-2 text-right tabular-nums">{row.total}</td>
+                </tr>
+              ))}
+            </tbody>
+            <tfoot>
+              <tr>
+                <th class={th} colspan="4">Total in USD</th>
+                <td class="px-2 py-2 text-right font-subsection text-heading tabular-nums whitespace-nowrap">{aiSpend.totalUsd}</td>
+              </tr>
+              <tr>
+                <th class={th} colspan="4">Total in NPR</th>
+                <td class="px-2 py-2 text-right font-subsection text-heading tabular-nums whitespace-nowrap">{aiSpend.totalNpr}</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      )}
     </section>
   ))}
 
