@@ -235,7 +235,16 @@ export const verify: {
 ];
 
 // {name} in a body puts assets/uses/icons/<name>.png inline before the next word
-export const ai: { title: string; body: string }[] = [
+export const aiSpend = {
+  rows: [
+    { name: "Cursor", icon: "cursor", period: "May – Oct 2026", monthly: "A$25", months: 5, total: "A$125" },
+    { name: "Claude Pro", icon: "claude-code", period: "Oct 2026 – now", monthly: "US$20", months: 2, total: "US$40" },
+  ],
+  totalUsd: "≈ US$123",
+  totalNpr: "≈ रू 18,600",
+};
+
+export const ai: { title: string; body: string; spend?: boolean }[] = [
   {
     title: "How this site was built",
     body: "This site was originally made with human effort back in 2024, in Next.js, after I finished my 10th (SEE). It started as a fork of leerob's 2021 portfolio, when I was new to Next.js and AI was barely used for coding. In mid 2025 I used some AI while testing the {cursor}Cursor IDE, though I've forgotten the model names. This Astro port was migrated using {claude-code}Claude Opus 5.5 in Claude Code, because I wanted to test its potential.",
@@ -245,12 +254,21 @@ export const ai: { title: string; body: string }[] = [
     body: "Some of my blogs are written using AI. Not the full content: they're guided by me, with the actual content I want. Still, that's what people hate, so I've added an AI tag to those posts so you're informed before reading.",
   },
   {
+    title: "What I use it for",
+    body: "AI has been part of my regular workflow since October 2026, mostly for coding with {claude-code}Claude Code.",
+  },
+  {
     title: "What I don't use it for",
-    body: "I never use AI to write or reply to my emails, and I hope that stays true in the future too.",
+    body: "I never use AI to write or reply to my emails, and I hope that stays true in the future too. I also don't make AI images or videos. I tried making a few when the hype was at its peak, but only out of curiosity.",
   },
   {
     title: "On this site",
     body: "Most of the content on this website is not AI generated. It was migrated to Astro, not rewritten.",
+  },
+  {
+    title: "Money spent on AI",
+    body: "I paid for {cursor}Cursor from May 2026 until I left it on October 13, 2026, then moved to {claude-code}Claude Pro. Totals are converted at late November 2026 rates and rounded.",
+    spend: true,
   },
 ];
 
